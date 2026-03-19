@@ -1,0 +1,183 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>PROVEED — Estadísticas</title>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@700;800;900&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+  *{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent;}
+  :root{ --naranja:#FF8C00; --negro:#0A0A0A; --blanco:#F8F8F5; --gris:#F0F1EE; --verde:#32CD32; --rojo:#FF4D4D; --azul:#007AFF; }
+  body{ background:var(--gris); font-family:'DM Sans',sans-serif; padding-bottom:90px; }
+  .header{ background:var(--negro); color:var(--blanco); padding:48px 20px 24px; border-radius:0 0 28px 28px; position:sticky; top:0; z-index:100; }
+  .h-row{ display:flex; align-items:center; gap:12px; }
+  .back-btn{ width:36px; height:36px; border-radius:12px; background:rgba(255,255,255,0.08); display:flex; align-items:center; justify-content:center; cursor:pointer; flex-shrink:0; }
+  .back-btn svg{ width:18px; height:18px; stroke:white; fill:none; stroke-width:2.5; }
+  .page-title{ font-family:'Syne',sans-serif; font-size:1.1rem; font-weight:800; }
+  .header-sub{ font-size:0.72rem; color:#666; margin-top:2px; }
+  .kpi-grid{ display:grid; grid-template-columns:1fr 1fr; gap:10px; padding:16px 20px 0; margin-top:-10px; }
+  .kpi{ background:white; border-radius:20px; padding:18px; box-shadow:0 2px 8px rgba(0,0,0,0.04); }
+  .kpi-lbl{ font-size:0.68rem; font-weight:600; color:#aaa; text-transform:uppercase; letter-spacing:0.6px; margin-bottom:6px; }
+  .kpi-val{ font-family:'Syne',sans-serif; font-size:1.6rem; font-weight:900; letter-spacing:-1px; color:var(--negro); }
+  .kpi-val.naranja{ color:var(--naranja); }
+  .kpi-val.verde{ color:var(--verde); }
+  .kpi-trend{ font-size:0.68rem; margin-top:4px; font-weight:600; }
+  .trend-up{ color:var(--verde); }
+  .chart-card{ background:white; border-radius:20px; padding:20px; margin:14px 20px 0; box-shadow:0 2px 8px rgba(0,0,0,0.04); }
+  .chart-title{ font-weight:700; font-size:0.9rem; margin-bottom:18px; display:flex; justify-content:space-between; align-items:center; }
+  .chart-sub{ font-size:0.7rem; color:#aaa; font-weight:400; }
+  .bar-container{ display:flex; align-items:flex-end; justify-content:space-between; height:160px; gap:6px; }
+  .bar-wrap{ flex:1; display:flex; flex-direction:column; align-items:center; gap:6px; height:100%; justify-content:flex-end; }
+  .bar{ width:100%; border-radius:8px 8px 4px 4px; background:var(--gris); min-height:4px; transition:height 1s ease; position:relative; }
+  .bar.activa{ background:var(--naranja); }
+  .bar-val{ position:absolute; top:-20px; width:100%; text-align:center; font-size:0.6rem; font-weight:700; color:var(--negro); }
+  .bar-lbl{ font-size:0.62rem; font-weight:600; color:#bbb; text-align:center; }
+  .rank-card{ background:white; border-radius:20px; margin:14px 20px 0; overflow:hidden; box-shadow:0 2px 8px rgba(0,0,0,0.04); }
+  .rank-item{ display:flex; align-items:center; gap:14px; padding:14px 16px; border-bottom:1px solid #f5f5f5; }
+  .rank-item:last-child{ border-bottom:none; }
+  .rank-num{ font-family:'Syne',sans-serif; font-weight:900; font-size:1.1rem; color:#e0e0e0; width:24px; flex-shrink:0; }
+  .rank-num.top1{ color:var(--naranja); }
+  .rank-info{ flex:1; }
+  .rank-nombre{ font-weight:700; font-size:0.88rem; }
+  .rank-cat{ font-size:0.7rem; color:#bbb; margin-top:2px; }
+  .rank-tag{ font-size:0.6rem; font-weight:800; padding:3px 8px; border-radius:8px; }
+  .tag-top{ background:rgba(50,205,50,0.1); color:var(--verde); }
+  .tag-bajo{ background:rgba(255,77,77,0.1); color:var(--rojo); }
+  .satisf-card{ background:var(--negro); border-radius:20px; margin:14px 20px 0; padding:24px; text-align:center; }
+  .satisf-num{ font-family:'Syne',sans-serif; font-size:3rem; font-weight:900; color:var(--verde); }
+  .satisf-lbl{ font-size:0.72rem; color:#666; text-transform:uppercase; letter-spacing:1px; margin-bottom:12px; }
+  .stars{ font-size:1.4rem; color:#FFD60A; margin:8px 0; }
+  .satisf-stats{ display:flex; justify-content:center; gap:24px; margin-top:16px; }
+  .satisf-stat{ text-align:center; }
+  .satisf-stat b{ display:block; font-family:'Syne',sans-serif; font-weight:800; color:white; }
+  .satisf-stat small{ font-size:0.65rem; color:#555; }
+  .empty{ text-align:center; padding:30px; color:#bbb; font-size:0.85rem; }
+  .section{ padding:16px 20px 0; }
+  .section-title{ font-family:'Syne',sans-serif; font-size:0.82rem; font-weight:800; color:#aaa; text-transform:uppercase; letter-spacing:1px; margin-bottom:10px; }
+  .tab-bar{ position:fixed; bottom:0; width:100%; background:white; display:flex; justify-content:space-around; align-items:center; padding:10px 0 18px; border-top:1px solid #eee; box-shadow:0 -4px 20px rgba(0,0,0,0.06); z-index:200; }
+  .tab{ display:flex; flex-direction:column; align-items:center; gap:4px; cursor:pointer; flex:1; color:#ccc; text-decoration:none; }
+  .tab.active{ color:var(--naranja); }
+  .tab svg{ width:23px; height:23px; stroke:currentColor; fill:none; stroke-width:2; stroke-linecap:round; }
+  .tab span{ font-size:0.6rem; font-weight:700; text-transform:uppercase; letter-spacing:0.5px; }
+</style>
+</head>
+<body>
+<div class="header">
+  <div class="h-row">
+    <div class="back-btn" onclick="window.location.href='dashboard.html'"><svg viewBox="0 0 24 24"><path d="M19 12H5M12 19l-7-7 7-7"/></svg></div>
+    <div>
+      <div class="page-title">Estadísticas</div>
+      <div class="header-sub" id="periodo-lbl">Cargando datos...</div>
+    </div>
+  </div>
+</div>
+<div class="kpi-grid">
+  <div class="kpi"><div class="kpi-lbl">Ventas totales</div><div class="kpi-val naranja" id="k-ventas">$0</div><div class="kpi-trend trend-up" id="k-ventas-t">—</div></div>
+  <div class="kpi"><div class="kpi-lbl">Pedidos recibidos</div><div class="kpi-val" id="k-pedidos">0</div><div class="kpi-trend" id="k-pedidos-t">—</div></div>
+  <div class="kpi"><div class="kpi-lbl">Productos activos</div><div class="kpi-val verde" id="k-prods">0</div><div class="kpi-trend">en catálogo</div></div>
+  <div class="kpi"><div class="kpi-lbl">Ticket promedio</div><div class="kpi-val" id="k-ticket">$0</div><div class="kpi-trend">por pedido</div></div>
+</div>
+<div class="chart-card">
+  <div class="chart-title">Ventas por ciudad<span class="chart-sub">Top destinos</span></div>
+  <div class="bar-container" id="bar-container"><div class="empty">Cargando...</div></div>
+</div>
+<div class="section" style="margin-top:14px;">
+  <div class="section-title">Productos más vendidos</div>
+</div>
+<div class="rank-card" id="rank-card"><div class="empty">Cargando...</div></div>
+<div class="satisf-card">
+  <div class="satisf-lbl">Satisfacción del cliente</div>
+  <div class="satisf-num">98.5%</div>
+  <div class="stars">★★★★★</div>
+  <div class="satisf-stats">
+    <div class="satisf-stat"><b>&lt; 2min</b><small>Respuesta chat</small></div>
+    <div class="satisf-stat"><b id="s-dev">0</b><small>Devoluciones</small></div>
+    <div class="satisf-stat"><b id="s-rep">0</b><small>Clientes rep.</small></div>
+  </div>
+</div>
+<nav class="tab-bar">
+  <a class="tab" href="dashboard.html"><svg viewBox="0 0 24 24"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/></svg><span>Panel</span></a>
+  <a class="tab" href="productos.html"><svg viewBox="0 0 24 24"><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"/></svg><span>Productos</span></a>
+  <a class="tab" href="pedidos.html"><svg viewBox="0 0 24 24"><path d="M1 3h15v13H1zM16 8h4l3 3v5h-7M5 19a2 2 0 1 0 0 4 2 2 0 0 0 0-4zM18 19a2 2 0 1 0 0 4 2 2 0 0 0 0-4z"/></svg><span>Pedidos</span></a>
+  <a class="tab active" href="estadisticas.html"><svg viewBox="0 0 24 24"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/></svg><span>Stats</span></a>
+  <a class="tab" href="chat.html"><svg viewBox="0 0 24 24"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg><span>Chat</span></a>
+</nav>
+<script type="module">
+import { initializeApp } from "https://www.gstatic.com/firebasejs/11.0.0/firebase-app.js";
+import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/11.0.0/firebase-auth.js";
+import { getFirestore, collection, query, where, getDocs, doc, getDoc, orderBy } from "https://www.gstatic.com/firebasejs/11.0.0/firebase-firestore.js";
+const app=initializeApp({
+  apiKey:"AIzaSyAZQRlfdtJjmodrfmct5N3qrLO6hniO2o8",
+  authDomain:"proveed-8cb7c.firebaseapp.com",
+  projectId:"proveed-8cb7c",
+  storageBucket:"proveed-8cb7c.firebasestorage.app",
+  messagingSenderId:"235073250367",
+  appId:"1:235073250367:web:89ec59fea5f0b8a347448a"
+});
+const auth=getAuth(app);
+const db=getFirestore(app);
+onAuthStateChanged(auth,async(user)=>{
+  if(!user){window.location.href='login.html';return;}
+  const snap=await getDoc(doc(db,'usuarios',user.uid));
+  const empresa=snap.exists()?(snap.data().empresa||snap.data().nombre||''):'';
+  const now=new Date();
+  document.getElementById('periodo-lbl').textContent=now.toLocaleDateString('es-EC',{month:'long',year:'numeric'});
+  const pSnap=await getDocs(query(collection(db,'pedidos'),orderBy('creadoEn','desc')));
+  let totalVentas=0,totalPedidos=0;
+  const ciudades={},productos={},clientesPedidos={};
+  let clientesRepetidos=0;
+  pSnap.forEach(d=>{
+    const data=d.data();
+    const items=(data.items||[]).filter(i=>i.proveedor===empresa);
+    if(!items.length) return;
+    totalPedidos++;
+    const empId=data.emprendedorId;
+    clientesPedidos[empId]=(clientesPedidos[empId]||0)+1;
+    if(clientesPedidos[empId]>1) clientesRepetidos++;
+    items.forEach(i=>{
+      const monto=i.precio*i.cantidad;
+      totalVentas+=monto;
+      const ciudad=(data.entrega?.ciudad||'Otras').split(',')[0].trim();
+      ciudades[ciudad]=(ciudades[ciudad]||0)+monto;
+      productos[i.nombre]=(productos[i.nombre]||0)+i.cantidad;
+    });
+  });
+  const ticket=totalPedidos>0?totalVentas/totalPedidos:0;
+  const qpr=await getDocs(query(collection(db,'productos'),where('proveedorId','==',user.uid),where('activo','==',true)));
+  document.getElementById('k-ventas').textContent='$'+totalVentas.toFixed(2);
+  document.getElementById('k-pedidos').textContent=totalPedidos;
+  document.getElementById('k-prods').textContent=qpr.size;
+  document.getElementById('k-ticket').textContent='$'+ticket.toFixed(2);
+  document.getElementById('s-rep').textContent=clientesRepetidos;
+  const barCont=document.getElementById('bar-container');
+  const topCiudades=Object.entries(ciudades).sort((a,b)=>b[1]-a[1]).slice(0,5);
+  if(!topCiudades.length){barCont.innerHTML='<div class="empty">Sin datos de ciudades aún</div>';}
+  else{
+    const maxVal=topCiudades[0][1];
+    barCont.innerHTML='';
+    topCiudades.forEach(([ciudad,monto],idx)=>{
+      const pct=Math.max(8,Math.round((monto/maxVal)*100));
+      const div=document.createElement('div');
+      div.className='bar-wrap';
+      div.innerHTML=`<div class="bar ${idx===0?'activa':''}" style="height:${pct}%"><div class="bar-val">$${monto>999?Math.round(monto/1000)+'k':monto.toFixed(0)}</div></div><div class="bar-lbl">${ciudad.slice(0,4).toUpperCase()}</div>`;
+      barCont.appendChild(div);
+    });
+  }
+  const rankCard=document.getElementById('rank-card');
+  const topProds=Object.entries(productos).sort((a,b)=>b[1]-a[1]).slice(0,5);
+  if(!topProds.length){rankCard.innerHTML='<div class="empty">Sin datos de ventas aún</div>';}
+  else{
+    rankCard.innerHTML='';
+    topProds.forEach(([nombre,qty],idx)=>{
+      const div=document.createElement('div');
+      div.className='rank-item';
+      div.innerHTML=`<div class="rank-num ${idx===0?'top1':''}">${idx+1}</div>
+        <div class="rank-info"><div class="rank-nombre">${nombre}</div><div class="rank-cat">${qty} unidades vendidas</div></div>
+        <span class="rank-tag ${idx<2?'tag-top':'tag-bajo'}">${idx===0?'ESTRELLA':idx<3?'ALTA ROT.':'REGULAR'}</span>`;
+      rankCard.appendChild(div);
+    });
+  }
+});
+</script>
+</body>
+</html>
