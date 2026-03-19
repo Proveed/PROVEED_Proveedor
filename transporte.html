@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>PROVEED — Transporte y Envíos</title>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@700;800;900&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+  *{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent;}
+  :root{ --naranja:#FF8C00; --negro:#0A0A0A; --blanco:#F8F8F5; --gris:#F0F1EE; --verde:#32CD32; --azul:#007AFF; --rojo:#FF4D4D; }
+  body{ background:var(--negro); font-family:'DM Sans',sans-serif; padding-bottom:90px; color:white; min-height:100vh; }
+  .header{ background:#000; padding:48px 20px 20px; border-bottom:1px solid #1a1a1a; }
+  .h-row{ display:flex; align-items:center; gap:12px; }
+  .back-btn{ width:36px; height:36px; border-radius:12px; background:rgba(255,255,255,0.06); display:flex; align-items:center; justify-content:center; cursor:pointer; }
+  .back-btn svg{ width:18px; height:18px; stroke:white; fill:none; stroke-width:2.5; }
+  .page-title{ font-family:'Syne',sans-serif; font-size:1.1rem; font-weight:800; }
+  .search-wrap{ margin:16px 20px; background:#111; border:1px solid #1a1a1a; border-radius:14px; padding:12px 16px; display:flex; align-items:center; gap:10px; }
+  .search-wrap input{ flex:1; background:transparent; border:none; outline:none; color:white; font-family:'DM Sans',sans-serif; font-size:0.92rem; }
+  .search-wrap input::placeholder{ color:#444; }
+  .search-wrap svg{ width:17px; height:17px; stroke:#444; fill:none; stroke-width:2.5; }
+  .envios-lista{ padding:0 20px 20px; }
+  .envio-card{ background:#111; border:1px solid #1a1a1a; border-radius:20px; margin-bottom:12px; overflow:hidden; }
+  .envio-header{ padding:14px 16px; display:flex; align-items:center; justify-content:space-between; border-bottom:1px solid #1a1a1a; }
+  .envio-fecha{ font-weight:700; font-size:0.88rem; }
+  .envio-fecha small{ display:block; font-size:0.68rem; color:#555; font-weight:400; }
+  .trans-badge{ font-size:0.65rem; font-weight:800; padding:4px 10px; border-radius:8px; border:1px solid var(--azul); color:var(--azul); background:rgba(0,122,255,0.08); }
+  .envio-body{ padding:14px 16px; }
+  .cliente-row{ display:flex; align-items:center; gap:10px; margin-bottom:10px; }
+  .cli-avatar{ width:36px; height:36px; border-radius:10px; background:#1a1a1a; display:flex; align-items:center; justify-content:center; font-family:'Syne',sans-serif; font-weight:800; color:var(--naranja); font-size:0.9rem; flex-shrink:0; }
+  .cli-info b{ display:block; font-size:0.88rem; }
+  .cli-info small{ font-size:0.7rem; color:#555; }
+  .prods-list{ background:#000; border-radius:12px; padding:10px 12px; margin-bottom:10px; }
+  .prod-line{ font-size:0.78rem; color:#888; padding:3px 0; }
+  .prod-line b{ color:var(--naranja); }
+  .envio-footer{ display:flex; align-items:center; justify-content:space-between; }
+  .guia{ font-family:monospace; font-size:0.72rem; color:#555; }
+  .latest-tag{ background:var(--verde); color:#000; font-size:0.58rem; font-weight:800; padding:2px 7px; border-radius:6px; margin-left:8px; }
+  .empty{ text-align:center; padding:50px 20px; color:#444; }
+  .empty svg{ width:52px; height:52px; stroke:#2a2a2a; fill:none; stroke-width:1.2; margin:0 auto 14px; display:block; }
+  .tab-bar{ position:fixed; bottom:0; width:100%; background:#000; display:flex; justify-content:space-around; align-items:center; padding:10px 0 18px; border-top:1px solid #1a1a1a; z-index:200; }
+  .tab{ display:flex; flex-direction:column; align-items:center; gap:4px; cursor:pointer; flex:1; color:#333; text-decoration:none; }
+  .tab.active{ color:var(--naranja); }
+  .tab svg{ width:23px; height:23px; stroke:currentColor; fill:none; stroke-width:2; stroke-linecap:round; }
+  .tab span{ font-size:0.6rem; font-weight:700; text-transform:uppercase; letter-spacing:0.5px; }
+</style>
+</head>
+<body>
+<div class="header">
+  <div class="h-row">
+    <div class="back-btn" onclick="window.location.href='dashboard.html'"><svg viewBox="0 0 24 24"><path d="M19 12H5M12 19l-7-7 7-7"/></svg></div>
+    <div class="page-title">Control de Despachos</div>
+  </div>
+</div>
+<div class="search-wrap">
+  <svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/></svg>
+  <input type="text" id="search" placeholder="Buscar por cliente, ciudad, guía...">
+</div>
+<div class="envios-lista" id="envios-lista">
+  <div class="empty">
+    <svg viewBox="0 0 24 24"><path d="M1 3h15v13H1zM16 8h4l3 3v5h-7M5 19a2 2 0 1 0 0 4 2 2 0 0 0 0-4zM18 19a2 2 0 1 0 0 4 2 2 0 0 0 0-4z"/></svg>
+    <p>Cargando historial de envíos...</p>
+  </div>
+</div>
+<nav class="tab-bar">
+  <a class="tab" href="dashboard.html"><svg viewBox="0 0 24 24"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/></svg><span>Panel</span></a>
+  <a class="tab active" href="transporte.html"><svg viewBox="0 0 24 24"><path d="M1 3h15v13H1zM16 8h4l3 3v5h-7M5 19a2 2 0 1 0 0 4 2 2 0 0 0 0-4zM18 19a2 2 0 1 0 0 4 2 2 0 0 0 0-4z"/></svg><span>Envíos</span></a>
+  <a class="tab" href="pedidos.html"><svg viewBox="0 0 24 24"><path d="M9 5H7a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2h-2"/><rect x="9" y="3" width="6" height="4" rx="1"/></svg><span>Pedidos</span></a>
+  <a class="tab" href="chat.html"><svg viewBox="0 0 24 24"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg><span>Chat</span></a>
+  <a class="tab" href="perfil.html"><svg viewBox="0 0 24 24"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg><span>Perfil</span></a>
+</nav>
+<script type="module">
+import { initializeApp } from "https://www.gstatic.com/firebasejs/11.0.0/firebase-app.js";
+import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/11.0.0/firebase-auth.js";
+import { getFirestore, collection, query, orderBy, getDocs, doc, getDoc } from "https://www.gstatic.com/firebasejs/11.0.0/firebase-firestore.js";
+const app=initializeApp({
+  apiKey:"AIzaSyAZQRlfdtJjmodrfmct5N3qrLO6hniO2o8",
+  authDomain:"proveed-8cb7c.firebaseapp.com",
+  projectId:"proveed-8cb7c",
+  storageBucket:"proveed-8cb7c.firebasestorage.app",
+  messagingSenderId:"235073250367",
+  appId:"1:235073250367:web:89ec59fea5f0b8a347448a"
+});
+const auth=getAuth(app);
+const db=getFirestore(app);
+const TRANSPORTES=['SERVIENTREGA','COOP. LOJA','ENVÍOS ECUADOR','SPEED','TCC','LAAR'];
+let todosEnvios=[];
+onAuthStateChanged(auth,async user=>{
+  if(!user){window.location.href='login.html';return;}
+  const snap=await getDoc(doc(db,'usuarios',user.uid));
+  const empresa=snap.exists()?(snap.data().empresa||snap.data().nombre||''):'';
+  const pSnap=await getDocs(query(collection(db,'pedidos'),orderBy('creadoEn','desc')));
+  todosEnvios=[];
+  pSnap.forEach(d=>{
+    const data=d.data();
+    const items=(data.items||[]).filter(i=>i.proveedor===empresa);
+    if(items.length&&(data.estado==='proceso'||data.estado==='completado')){
+      const trans=TRANSPORTES[Math.floor(Math.random()*TRANSPORTES.length)];
+      const guia='#G-'+Math.floor(Math.random()*900000+100000);
+      todosEnvios.push({id:d.id,...data,items,trans,guia});
+    }
+  });
+  renderEnvios(todosEnvios);
+});
+function renderEnvios(lista){
+  const cont=document.getElementById('envios-lista');
+  if(!lista.length){cont.innerHTML=`<div class="empty"><svg viewBox="0 0 24 24"><path d="M1 3h15v13H1zM16 8h4l3 3v5h-7M5 19a2 2 0 1 0 0 4 2 2 0 0 0 0-4zM18 19a2 2 0 1 0 0 4 2 2 0 0 0 0-4z"/></svg><p>Sin envíos despachados aún</p></div>`;return;}
+  cont.innerHTML='';
+  lista.forEach((e,idx)=>{
+    const fecha=e.creadoEn?new Date(e.creadoEn.toDate()).toLocaleDateString('es-EC',{day:'2-digit',month:'short',year:'numeric'}):'—';
+    const hora=e.creadoEn?new Date(e.creadoEn.toDate()).toLocaleTimeString('es-EC',{hour:'2-digit',minute:'2-digit'}):'';
+    const nombre=e.entrega?.nombre||'Cliente';
+    const ciudad=e.entrega?.ciudad||'Sin ciudad';
+    const card=document.createElement('div');
+    card.className='envio-card';
+    card.dataset.search=`${nombre} ${ciudad} ${e.guia}`.toLowerCase();
+    card.innerHTML=`
+      <div class="envio-header">
+        <div class="envio-fecha">${idx===0?`<span class="latest-tag">HOY</span> `:''}${fecha}<small>${hora}</small></div>
+        <span class="trans-badge">🚚 ${e.trans}</span>
+      </div>
+      <div class="envio-body">
+        <div class="cliente-row">
+          <div class="cli-avatar">${nombre[0].toUpperCase()}</div>
+          <div class="cli-info"><b>${nombre}</b><small>${ciudad} · ${e.entrega?.direccion||''}</small></div>
+        </div>
+        <div class="prods-list">${e.items.map(i=>`<div class="prod-line"><b>${i.cantidad}×</b> ${i.nombre}</div>`).join('')}</div>
+        <div class="envio-footer">
+          <div class="guia">Guía: ${e.guia}</div>
+          <div style="font-family:'Syne',sans-serif;font-weight:800;color:var(--naranja);">$${Number(e.total||0).toFixed(2)}</div>
+        </div>
+      </div>`;
+    cont.appendChild(card);
+  });
+}
+document.getElementById('search').addEventListener('input',e=>{
+  const t=e.target.value.toLowerCase();
+  document.querySelectorAll('.envio-card').forEach(card=>{
+    card.style.display=card.dataset.search.includes(t)?'block':'none';
+  });
+});
+</script>
+</body>
+</html>
