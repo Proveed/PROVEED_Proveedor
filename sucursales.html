@@ -1,0 +1,239 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>PROVEED — Sucursales</title>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@700;800;900&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+  *{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent;}
+  :root{ --naranja:#FF8C00; --negro:#0A0A0A; --blanco:#F8F8F5; --gris:#F0F1EE; --verde:#32CD32; --rojo:#FF4D4D; --azul:#007AFF; }
+  body{ background:var(--negro); font-family:'DM Sans',sans-serif; min-height:100vh; color:white; }
+  .layout{ display:flex; flex-direction:column; min-height:100vh; }
+  @media(min-width:900px){ .layout{ flex-direction:row; } }
+  .sidebar{ background:#000; border-bottom:1px solid #1a1a1a; padding:48px 20px 24px; }
+  @media(min-width:900px){ .sidebar{ width:280px; min-height:100vh; border-right:1px solid #1a1a1a; border-bottom:none; padding:40px 20px; position:sticky; top:0; height:100vh; overflow-y:auto; display:flex; flex-direction:column; } }
+  .brand{ font-family:'Syne',sans-serif; font-size:1.2rem; font-weight:900; color:var(--naranja); margin-bottom:4px; }
+  .brand-sub{ font-size:0.65rem; color:#555; text-transform:uppercase; letter-spacing:1px; margin-bottom:24px; }
+  .back-link{ display:flex; align-items:center; gap:8px; color:#666; font-size:0.8rem; cursor:pointer; margin-bottom:20px; }
+  .back-link svg{ width:16px; height:16px; stroke:#666; fill:none; stroke-width:2.5; }
+  .back-link:hover{ color:var(--naranja); }
+  .suc-card{ background:#111; border:1px solid #222; border-radius:14px; padding:14px; margin-bottom:10px; cursor:pointer; transition:0.2s; }
+  .suc-card.active{ border-color:var(--naranja); background:rgba(255,140,0,0.08); }
+  .suc-nombre{ font-weight:700; font-size:0.92rem; margin-bottom:3px; }
+  .suc-info{ font-size:0.7rem; color:#555; }
+  .suc-estado{ font-size:0.62rem; font-weight:700; padding:2px 8px; border-radius:6px; display:inline-block; margin-top:5px; }
+  .estado-activa{ background:rgba(50,205,50,0.15); color:var(--verde); }
+  .estado-inactiva{ background:rgba(255,77,77,0.1); color:var(--rojo); }
+  .btn-add-suc{ width:100%; padding:12px; background:#1a1a1a; border:1px dashed #333; border-radius:12px; color:#666; font-family:'DM Sans',sans-serif; font-size:0.82rem; font-weight:600; cursor:pointer; transition:0.2s; margin-top:8px; }
+  .btn-add-suc:hover{ border-color:var(--naranja); color:var(--naranja); }
+  .btn-panico{ width:100%; padding:12px; background:rgba(255,77,77,0.12); border:1px solid rgba(255,77,77,0.3); border-radius:12px; color:var(--rojo); font-weight:700; cursor:pointer; font-family:'DM Sans',sans-serif; font-size:0.82rem; transition:0.2s; margin-top:12px; }
+  .main{ flex:1; padding:24px 20px; overflow-y:auto; }
+  @media(min-width:900px){ .main{ padding:40px; } }
+  .main-title{ font-family:'Syne',sans-serif; font-size:1.4rem; font-weight:900; margin-bottom:4px; }
+  .main-sub{ font-size:0.8rem; color:#555; margin-bottom:24px; }
+  .kpi-grid{ display:grid; grid-template-columns:repeat(2,1fr); gap:10px; margin-bottom:24px; }
+  @media(min-width:600px){ .kpi-grid{ grid-template-columns:repeat(4,1fr); } }
+  .kpi{ background:#111; border:1px solid #1a1a1a; border-radius:16px; padding:16px; text-align:center; }
+  .kpi-val{ font-family:'Syne',sans-serif; font-size:1.5rem; font-weight:900; color:var(--naranja); }
+  .kpi-lbl{ font-size:0.62rem; color:#555; text-transform:uppercase; letter-spacing:0.6px; margin-top:4px; }
+  .panel{ background:#111; border:1px solid #1a1a1a; border-radius:20px; padding:20px; margin-bottom:20px; }
+  .panel-title{ font-family:'Syne',sans-serif; font-size:0.9rem; font-weight:800; color:var(--naranja); margin-bottom:16px; border-left:3px solid var(--naranja); padding-left:10px; }
+  .emp-row{ display:flex; align-items:center; justify-content:space-between; padding:12px 0; border-bottom:1px solid #1a1a1a; }
+  .emp-row:last-child{ border-bottom:none; }
+  .emp-info b{ display:block; font-size:0.88rem; }
+  .emp-info small{ font-size:0.7rem; color:#555; }
+  .emp-permisos{ display:flex; gap:8px; }
+  .perm-chip{ font-size:0.6rem; font-weight:700; padding:3px 8px; border-radius:8px; background:#1a1a1a; color:#666; cursor:pointer; transition:0.2s; }
+  .perm-chip.on{ background:rgba(50,205,50,0.12); color:var(--verde); }
+  .add-emp-row{ display:flex; gap:8px; margin-top:16px; }
+  .add-emp-row input{ flex:1; background:#000; border:1px solid #2a2a2a; padding:10px 13px; border-radius:10px; color:white; font-family:'DM Sans',sans-serif; font-size:0.85rem; outline:none; }
+  .add-emp-row input:focus{ border-color:var(--naranja); }
+  .add-emp-row button{ background:var(--naranja); color:#000; border:none; border-radius:10px; padding:10px 14px; font-weight:700; cursor:pointer; font-family:'DM Sans',sans-serif; font-size:0.78rem; }
+  .monitor-grid{ display:grid; grid-template-columns:1fr 1fr; gap:14px; }
+  @media(max-width:600px){ .monitor-grid{ grid-template-columns:1fr; } }
+  .log-screen{ background:#000; border:1px solid #1a1a1a; border-radius:12px; padding:14px; height:140px; overflow-y:auto; font-family:'Roboto Mono',monospace; font-size:0.72rem; color:#555; }
+  .log-line{ margin-bottom:6px; border-bottom:1px solid #0a0a0a; padding-bottom:4px; }
+  .log-ts{ color:var(--azul); }
+  .log-ok{ color:var(--verde); }
+  .log-warn{ color:var(--naranja); }
+  .modal-overlay{ position:fixed; inset:0; background:rgba(0,0,0,0.7); display:none; z-index:300; }
+  .modal-overlay.show{ display:flex; align-items:flex-end; }
+  .modal-sheet{ background:#111; width:100%; max-height:80vh; border-radius:28px 28px 0 0; padding:28px 22px 36px; transform:translateY(100%); transition:0.4s cubic-bezier(0.16,1,0.3,1); overflow-y:auto; }
+  .modal-overlay.show .modal-sheet{ transform:translateY(0); }
+  .modal-title{ font-family:'Syne',sans-serif; font-size:1.1rem; font-weight:800; margin-bottom:20px; display:flex; justify-content:space-between; }
+  .close-x{ cursor:pointer; width:30px; height:30px; background:#222; border-radius:9px; display:flex; align-items:center; justify-content:center; }
+  .close-x svg{ width:14px; height:14px; stroke:#666; fill:none; stroke-width:2.5; }
+  .field{ margin-bottom:14px; }
+  .field label{ display:block; font-size:0.7rem; font-weight:600; color:#555; text-transform:uppercase; letter-spacing:0.8px; margin-bottom:6px; }
+  .field input{ width:100%; background:#000; border:1px solid #2a2a2a; padding:12px 14px; border-radius:12px; color:white; font-family:'DM Sans',sans-serif; font-size:0.92rem; outline:none; transition:border-color 0.2s; box-sizing:border-box; }
+  .field input:focus{ border-color:var(--naranja); }
+  .btn-save{ width:100%; padding:15px; background:var(--naranja); color:#000; border:none; border-radius:14px; font-family:'Syne',sans-serif; font-size:0.95rem; font-weight:800; cursor:pointer; }
+</style>
+</head>
+<body>
+<div class="layout">
+  <aside class="sidebar">
+    <div class="brand">PROVEED</div>
+    <div class="brand-sub">Gestión Multi-Sucursal</div>
+    <div class="back-link" onclick="window.location.href='dashboard.html'">
+      <svg viewBox="0 0 24 24"><path d="M19 12H5M12 19l-7-7 7-7"/></svg>
+      Volver al panel
+    </div>
+    <div id="sucursales-lista"></div>
+    <button class="btn-add-suc" onclick="abrirModal()">+ Agregar sucursal</button>
+    <button class="btn-panico" onclick="bloqueoTotal()">⚠ BLOQUEO DE EMERGENCIA</button>
+  </aside>
+  <main class="main">
+    <div class="main-title" id="main-title">Selecciona una sucursal</div>
+    <div class="main-sub" id="main-sub">Elige una sucursal del panel izquierdo</div>
+    <div id="main-content" style="display:none;">
+      <div class="kpi-grid">
+        <div class="kpi"><div class="kpi-val" id="k-ventas">$0</div><div class="kpi-lbl">Ventas hoy</div></div>
+        <div class="kpi"><div class="kpi-val" id="k-pedidos">0</div><div class="kpi-lbl">Pedidos</div></div>
+        <div class="kpi"><div class="kpi-val" id="k-chats">0</div><div class="kpi-lbl">Chats</div></div>
+        <div class="kpi"><div class="kpi-val" id="k-cajas">1</div><div class="kpi-lbl">Cajas</div></div>
+      </div>
+      <div class="panel">
+        <div class="panel-title">Equipo y Permisos</div>
+        <div id="equipo-lista">
+          <div class="emp-row">
+            <div class="emp-info"><b>Administrador sede</b><small>Acceso completo</small></div>
+            <div class="emp-permisos">
+              <div class="perm-chip on" onclick="this.classList.toggle('on')">Facturar</div>
+              <div class="perm-chip on" onclick="this.classList.toggle('on')">Stock</div>
+              <div class="perm-chip on" onclick="this.classList.toggle('on')">Caja</div>
+            </div>
+          </div>
+        </div>
+        <div class="add-emp-row">
+          <input type="text" id="nuevo-empleado" placeholder="Nombre del empleado">
+          <button onclick="agregarEmpleado()">+ Añadir</button>
+        </div>
+      </div>
+      <div class="panel">
+        <div class="panel-title">Monitor en vivo</div>
+        <div class="monitor-grid">
+          <div>
+            <div style="font-size:0.72rem;font-weight:700;color:var(--azul);margin-bottom:8px;">💬 CHATS</div>
+            <div class="log-screen">
+              <div class="log-line"><span class="log-ts">[14:20]</span> Emprendedor consultó stock</div>
+              <div class="log-line"><span class="log-ok">[14:22]</span> Ticket #882 cerrado</div>
+            </div>
+          </div>
+          <div>
+            <div style="font-size:0.72rem;font-weight:700;color:var(--naranja);margin-bottom:8px;">📦 PEDIDOS</div>
+            <div class="log-screen">
+              <div class="log-line"><span class="log-warn">[PEND]</span> Pedido #1029 en espera</div>
+              <div class="log-line"><span class="log-ok">[OK]</span> Pedido #1028 despachado</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </main>
+</div>
+<div class="modal-overlay" id="modal-overlay" onclick="cerrarModal(event)">
+  <div class="modal-sheet">
+    <div class="modal-title">
+      Nueva Sucursal
+      <div class="close-x" onclick="cerrarModalDirecto()"><svg viewBox="0 0 24 24"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg></div>
+    </div>
+    <div class="field"><label>Nombre de la sucursal</label><input type="text" id="s-nombre" placeholder="Ej: Guayaquil Norte"></div>
+    <div class="field"><label>Ciudad</label><input type="text" id="s-ciudad" placeholder="Ciudad"></div>
+    <div class="field"><label>Dirección</label><input type="text" id="s-direccion" placeholder="Calle y sector"></div>
+    <div class="field"><label>Gerente responsable</label><input type="text" id="s-gerente" placeholder="Nombre del gerente"></div>
+    <button class="btn-save" onclick="guardarSucursal()">CREAR SUCURSAL</button>
+  </div>
+</div>
+<script type="module">
+import { initializeApp } from "https://www.gstatic.com/firebasejs/11.0.0/firebase-app.js";
+import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/11.0.0/firebase-auth.js";
+import { getFirestore, collection, query, where, getDocs, addDoc, doc, onSnapshot, serverTimestamp } from "https://www.gstatic.com/firebasejs/11.0.0/firebase-firestore.js";
+const app=initializeApp({
+  apiKey:"AIzaSyAZQRlfdtJjmodrfmct5N3qrLO6hniO2o8",
+  authDomain:"proveed-8cb7c.firebaseapp.com",
+  projectId:"proveed-8cb7c",
+  storageBucket:"proveed-8cb7c.firebasestorage.app",
+  messagingSenderId:"235073250367",
+  appId:"1:235073250367:web:89ec59fea5f0b8a347448a"
+});
+const auth=getAuth(app);
+const db=getFirestore(app);
+let currentUser=null;
+onAuthStateChanged(auth,user=>{
+  if(!user){window.location.href='login.html';return;}
+  currentUser=user;
+  cargarSucursales();
+});
+function cargarSucursales(){
+  const q=query(collection(db,'sucursales'),where('proveedorId','==',currentUser.uid));
+  onSnapshot(q,snap=>{
+    const lista=document.getElementById('sucursales-lista');
+    if(snap.empty){lista.innerHTML=`<div style="color:#555;font-size:0.8rem;padding:10px 0;">Sin sucursales. Agrega una.</div>`;return;}
+    lista.innerHTML='';
+    snap.forEach(d=>{
+      const s=d.data();
+      const div=document.createElement('div');
+      div.className='suc-card';
+      div.dataset.id=d.id;
+      div.innerHTML=`<div class="suc-nombre">${s.nombre}</div><div class="suc-info">${s.ciudad} · ${s.gerente||'Sin gerente'}</div><span class="suc-estado ${s.activa!==false?'estado-activa':'estado-inactiva'}">${s.activa!==false?'Activa':'Inactiva'}</span>`;
+      div.onclick=()=>cargarDetalle(d.id,s);
+      lista.appendChild(div);
+    });
+  });
+}
+function cargarDetalle(id,s){
+  document.querySelectorAll('.suc-card').forEach(c=>c.classList.remove('active'));
+  document.querySelector(`[data-id="${id}"]`)?.classList.add('active');
+  document.getElementById('main-title').textContent=s.nombre;
+  document.getElementById('main-sub').textContent=`${s.ciudad} · ${s.direccion||''}`;
+  document.getElementById('main-content').style.display='block';
+  cargarKPIs();
+}
+async function cargarKPIs(){
+  const hoy=new Date();hoy.setHours(0,0,0,0);
+  try{
+    const snap=await getDocs(query(collection(db,'pedidos')));
+    let ventas=0,pedidos=0;
+    snap.forEach(d=>{const data=d.data();const fecha=data.creadoEn?.toDate();if(fecha&&fecha>=hoy){pedidos++;ventas+=data.total||0;}});
+    document.getElementById('k-ventas').textContent='$'+ventas.toFixed(2);
+    document.getElementById('k-pedidos').textContent=pedidos;
+  }catch(e){console.warn(e);}
+}
+window.agregarEmpleado=function(){
+  const nombre=document.getElementById('nuevo-empleado').value.trim();
+  if(!nombre) return;
+  const lista=document.getElementById('equipo-lista');
+  const div=document.createElement('div');
+  div.className='emp-row';
+  div.innerHTML=`<div class="emp-info"><b>${nombre}</b><small>Vendedor</small></div>
+    <div class="emp-permisos">
+      <div class="perm-chip on" onclick="this.classList.toggle('on')">Facturar</div>
+      <div class="perm-chip" onclick="this.classList.toggle('on')">Stock</div>
+      <div class="perm-chip" onclick="this.classList.toggle('on')">Caja</div>
+    </div>`;
+  lista.appendChild(div);
+  document.getElementById('nuevo-empleado').value='';
+};
+window.abrirModal=function(){document.getElementById('modal-overlay').classList.add('show');};
+window.cerrarModal=function(e){if(e.target===document.getElementById('modal-overlay')) document.getElementById('modal-overlay').classList.remove('show');};
+window.cerrarModalDirecto=function(){document.getElementById('modal-overlay').classList.remove('show');};
+window.guardarSucursal=async function(){
+  const nombre=document.getElementById('s-nombre').value.trim();
+  const ciudad=document.getElementById('s-ciudad').value.trim();
+  const direccion=document.getElementById('s-direccion').value.trim();
+  const gerente=document.getElementById('s-gerente').value.trim();
+  if(!nombre||!ciudad){alert('Nombre y ciudad son obligatorios');return;}
+  await addDoc(collection(db,'sucursales'),{nombre,ciudad,direccion,gerente,proveedorId:currentUser.uid,activa:true,creadoEn:serverTimestamp()});
+  document.getElementById('modal-overlay').classList.remove('show');
+  ['s-nombre','s-ciudad','s-direccion','s-gerente'].forEach(id=>document.getElementById(id).value='');
+};
+window.bloqueoTotal=function(){
+  if(confirm('⚠ BLOQUEO DE EMERGENCIA\n\n¿Estás seguro? Se desactivarán todos los accesos inmediatamente.')){
+    document.body.innerHTML=`<div style="background:#8B0000;color:white;height:100vh;display:flex;align-items:center;justify-content:center;flex-direction:column;font-family:sans-serif;text-align:center;padding:20px;"><div style="font-size:3rem;margin-bottom:20px;">🔒</div><h1 style="margin:0 0 10px;">SISTEMA BLOQUEADO</h1><p style="opacity:0.7;margin-bottom:30px;">Todos los accesos han sido suspendidos.</p><button onclick="location.href='dashboard.html'" style="background:white;color:#8B0000;border:none;padding:14px 28px;border-radius:12px;font-weight:700;cursor:pointer;font-size:1rem;">DESBLOQUEAR →</button></div>`;
+  }
+};
+</script>
+</body>
+</html>
