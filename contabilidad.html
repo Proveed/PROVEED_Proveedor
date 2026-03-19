@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>PROVEED — Contabilidad SRI</title>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@700;800;900&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+  *{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent;}
+  :root{ --naranja:#FF8C00; --negro:#0A0A0A; --blanco:#F8F8F5; --gris:#F0F1EE; --verde:#32CD32; --rojo:#FF4D4D; --azul:#007AFF; }
+  body{ background:var(--gris); font-family:'DM Sans',sans-serif; padding-bottom:90px; color:var(--negro); }
+  .header{ background:var(--negro); color:var(--blanco); padding:48px 20px 24px; border-radius:0 0 28px 28px; position:sticky; top:0; z-index:100; }
+  .h-row{ display:flex; align-items:center; justify-content:space-between; }
+  .h-left{ display:flex; align-items:center; gap:12px; }
+  .back-btn{ width:36px; height:36px; border-radius:12px; background:rgba(255,255,255,0.08); display:flex; align-items:center; justify-content:center; cursor:pointer; }
+  .back-btn svg{ width:18px; height:18px; stroke:white; fill:none; stroke-width:2.5; }
+  .page-title{ font-family:'Syne',sans-serif; font-size:1.1rem; font-weight:800; }
+  .estado-fiscal{ background:rgba(50,205,50,0.15); color:var(--verde); font-size:0.68rem; font-weight:800; padding:4px 10px; border-radius:10px; }
+  .periodo-card{ background:white; margin:14px 20px 0; border-radius:20px; padding:18px; box-shadow:0 2px 8px rgba(0,0,0,0.04); }
+  .periodo-label{ font-size:0.7rem; font-weight:700; color:#aaa; text-transform:uppercase; letter-spacing:0.8px; margin-bottom:12px; }
+  .periodo-btns{ display:grid; grid-template-columns:repeat(4,1fr); gap:8px; }
+  .p-btn{ padding:10px 6px; border:2px solid #eee; border-radius:12px; background:white; font-family:'DM Sans',sans-serif; font-size:0.78rem; font-weight:600; color:#888; cursor:pointer; transition:0.2s; text-align:center; }
+  .p-btn.active{ border-color:var(--naranja); background:rgba(255,140,0,0.07); color:var(--naranja); }
+  .tax-grid{ display:grid; grid-template-columns:1fr 1fr; gap:12px; padding:14px 20px 0; }
+  .tax-card{ background:white; border-radius:20px; padding:18px; box-shadow:0 2px 8px rgba(0,0,0,0.04); }
+  .tax-label{ font-size:0.68rem; font-weight:700; color:#aaa; text-transform:uppercase; letter-spacing:0.6px; margin-bottom:8px; }
+  .tax-val{ font-family:'Syne',sans-serif; font-size:1.7rem; font-weight:900; color:var(--negro); }
+  .tax-val.naranja{ color:var(--naranja); }
+  .tax-val.azul{ color:var(--azul); }
+  .tax-detalles{ margin-top:12px; }
+  .tax-fila{ display:flex; justify-content:space-between; padding:5px 0; border-bottom:1px dashed #f0f0f0; font-size:0.78rem; }
+  .tax-fila:last-child{ border:none; }
+  .tax-fila span{ color:#aaa; }
+  .tax-fila b{ font-weight:700; }
+  .total-card{ background:var(--negro); color:white; border-radius:20px; margin:14px 20px 0; padding:22px; }
+  .total-head{ display:flex; justify-content:space-between; align-items:flex-start; margin-bottom:16px; }
+  .total-lbl{ font-size:0.7rem; color:#666; text-transform:uppercase; letter-spacing:0.8px; margin-bottom:4px; }
+  .total-val{ font-family:'Syne',sans-serif; font-size:2.2rem; font-weight:900; color:var(--naranja); }
+  .total-periodo{ font-size:0.75rem; color:#555; }
+  .total-fecha{ font-size:0.78rem; color:#555; margin-top:2px; }
+  .btn-xml{ width:100%; padding:15px; background:var(--naranja); color:#000; border:none; border-radius:14px; font-family:'Syne',sans-serif; font-size:0.95rem; font-weight:800; cursor:pointer; transition:0.2s; }
+  .btn-xml:active{ transform:scale(0.98); }
+  .ventas-card{ background:white; border-radius:20px; margin:14px 20px 0; padding:18px; box-shadow:0 2px 8px rgba(0,0,0,0.04); }
+  .ventas-title{ font-family:'Syne',sans-serif; font-size:0.88rem; font-weight:800; margin-bottom:14px; }
+  .v-fila{ display:flex; justify-content:space-between; align-items:center; padding:10px 0; border-bottom:1px solid #f5f5f5; }
+  .v-fila:last-child{ border:none; }
+  .v-concepto{ font-size:0.85rem; font-weight:500; }
+  .v-monto{ font-weight:700; }
+  .v-monto.verde{ color:var(--verde); }
+  .v-monto.rojo{ color:var(--rojo); }
+  .tab-bar{ position:fixed; bottom:0; width:100%; background:white; display:flex; justify-content:space-around; align-items:center; padding:10px 0 18px; border-top:1px solid #eee; box-shadow:0 -4px 20px rgba(0,0,0,0.06); z-index:200; }
+  .tab{ display:flex; flex-direction:column; align-items:center; gap:4px; cursor:pointer; flex:1; color:#ccc; text-decoration:none; }
+  .tab.active{ color:var(--naranja); }
+  .tab svg{ width:23px; height:23px; stroke:currentColor; fill:none; stroke-width:2; stroke-linecap:round; }
+  .tab span{ font-size:0.6rem; font-weight:700; text-transform:uppercase; letter-spacing:0.5px; }
+</style>
+</head>
+<body>
+<div class="header">
+  <div class="h-row">
+    <div class="h-left">
+      <div class="back-btn" onclick="window.location.href='dashboard.html'"><svg viewBox="0 0 24 24"><path d="M19 12H5M12 19l-7-7 7-7"/></svg></div>
+      <div class="page-title">Contabilidad SRI</div>
+    </div>
+    <div class="estado-fiscal">● AL DÍA</div>
+  </div>
+</div>
+<div class="periodo-card">
+  <div class="periodo-label">¿Cómo declara al SRI?</div>
+  <div class="periodo-btns">
+    <button class="p-btn" onclick="setPeriodo('Mensual',1,this)">Mensual</button>
+    <button class="p-btn" onclick="setPeriodo('Trimestral',3,this)">Trimestral</button>
+    <button class="p-btn active" onclick="setPeriodo('Semestral',6,this)">Semestral</button>
+    <button class="p-btn" onclick="setPeriodo('Anual',12,this)">Anual</button>
+  </div>
+</div>
+<div class="tax-grid">
+  <div class="tax-card">
+    <div class="tax-label">IVA por pagar</div>
+    <div class="tax-val naranja" id="t-iva">$0.00</div>
+    <div class="tax-detalles">
+      <div class="tax-fila"><span>IVA Ventas (15%)</span><b id="t-iva-v">$0.00</b></div>
+      <div class="tax-fila"><span>IVA Compras (−)</span><b id="t-iva-c" style="color:var(--rojo)">$0.00</b></div>
+    </div>
+  </div>
+  <div class="tax-card">
+    <div class="tax-label">Retenciones</div>
+    <div class="tax-val azul" id="t-ret">$0.00</div>
+    <div class="tax-detalles">
+      <div class="tax-fila"><span>Servicios (2.75%)</span><b id="t-ret-s">$0.00</b></div>
+      <div class="tax-fila"><span>Bienes (1%)</span><b id="t-ret-b">$0.00</b></div>
+    </div>
+  </div>
+</div>
+<div class="total-card">
+  <div class="total-head">
+    <div>
+      <div class="total-lbl">Total proyectado al SRI</div>
+      <div class="total-val" id="t-total">$0.00</div>
+      <div class="total-periodo" id="t-periodo">Período: Semestral</div>
+    </div>
+    <div style="text-align:right">
+      <div class="total-fecha">Fecha límite:</div>
+      <div style="color:#888;font-size:0.82rem;">20 de julio</div>
+    </div>
+  </div>
+  <button class="btn-xml" onclick="generarXML()">📄 GENERAR DECLARACIÓN XML SRI</button>
+</div>
+<div class="ventas-card">
+  <div class="ventas-title">Resumen de operaciones</div>
+  <div class="v-fila"><span class="v-concepto">Total ventas netas</span><span class="v-monto verde" id="v-ventas">$0.00</span></div>
+  <div class="v-fila"><span class="v-concepto">Total pedidos</span><span class="v-monto" id="v-pedidos">0</span></div>
+  <div class="v-fila"><span class="v-concepto">Ticket promedio</span><span class="v-monto" id="v-ticket">$0.00</span></div>
+  <div class="v-fila"><span class="v-concepto">Devoluciones</span><span class="v-monto rojo">0</span></div>
+</div>
+<nav class="tab-bar">
+  <a class="tab" href="dashboard.html"><svg viewBox="0 0 24 24"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/></svg><span>Panel</span></a>
+  <a class="tab" href="facturador.html"><svg viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg><span>Facturar</span></a>
+  <a class="tab active" href="contabilidad.html"><svg viewBox="0 0 24 24"><line x1="12" y1="1" x2="12" y2="23"/><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg><span>SRI</span></a>
+  <a class="tab" href="estadisticas.html"><svg viewBox="0 0 24 24"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/></svg><span>Stats</span></a>
+  <a class="tab" href="dashboard.html"><svg viewBox="0 0 24 24"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/></svg><span>Inicio</span></a>
+</nav>
+<script type="module">
+import { initializeApp } from "https://www.gstatic.com/firebasejs/11.0.0/firebase-app.js";
+import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/11.0.0/firebase-auth.js";
+import { getFirestore, collection, query, getDocs, doc, getDoc } from "https://www.gstatic.com/firebasejs/11.0.0/firebase-firestore.js";
+const app=initializeApp({
+  apiKey:"AIzaSyAZQRlfdtJjmodrfmct5N3qrLO6hniO2o8",
+  authDomain:"proveed-8cb7c.firebaseapp.com",
+  projectId:"proveed-8cb7c",
+  storageBucket:"proveed-8cb7c.firebasestorage.app",
+  messagingSenderId:"235073250367",
+  appId:"1:235073250367:web:89ec59fea5f0b8a347448a"
+});
+const auth=getAuth(app);
+const db=getFirestore(app);
+let totalVentasBase=0,totalPedidosBase=0,periodoFactor=6;
+onAuthStateChanged(auth,async user=>{
+  if(!user){window.location.href='login.html';return;}
+  const snap=await getDoc(doc(db,'usuarios',user.uid));
+  const empresa=snap.exists()?(snap.data().empresa||snap.data().nombre||''):'';
+  const pSnap=await getDocs(query(collection(db,'pedidos')));
+  let ventas=0,pedidos=0;
+  pSnap.forEach(d=>{
+    const items=(d.data().items||[]).filter(i=>i.proveedor===empresa);
+    if(items.length){pedidos++;items.forEach(i=>ventas+=i.precio*i.cantidad);}
+  });
+  totalVentasBase=ventas;
+  totalPedidosBase=pedidos;
+  document.getElementById('v-ventas').textContent='$'+ventas.toFixed(2);
+  document.getElementById('v-pedidos').textContent=pedidos;
+  document.getElementById('v-ticket').textContent=pedidos>0?'$'+(ventas/pedidos).toFixed(2):'$0.00';
+  calcular();
+});
+function calcular(){
+  const ventas=totalVentasBase*(periodoFactor/6);
+  const ivaVentas=ventas*0.15;
+  const ivaCompras=ventas*0.05;
+  const ivaPagar=Math.max(0,ivaVentas-ivaCompras);
+  const retServ=ventas*0.0275*0.3;
+  const retBienes=ventas*0.01*0.7;
+  const retTotal=retServ+retBienes;
+  const totalSRI=ivaPagar+retTotal;
+  document.getElementById('t-iva').textContent='$'+ivaPagar.toFixed(2);
+  document.getElementById('t-iva-v').textContent='$'+ivaVentas.toFixed(2);
+  document.getElementById('t-iva-c').textContent='-$'+ivaCompras.toFixed(2);
+  document.getElementById('t-ret').textContent='$'+retTotal.toFixed(2);
+  document.getElementById('t-ret-s').textContent='$'+retServ.toFixed(2);
+  document.getElementById('t-ret-b').textContent='$'+retBienes.toFixed(2);
+  document.getElementById('t-total').textContent='$'+totalSRI.toFixed(2);
+}
+window.setPeriodo=function(nombre,factor,btn){
+  periodoFactor=factor;
+  document.querySelectorAll('.p-btn').forEach(b=>b.classList.remove('active'));
+  btn.classList.add('active');
+  document.getElementById('t-periodo').textContent='Período: '+nombre;
+  calcular();
+};
+window.generarXML=function(){
+  const xml=`<?xml version="1.0" encoding="UTF-8"?>\n<DeclaracionSRI>\n  <Periodo>${document.getElementById('t-periodo').textContent.replace('Período: ','')}</Periodo>\n  <IVAPorPagar>${document.getElementById('t-iva').textContent}</IVAPorPagar>\n  <Retenciones>${document.getElementById('t-ret').textContent}</Retenciones>\n  <TotalAPagar>${document.getElementById('t-total').textContent}</TotalAPagar>\n  <GeneradoPor>PROVEED ERP v5.0</GeneradoPor>\n</DeclaracionSRI>`;
+  const blob=new Blob([xml],{type:'text/xml'});
+  const a=document.createElement('a');
+  a.href=URL.createObjectURL(blob);
+  a.download='declaracion-sri.xml';
+  a.click();
+};
+</script>
+</body>
+</html>
