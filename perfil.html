@@ -1,0 +1,209 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>PROVEED — Mi Empresa</title>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@700;800;900&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+  *{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent;}
+  :root{ --naranja:#FF8C00; --negro:#0A0A0A; --blanco:#F8F8F5; --gris:#F0F1EE; --rojo:#FF4D4D; }
+  body{ background:var(--gris); font-family:'DM Sans',sans-serif; padding-bottom:100px; }
+  .header{ background:var(--negro); color:var(--blanco); padding:48px 20px 30px; border-radius:0 0 32px 32px; position:sticky; top:0; z-index:100; }
+  .header-top{ display:flex; align-items:center; gap:12px; margin-bottom:20px; }
+  .back-btn{ width:36px; height:36px; border-radius:12px; background:rgba(255,255,255,0.08); display:flex; align-items:center; justify-content:center; cursor:pointer; }
+  .back-btn svg{ width:18px; height:18px; stroke:white; fill:none; stroke-width:2.5; }
+  .page-title{ font-family:'Syne',sans-serif; font-size:1.1rem; font-weight:800; }
+  .profile-card{ display:flex; align-items:center; gap:16px; }
+  .avatar{ width:64px; height:64px; border-radius:20px; background:var(--naranja); display:flex; align-items:center; justify-content:center; font-family:'Syne',sans-serif; font-size:1.8rem; font-weight:900; color:#000; flex-shrink:0; }
+  .profile-empresa{ font-family:'Syne',sans-serif; font-size:1.3rem; font-weight:800; }
+  .profile-role{ font-size:0.75rem; color:var(--naranja); font-weight:600; margin-top:2px; text-transform:uppercase; letter-spacing:1px; }
+  .profile-email{ font-size:0.8rem; color:#666; margin-top:4px; }
+  .stats-grid{ display:grid; grid-template-columns:1fr 1fr 1fr; gap:10px; margin:16px 20px 0; }
+  .stat-box{ background:white; border-radius:16px; padding:14px; text-align:center; box-shadow:0 2px 8px rgba(0,0,0,0.04); }
+  .stat-num{ font-family:'Syne',sans-serif; font-size:1.4rem; font-weight:900; color:var(--naranja); }
+  .stat-lbl{ font-size:0.65rem; color:#aaa; margin-top:3px; font-weight:600; text-transform:uppercase; }
+  .section{ padding:20px 20px 0; }
+  .section-label{ font-size:0.7rem; font-weight:700; color:#bbb; text-transform:uppercase; letter-spacing:1px; margin-bottom:10px; }
+  .menu-card{ background:white; border-radius:20px; overflow:hidden; box-shadow:0 2px 8px rgba(0,0,0,0.04); }
+  .menu-item{ display:flex; align-items:center; gap:14px; padding:16px 18px; border-bottom:1px solid #f5f5f5; cursor:pointer; transition:0.15s; }
+  .menu-item:last-child{ border-bottom:none; }
+  .menu-item:active{ background:#fafafa; }
+  .menu-icon{ width:40px; height:40px; border-radius:12px; background:#f5f5f5; display:flex; align-items:center; justify-content:center; flex-shrink:0; }
+  .menu-icon svg{ width:20px; height:20px; stroke:var(--negro); fill:none; stroke-width:2; }
+  .menu-icon.naranja{ background:rgba(255,140,0,0.1); }
+  .menu-icon.naranja svg{ stroke:var(--naranja); }
+  .menu-text{ flex:1; }
+  .menu-title{ font-weight:600; font-size:0.92rem; }
+  .menu-sub{ font-size:0.74rem; color:#bbb; margin-top:1px; }
+  .menu-arrow svg{ width:16px; height:16px; stroke:#ddd; fill:none; stroke-width:2.5; }
+  .btn-logout{ margin:20px 20px 0; width:calc(100% - 40px); padding:16px; border:2px solid rgba(255,77,77,0.2); border-radius:16px; background:rgba(255,77,77,0.06); color:var(--rojo); font-family:'Syne',sans-serif; font-size:0.92rem; font-weight:800; cursor:pointer; transition:0.2s; }
+  .btn-logout:active{ background:rgba(255,77,77,0.12); }
+  .modal-overlay{ position:fixed; inset:0; background:rgba(0,0,0,0.5); display:none; z-index:300; }
+  .modal-overlay.show{ display:flex; align-items:flex-end; }
+  .modal-sheet{ background:white; width:100%; border-radius:28px 28px 0 0; padding:28px 24px 36px; transform:translateY(100%); transition:0.4s cubic-bezier(0.16,1,0.3,1); }
+  .modal-overlay.show .modal-sheet{ transform:translateY(0); }
+  .modal-title{ font-family:'Syne',sans-serif; font-size:1.1rem; font-weight:800; margin-bottom:20px; display:flex; justify-content:space-between; align-items:center; }
+  .close-x{ cursor:pointer; width:30px; height:30px; background:#f5f5f5; border-radius:9px; display:flex; align-items:center; justify-content:center; }
+  .close-x svg{ width:14px; height:14px; stroke:#666; fill:none; stroke-width:2.5; }
+  .field{ margin-bottom:14px; }
+  .field label{ display:block; font-size:0.72rem; font-weight:600; color:#aaa; text-transform:uppercase; letter-spacing:0.8px; margin-bottom:5px; }
+  .field input,.field select{ width:100%; padding:13px 14px; background:#f8f8f8; border:1.5px solid #eee; border-radius:13px; outline:none; font-family:'DM Sans',sans-serif; font-size:0.92rem; color:var(--negro); transition:border-color 0.2s; box-sizing:border-box; }
+  .field input:focus,.field select:focus{ border-color:var(--naranja); }
+  .btn-save{ width:100%; padding:16px; background:var(--negro); color:white; border:none; border-radius:16px; font-family:'Syne',sans-serif; font-size:0.95rem; font-weight:800; cursor:pointer; margin-top:6px; }
+  .tab-bar{ position:fixed; bottom:0; width:100%; background:white; display:flex; justify-content:space-around; align-items:center; padding:10px 0 18px; border-top:1px solid #eee; box-shadow:0 -4px 20px rgba(0,0,0,0.06); z-index:200; }
+  .tab{ display:flex; flex-direction:column; align-items:center; gap:4px; cursor:pointer; flex:1; color:#ccc; text-decoration:none; }
+  .tab.active{ color:var(--naranja); }
+  .tab svg{ width:23px; height:23px; stroke:currentColor; fill:none; stroke-width:2; stroke-linecap:round; }
+  .tab span{ font-size:0.6rem; font-weight:700; text-transform:uppercase; letter-spacing:0.5px; }
+</style>
+</head>
+<body>
+<div class="header">
+  <div class="header-top">
+    <div class="back-btn" onclick="window.location.href='dashboard.html'"><svg viewBox="0 0 24 24"><path d="M19 12H5M12 19l-7-7 7-7"/></svg></div>
+    <div class="page-title">Mi Empresa</div>
+  </div>
+  <div class="profile-card">
+    <div class="avatar" id="avatar-letra">?</div>
+    <div>
+      <div class="profile-empresa" id="profile-empresa">Cargando...</div>
+      <div class="profile-role">Proveedor Verificado</div>
+      <div class="profile-email" id="profile-email">—</div>
+    </div>
+  </div>
+</div>
+<div class="stats-grid">
+  <div class="stat-box"><div class="stat-num" id="stat-prods">—</div><div class="stat-lbl">Productos</div></div>
+  <div class="stat-box"><div class="stat-num" id="stat-pedidos">—</div><div class="stat-lbl">Pedidos</div></div>
+  <div class="stat-box"><div class="stat-num" id="stat-ventas">—</div><div class="stat-lbl">Ventas $</div></div>
+</div>
+<div class="section">
+  <div class="section-label">Empresa</div>
+  <div class="menu-card">
+    <div class="menu-item" onclick="abrirModal()">
+      <div class="menu-icon naranja"><svg viewBox="0 0 24 24"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg></div>
+      <div class="menu-text"><div class="menu-title">Datos de la empresa</div><div class="menu-sub">Nombre, RUC, categoría, ciudad</div></div>
+      <div class="menu-arrow"><svg viewBox="0 0 24 24"><path d="m9 18 6-6-6-6"/></svg></div>
+    </div>
+    <div class="menu-item" onclick="window.location.href='productos.html'">
+      <div class="menu-icon"><svg viewBox="0 0 24 24"><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"/></svg></div>
+      <div class="menu-text"><div class="menu-title">Gestionar catálogo</div><div class="menu-sub">Agregar, editar o pausar productos</div></div>
+      <div class="menu-arrow"><svg viewBox="0 0 24 24"><path d="m9 18 6-6-6-6"/></svg></div>
+    </div>
+  </div>
+</div>
+<div class="section" style="margin-top:14px;">
+  <div class="section-label">Herramientas</div>
+  <div class="menu-card">
+    <div class="menu-item" onclick="window.location.href='sucursales.html'">
+      <div class="menu-icon naranja"><svg viewBox="0 0 24 24"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/></svg></div>
+      <div class="menu-text"><div class="menu-title">Sucursales</div><div class="menu-sub">Gestión multi-sede</div></div>
+      <div class="menu-arrow"><svg viewBox="0 0 24 24"><path d="m9 18 6-6-6-6"/></svg></div>
+    </div>
+    <div class="menu-item" onclick="window.location.href='contabilidad.html'">
+      <div class="menu-icon"><svg viewBox="0 0 24 24"><line x1="12" y1="1" x2="12" y2="23"/><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg></div>
+      <div class="menu-text"><div class="menu-title">Contabilidad SRI</div><div class="menu-sub">IVA, retenciones y declaraciones</div></div>
+      <div class="menu-arrow"><svg viewBox="0 0 24 24"><path d="m9 18 6-6-6-6"/></svg></div>
+    </div>
+    <div class="menu-item" onclick="window.location.href='transporte.html'">
+      <div class="menu-icon"><svg viewBox="0 0 24 24"><path d="M1 3h15v13H1zM16 8h4l3 3v5h-7M5 19a2 2 0 1 0 0 4 2 2 0 0 0 0-4zM18 19a2 2 0 1 0 0 4 2 2 0 0 0 0-4z"/></svg></div>
+      <div class="menu-text"><div class="menu-title">Historial de envíos</div><div class="menu-sub">Control de despachos</div></div>
+      <div class="menu-arrow"><svg viewBox="0 0 24 24"><path d="m9 18 6-6-6-6"/></svg></div>
+    </div>
+    <div class="menu-item" onclick="window.location.href='chat.html'">
+      <div class="menu-icon naranja"><svg viewBox="0 0 24 24"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg></div>
+      <div class="menu-text"><div class="menu-title">Chat con emprendedores</div><div class="menu-sub">Ver todas las conversaciones</div></div>
+      <div class="menu-arrow"><svg viewBox="0 0 24 24"><path d="m9 18 6-6-6-6"/></svg></div>
+    </div>
+  </div>
+</div>
+<button class="btn-logout" onclick="cerrarSesion()">CERRAR SESIÓN</button>
+<div class="modal-overlay" id="modal-overlay" onclick="cerrarModal(event)">
+  <div class="modal-sheet">
+    <div class="modal-title">
+      <span>Editar empresa</span>
+      <div class="close-x" onclick="cerrarModalDirecto()"><svg viewBox="0 0 24 24"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg></div>
+    </div>
+    <div class="field"><label>Nombre comercial</label><input type="text" id="e-empresa" placeholder="Nombre empresa"></div>
+    <div class="field"><label>RUC</label><input type="text" id="e-ruc" placeholder="RUC"></div>
+    <div class="field"><label>Ciudad</label><input type="text" id="e-ciudad" placeholder="Ciudad"></div>
+    <button class="btn-save" onclick="guardarEmpresa()">GUARDAR CAMBIOS</button>
+  </div>
+</div>
+<nav class="tab-bar">
+  <a class="tab" href="dashboard.html"><svg viewBox="0 0 24 24"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/></svg><span>Panel</span></a>
+  <a class="tab" href="productos.html"><svg viewBox="0 0 24 24"><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"/></svg><span>Productos</span></a>
+  <a class="tab" href="pedidos.html"><svg viewBox="0 0 24 24"><path d="M1 3h15v13H1zM16 8h4l3 3v5h-7M5 19a2 2 0 1 0 0 4 2 2 0 0 0 0-4zM18 19a2 2 0 1 0 0 4 2 2 0 0 0 0-4z"/></svg><span>Pedidos</span></a>
+  <a class="tab" href="chat.html"><svg viewBox="0 0 24 24"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg><span>Chat</span></a>
+  <a class="tab active" href="perfil.html"><svg viewBox="0 0 24 24"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg><span>Perfil</span></a>
+</nav>
+<script type="module">
+import { initializeApp } from "https://www.gstatic.com/firebasejs/11.0.0/firebase-app.js";
+import { getAuth, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/11.0.0/firebase-auth.js";
+import { getFirestore, doc, getDoc, updateDoc, collection, query, where, getDocs } from "https://www.gstatic.com/firebasejs/11.0.0/firebase-firestore.js";
+const app=initializeApp({
+  apiKey:"AIzaSyAZQRlfdtJjmodrfmct5N3qrLO6hniO2o8",
+  authDomain:"proveed-8cb7c.firebaseapp.com",
+  projectId:"proveed-8cb7c",
+  storageBucket:"proveed-8cb7c.firebasestorage.app",
+  messagingSenderId:"235073250367",
+  appId:"1:235073250367:web:89ec59fea5f0b8a347448a"
+});
+const auth=getAuth(app);
+const db=getFirestore(app);
+let currentUser=null,userData={};
+onAuthStateChanged(auth,async(user)=>{
+  if(!user){window.location.href='login.html';return;}
+  currentUser=user;
+  const snap=await getDoc(doc(db,'usuarios',user.uid));
+  if(snap.exists()){
+    userData=snap.data();
+    const empresa=userData.empresa||userData.nombre||'Empresa';
+    document.getElementById('profile-empresa').textContent=empresa;
+    document.getElementById('profile-email').textContent=user.email;
+    document.getElementById('avatar-letra').textContent=empresa[0].toUpperCase();
+    document.getElementById('e-empresa').value=empresa;
+    document.getElementById('e-ruc').value=userData.ruc||'';
+    document.getElementById('e-ciudad').value=userData.ciudad||'';
+  }
+  cargarStats(user.uid);
+});
+async function cargarStats(uid){
+  try{
+    const qp=await getDocs(query(collection(db,'productos'),where('proveedorId','==',uid)));
+    document.getElementById('stat-prods').textContent=qp.size;
+    const empresa=userData.empresa||userData.nombre||'';
+    const qpeds=await getDocs(query(collection(db,'pedidos')));
+    let misPedidos=0,misVentas=0;
+    qpeds.forEach(d=>{
+      const items=(d.data().items||[]).filter(i=>i.proveedor===empresa);
+      if(items.length){misPedidos++;items.forEach(i=>misVentas+=i.precio*i.cantidad);}
+    });
+    document.getElementById('stat-pedidos').textContent=misPedidos;
+    document.getElementById('stat-ventas').textContent='$'+misVentas.toFixed(0);
+  }catch(e){console.warn(e);}
+}
+window.cerrarSesion=async function(){
+  if(!confirm('¿Seguro que quieres cerrar sesión?')) return;
+  await signOut(auth);
+  window.location.href='login.html';
+};
+window.abrirModal=function(){document.getElementById('modal-overlay').classList.add('show');};
+window.cerrarModal=function(e){if(e.target===document.getElementById('modal-overlay')) document.getElementById('modal-overlay').classList.remove('show');};
+window.cerrarModalDirecto=function(){document.getElementById('modal-overlay').classList.remove('show');};
+window.guardarEmpresa=async function(){
+  const empresa=document.getElementById('e-empresa').value.trim();
+  const ruc=document.getElementById('e-ruc').value.trim();
+  const ciudad=document.getElementById('e-ciudad').value.trim();
+  if(!empresa) return;
+  await updateDoc(doc(db,'usuarios',currentUser.uid),{empresa,ruc,ciudad});
+  try{await updateDoc(doc(db,'proveedores',currentUser.uid),{nombre:empresa,ruc,ciudad});}catch(e){}
+  userData.empresa=empresa;
+  document.getElementById('profile-empresa').textContent=empresa;
+  document.getElementById('avatar-letra').textContent=empresa[0].toUpperCase();
+  document.getElementById('modal-overlay').classList.remove('show');
+};
+</script>
+</body>
+</html>
