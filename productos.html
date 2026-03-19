@@ -1,0 +1,257 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>PROVEED — Mis Productos</title>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@700;800;900&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+  *{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent;}
+  :root{ --naranja:#FF8C00; --negro:#0A0A0A; --blanco:#F8F8F5; --gris:#F0F1EE; --verde:#32CD32; --rojo:#FF4D4D; }
+  body{ background:var(--gris); font-family:'DM Sans',sans-serif; padding-bottom:90px; }
+  .header{ background:var(--negro); color:var(--blanco); padding:48px 20px 20px; border-radius:0 0 28px 28px; display:flex; align-items:center; justify-content:space-between; position:sticky; top:0; z-index:100; }
+  .h-left{ display:flex; align-items:center; gap:12px; }
+  .back-btn{ width:36px; height:36px; border-radius:12px; background:rgba(255,255,255,0.08); display:flex; align-items:center; justify-content:center; cursor:pointer; }
+  .back-btn svg{ width:18px; height:18px; stroke:white; fill:none; stroke-width:2.5; }
+  .page-title{ font-family:'Syne',sans-serif; font-size:1.1rem; font-weight:800; }
+  .btn-nuevo{ background:var(--naranja); color:#000; border:none; padding:10px 16px; border-radius:12px; font-weight:700; font-size:0.82rem; cursor:pointer; font-family:'DM Sans',sans-serif; }
+  .tabs{ display:flex; gap:8px; padding:16px 20px 4px; }
+  .vtab{ padding:8px 16px; border-radius:20px; font-size:0.8rem; font-weight:600; cursor:pointer; transition:0.2s; border:1.5px solid #e0e0e0; background:white; color:#777; }
+  .vtab.active{ background:var(--negro); color:white; border-color:var(--negro); }
+  .prod-lista{ padding:8px 20px; }
+  .prod-row{ background:white; border-radius:18px; padding:14px; margin-bottom:10px; display:flex; gap:12px; align-items:center; box-shadow:0 2px 8px rgba(0,0,0,0.04); }
+  .prod-thumb{ width:60px; height:60px; border-radius:14px; background:#f5f5f5; flex-shrink:0; display:flex; align-items:center; justify-content:center; overflow:hidden; }
+  .prod-thumb img{ width:100%; height:100%; object-fit:cover; }
+  .prod-thumb svg{ width:26px; height:26px; stroke:#ddd; fill:none; stroke-width:1.5; }
+  .prod-data{ flex:1; min-width:0; }
+  .prod-nombre{ font-weight:700; font-size:0.9rem; }
+  .prod-cat{ font-size:0.7rem; color:#aaa; margin-top:1px; }
+  .prod-stats{ display:flex; gap:10px; margin-top:6px; }
+  .stat-price{ color:var(--naranja); font-weight:700; font-size:0.72rem; }
+  .stat-stock{ color:#aaa; font-size:0.72rem; }
+  .prod-actions{ display:flex; flex-direction:column; gap:6px; align-items:flex-end; }
+  .act-btn{ border:none; border-radius:8px; padding:5px 10px; font-size:0.68rem; font-weight:700; cursor:pointer; font-family:'DM Sans',sans-serif; }
+  .act-edit{ background:#f0f0f0; color:var(--negro); }
+  .act-on{ background:rgba(50,205,50,0.1); color:var(--verde); }
+  .act-off{ background:rgba(255,77,77,0.1); color:var(--rojo); }
+  .empty{ text-align:center; padding:50px 20px; color:#bbb; }
+  .empty svg{ width:52px; height:52px; stroke:#ddd; fill:none; stroke-width:1.2; margin:0 auto 14px; display:block; }
+  .modal-overlay{ position:fixed; inset:0; background:rgba(0,0,0,0.6); display:none; z-index:300; align-items:flex-end; }
+  .modal-overlay.show{ display:flex; }
+  .modal-sheet{ background:white; width:100%; max-height:92vh; border-radius:28px 28px 0 0; padding:24px 22px 36px; overflow-y:auto; transform:translateY(100%); transition:0.4s cubic-bezier(0.16,1,0.3,1); }
+  .modal-overlay.show .modal-sheet{ transform:translateY(0); }
+  .modal-title{ font-family:'Syne',sans-serif; font-size:1.15rem; font-weight:800; margin-bottom:20px; display:flex; justify-content:space-between; align-items:center; }
+  .close-btn{ cursor:pointer; width:32px; height:32px; background:#f5f5f5; border-radius:10px; display:flex; align-items:center; justify-content:center; }
+  .close-btn svg{ width:16px; height:16px; stroke:#666; fill:none; stroke-width:2.5; }
+  .field{ margin-bottom:14px; }
+  .field label{ display:block; font-size:0.7rem; font-weight:600; color:#aaa; text-transform:uppercase; letter-spacing:0.8px; margin-bottom:5px; }
+  .field input,.field select,.field textarea{ width:100%; padding:12px 14px; background:#f8f8f8; border:1.5px solid #eee; border-radius:13px; outline:none; font-family:'DM Sans',sans-serif; font-size:0.92rem; color:var(--negro); transition:border-color 0.2s; box-sizing:border-box; }
+  .field input:focus,.field select:focus,.field textarea:focus{ border-color:var(--naranja); }
+  .field textarea{ resize:none; height:70px; }
+  .field-row{ display:grid; grid-template-columns:1fr 1fr; gap:10px; }
+  .btn-pub{ width:100%; padding:16px; background:var(--naranja); color:#000; border:none; border-radius:16px; font-family:'Syne',sans-serif; font-size:1rem; font-weight:800; cursor:pointer; margin-top:8px; transition:0.2s; }
+  .btn-pub:active{ transform:scale(0.98); }
+  .btn-pub:disabled{ opacity:0.5; }
+  .tab-bar{ position:fixed; bottom:0; width:100%; background:white; display:flex; justify-content:space-around; align-items:center; padding:10px 0 18px; border-top:1px solid #eee; box-shadow:0 -4px 20px rgba(0,0,0,0.06); z-index:200; }
+  .tab{ display:flex; flex-direction:column; align-items:center; gap:4px; cursor:pointer; flex:1; color:#ccc; text-decoration:none; }
+  .tab.active{ color:var(--naranja); }
+  .tab svg{ width:23px; height:23px; stroke:currentColor; fill:none; stroke-width:2; stroke-linecap:round; }
+  .tab span{ font-size:0.6rem; font-weight:700; text-transform:uppercase; letter-spacing:0.5px; }
+</style>
+</head>
+<body>
+<div class="header">
+  <div class="h-left">
+    <div class="back-btn" onclick="window.location.href='dashboard.html'"><svg viewBox="0 0 24 24"><path d="M19 12H5M12 19l-7-7 7-7"/></svg></div>
+    <div class="page-title">Mis Productos</div>
+  </div>
+  <button class="btn-nuevo" onclick="abrirForm()">+ Nuevo</button>
+</div>
+<div class="tabs">
+  <div class="vtab active" onclick="filtrar('activos',this)">Activos</div>
+  <div class="vtab" onclick="filtrar('inactivos',this)">Pausados</div>
+  <div class="vtab" onclick="filtrar('todos',this)">Todos</div>
+</div>
+<div class="prod-lista" id="prod-lista">
+  <div class="empty"><svg viewBox="0 0 24 24"><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"/></svg><p>Cargando productos...</p></div>
+</div>
+<div class="modal-overlay" id="modal-overlay" onclick="cerrarForm(event)">
+  <div class="modal-sheet">
+    <div class="modal-title">
+      <span id="form-titulo">Nuevo Producto</span>
+      <div class="close-btn" onclick="cerrarFormDirecto()"><svg viewBox="0 0 24 24"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg></div>
+    </div>
+    <div class="field"><label>Nombre del producto *</label><input type="text" id="f-nombre" placeholder="Ej: Denim Stretch 14oz"></div>
+    <div class="field"><label>Descripción</label><textarea id="f-desc" placeholder="Detalles, materiales..."></textarea></div>
+    <div class="field-row">
+      <div class="field"><label>Categoría *</label>
+        <select id="f-cat">
+          <option value="">Seleccionar</option>
+          <option value="textiles">Textiles</option>
+          <option value="tecnologia">Tecnología</option>
+          <option value="alimentos">Alimentos</option>
+          <option value="maquinaria">Maquinaria</option>
+          <option value="cosmeticos">Cosméticos</option>
+          <option value="construccion">Construcción</option>
+          <option value="agricultura">Agricultura</option>
+          <option value="automotriz">Automotriz</option>
+          <option value="otros">Otros</option>
+        </select>
+      </div>
+      <div class="field"><label>Unidad</label>
+        <select id="f-unidad">
+          <option value="unidad">Unidad</option>
+          <option value="metro">Metro</option>
+          <option value="kg">Kilogramo</option>
+          <option value="litro">Litro</option>
+          <option value="caja">Caja</option>
+          <option value="rollo">Rollo</option>
+          <option value="docena">Docena</option>
+        </select>
+      </div>
+    </div>
+    <div class="field-row">
+      <div class="field"><label>Precio unitario ($) *</label><input type="number" id="f-precio" placeholder="0.00" step="0.01" min="0"></div>
+      <div class="field"><label>Compra mínima *</label><input type="number" id="f-minimo" placeholder="10" min="1"></div>
+    </div>
+    <div class="field-row">
+      <div class="field"><label>Stock disponible</label><input type="number" id="f-stock" placeholder="100" min="0"></div>
+      <div class="field"><label>Tiempo entrega</label>
+        <select id="f-entrega">
+          <option value="inmediato">Inmediato</option>
+          <option value="1-3 días">1-3 días</option>
+          <option value="3-7 días">3-7 días</option>
+          <option value="7-15 días">7-15 días</option>
+        </select>
+      </div>
+    </div>
+    <button class="btn-pub" id="btn-pub" onclick="publicar()">PUBLICAR EN PROVEED</button>
+  </div>
+</div>
+<nav class="tab-bar">
+  <a class="tab" href="dashboard.html"><svg viewBox="0 0 24 24"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/></svg><span>Panel</span></a>
+  <a class="tab active" href="productos.html"><svg viewBox="0 0 24 24"><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"/></svg><span>Productos</span></a>
+  <a class="tab" href="pedidos.html"><svg viewBox="0 0 24 24"><path d="M1 3h15v13H1zM16 8h4l3 3v5h-7M5 19a2 2 0 1 0 0 4 2 2 0 0 0 0-4zM18 19a2 2 0 1 0 0 4 2 2 0 0 0 0-4z"/></svg><span>Pedidos</span></a>
+  <a class="tab" href="chat.html"><svg viewBox="0 0 24 24"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg><span>Chat</span></a>
+  <a class="tab" href="perfil.html"><svg viewBox="0 0 24 24"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg><span>Perfil</span></a>
+</nav>
+<script type="module">
+import { initializeApp } from "https://www.gstatic.com/firebasejs/11.0.0/firebase-app.js";
+import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/11.0.0/firebase-auth.js";
+import { getFirestore, collection, query, where, orderBy, getDocs, addDoc, updateDoc, doc, getDoc, serverTimestamp } from "https://www.gstatic.com/firebasejs/11.0.0/firebase-firestore.js";
+const app=initializeApp({
+  apiKey:"AIzaSyAZQRlfdtJjmodrfmct5N3qrLO6hniO2o8",
+  authDomain:"proveed-8cb7c.firebaseapp.com",
+  projectId:"proveed-8cb7c",
+  storageBucket:"proveed-8cb7c.firebasestorage.app",
+  messagingSenderId:"235073250367",
+  appId:"1:235073250367:web:89ec59fea5f0b8a347448a"
+});
+const auth=getAuth(app);
+const db=getFirestore(app);
+let currentUser=null,empresaData={},filtroActual='activos',editandoId=null;
+onAuthStateChanged(auth,async(user)=>{
+  if(!user){window.location.href='login.html';return;}
+  currentUser=user;
+  const snap=await getDoc(doc(db,'usuarios',user.uid));
+  if(snap.exists()) empresaData=snap.data();
+  cargarProductos();
+});
+async function cargarProductos(){
+  const lista=document.getElementById('prod-lista');
+  lista.innerHTML='<div style="text-align:center;padding:30px;color:#bbb;font-size:0.85rem;">Cargando...</div>';
+  try{
+    const q=query(collection(db,'productos'),where('proveedorId','==',currentUser.uid),orderBy('creadoEn','desc'));
+    const snap=await getDocs(q);
+    let prods=snap.docs.map(d=>({id:d.id,...d.data()}));
+    if(filtroActual==='activos') prods=prods.filter(p=>p.activo);
+    if(filtroActual==='inactivos') prods=prods.filter(p=>!p.activo);
+    if(!prods.length){lista.innerHTML=`<div class="empty"><svg viewBox="0 0 24 24"><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"/></svg><p>Sin productos. Pulsa "+ Nuevo"</p></div>`;return;}
+    lista.innerHTML='';
+    prods.forEach(p=>{
+      const div=document.createElement('div');
+      div.className='prod-row';
+      div.innerHTML=`
+        <div class="prod-thumb">${p.imagen?`<img src="${p.imagen}">`:`<svg viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg>`}</div>
+        <div class="prod-data">
+          <div class="prod-nombre">${p.nombre}</div>
+          <div class="prod-cat">${p.categoria||''} · ${p.unidad||'unidad'}</div>
+          <div class="prod-stats"><span class="stat-price">$${Number(p.precio||0).toFixed(2)}</span><span class="stat-stock">Stock: ${p.stock||0}</span><span class="stat-stock">Mín: ${p.minimo||1}</span></div>
+        </div>
+        <div class="prod-actions">
+          <button class="act-btn act-edit" onclick="editarProducto('${p.id}')">Editar</button>
+          <button class="act-btn ${p.activo?'act-on':'act-off'}" onclick="toggleActivo('${p.id}',${p.activo})">${p.activo?'Activo':'Pausado'}</button>
+        </div>`;
+      lista.appendChild(div);
+    });
+  }catch(e){lista.innerHTML=`<div class="empty"><p>Error: ${e.message}</p></div>`;}
+}
+window.filtrar=function(f,el){
+  filtroActual=f;
+  document.querySelectorAll('.vtab').forEach(t=>t.classList.remove('active'));
+  el.classList.add('active');
+  cargarProductos();
+};
+window.abrirForm=function(){
+  editandoId=null;
+  document.getElementById('form-titulo').textContent='Nuevo Producto';
+  document.getElementById('btn-pub').textContent='PUBLICAR EN PROVEED';
+  ['f-nombre','f-desc','f-precio','f-minimo','f-stock'].forEach(id=>document.getElementById(id).value='');
+  document.getElementById('f-cat').value='';
+  document.getElementById('modal-overlay').classList.add('show');
+};
+window.cerrarForm=function(e){if(e.target===document.getElementById('modal-overlay')) document.getElementById('modal-overlay').classList.remove('show');};
+window.cerrarFormDirecto=function(){document.getElementById('modal-overlay').classList.remove('show');};
+window.editarProducto=async function(id){
+  editandoId=id;
+  const snap=await getDoc(doc(db,'productos',id));
+  const p=snap.data();
+  document.getElementById('f-nombre').value=p.nombre||'';
+  document.getElementById('f-desc').value=p.descripcion||'';
+  document.getElementById('f-cat').value=p.categoria||'';
+  document.getElementById('f-precio').value=p.precio||'';
+  document.getElementById('f-minimo').value=p.minimo||'';
+  document.getElementById('f-stock').value=p.stock||'';
+  document.getElementById('f-unidad').value=p.unidad||'unidad';
+  document.getElementById('f-entrega').value=p.tiempoEntrega||'inmediato';
+  document.getElementById('form-titulo').textContent='Editar Producto';
+  document.getElementById('btn-pub').textContent='GUARDAR CAMBIOS';
+  document.getElementById('modal-overlay').classList.add('show');
+};
+window.toggleActivo=async function(id,actual){
+  await updateDoc(doc(db,'productos',id),{activo:!actual});
+  cargarProductos();
+};
+window.publicar=async function(){
+  const nombre=document.getElementById('f-nombre').value.trim();
+  const cat=document.getElementById('f-cat').value;
+  const precio=parseFloat(document.getElementById('f-precio').value);
+  const minimo=parseInt(document.getElementById('f-minimo').value);
+  if(!nombre||!cat||!precio||!minimo){alert('Completa los campos obligatorios (*)');return;}
+  const btn=document.getElementById('btn-pub');
+  btn.disabled=true;btn.textContent='Guardando...';
+  try{
+    const datos={
+      nombre,
+      descripcion:document.getElementById('f-desc').value.trim(),
+      categoria:cat,precio,minimo,
+      stock:parseInt(document.getElementById('f-stock').value)||0,
+      unidad:document.getElementById('f-unidad').value,
+      tiempoEntrega:document.getElementById('f-entrega').value,
+      proveedorId:currentUser.uid,
+      nombreProveedor:empresaData.empresa||empresaData.nombre||'Proveedor',
+      activo:true
+    };
+    if(editandoId) await updateDoc(doc(db,'productos',editandoId),datos);
+    else{datos.creadoEn=serverTimestamp();await addDoc(collection(db,'productos'),datos);}
+    document.getElementById('modal-overlay').classList.remove('show');
+    cargarProductos();
+  }catch(e){
+    alert('Error: '+e.message);
+    btn.disabled=false;
+    btn.textContent=editandoId?'GUARDAR CAMBIOS':'PUBLICAR EN PROVEED';
+  }
+};
+</script>
+</body>
+</html>
