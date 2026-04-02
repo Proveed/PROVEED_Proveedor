@@ -2,172 +2,226 @@
 <html lang="es">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
 <title>PROVEED — Panel Proveedor</title>
-<link href="https://fonts.googleapis.com/css2?family=Syne:wght@700;800;900&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
 <style>
   *{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent;}
-  :root{ --naranja:#FF8C00; --negro:#0A0A0A; --blanco:#F8F8F5; --gris:#F0F1EE; --verde:#32CD32; --rojo:#FF4D4D; --azul:#007AFF; }
-  body{ background:var(--gris); font-family:'DM Sans',sans-serif; padding-bottom:90px; color:var(--negro); }
-  .header{ background:var(--negro); color:var(--blanco); padding:48px 22px 24px; border-radius:0 0 32px 32px; position:sticky; top:0; z-index:100; }
-  .h-row{ display:flex; align-items:center; justify-content:space-between; }
-  .h-empresa{ font-size:0.72rem; color:#666; margin-bottom:2px; }
-  .h-nombre{ font-family:'Syne',sans-serif; font-size:1.4rem; font-weight:800; letter-spacing:-0.5px; }
-  .h-icons{ display:flex; gap:14px; align-items:center; }
-  .h-icon{ cursor:pointer; position:relative; }
-  .h-icon svg{ width:26px; height:26px; stroke:#F8F8F5; fill:none; stroke-width:2; stroke-linecap:round; stroke-linejoin:round; }
-  .badge{ position:absolute; top:-6px; right:-6px; background:var(--rojo); color:white; font-size:0.58rem; font-weight:800; padding:2px 5px; border-radius:8px; border:2px solid var(--negro); display:none; }
-  .kpis{ display:grid; grid-template-columns:repeat(2,1fr); gap:12px; padding:18px 20px 4px; margin-top:-20px; }
-  .kpi{ background:white; border-radius:20px; padding:18px; box-shadow:0 2px 10px rgba(0,0,0,0.05); }
-  .kpi-label{ font-size:0.68rem; font-weight:600; color:#aaa; text-transform:uppercase; letter-spacing:0.6px; margin-bottom:8px; }
-  .kpi-val{ font-family:'Syne',sans-serif; font-size:1.6rem; font-weight:900; letter-spacing:-1px; }
-  .kpi-val.orange{ color:var(--naranja); }
-  .kpi-val.green{ color:var(--verde); }
-  .kpi-val.red{ color:var(--rojo); }
-  .kpi-sub{ font-size:0.7rem; color:#aaa; margin-top:3px; }
-  .modulos-grid{ display:grid; grid-template-columns:repeat(3,1fr); gap:10px; padding:16px 20px; }
-  .mod{ background:white; border-radius:20px; padding:18px 8px 14px; text-align:center; cursor:pointer; transition:0.18s; box-shadow:0 2px 8px rgba(0,0,0,0.04); position:relative; }
-  .mod:active{ transform:scale(0.93); }
-  .mod-icon{ width:46px; height:46px; border-radius:15px; background:var(--gris); display:flex; align-items:center; justify-content:center; margin:0 auto 10px; }
-  .mod-icon svg{ width:24px; height:24px; stroke:var(--negro); fill:none; stroke-width:2; stroke-linecap:round; stroke-linejoin:round; }
-  .mod-icon.orange{ background:rgba(255,140,0,0.12); }
-  .mod-icon.orange svg{ stroke:var(--naranja); }
-  .mod-icon.verde{ background:rgba(50,205,50,0.1); }
-  .mod-icon.verde svg{ stroke:var(--verde); }
-  .mod-icon.azul{ background:rgba(0,122,255,0.1); }
-  .mod-icon.azul svg{ stroke:var(--azul); }
-  .mod-icon.morado{ background:rgba(130,80,255,0.1); }
-  .mod-icon.morado svg{ stroke:#8250ff; }
-  .mod p{ font-size:0.62rem; font-weight:700; color:#666; text-transform:uppercase; letter-spacing:0.4px; }
-  .badge-mod{ position:absolute; top:10px; right:10px; background:var(--rojo); color:white; font-size:0.55rem; font-weight:800; padding:2px 6px; border-radius:8px; }
-  .section-head{ display:flex; justify-content:space-between; align-items:center; padding:8px 20px 10px; }
-  .section-head h3{ font-family:'Syne',sans-serif; font-size:1rem; font-weight:800; }
-  .section-head a{ font-size:0.8rem; color:var(--naranja); text-decoration:none; font-weight:600; }
-  .pedido-card{ background:white; border-radius:18px; padding:16px; margin:0 20px 10px; box-shadow:0 2px 8px rgba(0,0,0,0.04); display:flex; align-items:center; gap:14px; cursor:pointer; transition:0.15s; }
-  .pedido-card:active{ transform:scale(0.98); }
-  .pedido-dot{ width:10px; height:10px; border-radius:50%; flex-shrink:0; }
-  .dot-pendiente{ background:var(--azul); }
-  .dot-proceso{ background:var(--naranja); }
-  .dot-completado{ background:var(--verde); }
-  .pedido-info{ flex:1; min-width:0; }
-  .pedido-num{ font-weight:700; font-size:0.88rem; }
-  .pedido-cliente{ font-size:0.75rem; color:#aaa; margin-top:1px; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
-  .pedido-monto{ font-family:'Syne',sans-serif; font-weight:800; font-size:0.95rem; color:var(--naranja); }
-  .pedido-estado{ font-size:0.62rem; font-weight:700; padding:3px 8px; border-radius:8px; white-space:nowrap; }
-  .est-pendiente{ background:rgba(0,122,255,0.1); color:var(--azul); }
-  .est-proceso{ background:rgba(255,140,0,0.1); color:var(--naranja); }
-  .est-completado{ background:rgba(50,205,50,0.1); color:var(--verde); }
-  .empty-section{ text-align:center; padding:30px 20px; color:#bbb; }
-  .empty-section svg{ width:42px; height:42px; stroke:#ddd; fill:none; stroke-width:1.3; margin:0 auto 10px; display:block; }
-  .empty-section p{ font-size:0.82rem; }
-  .tab-bar{ position:fixed; bottom:0; width:100%; background:white; display:flex; justify-content:space-around; align-items:center; padding:10px 0 18px; border-top:1px solid #eee; box-shadow:0 -4px 20px rgba(0,0,0,0.06); z-index:200; }
-  .tab{ display:flex; flex-direction:column; align-items:center; gap:4px; cursor:pointer; flex:1; color:#ccc; text-decoration:none; transition:0.2s; }
+  :root{ --naranja:#FF8C00; --verde:#A8E63D; --negro:#0A0A0A; --blanco:#F8F8F5; --gris:#F2F3F0; --rojo:#FF4D4D; --azul:#007AFF; }
+  body{ background:var(--negro); font-family:'Inter',sans-serif; padding-bottom:90px; -webkit-font-smoothing:antialiased; }
+
+  /* HEADER */
+  .header{ background:var(--negro); padding:48px 20px 20px; }
+  .header-top{ display:flex; align-items:center; justify-content:space-between; margin-bottom:6px; }
+  .logo-row{ display:flex; align-items:center; gap:8px; }
+  .logo-hex{ width:32px; height:32px; }
+  .logo-text{ font-size:1.1rem; font-weight:800; color:white; letter-spacing:-0.3px; }
+  .logo-text span{ color:var(--naranja); }
+  .header-icons{ display:flex; gap:10px; }
+  .h-icon{ width:36px; height:36px; background:rgba(255,255,255,0.08); border-radius:10px; display:flex; align-items:center; justify-content:center; cursor:pointer; position:relative; }
+  .h-icon svg{ width:18px; height:18px; stroke:white; fill:none; stroke-width:2; }
+  .h-badge{ position:absolute; top:-4px; right:-4px; background:var(--rojo); color:white; font-size:0.52rem; font-weight:800; padding:2px 5px; border-radius:8px; border:2px solid var(--negro); display:none; }
+  .welcome-text{ font-size:0.82rem; color:#666; margin-top:2px; }
+  .welcome-name{ font-size:1.1rem; font-weight:700; color:white; }
+
+  /* KPI STRIP */
+  .kpi-strip{ display:flex; gap:10px; padding:16px 20px; overflow-x:auto; scrollbar-width:none; }
+  .kpi-strip::-webkit-scrollbar{ display:none; }
+  .kpi-card{ background:#161616; border-radius:16px; padding:14px 16px; flex-shrink:0; min-width:120px; border:1px solid #222; }
+  .kpi-val{ font-size:1.4rem; font-weight:800; color:white; line-height:1; }
+  .kpi-val.naranja{ color:var(--naranja); }
+  .kpi-val.verde{ color:var(--verde); }
+  .kpi-lbl{ font-size:0.65rem; color:#555; font-weight:600; text-transform:uppercase; letter-spacing:0.5px; margin-top:4px; }
+  .kpi-trend{ font-size:0.68rem; color:var(--verde); margin-top:2px; }
+
+  /* MÓDULOS */
+  .section-label{ font-size:0.7rem; font-weight:700; color:#444; text-transform:uppercase; letter-spacing:1px; padding:16px 20px 8px; }
+  .modulos-grid{ display:grid; grid-template-columns:repeat(3,1fr); gap:10px; padding:0 20px; }
+  .modulo{ background:#161616; border-radius:16px; padding:16px 12px; display:flex; flex-direction:column; align-items:center; gap:8px; cursor:pointer; transition:0.2s; border:1px solid #222; text-decoration:none; }
+  .modulo:active{ transform:scale(0.95); background:#1e1e1e; }
+  .mod-icon{ width:44px; height:44px; border-radius:14px; display:flex; align-items:center; justify-content:center; }
+  .mod-icon svg{ width:22px; height:22px; fill:none; stroke-width:2; stroke-linecap:round; }
+  .mod-label{ font-size:0.68rem; font-weight:600; color:#aaa; text-align:center; }
+  .mod-badge{ font-size:0.58rem; font-weight:800; padding:2px 6px; border-radius:6px; margin-top:-4px; }
+
+  /* COLORES MÓDULOS */
+  .mod-naranja .mod-icon{ background:rgba(255,140,0,0.12); }
+  .mod-naranja .mod-icon svg{ stroke:var(--naranja); }
+  .mod-verde .mod-icon{ background:rgba(168,230,61,0.12); }
+  .mod-verde .mod-icon svg{ stroke:var(--verde); }
+  .mod-azul .mod-icon{ background:rgba(0,122,255,0.12); }
+  .mod-azul .mod-icon svg{ stroke:var(--azul); }
+  .mod-rojo .mod-icon{ background:rgba(255,77,77,0.12); }
+  .mod-rojo .mod-icon svg{ stroke:var(--rojo); }
+  .mod-morado .mod-icon{ background:rgba(175,82,222,0.12); }
+  .mod-morado .mod-icon svg{ stroke:#AF52DE; }
+  .mod-cyan .mod-icon{ background:rgba(50,173,230,0.12); }
+  .mod-cyan .mod-icon svg{ stroke:#32ADE6; }
+  .mod-pink .mod-icon{ background:rgba(255,45,85,0.12); }
+  .mod-pink .mod-icon svg{ stroke:#FF2D55; }
+  .mod-yellow .mod-icon{ background:rgba(255,204,0,0.12); }
+  .mod-yellow .mod-icon svg{ stroke:#FFCC00; }
+  .mod-teal .mod-icon{ background:rgba(90,200,250,0.12); }
+  .mod-teal .mod-icon svg{ stroke:#5AC8FA; }
+
+  /* PEDIDOS RECIENTES */
+  .pedidos-recientes{ padding:0 20px; margin-top:4px; }
+  .ped-item{ background:#161616; border-radius:14px; padding:14px; margin-bottom:8px; display:flex; align-items:center; gap:12px; border:1px solid #222; cursor:pointer; }
+  .ped-num{ font-size:0.82rem; font-weight:700; color:white; }
+  .ped-cliente{ font-size:0.72rem; color:#666; margin-top:1px; }
+  .ped-total{ font-size:0.88rem; font-weight:700; color:var(--naranja); margin-left:auto; }
+  .ped-estado{ font-size:0.62rem; font-weight:700; padding:3px 8px; border-radius:6px; }
+  .est-pendiente{ background:rgba(0,122,255,0.15); color:var(--azul); }
+  .est-proceso{ background:rgba(255,140,0,0.15); color:var(--naranja); }
+  .est-completado{ background:rgba(168,230,61,0.15); color:var(--verde); }
+
+  .empty-ped{ text-align:center; padding:24px; color:#444; font-size:0.82rem; }
+
+  /* TAB BAR */
+  .tab-bar{ position:fixed; bottom:0; width:100%; background:#111; display:flex; justify-content:space-around; align-items:center; padding:10px 0 22px; border-top:1px solid #1e1e1e; z-index:200; }
+  .tab{ display:flex; flex-direction:column; align-items:center; gap:4px; cursor:pointer; flex:1; color:#444; text-decoration:none; transition:0.2s; }
   .tab.active{ color:var(--naranja); }
-  .tab svg{ width:23px; height:23px; stroke:currentColor; fill:none; stroke-width:2; stroke-linecap:round; stroke-linejoin:round; }
-  .tab span{ font-size:0.6rem; font-weight:700; text-transform:uppercase; letter-spacing:0.5px; }
+  .tab svg{ width:22px; height:22px; stroke:currentColor; fill:none; stroke-width:2; stroke-linecap:round; }
+  .tab span{ font-size:0.56rem; font-weight:600; text-transform:uppercase; letter-spacing:0.3px; }
 </style>
 </head>
 <body>
-<header class="header">
-  <div class="h-row">
-    <div>
-      <div class="h-empresa" id="h-empresa">Cargando...</div>
-      <div class="h-nombre" id="h-nombre">Panel ERP</div>
+
+<div class="header">
+  <div class="header-top">
+    <div class="logo-row">
+      <svg class="logo-hex" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+        <defs><linearGradient id="g1" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" style="stop-color:#FF8C00"/><stop offset="100%" style="stop-color:#e67300"/></linearGradient></defs>
+        <path d="M50 4 L93 28 V72 L50 96 L7 72 V28 Z" fill="url(#g1)"/>
+        <path d="M30 52 L44 66 L70 36" stroke="white" stroke-width="7" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
+      </svg>
+      <div class="logo-text">PRO<span>VEED</span></div>
     </div>
-    <div class="h-icons">
-      <div class="h-icon" onclick="window.location.href='chat.html'" style="position:relative;">
+    <div class="header-icons">
+      <div class="h-icon" onclick="window.location.href='chat.html'">
         <svg viewBox="0 0 24 24"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
-        <div class="badge" id="badge-chat">!</div>
+        <div class="h-badge" id="badge-chat">!</div>
       </div>
       <div class="h-icon" onclick="window.location.href='perfil.html'">
         <svg viewBox="0 0 24 24"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
       </div>
     </div>
   </div>
-</header>
-
-<div class="kpis">
-  <div class="kpi orange"><div class="kpi-label">Pedidos hoy</div><div class="kpi-val orange" id="kpi-pedidos">—</div><div class="kpi-sub">pendientes</div></div>
-  <div class="kpi green"><div class="kpi-label">Productos activos</div><div class="kpi-val green" id="kpi-productos">—</div><div class="kpi-sub">en catálogo</div></div>
-  <div class="kpi"><div class="kpi-label">Total ventas</div><div class="kpi-val" id="kpi-ventas">—</div><div class="kpi-sub">acumulado</div></div>
-  <div class="kpi red"><div class="kpi-label">Stock bajo</div><div class="kpi-val red" id="kpi-stock">—</div><div class="kpi-sub">productos</div></div>
+  <div class="welcome-text">Bienvenido de vuelta</div>
+  <div class="welcome-name" id="welcome-name">Proveedor</div>
 </div>
 
+<!-- KPIs -->
+<div class="kpi-strip">
+  <div class="kpi-card">
+    <div class="kpi-val naranja" id="kpi-ventas">$0</div>
+    <div class="kpi-lbl">Ventas hoy</div>
+    <div class="kpi-trend" id="kpi-trend">↑ cargando</div>
+  </div>
+  <div class="kpi-card">
+    <div class="kpi-val" id="kpi-pedidos">0</div>
+    <div class="kpi-lbl">Pedidos nuevos</div>
+  </div>
+  <div class="kpi-card">
+    <div class="kpi-val verde" id="kpi-productos">0</div>
+    <div class="kpi-lbl">Productos activos</div>
+  </div>
+  <div class="kpi-card">
+    <div class="kpi-val" id="kpi-chats">0</div>
+    <div class="kpi-lbl">Chats activos</div>
+  </div>
+</div>
+
+<!-- MÓDULOS -->
+<div class="section-label">Módulos</div>
 <div class="modulos-grid">
-  <div class="mod" onclick="window.location.href='productos.html'">
-    <div class="mod-icon orange"><svg viewBox="0 0 24 24"><path d="M12 5v14M5 12h14"/></svg></div>
-    <p>Nuevo prod.</p>
-  </div>
-  <div class="mod" onclick="window.location.href='inventario.html'">
-    <div class="mod-icon verde"><svg viewBox="0 0 24 24"><path d="M21 8l-9-4-9 4 9 4 9-4zM3 12l9 4 9-4M3 16l9 4 9-4"/></svg></div>
-    <p>Inventario</p>
-  </div>
-  <div class="mod" onclick="window.location.href='pedidos.html'" id="mod-pedidos">
-    <div class="mod-icon azul"><svg viewBox="0 0 24 24"><path d="M1 3h15v13H1zM16 8h4l3 3v5h-7M5 19a2 2 0 1 0 0 4 2 2 0 0 0 0-4zM18 19a2 2 0 1 0 0 4 2 2 0 0 0 0-4z"/></svg></div>
-    <p>Despachos</p>
-  </div>
-  <div class="mod" onclick="window.location.href='facturador.html'">
-    <div class="mod-icon"><svg viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg></div>
-    <p>Facturador</p>
-  </div>
-  <div class="mod" onclick="window.location.href='estadisticas.html'">
-    <div class="mod-icon"><svg viewBox="0 0 24 24"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/></svg></div>
-    <p>Estadísticas</p>
-  </div>
-  <div class="mod" onclick="window.location.href='chat.html'">
+  <a class="modulo mod-naranja" href="productos.html">
+    <div class="mod-icon"><svg viewBox="0 0 24 24"><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"/></svg></div>
+    <div class="mod-label">Productos</div>
+  </a>
+  <a class="modulo mod-azul" href="pedidos.html">
+    <div class="mod-icon"><svg viewBox="0 0 24 24"><path d="M1 3h15v13H1zM16 8h4l3 3v5h-7M5 19a2 2 0 1 0 0 4 2 2 0 0 0 0-4zM18 19a2 2 0 1 0 0 4 2 2 0 0 0 0-4z"/></svg></div>
+    <div class="mod-label">Pedidos</div>
+    <div class="mod-badge est-pendiente" id="mod-badge-ped" style="display:none;">0</div>
+  </a>
+  <a class="modulo mod-verde" href="chat.html">
     <div class="mod-icon"><svg viewBox="0 0 24 24"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg></div>
-    <p>Chat</p>
-  </div>
-  <div class="mod" onclick="window.location.href='sucursales.html'">
+    <div class="mod-label">Chat</div>
+    <div class="mod-badge" id="mod-badge-chat" style="display:none;background:rgba(168,230,61,0.2);color:var(--verde);">0</div>
+  </a>
+  <a class="modulo mod-cyan" href="inventario.html">
+    <div class="mod-icon"><svg viewBox="0 0 24 24"><line x1="8" y1="6" x2="21" y2="6"/><line x1="8" y1="12" x2="21" y2="12"/><line x1="8" y1="18" x2="21" y2="18"/><line x1="3" y1="6" x2="3.01" y2="6"/><line x1="3" y1="12" x2="3.01" y2="12"/><line x1="3" y1="18" x2="3.01" y2="18"/></svg></div>
+    <div class="mod-label">Inventario</div>
+  </a>
+  <a class="modulo mod-morado" href="estadisticas.html">
+    <div class="mod-icon"><svg viewBox="0 0 24 24"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/></svg></div>
+    <div class="mod-label">Estadísticas</div>
+  </a>
+  <a class="modulo mod-yellow" href="facturador.html">
+    <div class="mod-icon"><svg viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/></svg></div>
+    <div class="mod-label">Facturador</div>
+  </a>
+  <a class="modulo mod-teal" href="sucursales.html">
     <div class="mod-icon"><svg viewBox="0 0 24 24"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg></div>
-    <p>Sucursales</p>
-  </div>
-  <div class="mod" onclick="window.location.href='contabilidad.html'">
+    <div class="mod-label">Sucursales</div>
+  </a>
+  <a class="modulo mod-pink" href="acceso.html">
+    <div class="mod-icon"><svg viewBox="0 0 24 24"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg></div>
+    <div class="mod-label">Accesos</div>
+  </a>
+  <a class="modulo mod-verde" href="contabilidad.html">
     <div class="mod-icon"><svg viewBox="0 0 24 24"><line x1="12" y1="1" x2="12" y2="23"/><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg></div>
-    <p>SRI</p>
-  </div>
-  <div class="mod" onclick="window.location.href='servicio.html'">
-    <div class="mod-icon"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg></div>
-    <p>Soporte</p>
-  </div>
-  <div class="mod" onclick="window.location.href='acceso.html'">
-    <div class="mod-icon azul"><svg viewBox="0 0 24 24"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg></div>
-    <p>Accesos</p>
-  </div>
-  <div class="mod" onclick="window.location.href='transporte.html'">
-    <div class="mod-icon orange"><svg viewBox="0 0 24 24"><path d="M1 3h15v13H1zM16 8h4l3 3v5h-7M5 19a2 2 0 1 0 0 4 2 2 0 0 0 0-4zM18 19a2 2 0 1 0 0 4 2 2 0 0 0 0-4z"/></svg></div>
-    <p>Transporte</p>
-  </div>
-  <div class="mod" onclick="window.location.href='perfil.html'">
-    <div class="mod-icon morado"><svg viewBox="0 0 24 24"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg></div>
-    <p>Mi empresa</p>
-  </div>
+    <div class="mod-label">Contabilidad</div>
+  </a>
+  <a class="modulo mod-azul" href="transporte.html">
+    <div class="mod-icon"><svg viewBox="0 0 24 24"><path d="M1 3h15v13H1zM16 8h4l3 3v5h-7M5 19a2 2 0 1 0 0 4 2 2 0 0 0 0-4zM18 19a2 2 0 1 0 0 4 2 2 0 0 0 0-4z"/></svg></div>
+    <div class="mod-label">Transporte</div>
+  </a>
+  <a class="modulo mod-rojo" href="servicio.html">
+    <div class="mod-icon"><svg viewBox="0 0 24 24"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07A19.5 19.5 0 0 1 4.69 12a19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 3.62 1h3a2 2 0 0 1 2 1.72c.127.96.361 1.903.7 2.81a2 2 0 0 1-.45 2.11L8.09 8.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0 1 22 16.92z"/></svg></div>
+    <div class="mod-label">Servicio</div>
+  </a>
+  <a class="modulo mod-naranja" href="tips-proveedor.html">
+    <div class="mod-icon"><svg viewBox="0 0 24 24"><path d="M15 10l4.553-2.069A1 1 0 0 1 21 8.87v6.26a1 1 0 0 1-1.447.894L15 14M3 8a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2v8a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8z"/></svg></div>
+    <div class="mod-label">Tips</div>
+  </a>
 </div>
 
-<div class="section-head">
-  <h3>Pedidos recientes</h3>
-  <a href="pedidos.html">Ver todos</a>
-</div>
-<div id="pedidos-lista">
-  <div class="empty-section">
-    <svg viewBox="0 0 24 24"><path d="M1 3h15v13H1zM16 8h4l3 3v5h-7"/></svg>
-    <p>Aún no hay pedidos</p>
-  </div>
+<!-- PEDIDOS RECIENTES -->
+<div class="section-label" style="margin-top:8px;">Pedidos recientes</div>
+<div class="pedidos-recientes" id="pedidos-recientes">
+  <div class="empty-ped">Cargando pedidos...</div>
 </div>
 
 <nav class="tab-bar">
-  <a class="tab active" href="dashboard.html"><svg viewBox="0 0 24 24"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/></svg><span>Panel</span></a>
-  <a class="tab" href="productos.html"><svg viewBox="0 0 24 24"><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"/></svg><span>Productos</span></a>
-  <a class="tab" href="pedidos.html"><svg viewBox="0 0 24 24"><path d="M1 3h15v13H1zM16 8h4l3 3v5h-7M5 19a2 2 0 1 0 0 4 2 2 0 0 0 0-4zM18 19a2 2 0 1 0 0 4 2 2 0 0 0 0-4z"/></svg><span>Pedidos</span></a>
-  <a class="tab" href="chat.html"><svg viewBox="0 0 24 24"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg><span>Chat</span></a>
-  <a class="tab" href="perfil.html"><svg viewBox="0 0 24 24"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg><span>Perfil</span></a>
+  <a class="tab active" href="dashboard.html">
+    <svg viewBox="0 0 24 24"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/></svg>
+    <span>Panel</span>
+  </a>
+  <a class="tab" href="productos.html">
+    <svg viewBox="0 0 24 24"><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"/></svg>
+    <span>Productos</span>
+  </a>
+  <a class="tab" href="tips-proveedor.html">
+    <svg viewBox="0 0 24 24"><path d="M15 10l4.553-2.069A1 1 0 0 1 21 8.87v6.26a1 1 0 0 1-1.447.894L15 14M3 8a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2v8a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8z"/></svg>
+    <span>Tips</span>
+  </a>
+  <a class="tab" href="pedidos.html">
+    <svg viewBox="0 0 24 24"><path d="M1 3h15v13H1zM16 8h4l3 3v5h-7M5 19a2 2 0 1 0 0 4 2 2 0 0 0 0-4zM18 19a2 2 0 1 0 0 4 2 2 0 0 0 0-4z"/></svg>
+    <span>Pedidos</span>
+  </a>
+  <a class="tab" href="chat.html">
+    <svg viewBox="0 0 24 24"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
+    <span>Chat</span>
+  </a>
 </nav>
 
 <script type="module">
 import { initializeApp } from "https://www.gstatic.com/firebasejs/11.0.0/firebase-app.js";
 import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/11.0.0/firebase-auth.js";
-import { getFirestore, doc, getDoc, collection, query, where, orderBy, limit, getDocs, onSnapshot } from "https://www.gstatic.com/firebasejs/11.0.0/firebase-firestore.js";
-const app=initializeApp({
+import { getFirestore, collection, query, where, getDocs, doc, getDoc, orderBy } from "https://www.gstatic.com/firebasejs/11.0.0/firebase-firestore.js";
+
+const app = initializeApp({
   apiKey:"AIzaSyAZQRlfdtJjmodrfmct5N3qrLO6hniO2o8",
   authDomain:"proveed-8cb7c.firebaseapp.com",
   projectId:"proveed-8cb7c",
@@ -175,72 +229,93 @@ const app=initializeApp({
   messagingSenderId:"235073250367",
   appId:"1:235073250367:web:89ec59fea5f0b8a347448a"
 });
-const auth=getAuth(app);
-const db=getFirestore(app);
-onAuthStateChanged(auth,async(user)=>{
-  if(!user){window.location.href='login.html';return;}
-  const snap=await getDoc(doc(db,'usuarios',user.uid));
-  if(!snap.exists()||snap.data().rol!=='proveedor'){window.location.href='login.html';return;}
-  const d=snap.data();
-  document.getElementById('h-empresa').textContent=d.empresa||'Mi empresa';
-  document.getElementById('h-nombre').textContent='Hola, '+(d.nombre||'').split(' ')[0];
-  cargarKPIs(user.uid,d.empresa);
-  cargarPedidosRecientes(user.uid,d.empresa);
-  escucharChats(user.uid);
-});
-async function cargarKPIs(uid,empresa){
-  try{
-    const qp=await getDocs(query(collection(db,'productos'),where('proveedorId','==',uid),where('activo','==',true)));
-    document.getElementById('kpi-productos').textContent=qp.size;
-    const qpeds=await getDocs(query(collection(db,'pedidos')));
-    let pend=0,ventas=0,stockBajo=0;
-    qpeds.forEach(d=>{
-      const items=(d.data().items||[]).filter(i=>i.proveedor===empresa);
-      if(items.length&&d.data().estado==='pendiente') pend++;
-      if(items.length&&d.data().estado==='completado') items.forEach(i=>ventas+=i.precio*i.cantidad);
-    });
-    const qst=await getDocs(query(collection(db,'productos'),where('proveedorId','==',uid)));
-    qst.forEach(d=>{if((d.data().stock||0)<10) stockBajo++;});
-    document.getElementById('kpi-pedidos').textContent=pend;
-    document.getElementById('kpi-ventas').textContent='$'+ventas.toFixed(0);
-    document.getElementById('kpi-stock').textContent=stockBajo;
-    if(pend>0){
-      const mod=document.getElementById('mod-pedidos');
-      const badge=document.createElement('div');
-      badge.className='badge-mod';
-      badge.textContent=pend;
-      mod.appendChild(badge);
+const auth = getAuth(app);
+const db = getFirestore(app);
+
+onAuthStateChanged(auth, async user => {
+  if (!user) { window.location.href = 'login.html'; return; }
+  try {
+    const snap = await getDoc(doc(db, 'usuarios', user.uid));
+    if (snap.exists()) {
+      const d = snap.data();
+      document.getElementById('welcome-name').textContent = d.empresa || d.nombre || 'Proveedor';
     }
-  }catch(e){console.warn(e);}
-}
-async function cargarPedidosRecientes(uid,empresa){
-  const lista=document.getElementById('pedidos-lista');
-  try{
-    const snap=await getDocs(query(collection(db,'pedidos'),orderBy('creadoEn','desc'),limit(20)));
-    const misPedidos=[];
-    snap.forEach(d=>{
-      const items=(d.data().items||[]).filter(i=>i.proveedor===empresa);
-      if(items.length) misPedidos.push({id:d.id,...d.data()});
+  } catch(e) {}
+  cargarKPIs(user.uid);
+  cargarPedidos(user.uid);
+  cargarChats(user.uid);
+});
+
+async function cargarKPIs(uid) {
+  try {
+    const qProd = await getDocs(query(collection(db, 'productos'), where('proveedorId', '==', uid), where('activo', '==', true)));
+    document.getElementById('kpi-productos').textContent = qProd.size;
+    const qPed = await getDocs(query(collection(db, 'pedidos')));
+    let pedidosHoy = 0, ventasHoy = 0, pendientes = 0;
+    const hoy = new Date(); hoy.setHours(0,0,0,0);
+    qPed.forEach(d => {
+      const p = d.data();
+      const tieneProductos = (p.items || []).some(i => i.proveedor === (document.getElementById('welcome-name').textContent));
+      if (tieneProductos) {
+        if (p.estado === 'pendiente') pendientes++;
+        const fecha = p.creadoEn?.toDate?.();
+        if (fecha && fecha >= hoy) { pedidosHoy++; ventasHoy += p.total || 0; }
+      }
     });
-    if(!misPedidos.length){lista.innerHTML=`<div class="empty-section"><svg viewBox="0 0 24 24"><path d="M1 3h15v13H1z"/></svg><p>Aún no hay pedidos</p></div>`;return;}
-    lista.innerHTML='';
-    misPedidos.slice(0,5).forEach(p=>{
-      const est=p.estado||'pendiente';
-      const div=document.createElement('div');
-      div.className='pedido-card';
-      div.onclick=()=>window.location.href='pedidos.html';
-      div.innerHTML=`<div class="pedido-dot dot-${est}"></div>
-        <div class="pedido-info"><div class="pedido-num">#PV-${p.id.slice(-6).toUpperCase()}</div><div class="pedido-cliente">${p.entrega?.nombre||'Cliente'} · ${p.entrega?.ciudad||''}</div></div>
-        <div style="text-align:right"><div class="pedido-monto">$${Number(p.total||0).toFixed(2)}</div><div class="pedido-estado est-${est}">${est}</div></div>`;
-      lista.appendChild(div);
-    });
-  }catch(e){console.warn(e);}
+    document.getElementById('kpi-ventas').textContent = '$' + ventasHoy.toFixed(0);
+    document.getElementById('kpi-pedidos').textContent = pedidosHoy;
+    document.getElementById('kpi-trend').textContent = pedidosHoy > 0 ? '↑ ' + pedidosHoy + ' hoy' : '— sin pedidos hoy';
+    if (pendientes > 0) {
+      const b = document.getElementById('mod-badge-ped');
+      b.textContent = pendientes; b.style.display = 'block';
+    }
+  } catch(e) { console.warn(e); }
 }
-function escucharChats(uid){
-  const q=query(collection(db,'chats'),where('proveedorId','==',uid),where('noLeidos','>',0));
-  onSnapshot(q,snap=>{
-    document.getElementById('badge-chat').style.display=snap.size>0?'block':'none';
-  });
+
+async function cargarChats(uid) {
+  try {
+    const snap = await getDocs(query(collection(db, 'chats'), where('proveedorId', '==', uid)));
+    document.getElementById('kpi-chats').textContent = snap.size;
+    let noLeidos = 0;
+    snap.forEach(d => { noLeidos += d.data().noLeidos || 0; });
+    if (noLeidos > 0) {
+      document.getElementById('badge-chat').textContent = noLeidos;
+      document.getElementById('badge-chat').style.display = 'block';
+      const mc = document.getElementById('mod-badge-chat');
+      mc.textContent = noLeidos; mc.style.display = 'block';
+    }
+  } catch(e) {}
+}
+
+async function cargarPedidos(uid) {
+  const cont = document.getElementById('pedidos-recientes');
+  try {
+    const snap = await getDocs(collection(db, 'pedidos'));
+    const empresa = document.getElementById('welcome-name').textContent;
+    let pedidos = [];
+    snap.forEach(d => {
+      const p = d.data();
+      if ((p.items || []).some(i => i.proveedor === empresa)) pedidos.push({ id: d.id, ...p });
+    });
+    pedidos.sort((a, b) => (b.creadoEn?.toMillis?.() || 0) - (a.creadoEn?.toMillis?.() || 0));
+    pedidos = pedidos.slice(0, 5);
+    if (!pedidos.length) { cont.innerHTML = '<div class="empty-ped">Sin pedidos aún</div>'; return; }
+    cont.innerHTML = '';
+    pedidos.forEach(p => {
+      const div = document.createElement('div');
+      div.className = 'ped-item';
+      div.onclick = () => window.location.href = 'pedidos.html';
+      const est = p.estado || 'pendiente';
+      div.innerHTML = `
+        <div>
+          <div class="ped-num">#PV-${p.id.slice(-6).toUpperCase()}</div>
+          <div class="ped-cliente">${p.entrega?.nombre || 'Cliente'}</div>
+        </div>
+        <div class="ped-total">$${Number(p.total || 0).toFixed(2)}</div>
+        <div class="ped-estado est-${est}">${est}</div>`;
+      cont.appendChild(div);
+    });
+  } catch(e) { cont.innerHTML = '<div class="empty-ped">Error al cargar</div>'; }
 }
 </script>
 </body>
