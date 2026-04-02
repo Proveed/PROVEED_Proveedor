@@ -3,203 +3,165 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>PROVEED — Panel de Control</title>
+    <title>PROVEED — Dashboard Original</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <link href="https://fonts.googleapis.com/css2?family=Syne:wght@700;800&family=DM+Sans:wght@400;500;700&display=swap" rel="stylesheet">
-    
     <style>
         * { margin: 0; padding: 0; box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
-        :root { 
-            --naranja: #FF8C00; 
-            --negro: #0A0A0A; 
-            --gris-card: #161616; 
-            --borde: #262626;
-            --texto-secundario: #888888;
-        }
+        :root { --naranja: #FF8C00; --negro: #0A0A0A; --gris: #161616; --borde: #222; }
         
         body { 
             background-color: var(--negro); 
             font-family: 'DM Sans', sans-serif; 
-            color: #FFFFFF;
-            padding-bottom: 90px;
-            overflow-x: hidden;
+            color: #FFF;
+            padding-bottom: 100px;
         }
 
-        /* Header con Estilo Pro */
+        /* Header Original */
         .header {
-            padding: 50px 20px 25px;
+            padding: 60px 25px 30px;
             background: linear-gradient(180deg, #111 0%, #0A0A0A 100%);
             border-bottom: 1px solid var(--borde);
         }
-        .header h1 { 
-            font-family: 'Syne', sans-serif; 
-            font-size: 24px; 
-            color: var(--naranja); 
-            letter-spacing: -0.5px;
+        .header h1 { font-family: 'Syne', sans-serif; font-size: 26px; color: var(--naranja); }
+        .header p { font-size: 14px; color: #666; margin-top: 4px; }
+
+        /* Grid de Cards */
+        .grid-menu {
+            padding: 20px;
+            display: grid;
+            gap: 15px;
         }
-        .header p { font-size: 13px; color: var(--texto-secundario); margin-top: 4px; }
-
-        /* Contenedor Principal */
-        .main-content { padding: 20px; }
-
-        /* Grid de Accesos Rápidos */
-        .menu-grid { display: grid; gap: 12px; }
 
         .card {
-            background: var(--gris-card);
-            border-radius: 22px;
-            padding: 18px;
-            text-decoration: none;
+            background: var(--gris);
+            border: 1px solid var(--borde);
+            border-radius: 24px;
+            padding: 20px;
             display: flex;
             align-items: center;
-            gap: 16px;
-            border: 1px solid var(--borde);
-            transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+            text-decoration: none;
+            transition: all 0.3s ease;
         }
-        .card:active { transform: scale(0.96); background: #1a1a1a; border-color: var(--naranja); }
+        .card:active { transform: scale(0.96); background: #1f1f1f; }
 
-        .card-icon {
-            width: 52px;
-            height: 52px;
-            background: rgba(255, 140, 0, 0.08);
-            border-radius: 16px;
+        .icon-box {
+            width: 55px;
+            height: 55px;
+            background: rgba(255, 140, 0, 0.1);
+            border-radius: 18px;
             display: flex;
             align-items: center;
             justify-content: center;
             font-size: 22px;
             color: var(--naranja);
-            border: 1px solid rgba(255, 140, 0, 0.15);
+            margin-right: 18px;
         }
 
-        .card-body { flex: 1; }
-        .card-body h3 { font-size: 16px; font-weight: 700; color: #FFFFFF; margin-bottom: 2px; }
-        .card-body p { font-size: 12px; color: var(--texto-secundario); }
+        .card-content { flex: 1; }
+        .card-content h3 { font-size: 17px; font-weight: 700; color: #FFF; }
+        .card-content p { font-size: 12px; color: #777; margin-top: 2px; }
 
-        .arrow-right { color: #333; font-size: 14px; }
+        .arrow { color: #333; font-size: 14px; }
 
-        /* Sección de Métricas */
-        .stats-row {
+        /* Stats Rápidas */
+        .stats-container {
             display: grid;
             grid-template-columns: 1fr 1fr;
-            gap: 12px;
-            margin-top: 20px;
+            gap: 15px;
+            padding: 0 20px 20px;
         }
-        .stat-item {
-            background: var(--gris-card);
-            padding: 16px;
+        .stat-card {
+            background: #111;
+            padding: 18px;
             border-radius: 20px;
             border: 1px solid var(--borde);
+            text-align: center;
         }
-        .stat-item span { font-size: 10px; color: #555; text-transform: uppercase; font-weight: 700; letter-spacing: 0.5px; }
-        .stat-item h4 { font-size: 18px; margin-top: 6px; color: #FFF; font-family: 'Syne', sans-serif; }
+        .stat-card span { font-size: 11px; color: #555; text-transform: uppercase; font-weight: 700; }
+        .stat-card h2 { font-size: 20px; color: #FFF; margin-top: 5px; font-family: 'Syne', sans-serif; }
 
-        /* Navegación Inferior (Tab Bar) */
-        .bottom-nav {
+        /* Tab Bar Navegación */
+        .tab-bar {
             position: fixed;
             bottom: 0;
             left: 0;
-            right: 0;
-            background: rgba(10, 10, 10, 0.85);
-            backdrop-filter: blur(20px);
-            -webkit-backdrop-filter: blur(20px);
+            width: 100%;
+            background: rgba(10, 10, 10, 0.9);
+            backdrop-filter: blur(15px);
             display: flex;
             justify-content: space-around;
-            padding: 12px 0 32px;
+            padding: 15px 0 35px;
             border-top: 1px solid var(--borde);
-            z-index: 100;
+            z-index: 1000;
         }
-        .nav-link { 
-            color: #444; 
-            text-decoration: none; 
-            font-size: 22px; 
-            transition: 0.3s;
-        }
-        .nav-link.active { color: var(--naranja); }
-
-        /* Badge de Notificación */
-        .badge {
-            position: absolute;
-            top: -5px;
-            right: -5px;
-            background: var(--naranja);
-            color: #000;
-            font-size: 10px;
-            font-weight: 800;
-            padding: 2px 6px;
-            border-radius: 10px;
-        }
+        .tab-item { color: #444; text-decoration: none; font-size: 22px; }
+        .tab-item.active { color: var(--naranja); }
     </style>
 </head>
 <body>
 
-    <header class="header">
-        <h1>PROVEED Business</h1>
-        <p>Dashboard de Operaciones v2.0</p>
-    </header>
+    <div class="header">
+        <h1>PROVEED</h1>
+        <p>Panel de Administración Proveedor</p>
+    </div>
 
-    <main class="main-content">
+    <div class="grid-menu">
         
-        <div class="menu-grid">
-            
-            <a href="chat_proveedor.html" class="card">
-                <div class="card-icon" style="position: relative;">
-                    <i class="fas fa-comments"></i>
-                    <span class="badge">!</span>
-                </div>
-                <div class="card-body">
-                    <h3>Centro de Mensajes</h3>
-                    <p>Atención a emprendedores</p>
-                </div>
-                <i class="fas fa-chevron-right arrow-right"></i>
-            </a>
-
-            <a href="mis_productos.html" class="card">
-                <div class="card-icon"><i class="fas fa-boxes-stacked"></i></div>
-                <div class="card-body">
-                    <h3>Inventario Real</h3>
-                    <p>Gestionar stock y precios</p>
-                </div>
-                <i class="fas fa-chevron-right arrow-right"></i>
-            </a>
-
-            <a href="tips_proveedor.html" class="card">
-                <div class="card-icon"><i class="fas fa-lightbulb"></i></div>
-                <div class="card-body">
-                    <h3>Tips de Venta</h3>
-                    <p>Neuromarketing y conversión</p>
-                </div>
-                <i class="fas fa-chevron-right arrow-right"></i>
-            </a>
-
-            <a href="proveed_seg.html" class="card">
-                <div class="card-icon"><i class="fas fa-shield-halved"></i></div>
-                <div class="card-body">
-                    <h3>Proveed Seg</h3>
-                    <p>Validación de tokens antifraude</p>
-                </div>
-                <i class="fas fa-chevron-right arrow-right"></i>
-            </a>
-
-        </div>
-
-        <div class="stats-row">
-            <div class="stat-item">
-                <span>Ventas (Hoy)</span>
-                <h4>$0.00</h4>
+        <a href="chat_proveedor.html" class="card">
+            <div class="icon-box"><i class="fas fa-comment-alt"></i></div>
+            <div class="card-content">
+                <h3>Mensajes</h3>
+                <p>Chat con emprendedores</p>
             </div>
-            <div class="stat-item">
-                <span>Pedidos Activos</span>
-                <h4>0</h4>
+            <i class="fas fa-chevron-right arrow"></i>
+        </a>
+
+        <a href="tips_proveedor.html" class="card">
+            <div class="icon-box"><i class="fas fa-lightbulb"></i></div>
+            <div class="card-content">
+                <h3>Tips de Venta</h3>
+                <p>Estrategias de crecimiento</p>
             </div>
+            <i class="fas fa-chevron-right arrow"></i>
+        </a>
+
+        <a href="mis_productos.html" class="card">
+            <div class="icon-box"><i class="fas fa-box-open"></i></div>
+            <div class="card-content">
+                <h3>Mis Productos</h3>
+                <p>Gestión de stock e inventario</p>
+            </div>
+            <i class="fas fa-chevron-right arrow"></i>
+        </a>
+
+        <a href="proveed_seg.html" class="card">
+            <div class="icon-box"><i class="fas fa-user-shield"></i></div>
+            <div class="card-content">
+                <h3>Proveed Seg</h3>
+                <p>Seguridad y tokens antifraude</p>
+            </div>
+            <i class="fas fa-chevron-right arrow"></i>
+        </a>
+
+    </div>
+
+    <div class="stats-container">
+        <div class="stat-card">
+            <span>Balance</span>
+            <h2>$0.00</h2>
         </div>
+        <div class="stat-card">
+            <span>Pedidos</span>
+            <h2>0</h2>
+        </div>
+    </div>
 
-    </main>
-
-    <nav class="bottom-nav">
-        <a href="dashboard_proveedor.html" class="nav-link active"><i class="fas fa-house"></i></a>
-        <a href="chat_proveedor.html" class="nav-link"><i class="fas fa-message"></i></a>
-        <a href="pedidos_proveedor.html" class="nav-link"><i class="fas fa-receipt"></i></a>
-        <a href="perfil_proveedor.html" class="nav-link"><i class="fas fa-circle-user"></i></a>
+    <nav class="tab-bar">
+        <a href="dashboard_proveedor.html" class="tab-item active"><i class="fas fa-th-large"></i></a>
+        <a href="chat_proveedor.html" class="tab-item"><i class="fas fa-envelope"></i></a>
+        <a href="pedidos_proveedor.html" class="tab-item"><i class="fas fa-shopping-bag"></i></a>
+        <a href="perfil_proveedor.html" class="tab-item"><i class="fas fa-user-circle"></i></a>
     </nav>
 
 </body>
