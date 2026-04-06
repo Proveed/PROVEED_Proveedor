@@ -3,105 +3,195 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-<title>PROVEED — Proveedor</title>
+<title>PROVEED — Chat con Catálogo</title>
 <link href="https://fonts.googleapis.com/css2?family=Syne:wght@700;800;900&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
 <style>
   *{margin:0;padding:0;box-sizing:border-box;}
-  :root{ --naranja:#FF8C00; --negro:#0A0A0A; --gris:#F0F1EE; }
+  :root{ --naranja:#FF8C00; --negro:#0A0A0A; --gris:#F0F1EE; --verde:#32CD32; }
   body{ background:var(--gris); font-family:'DM Sans',sans-serif; height:100vh; display:flex; flex-direction:column; overflow:hidden; }
+  
+  /* Vistas */
   #lista-view{ display:flex; flex-direction:column; height:100%; }
-  .chat-header{ background:var(--negro); color:white; padding:48px 20px 18px; }
+  #vista-chat{ display:none; flex:1; flex-direction:column; overflow:hidden; background: var(--gris); }
+
+  /* Header */
+  .chat-header, .conv-header{ background:var(--negro); color:white; padding:48px 20px 18px; border-radius:0 0 24px 24px; }
   .chat-title{ font-family:'Syne',sans-serif; font-size:1.1rem; font-weight:800; }
+  
+  /* Lista de Chats */
   #lista-chats{ flex:1; overflow-y:auto; padding:12px; }
   .chat-item{ display:flex; align-items:center; gap:14px; background:white; border-radius:20px; padding:16px; margin-bottom:10px; cursor:pointer; }
   .chat-avatar{ width:50px; height:50px; border-radius:16px; background:var(--naranja); display:flex; align-items:center; justify-content:center; font-family:'Syne',sans-serif; font-size:1.2rem; font-weight:800; color:#000; }
-  .chat-info{ flex:1; min-width:0; }
-  .chat-nombre{ font-weight:700; font-size:0.92rem; }
-  #vista-chat{ display:none; flex:1; flex-direction:column; overflow:hidden; }
-  .conv-header{ background:var(--negro); color:white; padding:48px 20px 16px; display:flex; align-items:center; gap:14px; }
+
+  /* Burbujas y Mensajes */
   #mensajes{ flex:1; overflow-y:auto; padding:16px; display:flex; flex-direction:column; gap:10px; }
   .burbuja{ max-width:80%; padding:12px 16px; border-radius:20px; font-size:0.88rem; line-height:1.5; }
   .burbuja.enviado{ background:var(--naranja); color:#000; align-self:flex-end; border-bottom-right-radius:4px; font-weight:500; }
   .burbuja.recibido{ background:white; color:var(--negro); align-self:flex-start; border-bottom-left-radius:4px; }
-  .input-area{ background:white; padding:12px 16px 30px; display:flex; gap:10px; border-top:1px solid #eee; }
-  #msg-input{ flex:1; border:none; background:var(--gris); border-radius:20px; padding:12px 16px; outline:none; resize:none; font-size:0.9rem; }
-  .send-btn{ width:44px; height:44px; border-radius:14px; background:var(--naranja); border:none; display:flex; align-items:center; justify-content:center; }
+
+  /* Burbuja de Producto (Catálogo) */
+  .prod-card-msg{ background: white; border-radius: 16px; overflow: hidden; border: 1px solid #eee; margin-top: 4px; width: 200px; }
+  .prod-img-msg{ width: 100%; height: 120px; object-fit: cover; background: #f9f9f9; }
+  .prod-info-msg{ padding: 10px; }
+  .prod-name-msg{ font-weight: 700; font-size: 0.8rem; display: block; }
+  .prod-price-msg{ color: var(--naranja); font-weight: 800; font-size: 0.9rem; }
+
+  /* Input Area */
+  .input-area{ background:white; padding:12px 16px 30px; display:flex; gap:10px; border-top:1px solid #eee; align-items: center; }
+  #msg-input{ flex:1; border:none; background:var(--gris); border-radius:20px; padding:12px 16px; outline:none; font-size:0.9rem; }
+  .action-btn{ width:44px; height:44px; border-radius:14px; background:#eee; border:none; display:flex; align-items:center; justify-content:center; cursor:pointer; }
+  .send-btn{ width:44px; height:44px; border-radius:14px; background:var(--naranja); border:none; display:flex; align-items:center; justify-content:center; cursor:pointer; }
+
+  /* Modal Catálogo */
+  #modal-catalogo{ display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.8); z-index:1000; flex-direction:column; justify-content: flex-end; }
+  .catalogo-sheet{ background:white; border-radius:28px 28px 0 0; height:70%; display:flex; flex-direction:column; padding:20px; }
+  .cat-header{ display:flex; justify-content:space-between; align-items:center; margin-bottom:15px; }
+  .cat-title{ font-family:'Syne'; font-weight:800; }
+  #lista-productos-cat{ flex:1; overflow-y:auto; display:grid; grid-template-columns: 1fr 1fr; gap:10px; }
+  .item-prod{ background:var(--gris); padding:10px; border-radius:16px; cursor:pointer; }
+  .item-prod img{ width:100%; height:80px; border-radius:10px; object-fit:cover; margin-bottom:5px; }
+  .item-prod b{ font-size:0.75rem; display:block; height:32px; overflow:hidden; }
 </style>
 </head>
 <body>
 
 <div id="lista-view">
-  <div class="chat-header"><div class="chat-title">Panel de Proveedor</div></div>
+  <div class="chat-header"><div class="chat-title">Mensajes</div></div>
   <div id="lista-chats"><div id="lista-content"></div></div>
 </div>
 
 <div id="vista-chat">
-  <div class="conv-header">
-    <div onclick="volverLista()" style="cursor:pointer;"> <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2.5"><path d="M19 12H5M12 19l-7-7 7-7"/></svg> </div>
-    <div id="conv-nombre">Emprendedor</div>
+  <div class="conv-header" style="display:flex; align-items:center; gap:15px;">
+    <div onclick="volverLista()"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2.5"><path d="M19 12H5M12 19l-7-7 7-7"/></svg></div>
+    <div id="conv-nombre" style="font-family:'Syne';font-weight:800;">Emprendedor</div>
   </div>
   <div id="mensajes"></div>
   <div class="input-area">
-    <textarea id="msg-input" placeholder="Responder..." rows="1"></textarea>
-    <button class="send-btn" onclick="enviarMensaje()"> <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="black" stroke-width="2.5"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg> </button>
+    <button class="action-btn" onclick="abrirCatalogo()">
+      <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#666" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M3 9h18M9 21V9"/></svg>
+    </button>
+    <textarea id="msg-input" placeholder="Mensaje..." rows="1"></textarea>
+    <button class="send-btn" onclick="enviarMensaje()">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="black" stroke-width="2.5"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg>
+    </button>
+  </div>
+</div>
+
+<div id="modal-catalogo" onclick="cerrarCatalogo(event)">
+  <div class="catalogo-sheet" onclick="event.stopPropagation()">
+    <div class="cat-header">
+      <div class="cat-title">Enviar Producto</div>
+      <div onclick="cerrarCatalogo()" style="color:#aaa; font-weight:800;">CERRAR</div>
+    </div>
+    <div id="lista-productos-cat"></div>
   </div>
 </div>
 
 <script type="module">
-import { initializeApp } from "https://www.gstatic.com/firebasejs/11.0.0/firebase-app.js";
-import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/11.0.0/firebase-auth.js";
-import { getFirestore, collection, query, where, orderBy, onSnapshot, addDoc, serverTimestamp, updateDoc, doc } from "https://www.gstatic.com/firebasejs/11.0.0/firebase-firestore.js";
+import { createClient } from 'https://cdn.jsdelivr.net/npm/@supabase/supabase-js/+esm'
+const supabase = createClient('https://pqoqirousggkjnkzxkhy.supabase.co', 'Sb_publishable_L8cdOOPzHe4ff3rkPr8x5Q_WTCF694I')
 
-const app=initializeApp({ apiKey:"AIzaSyAZQRlfdtJjmodrfmct5N3qrLO6hniO2o8", authDomain:"proveed-8cb7c.firebaseapp.com", projectId:"proveed-8cb7c", storageBucket:"proveed-8cb7c.firebasestorage.app", messagingSenderId:"235073250367", appId:"1:235073250367:web:89ec59fea5f0b8a347448a" });
-const auth=getAuth(app), db=getFirestore(app);
-let currentUser=null, chatActivoId=null, unsubMensajes=null;
+let currentUser=null, chatActivoId=null;
 
-onAuthStateChanged(auth, user => { if(user) { currentUser=user; cargarChats(); } });
+async function init() {
+  const { data: { session } } = await supabase.auth.getSession();
+  if(!session) return;
+  currentUser = session.user;
+  cargarChats();
+}
 
-function cargarChats() {
-  const q = query(collection(db, 'chats'), where('proveedorId', '==', currentUser.uid), orderBy('ultimoMensajeEn', 'desc'));
-  onSnapshot(q, snap => {
-    const cont = document.getElementById('lista-content');
-    cont.innerHTML = '';
-    snap.forEach(d => {
-      const c = d.data();
-      const div = document.createElement('div');
-      div.className = 'chat-item';
-      div.innerHTML = `<div class="chat-avatar">${(c.emprendedorNombre||'E')[0]}</div>
-        <div class="chat-info"><div class="chat-nombre">${c.emprendedorNombre}</div><div class="chat-preview">${c.ultimoMensaje||'Nuevo mensaje'}</div></div>`;
-      div.onclick = () => abrirChat(d.id, c.emprendedorNombre);
-      cont.appendChild(div);
-    });
+// 1. Cargar Chats
+async function cargarChats() {
+  const { data: chats } = await supabase.from('chats').select('*').eq('proveedor_id', currentUser.id).order('ultimo_mensaje_en', {ascending:false});
+  const cont = document.getElementById('lista-content');
+  cont.innerHTML = '';
+  chats?.forEach(c => {
+    const div = document.createElement('div');
+    div.className = 'chat-item';
+    div.innerHTML = `<div class="chat-avatar">${c.emprendedor_nombre[0]}</div>
+      <div class="chat-info"><div class="chat-nombre">${c.emprendedor_nombre}</div><div class="chat-preview">${c.ultimo_mensaje || '...'}</div></div>`;
+    div.onclick = () => abrirChat(c.id, c.emprendedor_nombre);
+    cont.appendChild(div);
   });
 }
 
-function abrirChat(chatId, nombre) {
+// 2. Abrir Chat
+async function abrirChat(chatId, nombre) {
   chatActivoId = chatId;
   document.getElementById('lista-view').style.display='none';
   document.getElementById('vista-chat').style.display='flex';
   document.getElementById('conv-nombre').textContent = nombre;
 
-  if(unsubMensajes) unsubMensajes();
-  const q = query(collection(db, 'chats', chatId, 'mensajes'), orderBy('enviadoEn', 'asc'));
-  unsubMensajes = onSnapshot(q, snap => {
-    const mDiv = document.getElementById('mensajes');
-    mDiv.innerHTML = '';
-    snap.forEach(doc => {
-      const m = doc.data();
-      const b = document.createElement('div');
-      b.className = `burbuja ${m.remitenteId === currentUser.uid ? 'enviado' : 'recibido'}`;
-      b.textContent = m.texto;
-      mDiv.appendChild(b);
-    });
-    mDiv.scrollTop = mDiv.scrollHeight;
-  });
+  const { data: msgs } = await supabase.from('mensajes').select('*').eq('chat_id', chatId).order('enviado_en', {ascending:true});
+  const mDiv = document.getElementById('mensajes');
+  mDiv.innerHTML = '';
+  msgs?.forEach(m => renderMensaje(m));
+  mDiv.scrollTop = mDiv.scrollHeight;
+}
 
-  // TECLADO AUTOMÁTICO
-  setTimeout(() => {
-    const input = document.getElementById('msg-input');
-    input.focus();
-    input.click();
-  }, 400);
+function renderMensaje(m) {
+  const mDiv = document.getElementById('mensajes');
+  const b = document.createElement('div');
+  
+  if (m.tipo === 'producto') {
+    const p = JSON.parse(m.metadata || '{}');
+    b.className = m.remitente_id === currentUser.id ? 'enviado' : 'recibido';
+    b.style.background = 'transparent'; 
+    b.innerHTML = `
+      <div class="prod-card-msg">
+        <img src="${p.imagen}" class="prod-img-msg">
+        <div class="prod-info-msg">
+          <span class="prod-name-msg">${p.nombre}</span>
+          <span class="prod-price-msg">$${p.precio}</span>
+        </div>
+      </div>`;
+  } else {
+    b.className = `burbuja ${m.remitente_id === currentUser.id ? 'enviado' : 'recibido'}`;
+    b.textContent = m.texto;
+  }
+  
+  mDiv.appendChild(b);
+}
+
+// 3. Catálogo
+window.abrirCatalogo = async () => {
+  document.getElementById('modal-catalogo').style.display = 'flex';
+  const { data: productos } = await supabase.from('productos').select('*').eq('proveedor_id', currentUser.id).eq('activo', true);
+  const list = document.getElementById('lista-productos-cat');
+  list.innerHTML = '';
+  productos?.forEach(p => {
+    const d = document.createElement('div');
+    d.className = 'item-prod';
+    d.innerHTML = `<img src="${p.imagen_url || ''}"><b>${p.nombre}</b><span>$${p.precio}</span>`;
+    d.onclick = () => enviarProducto(p);
+    list.appendChild(d);
+  });
+}
+
+window.cerrarCatalogo = () => document.getElementById('modal-catalogo').style.display = 'none';
+
+async function enviarProducto(prod) {
+  cerrarCatalogo();
+  const metadata = JSON.stringify({ nombre: prod.nombre, precio: prod.precio, imagen: prod.imagen_url });
+  const msg = { chat_id: chatActivoId, remitente_id: currentUser.id, texto: `Producto: ${prod.nombre}`, tipo: 'producto', metadata: metadata };
+  
+  await supabase.from('mensajes').insert([msg]);
+  await supabase.from('chats').update({ ultimo_mensaje: 'Envió un producto', ultimo_mensaje_en: new Date() }).eq('id', chatActivoId);
+  
+  renderMensaje(msg); // Render local inmediato
+  document.getElementById('mensajes').scrollTop = document.getElementById('mensajes').scrollHeight;
+}
+
+window.enviarMensaje = async () => {
+  const input = document.getElementById('msg-input');
+  const texto = input.value.trim();
+  if(!texto) return;
+  const msg = { chat_id: chatActivoId, remitente_id: currentUser.id, texto, tipo: 'texto' };
+  input.value = '';
+  await supabase.from('mensajes').insert([msg]);
+  await supabase.from('chats').update({ ultimo_mensaje: texto, ultimo_mensaje_en: new Date() }).eq('id', chatActivoId);
+  renderMensaje(msg);
+  document.getElementById('mensajes').scrollTop = document.getElementById('mensajes').scrollHeight;
 }
 
 window.volverLista = () => {
@@ -109,14 +199,7 @@ window.volverLista = () => {
   document.getElementById('vista-chat').style.display='none';
 };
 
-window.enviarMensaje = async () => {
-  const input = document.getElementById('msg-input');
-  const texto = input.value.trim();
-  if(!texto || !chatActivoId) return;
-  input.value = '';
-  await addDoc(collection(db, 'chats', chatActivoId, 'mensajes'), { texto, remitenteId: currentUser.uid, enviadoEn: serverTimestamp() });
-  await updateDoc(doc(db, 'chats', chatActivoId), { ultimoMensaje: texto, ultimoMensajeEn: serverTimestamp() });
-};
+init();
 </script>
 </body>
 </html>
