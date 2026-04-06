@@ -85,7 +85,7 @@
     <div style="border-top:1px solid #1a1a1a;padding-top:14px;margin-top:4px;">
       <label style="display:block;font-size:0.65rem;font-weight:700;color:#555;text-transform:uppercase;letter-spacing:0.8px;margin-bottom:10px;">Productos</label>
       <div class="items-config" id="items-config"></div>
-      <button class="btn-accion btn-add-item" onclick="addItem()">+ Agregar línea</button>
+      <button class="btn-accion btn-add-item" id="btn-add-item">+ Agregar línea</button>
     </div>
     <button class="btn-accion btn-print" onclick="window.print()" style="margin-top:16px;">🖨 Imprimir / PDF</button>
   </aside>
@@ -114,98 +114,117 @@
     </div>
   </main>
 </div>
+
 <script type="module">
-import { initializeApp } from "https://www.gstatic.com/firebasejs/11.0.0/firebase-app.js";
-import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/11.0.0/firebase-auth.js";
-import { getFirestore, doc, getDoc } from "https://www.gstatic.com/firebasejs/11.0.0/firebase-firestore.js";
-const app=initializeApp({
-  apiKey:"AIzaSyAZQRlfdtJjmodrfmct5N3qrLO6hniO2o8",
-  authDomain:"proveed-8cb7c.firebaseapp.com",
-  projectId:"proveed-8cb7c",
-  storageBucket:"proveed-8cb7c.firebasestorage.app",
-  messagingSenderId:"235073250367",
-  appId:"1:235073250367:web:89ec59fea5f0b8a347448a"
-});
-const auth=getAuth(app);
-const db=getFirestore(app);
-let items=[{desc:'Producto PROVEED',cant:1,precio:0}];
-onAuthStateChanged(auth,async(user)=>{
-  if(!user){window.location.href='login.html';return;}
-  const snap=await getDoc(doc(db,'usuarios',user.uid));
-  if(snap.exists()){
-    const d=snap.data();
-    document.getElementById('f-empresa').value=d.empresa||'';
-    document.getElementById('f-ruc').value=d.ruc||'';
-    document.getElementById('f-direccion').value=d.ciudad||'';
+import { createClient } from 'https://cdn.jsdelivr.net/npm/@supabase/supabase-js/+esm'
+
+const supabase = createClient('https://pqoqirousggkjnkzxkhy.supabase.co', 'Sb_publishable_L8cdOOPzHe4ff3rkPr8x5Q_WTCF694I')
+
+let items = [{desc:'Producto PROVEED', cant:1, precio:0}];
+
+async function init() {
+  const { data: { session } } = await supabase.auth.getSession();
+  if (!session) { window.location.href = 'login.html'; return; }
+
+  const { data: userProfile } = await supabase
+    .from('usuarios')
+    .select('*')
+    .eq('id', session.user.id)
+    .single();
+
+  if (userProfile) {
+    document.getElementById('f-empresa').value = userProfile.empresa || '';
+    document.getElementById('f-ruc').value = userProfile.ruc || '';
+    document.getElementById('f-direccion').value = userProfile.ciudad || '';
     actualizar();
   }
   renderItems();
   actualizar();
-});
-const hoy=new Date().toLocaleDateString('es-EC',{day:'2-digit',month:'2-digit',year:'numeric'});
-document.getElementById('inv-fecha').textContent=hoy;
-document.getElementById('inv-fecha2').textContent=hoy;
-window.loadLogo=function(e){
-  const file=e.target.files[0];
-  if(!file) return;
-  const box=document.getElementById('logo-box');
-  box.innerHTML=`<img src="${URL.createObjectURL(file)}">`;
+}
+
+const hoy = new Date().toLocaleDateString('es-EC', { day: '2-digit', month: '2-digit', year: 'numeric' });
+document.getElementById('inv-fecha').textContent = hoy;
+document.getElementById('inv-fecha2').textContent = hoy;
+
+window.loadLogo = function(e) {
+  const file = e.target.files[0];
+  if (!file) return;
+  const box = document.getElementById('logo-box');
+  box.innerHTML = `<img src="${URL.createObjectURL(file)}">`;
 };
-window.cambiarColor=function(){
-  const c=document.getElementById('f-color').value;
-  document.querySelectorAll('.inv-table th').forEach(th=>th.style.background=c);
-  document.querySelector('.inv-header').style.borderBottomColor=c;
-  document.querySelector('.inv-details h1').style.color=c;
-  document.querySelectorAll('.inv-parties').forEach(el=>el.style.borderLeftColor=c);
+
+window.cambiarColor = function() {
+  const c = document.getElementById('f-color').value;
+  document.querySelectorAll('.inv-table th').forEach(th => th.style.background = c);
+  document.querySelector('.inv-header').style.borderBottomColor = c;
+  document.querySelector('.inv-details h1').style.color = c;
+  document.querySelectorAll('.inv-parties').forEach(el => el.style.borderLeftColor = c);
 };
-window.actualizar=function(){
-  const get=id=>document.getElementById(id).value||'';
-  document.getElementById('inv-empresa').textContent=get('f-empresa')||'NOMBRE EMPRESA';
-  document.getElementById('inv-ruc').textContent=get('f-ruc')||'0000000000001';
-  document.getElementById('inv-dir').textContent=get('f-direccion')||'Dirección registrada';
-  document.getElementById('inv-cliente').textContent=get('f-cliente')||'Consumidor Final';
-  document.getElementById('inv-ci').textContent=get('f-ci')||'9999999999999';
-  document.getElementById('inv-num').textContent=get('f-num')||'001-001-000001';
+
+window.actualizar = function() {
+  const get = id => document.getElementById(id).value || '';
+  document.getElementById('inv-empresa').textContent = get('f-empresa') || 'NOMBRE EMPRESA';
+  document.getElementById('inv-ruc').textContent = get('f-ruc') || '0000000000001';
+  document.getElementById('inv-dir').textContent = get('f-direccion') || 'Dirección registrada';
+  document.getElementById('inv-cliente').textContent = get('f-cliente') || 'Consumidor Final';
+  document.getElementById('inv-ci').textContent = get('f-ci') || '9999999999999';
+  document.getElementById('inv-num').textContent = get('f-num') || '001-001-000001';
   renderTabla();
 };
-window.addItem=function(){items.push({desc:'',cant:1,precio:0});renderItems();actualizar();};
-window.removeItem=function(idx){if(items.length<=1) return;items.splice(idx,1);renderItems();actualizar();};
-function renderItems(){
-  const cont=document.getElementById('items-config');
-  cont.innerHTML='<div class="item-row" style="margin-bottom:6px;"><span style="font-size:0.6rem;color:#555;">Descripción</span><span style="font-size:0.6rem;color:#555;text-align:center;">Cant</span><span style="font-size:0.6rem;color:#555;text-align:center;">P.Unit</span><span></span></div>';
-  items.forEach((item,idx)=>{
-    const div=document.createElement('div');
-    div.className='item-row';
-    div.innerHTML=`
-      <input class="item-input" type="text" value="${item.desc}" placeholder="Descripción" oninput="items[${idx}].desc=this.value;renderTabla()">
-      <input class="item-input" type="number" value="${item.cant}" min="1" style="text-align:center" oninput="items[${idx}].cant=parseFloat(this.value)||1;renderTabla()">
-      <input class="item-input" type="number" value="${item.precio}" min="0" step="0.01" style="text-align:center" placeholder="0.00" oninput="items[${idx}].precio=parseFloat(this.value)||0;renderTabla()">
-      <button class="del-item" onclick="removeItem(${idx})">✕</button>`;
+
+function renderItems() {
+  const cont = document.getElementById('items-config');
+  cont.innerHTML = '<div class="item-row" style="margin-bottom:6px;"><span style="font-size:0.6rem;color:#555;">Descripción</span><span style="font-size:0.6rem;color:#555;text-align:center;">Cant</span><span style="font-size:0.6rem;color:#555;text-align:center;">P.Unit</span><span></span></div>';
+  
+  items.forEach((item, idx) => {
+    const div = document.createElement('div');
+    div.className = 'item-row';
+    div.innerHTML = `
+      <input class="item-input" type="text" value="${item.desc}" placeholder="Descripción">
+      <input class="item-input" type="number" value="${item.cant}" min="1" style="text-align:center">
+      <input class="item-input" type="number" value="${item.precio}" min="0" step="0.01" style="text-align:center" placeholder="0.00">
+      <button class="del-item">✕</button>`;
+    
+    const inputs = div.querySelectorAll('input');
+    inputs[0].oninput = (e) => { items[idx].desc = e.target.value; renderTabla(); };
+    inputs[1].oninput = (e) => { items[idx].cant = parseFloat(e.target.value) || 1; renderTabla(); };
+    inputs[2].oninput = (e) => { items[idx].precio = parseFloat(e.target.value) || 0; renderTabla(); };
+    div.querySelector('.del-item').onclick = () => { if(items.length > 1) { items.splice(idx, 1); renderItems(); actualizar(); } };
+    
     cont.appendChild(div);
   });
 }
-function renderTabla(){
-  const tbody=document.getElementById('inv-tbody');
-  const tfoot=document.getElementById('inv-tfoot');
-  tbody.innerHTML='';
-  let subtotal=0;
-  items.forEach(item=>{
-    const total=(item.cant||1)*(item.precio||0);
-    subtotal+=total;
-    const tr=document.createElement('tr');
-    tr.innerHTML=`<td>${item.cant||1}</td><td>${item.desc||'—'}</td><td style="text-align:right">$${Number(item.precio||0).toFixed(2)}</td><td style="text-align:right">$${total.toFixed(2)}</td>`;
+
+document.getElementById('btn-add-item').onclick = () => {
+  items.push({desc:'', cant:1, precio:0});
+  renderItems();
+  actualizar();
+};
+
+function renderTabla() {
+  const tbody = document.getElementById('inv-tbody');
+  const tfoot = document.getElementById('inv-tfoot');
+  tbody.innerHTML = '';
+  let subtotal = 0;
+  
+  items.forEach(item => {
+    const total = (item.cant || 1) * (item.precio || 0);
+    subtotal += total;
+    const tr = document.createElement('tr');
+    tr.innerHTML = `<td>${item.cant || 1}</td><td>${item.desc || '—'}</td><td style="text-align:right">$${Number(item.precio || 0).toFixed(2)}</td><td style="text-align:right">$${total.toFixed(2)}</td>`;
     tbody.appendChild(tr);
   });
-  const iva=subtotal*0.15;
-  const total=subtotal+iva;
-  tfoot.innerHTML=`
+  
+  const iva = subtotal * 0.15;
+  const totalFinal = subtotal + iva;
+  
+  tfoot.innerHTML = `
     <tr><td colspan="3" style="text-align:right;color:#888;">Subtotal:</td><td style="text-align:right">$${subtotal.toFixed(2)}</td></tr>
     <tr><td colspan="3" style="text-align:right;color:#888;">IVA 15%:</td><td style="text-align:right">$${iva.toFixed(2)}</td></tr>
-    <tr><td colspan="3" style="text-align:right;font-size:1rem;font-weight:800;">TOTAL:</td><td style="text-align:right" class="total-final">$${total.toFixed(2)}</td></tr>`;
+    <tr><td colspan="3" style="text-align:right;font-size:1rem;font-weight:800;">TOTAL:</td><td style="text-align:right" class="total-final">$${totalFinal.toFixed(2)}</td></tr>`;
 }
-window.renderTabla=renderTabla;
-renderItems();
-actualizar();
+
+init();
 </script>
 </body>
 </html>
