@@ -67,11 +67,11 @@
 </div>
 <div class="periodo-card">
   <div class="periodo-label">¿Cómo declara al SRI?</div>
-  <div class="periodo-btns">
-    <button class="p-btn" onclick="setPeriodo('Mensual',1,this)">Mensual</button>
-    <button class="p-btn" onclick="setPeriodo('Trimestral',3,this)">Trimestral</button>
-    <button class="p-btn active" onclick="setPeriodo('Semestral',6,this)">Semestral</button>
-    <button class="p-btn" onclick="setPeriodo('Anual',12,this)">Anual</button>
+  <div class="periodo-btns" id="periodo-container">
+    <button class="p-btn" onclick="setPeriodo('Mensual', 1, this)">Mensual</button>
+    <button class="p-btn" onclick="setPeriodo('Trimestral', 3, this)">Trimestral</button>
+    <button class="p-btn active" onclick="setPeriodo('Semestral', 6, this)">Semestral</button>
+    <button class="p-btn" onclick="setPeriodo('Anual', 12, this)">Anual</button>
   </div>
 </div>
 <div class="tax-grid">
@@ -101,10 +101,10 @@
     </div>
     <div style="text-align:right">
       <div class="total-fecha">Fecha límite:</div>
-      <div style="color:#888;font-size:0.82rem;">20 de julio</div>
+      <div style="color:#888;font-size:0.82rem;" id="fecha-limite">20 de Julio</div>
     </div>
   </div>
-  <button class="btn-xml" onclick="generarXML()">📄 GENERAR DECLARACIÓN XML SRI</button>
+  <button class="btn-xml" id="btn-xml">📄 GENERAR DECLARACIÓN XML SRI</button>
 </div>
 <div class="ventas-card">
   <div class="ventas-title">Resumen de operaciones</div>
@@ -120,70 +120,103 @@
   <a class="tab" href="estadisticas.html"><svg viewBox="0 0 24 24"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/></svg><span>Stats</span></a>
   <a class="tab" href="dashboard.html"><svg viewBox="0 0 24 24"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/></svg><span>Inicio</span></a>
 </nav>
+
 <script type="module">
-import { initializeApp } from "https://www.gstatic.com/firebasejs/11.0.0/firebase-app.js";
-import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/11.0.0/firebase-auth.js";
-import { getFirestore, collection, query, getDocs, doc, getDoc } from "https://www.gstatic.com/firebasejs/11.0.0/firebase-firestore.js";
-const app=initializeApp({
-  apiKey:"AIzaSyAZQRlfdtJjmodrfmct5N3qrLO6hniO2o8",
-  authDomain:"proveed-8cb7c.firebaseapp.com",
-  projectId:"proveed-8cb7c",
-  storageBucket:"proveed-8cb7c.firebasestorage.app",
-  messagingSenderId:"235073250367",
-  appId:"1:235073250367:web:89ec59fea5f0b8a347448a"
-});
-const auth=getAuth(app);
-const db=getFirestore(app);
-let totalVentasBase=0,totalPedidosBase=0,periodoFactor=6;
-onAuthStateChanged(auth,async user=>{
-  if(!user){window.location.href='login.html';return;}
-  const snap=await getDoc(doc(db,'usuarios',user.uid));
-  const empresa=snap.exists()?(snap.data().empresa||snap.data().nombre||''):'';
-  const pSnap=await getDocs(query(collection(db,'pedidos')));
-  let ventas=0,pedidos=0;
-  pSnap.forEach(d=>{
-    const items=(d.data().items||[]).filter(i=>i.proveedor===empresa);
-    if(items.length){pedidos++;items.forEach(i=>ventas+=i.precio*i.cantidad);}
+import { createClient } from 'https://cdn.jsdelivr.net/npm/@supabase/supabase-js/+esm'
+
+const supabase = createClient('https://pqoqirousggkjnkzxkhy.supabase.co', 'Sb_publishable_L8cdOOPzHe4ff3rkPr8x5Q_WTCF694I')
+
+let totalVentasBase = 0;
+let totalPedidosBase = 0;
+let periodoFactor = 6;
+
+async function init() {
+  const { data: { session } } = await supabase.auth.getSession();
+  if (!session) { window.location.href = 'login.html'; return; }
+
+  const currentUser = session.user;
+
+  // Obtenemos los pedidos donde el usuario es el proveedor
+  const { data: pedidos, error } = await supabase
+    .from('pedidos')
+    .select('*')
+    .eq('proveedor_id', currentUser.id);
+
+  if (error) { console.error(error); return; }
+
+  let ventas = 0;
+  let numPedidos = (pedidos || []).length;
+
+  pedidos.forEach(p => {
+    ventas += Number(p.total || 0);
   });
-  totalVentasBase=ventas;
-  totalPedidosBase=pedidos;
-  document.getElementById('v-ventas').textContent='$'+ventas.toFixed(2);
-  document.getElementById('v-pedidos').textContent=pedidos;
-  document.getElementById('v-ticket').textContent=pedidos>0?'$'+(ventas/pedidos).toFixed(2):'$0.00';
+
+  totalVentasBase = ventas;
+  totalPedidosBase = numPedidos;
+
+  document.getElementById('v-ventas').textContent = '$' + ventas.toFixed(2);
+  document.getElementById('v-pedidos').textContent = numPedidos;
+  document.getElementById('v-ticket').textContent = numPedidos > 0 ? '$' + (ventas / numPedidos).toFixed(2) : '$0.00';
+
   calcular();
-});
-function calcular(){
-  const ventas=totalVentasBase*(periodoFactor/6);
-  const ivaVentas=ventas*0.15;
-  const ivaCompras=ventas*0.05;
-  const ivaPagar=Math.max(0,ivaVentas-ivaCompras);
-  const retServ=ventas*0.0275*0.3;
-  const retBienes=ventas*0.01*0.7;
-  const retTotal=retServ+retBienes;
-  const totalSRI=ivaPagar+retTotal;
-  document.getElementById('t-iva').textContent='$'+ivaPagar.toFixed(2);
-  document.getElementById('t-iva-v').textContent='$'+ivaVentas.toFixed(2);
-  document.getElementById('t-iva-c').textContent='-$'+ivaCompras.toFixed(2);
-  document.getElementById('t-ret').textContent='$'+retTotal.toFixed(2);
-  document.getElementById('t-ret-s').textContent='$'+retServ.toFixed(2);
-  document.getElementById('t-ret-b').textContent='$'+retBienes.toFixed(2);
-  document.getElementById('t-total').textContent='$'+totalSRI.toFixed(2);
 }
-window.setPeriodo=function(nombre,factor,btn){
-  periodoFactor=factor;
-  document.querySelectorAll('.p-btn').forEach(b=>b.classList.remove('active'));
+
+function calcular() {
+  // Ajuste según el factor del período (ej: si son datos totales, se proyectan al factor seleccionado)
+  const ventas = totalVentasBase * (periodoFactor / 6); 
+  const ivaVentas = ventas * 0.15;
+  const ivaCompras = ventas * 0.05; // Estimación de crédito tributario
+  const ivaPagar = Math.max(0, ivaVentas - ivaCompras);
+  
+  const retServ = ventas * 0.0275 * 0.3; // Estimación 30% servicios
+  const retBienes = ventas * 0.01 * 0.7; // Estimación 70% bienes
+  const retTotal = retServ + retBienes;
+  
+  const totalSRI = ivaPagar + retTotal;
+
+  document.getElementById('t-iva').textContent = '$' + ivaPagar.toFixed(2);
+  document.getElementById('t-iva-v').textContent = '$' + ivaVentas.toFixed(2);
+  document.getElementById('t-iva-c').textContent = '-$' + ivaCompras.toFixed(2);
+  document.getElementById('t-ret').textContent = '$' + retTotal.toFixed(2);
+  document.getElementById('t-ret-s').textContent = '$' + retServ.toFixed(2);
+  document.getElementById('t-ret-b').textContent = '$' + retBienes.toFixed(2);
+  document.getElementById('t-total').textContent = '$' + totalSRI.toFixed(2);
+}
+
+window.setPeriodo = function(nombre, factor, btn) {
+  periodoFactor = factor;
+  document.querySelectorAll('.p-btn').forEach(b => b.classList.remove('active'));
   btn.classList.add('active');
-  document.getElementById('t-periodo').textContent='Período: '+nombre;
+  document.getElementById('t-periodo').textContent = 'Período: ' + nombre;
+  
+  // Ajuste visual de fecha límite aproximada
+  const meses = ["Enero", "Febrero", "Marzo", "Abril", "Mayo", "Junio", "Julio", "Agosto", "Septiembre", "Octubre", "Noviembre", "Diciembre"];
+  const proxyMes = (new Date().getMonth() + factor) % 12;
+  document.getElementById('fecha-limite').textContent = `20 de ${meses[proxyMes]}`;
+  
   calcular();
 };
-window.generarXML=function(){
-  const xml=`<?xml version="1.0" encoding="UTF-8"?>\n<DeclaracionSRI>\n  <Periodo>${document.getElementById('t-periodo').textContent.replace('Período: ','')}</Periodo>\n  <IVAPorPagar>${document.getElementById('t-iva').textContent}</IVAPorPagar>\n  <Retenciones>${document.getElementById('t-ret').textContent}</Retenciones>\n  <TotalAPagar>${document.getElementById('t-total').textContent}</TotalAPagar>\n  <GeneradoPor>PROVEED ERP v5.0</GeneradoPor>\n</DeclaracionSRI>`;
-  const blob=new Blob([xml],{type:'text/xml'});
-  const a=document.createElement('a');
-  a.href=URL.createObjectURL(blob);
-  a.download='declaracion-sri.xml';
+
+document.getElementById('btn-xml').onclick = function() {
+  const periodoTxt = document.getElementById('t-periodo').textContent.replace('Período: ', '');
+  const xml = `<?xml version="1.0" encoding="UTF-8"?>
+<DeclaracionSRI>
+  <Software>PROVEED ERP v5.0</Software>
+  <Periodo>${periodoTxt}</Periodo>
+  <IVAPorPagar>${document.getElementById('t-iva').textContent}</IVAPorPagar>
+  <Retenciones>${document.getElementById('t-ret').textContent}</Retenciones>
+  <TotalAPagar>${document.getElementById('t-total').textContent}</TotalAPagar>
+  <Timestamp>${new Date().toISOString()}</Timestamp>
+</DeclaracionSRI>`;
+
+  const blob = new Blob([xml], { type: 'text/xml' });
+  const a = document.createElement('a');
+  a.href = URL.createObjectURL(blob);
+  a.download = `PROVEED-SRI-${periodoTxt.toUpperCase()}.xml`;
   a.click();
 };
+
+init();
 </script>
 </body>
 </html>
