@@ -51,7 +51,7 @@
   .satisf-stat{ text-align:center; }
   .satisf-stat b{ display:block; font-family:'Syne',sans-serif; font-weight:800; color:white; }
   .satisf-stat small{ font-size:0.65rem; color:#555; }
-  .empty{ text-align:center; padding:30px; color:#bbb; font-size:0.85rem; }
+  .empty{ text-align:center; padding:30px; color:#bbb; font-size:0.85rem; width:100%; }
   .section{ padding:16px 20px 0; }
   .section-title{ font-family:'Syne',sans-serif; font-size:0.82rem; font-weight:800; color:#aaa; text-transform:uppercase; letter-spacing:1px; margin-bottom:10px; }
   .tab-bar{ position:fixed; bottom:0; width:100%; background:white; display:flex; justify-content:space-around; align-items:center; padding:10px 0 18px; border-top:1px solid #eee; box-shadow:0 -4px 20px rgba(0,0,0,0.06); z-index:200; }
@@ -102,82 +102,123 @@
   <a class="tab active" href="estadisticas.html"><svg viewBox="0 0 24 24"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/></svg><span>Stats</span></a>
   <a class="tab" href="chat.html"><svg viewBox="0 0 24 24"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg><span>Chat</span></a>
 </nav>
+
 <script type="module">
-import { initializeApp } from "https://www.gstatic.com/firebasejs/11.0.0/firebase-app.js";
-import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/11.0.0/firebase-auth.js";
-import { getFirestore, collection, query, where, getDocs, doc, getDoc, orderBy } from "https://www.gstatic.com/firebasejs/11.0.0/firebase-firestore.js";
-const app=initializeApp({
-  apiKey:"AIzaSyAZQRlfdtJjmodrfmct5N3qrLO6hniO2o8",
-  authDomain:"proveed-8cb7c.firebaseapp.com",
-  projectId:"proveed-8cb7c",
-  storageBucket:"proveed-8cb7c.firebasestorage.app",
-  messagingSenderId:"235073250367",
-  appId:"1:235073250367:web:89ec59fea5f0b8a347448a"
-});
-const auth=getAuth(app);
-const db=getFirestore(app);
-onAuthStateChanged(auth,async(user)=>{
-  if(!user){window.location.href='login.html';return;}
-  const snap=await getDoc(doc(db,'usuarios',user.uid));
-  const empresa=snap.exists()?(snap.data().empresa||snap.data().nombre||''):'';
-  const now=new Date();
-  document.getElementById('periodo-lbl').textContent=now.toLocaleDateString('es-EC',{month:'long',year:'numeric'});
-  const pSnap=await getDocs(query(collection(db,'pedidos'),orderBy('creadoEn','desc')));
-  let totalVentas=0,totalPedidos=0;
-  const ciudades={},productos={},clientesPedidos={};
-  let clientesRepetidos=0;
-  pSnap.forEach(d=>{
-    const data=d.data();
-    const items=(data.items||[]).filter(i=>i.proveedor===empresa);
-    if(!items.length) return;
+import { createClient } from 'https://cdn.jsdelivr.net/npm/@supabase/supabase-js/+esm'
+
+const supabase = createClient('https://pqoqirousggkjnkzxkhy.supabase.co', 'Sb_publishable_L8cdOOPzHe4ff3rkPr8x5Q_WTCF694I')
+
+async function init() {
+  const { data: { session } } = await supabase.auth.getSession();
+  if (!session) { window.location.href = 'login.html'; return; }
+
+  const currentUser = session.user;
+  const now = new Date();
+  document.getElementById('periodo-lbl').textContent = now.toLocaleDateString('es-EC', { month: 'long', year: 'numeric' });
+
+  // 1. Obtener Pedidos asociados al proveedor
+  const { data: pedidos, error: pError } = await supabase
+    .from('pedidos')
+    .select('*')
+    .eq('proveedor_id', currentUser.id)
+    .order('creado_en', { ascending: false });
+
+  // 2. Obtener Productos activos
+  const { count: prodsActivos } = await supabase
+    .from('productos')
+    .select('*', { count: 'exact', head: true })
+    .eq('proveedor_id', currentUser.id)
+    .eq('activo', true);
+
+  if (pError) return;
+
+  let totalVentas = 0, totalPedidos = 0;
+  const ciudades = {}, productosMap = {}, clientesPedidos = {};
+  let clientesRepetidos = 0;
+
+  (pedidos || []).forEach(p => {
     totalPedidos++;
-    const empId=data.emprendedorId;
-    clientesPedidos[empId]=(clientesPedidos[empId]||0)+1;
-    if(clientesPedidos[empId]>1) clientesRepetidos++;
-    items.forEach(i=>{
-      const monto=i.precio*i.cantidad;
-      totalVentas+=monto;
-      const ciudad=(data.entrega?.ciudad||'Otras').split(',')[0].trim();
-      ciudades[ciudad]=(ciudades[ciudad]||0)+monto;
-      productos[i.nombre]=(productos[i.nombre]||0)+i.cantidad;
+    const empId = p.emprendedor_id;
+    clientesPedidos[empId] = (clientesPedidos[empId] || 0) + 1;
+    if (clientesPedidos[empId] === 2) clientesRepetidos++; // Solo sumamos una vez cuando llega al segundo pedido
+
+    totalVentas += Number(p.total || 0);
+
+    // Ciudad (limpieza de string)
+    const ciudad = (p.entrega?.ciudad || 'Otras').split(',')[0].trim();
+    ciudades[ciudad] = (ciudades[ciudad] || 0) + Number(p.total || 0);
+
+    // Productos del pedido
+    (p.items || []).forEach(item => {
+      productosMap[item.nombre] = (productosMap[item.nombre] || 0) + (item.cantidad || 1);
     });
   });
-  const ticket=totalPedidos>0?totalVentas/totalPedidos:0;
-  const qpr=await getDocs(query(collection(db,'productos'),where('proveedorId','==',user.uid),where('activo','==',true)));
-  document.getElementById('k-ventas').textContent='$'+totalVentas.toFixed(2);
-  document.getElementById('k-pedidos').textContent=totalPedidos;
-  document.getElementById('k-prods').textContent=qpr.size;
-  document.getElementById('k-ticket').textContent='$'+ticket.toFixed(2);
-  document.getElementById('s-rep').textContent=clientesRepetidos;
-  const barCont=document.getElementById('bar-container');
-  const topCiudades=Object.entries(ciudades).sort((a,b)=>b[1]-a[1]).slice(0,5);
-  if(!topCiudades.length){barCont.innerHTML='<div class="empty">Sin datos de ciudades aún</div>';}
-  else{
-    const maxVal=topCiudades[0][1];
-    barCont.innerHTML='';
-    topCiudades.forEach(([ciudad,monto],idx)=>{
-      const pct=Math.max(8,Math.round((monto/maxVal)*100));
-      const div=document.createElement('div');
-      div.className='bar-wrap';
-      div.innerHTML=`<div class="bar ${idx===0?'activa':''}" style="height:${pct}%"><div class="bar-val">$${monto>999?Math.round(monto/1000)+'k':monto.toFixed(0)}</div></div><div class="bar-lbl">${ciudad.slice(0,4).toUpperCase()}</div>`;
-      barCont.appendChild(div);
-    });
+
+  const ticket = totalPedidos > 0 ? totalVentas / totalPedidos : 0;
+
+  // Actualizar KPIs
+  document.getElementById('k-ventas').textContent = '$' + totalVentas.toFixed(2);
+  document.getElementById('k-pedidos').textContent = totalPedidos;
+  document.getElementById('k-prods').textContent = prodsActivos || 0;
+  document.getElementById('k-ticket').textContent = '$' + ticket.toFixed(2);
+  document.getElementById('s-rep').textContent = clientesRepetidos;
+
+  // Renderizar Gráfico de Ciudades
+  renderCiudades(ciudades);
+  
+  // Renderizar Ranking de Productos
+  renderRanking(productosMap);
+}
+
+function renderCiudades(ciudades) {
+  const barCont = document.getElementById('bar-container');
+  const topCiudades = Object.entries(ciudades).sort((a, b) => b[1] - a[1]).slice(0, 5);
+  
+  if (!topCiudades.length) {
+    barCont.innerHTML = '<div class="empty">Sin datos de ciudades aún</div>';
+    return;
   }
-  const rankCard=document.getElementById('rank-card');
-  const topProds=Object.entries(productos).sort((a,b)=>b[1]-a[1]).slice(0,5);
-  if(!topProds.length){rankCard.innerHTML='<div class="empty">Sin datos de ventas aún</div>';}
-  else{
-    rankCard.innerHTML='';
-    topProds.forEach(([nombre,qty],idx)=>{
-      const div=document.createElement('div');
-      div.className='rank-item';
-      div.innerHTML=`<div class="rank-num ${idx===0?'top1':''}">${idx+1}</div>
-        <div class="rank-info"><div class="rank-nombre">${nombre}</div><div class="rank-cat">${qty} unidades vendidas</div></div>
-        <span class="rank-tag ${idx<2?'tag-top':'tag-bajo'}">${idx===0?'ESTRELLA':idx<3?'ALTA ROT.':'REGULAR'}</span>`;
-      rankCard.appendChild(div);
-    });
+
+  const maxVal = topCiudades[0][1];
+  barCont.innerHTML = '';
+  topCiudades.forEach(([ciudad, monto], idx) => {
+    const pct = Math.max(10, Math.round((monto / maxVal) * 100));
+    const div = document.createElement('div');
+    div.className = 'bar-wrap';
+    div.innerHTML = `
+      <div class="bar ${idx === 0 ? 'activa' : ''}" style="height:${pct}%">
+        <div class="bar-val">$${monto > 999 ? (monto / 1000).toFixed(1) + 'k' : monto.toFixed(0)}</div>
+      </div>
+      <div class="bar-lbl">${ciudad.slice(0, 4).toUpperCase()}</div>`;
+    barCont.appendChild(div);
+  });
+}
+
+function renderRanking(productosMap) {
+  const rankCard = document.getElementById('rank-card');
+  const topProds = Object.entries(productosMap).sort((a, b) => b[1] - a[1]).slice(0, 5);
+
+  if (!topProds.length) {
+    rankCard.innerHTML = '<div class="empty">Sin datos de ventas aún</div>';
+    return;
   }
-});
+
+  rankCard.innerHTML = '';
+  topProds.forEach(([nombre, qty], idx) => {
+    const div = document.createElement('div');
+    div.className = 'rank-item';
+    div.innerHTML = `
+      <div class="rank-num ${idx === 0 ? 'top1' : ''}">${idx + 1}</div>
+      <div class="rank-info">
+        <div class="rank-nombre">${nombre}</div>
+        <div class="rank-cat">${qty} unidades vendidas</div>
+      </div>
+      <span class="rank-tag ${idx < 2 ? 'tag-top' : 'tag-bajo'}">${idx === 0 ? 'ESTRELLA' : idx < 3 ? 'ALTA ROT.' : 'REGULAR'}</span>`;
+    rankCard.appendChild(div);
+  });
+}
+
+init();
 </script>
 </body>
 </html>
