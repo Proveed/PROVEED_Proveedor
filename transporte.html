@@ -68,76 +68,91 @@
   <a class="tab" href="chat.html"><svg viewBox="0 0 24 24"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg><span>Chat</span></a>
   <a class="tab" href="perfil.html"><svg viewBox="0 0 24 24"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg><span>Perfil</span></a>
 </nav>
+
 <script type="module">
-import { initializeApp } from "https://www.gstatic.com/firebasejs/11.0.0/firebase-app.js";
-import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/11.0.0/firebase-auth.js";
-import { getFirestore, collection, query, orderBy, getDocs, doc, getDoc } from "https://www.gstatic.com/firebasejs/11.0.0/firebase-firestore.js";
-const app=initializeApp({
-  apiKey:"AIzaSyAZQRlfdtJjmodrfmct5N3qrLO6hniO2o8",
-  authDomain:"proveed-8cb7c.firebaseapp.com",
-  projectId:"proveed-8cb7c",
-  storageBucket:"proveed-8cb7c.firebasestorage.app",
-  messagingSenderId:"235073250367",
-  appId:"1:235073250367:web:89ec59fea5f0b8a347448a"
-});
-const auth=getAuth(app);
-const db=getFirestore(app);
-const TRANSPORTES=['SERVIENTREGA','COOP. LOJA','ENVÍOS ECUADOR','SPEED','TCC','LAAR'];
-let todosEnvios=[];
-onAuthStateChanged(auth,async user=>{
-  if(!user){window.location.href='login.html';return;}
-  const snap=await getDoc(doc(db,'usuarios',user.uid));
-  const empresa=snap.exists()?(snap.data().empresa||snap.data().nombre||''):'';
-  const pSnap=await getDocs(query(collection(db,'pedidos'),orderBy('creadoEn','desc')));
-  todosEnvios=[];
-  pSnap.forEach(d=>{
-    const data=d.data();
-    const items=(data.items||[]).filter(i=>i.proveedor===empresa);
-    if(items.length&&(data.estado==='proceso'||data.estado==='completado')){
-      const trans=TRANSPORTES[Math.floor(Math.random()*TRANSPORTES.length)];
-      const guia='#G-'+Math.floor(Math.random()*900000+100000);
-      todosEnvios.push({id:d.id,...data,items,trans,guia});
-    }
+import { createClient } from 'https://cdn.jsdelivr.net/npm/@supabase/supabase-js/+esm'
+
+const supabase = createClient('https://pqoqirousggkjnkzxkhy.supabase.co', 'Sb_publishable_L8cdOOPzHe4ff3rkPr8x5Q_WTCF694I')
+
+const TRANSPORTES = ['SERVIENTREGA', 'COOP. LOJA', 'ENVÍOS ECUADOR', 'SPEED', 'TCC', 'LAAR'];
+let todosEnvios = [];
+
+async function init() {
+  const { data: { session } } = await supabase.auth.getSession();
+  if (!session) { window.location.href = 'login.html'; return; }
+  
+  const currentUser = session.user;
+
+  // Obtenemos los pedidos donde el proveedor_id coincida (esto asume tu estructura de DB en Supabase)
+  const { data: pedidos, error } = await supabase
+    .from('pedidos')
+    .select('*')
+    .eq('proveedor_id', currentUser.id)
+    .in('estado', ['proceso', 'completado'])
+    .order('creado_en', { ascending: false });
+
+  if (error) { console.error(error); return; }
+
+  todosEnvios = (pedidos || []).map(data => {
+    // Generación de data ficticia para transporte si no existe en DB
+    const trans = data.transporte || TRANSPORTES[Math.floor(Math.random() * TRANSPORTES.length)];
+    const guia = data.guia_numero || '#G-' + Math.floor(Math.random() * 900000 + 100000);
+    return { ...data, trans, guia };
   });
+
   renderEnvios(todosEnvios);
-});
-function renderEnvios(lista){
-  const cont=document.getElementById('envios-lista');
-  if(!lista.length){cont.innerHTML=`<div class="empty"><svg viewBox="0 0 24 24"><path d="M1 3h15v13H1zM16 8h4l3 3v5h-7M5 19a2 2 0 1 0 0 4 2 2 0 0 0 0-4zM18 19a2 2 0 1 0 0 4 2 2 0 0 0 0-4z"/></svg><p>Sin envíos despachados aún</p></div>`;return;}
-  cont.innerHTML='';
-  lista.forEach((e,idx)=>{
-    const fecha=e.creadoEn?new Date(e.creadoEn.toDate()).toLocaleDateString('es-EC',{day:'2-digit',month:'short',year:'numeric'}):'—';
-    const hora=e.creadoEn?new Date(e.creadoEn.toDate()).toLocaleTimeString('es-EC',{hour:'2-digit',minute:'2-digit'}):'';
-    const nombre=e.entrega?.nombre||'Cliente';
-    const ciudad=e.entrega?.ciudad||'Sin ciudad';
-    const card=document.createElement('div');
-    card.className='envio-card';
-    card.dataset.search=`${nombre} ${ciudad} ${e.guia}`.toLowerCase();
-    card.innerHTML=`
+}
+
+function renderEnvios(lista) {
+  const cont = document.getElementById('envios-lista');
+  if (!lista.length) {
+    cont.innerHTML = `<div class="empty"><svg viewBox="0 0 24 24"><path d="M1 3h15v13H1zM16 8h4l3 3v5h-7M5 19a2 2 0 1 0 0 4 2 2 0 0 0 0-4zM18 19a2 2 0 1 0 0 4 2 2 0 0 0 0-4z"/></svg><p>Sin envíos despachados aún</p></div>`;
+    return;
+  }
+  cont.innerHTML = '';
+  lista.forEach((e, idx) => {
+    const d = new Date(e.creado_en);
+    const fecha = d.toLocaleDateString('es-EC', { day: '2-digit', month: 'short', year: 'numeric' });
+    const hora = d.toLocaleTimeString('es-EC', { hour: '2-digit', minute: '2-digit' });
+    
+    // Asumiendo que entrega es un objeto JSON en Supabase
+    const nombre = e.entrega?.nombre || 'Cliente';
+    const ciudad = e.entrega?.ciudad || 'Sin ciudad';
+    const card = document.createElement('div');
+    card.className = 'envio-card';
+    card.dataset.search = `${nombre} ${ciudad} ${e.guia}`.toLowerCase();
+    
+    // Mapeo de items (si vienen como array JSON)
+    const itemsHtml = (e.items || []).map(i => `<div class="prod-line"><b>${i.cantidad}×</b> ${i.nombre}</div>`).join('');
+
+    card.innerHTML = `
       <div class="envio-header">
-        <div class="envio-fecha">${idx===0?`<span class="latest-tag">HOY</span> `:''}${fecha}<small>${hora}</small></div>
+        <div class="envio-fecha">${idx === 0 ? `<span class="latest-tag">HOY</span> ` : ''}${fecha}<small>${hora}</small></div>
         <span class="trans-badge">🚚 ${e.trans}</span>
       </div>
       <div class="envio-body">
         <div class="cliente-row">
           <div class="cli-avatar">${nombre[0].toUpperCase()}</div>
-          <div class="cli-info"><b>${nombre}</b><small>${ciudad} · ${e.entrega?.direccion||''}</small></div>
+          <div class="cli-info"><b>${nombre}</b><small>${ciudad} · ${e.entrega?.direccion || ''}</small></div>
         </div>
-        <div class="prods-list">${e.items.map(i=>`<div class="prod-line"><b>${i.cantidad}×</b> ${i.nombre}</div>`).join('')}</div>
+        <div class="prods-list">${itemsHtml}</div>
         <div class="envio-footer">
           <div class="guia">Guía: ${e.guia}</div>
-          <div style="font-family:'Syne',sans-serif;font-weight:800;color:var(--naranja);">$${Number(e.total||0).toFixed(2)}</div>
+          <div style="font-family:'Syne',sans-serif;font-weight:800;color:var(--naranja);">$${Number(e.total || 0).toFixed(2)}</div>
         </div>
       </div>`;
     cont.appendChild(card);
   });
 }
-document.getElementById('search').addEventListener('input',e=>{
-  const t=e.target.value.toLowerCase();
-  document.querySelectorAll('.envio-card').forEach(card=>{
-    card.style.display=card.dataset.search.includes(t)?'block':'none';
+
+document.getElementById('search').addEventListener('input', e => {
+  const t = e.target.value.toLowerCase();
+  document.querySelectorAll('.envio-card').forEach(card => {
+    card.style.display = card.dataset.search.includes(t) ? 'block' : 'none';
   });
 });
+
+init();
 </script>
 </body>
 </html>
