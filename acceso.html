@@ -14,7 +14,7 @@
   @media(min-width:900px){ .wrapper{ flex-direction:row; } }
   .config{ background:#000; padding:48px 22px 28px; border-bottom:1px solid #1a1a1a; }
   @media(min-width:900px){ .config{ width:340px; min-height:100vh; border-right:1px solid #1a1a1a; border-bottom:none; padding:40px 22px; position:sticky; top:0; height:100vh; overflow-y:auto; } }
-  .back-row{ display:flex; align-items:center; gap:10px; margin-bottom:24px; cursor:pointer; color:#555; }
+  .back-row{ display:flex; align-items:center; gap:10px; margin-bottom:24px; cursor:pointer; color:#555; transition: 0.2s; }
   .back-row svg{ width:18px; height:18px; stroke:currentColor; fill:none; stroke-width:2.5; }
   .back-row:hover{ color:var(--naranja); }
   .panel-title{ font-family:'Syne',sans-serif; font-size:1.1rem; font-weight:800; color:var(--naranja); border-left:4px solid var(--naranja); padding-left:10px; margin-bottom:6px; }
@@ -23,7 +23,6 @@
   .field label{ display:block; font-size:0.65rem; font-weight:700; color:#555; text-transform:uppercase; letter-spacing:0.8px; margin-bottom:6px; }
   .field select,.field input{ width:100%; background:#111; border:1px solid #2a2a2a; padding:12px 14px; border-radius:12px; color:white; font-family:'DM Sans',sans-serif; font-size:0.92rem; outline:none; transition:border-color 0.2s; box-sizing:border-box; }
   .field select:focus,.field input:focus{ border-color:var(--naranja); }
-  .field select option{ background:#111; }
   .btn-gen{ width:100%; padding:15px; background:var(--naranja); color:#000; border:none; border-radius:14px; font-family:'Syne',sans-serif; font-size:0.95rem; font-weight:800; cursor:pointer; transition:0.2s; }
   .btn-gen:active{ transform:scale(0.98); }
   .qr-main{ flex:1; padding:24px; display:flex; flex-direction:column; align-items:center; justify-content:center; }
@@ -31,7 +30,6 @@
   .qr-container{ background:white; border-radius:24px; padding:32px; display:flex; flex-direction:column; align-items:center; box-shadow:0 20px 60px rgba(0,0,0,0.5); max-width:380px; width:100%; }
   .qr-placeholder{ width:260px; height:260px; background:#f5f5f5; border-radius:16px; display:flex; flex-direction:column; align-items:center; justify-content:center; border:2px dashed #ddd; color:#bbb; }
   .qr-placeholder svg{ width:60px; height:60px; margin-bottom:12px; }
-  .qr-placeholder p{ font-size:0.78rem; text-align:center; }
   #qrcode{ display:none; }
   #qrcode img,#qrcode canvas{ border-radius:12px; max-width:260px; }
   .qr-badge{ margin-top:16px; padding:10px 18px; background:#f8f8f8; border-radius:12px; text-align:center; display:none; width:100%; }
@@ -40,11 +38,10 @@
   .qr-badge .token{ font-family:monospace; font-size:0.65rem; color:#bbb; margin-top:6px; }
   .instrucciones{ background:rgba(0,122,255,0.08); border:1px solid rgba(0,122,255,0.2); border-radius:14px; padding:14px; margin-top:16px; display:none; width:100%; max-width:380px; }
   .instrucciones p{ font-size:0.78rem; color:#aaa; line-height:1.6; }
-  .instrucciones strong{ color:white; }
   .historial{ width:100%; max-width:380px; margin-top:20px; }
   .hist-title{ font-family:'Syne',sans-serif; font-size:0.78rem; font-weight:800; color:#555; text-transform:uppercase; letter-spacing:1px; margin-bottom:10px; }
   .hist-item{ background:#111; border:1px solid #1a1a1a; border-radius:12px; padding:12px 14px; margin-bottom:8px; display:flex; justify-content:space-between; align-items:center; }
-  .hist-rol{ font-size:0.82rem; font-weight:700; }
+  .hist-rol{ font-size:0.82rem; font-weight:700; color: white; }
   .hist-info{ font-size:0.68rem; color:#555; margin-top:2px; }
   .hist-exp{ font-size:0.65rem; color:#555; }
 </style>
@@ -58,6 +55,7 @@
     </div>
     <div class="panel-title">Generador de Accesos</div>
     <div class="panel-sub">Crea un QR para vincular un dispositivo de empleado.</div>
+    
     <div class="field">
       <label>Función del dispositivo</label>
       <select id="f-rol">
@@ -68,10 +66,14 @@
         <option value="soporte">💬 Servicio al Cliente</option>
       </select>
     </div>
+
     <div class="field">
       <label>Sucursal asignada</label>
-      <select id="f-sucursal"><option value="central">Central / Matriz</option></select>
+      <select id="f-sucursal">
+        <option value="central">Cargando sucursales...</option>
+      </select>
     </div>
+
     <div class="field">
       <label>Vencimiento</label>
       <select id="f-vencimiento">
@@ -81,12 +83,15 @@
         <option value="perm">Permanente</option>
       </select>
     </div>
+
     <div class="field">
       <label>Nombre del empleado (opcional)</label>
       <input type="text" id="f-empleado" placeholder="Ej: Juan Pérez">
     </div>
-    <button class="btn-gen" onclick="generarQR()">GENERAR CÓDIGO QR</button>
+
+    <button class="btn-gen" id="btn-generar">GENERAR CÓDIGO QR</button>
   </aside>
+
   <main class="qr-main">
     <div class="qr-container">
       <div class="qr-placeholder" id="qr-placeholder">
@@ -96,7 +101,7 @@
           <rect x="14" y="14" width="3" height="3"/><rect x="18" y="14" width="3" height="3"/>
           <rect x="14" y="18" width="3" height="3"/><rect x="18" y="18" width="3" height="3"/>
         </svg>
-        <p>Configura el acceso<br>y pulsa "Generar"</p>
+        <p style="font-size:0.78rem; text-align:center; color:#bbb;">Configura el acceso<br>y pulsa "Generar"</p>
       </div>
       <div id="qrcode"></div>
       <div class="qr-badge" id="qr-badge">
@@ -106,79 +111,121 @@
       </div>
     </div>
     <div class="instrucciones" id="instrucciones">
-      <p><strong>Instrucciones para el empleado:</strong><br>Abre la cámara de tu dispositivo y escanea el código QR. El equipo quedará configurado automáticamente con los permisos asignados.</p>
+      <p style="color:#aaa; font-size:0.78rem; line-height:1.6;"><strong>Instrucciones:</strong><br>Escanea este código desde la App de Punto de Venta para autorizar el dispositivo automáticamente.</p>
     </div>
     <div class="historial">
       <div class="hist-title">Accesos recientes</div>
-      <div id="hist-lista"><div style="color:#333;font-size:0.8rem;text-align:center;padding:20px;">Los QR generados aparecerán aquí</div></div>
+      <div id="hist-lista"></div>
     </div>
   </main>
 </div>
+
 <script type="module">
-import { initializeApp } from "https://www.gstatic.com/firebasejs/11.0.0/firebase-app.js";
-import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/11.0.0/firebase-auth.js";
-import { getFirestore, collection, query, where, getDocs, addDoc, serverTimestamp } from "https://www.gstatic.com/firebasejs/11.0.0/firebase-firestore.js";
-const app=initializeApp({
-  apiKey:"AIzaSyAZQRlfdtJjmodrfmct5N3qrLO6hniO2o8",
-  authDomain:"proveed-8cb7c.firebaseapp.com",
-  projectId:"proveed-8cb7c",
-  storageBucket:"proveed-8cb7c.firebasestorage.app",
-  messagingSenderId:"235073250367",
-  appId:"1:235073250367:web:89ec59fea5f0b8a347448a"
-});
-const auth=getAuth(app);
-const db=getFirestore(app);
-let currentUser=null,qrcode=null;
-const historial=[];
-const ROLES={bodega:'📦 Bodega / Despacho',caja:'💰 Punto de Venta',vendedor:'📱 Vendedor de Piso',admin:'🏢 Administración',soporte:'💬 Servicio al Cliente'};
-const VENC={'8h':'8 horas','24h':'24 horas','7d':'7 días','perm':'Permanente'};
-onAuthStateChanged(auth,async user=>{
-  if(!user){window.location.href='login.html';return;}
-  currentUser=user;
-  const snap=await getDocs(query(collection(db,'sucursales'),where('proveedorId','==',user.uid)));
-  const sel=document.getElementById('f-sucursal');
-  sel.innerHTML='<option value="central">Central / Matriz</option>';
-  snap.forEach(d=>{
-    const opt=document.createElement('option');
-    opt.value=d.id;opt.textContent=d.data().nombre;
+import { createClient } from 'https://cdn.jsdelivr.net/npm/@supabase/supabase-js/+esm'
+
+const supabase = createClient('https://pqoqirousggkjnkzxkhy.supabase.co', 'Sb_publishable_L8cdOOPzHe4ff3rkPr8x5Q_WTCF694I')
+
+let currentUser = null;
+let qrcodeInstance = null;
+const ROLES = {bodega:'📦 Bodega', caja:'💰 Caja', vendedor:'📱 Vendedor', admin:'🏢 Admin', soporte:'💬 Soporte'};
+const VENC = {'8h':'8 horas', '24h':'24 horas', '7d':'7 días', 'perm':'Permanente'};
+
+async function init() {
+  const { data: { session } } = await supabase.auth.getSession();
+  if (!session) { window.location.href = 'login.html'; return; }
+  currentUser = session.user;
+
+  // Cargar Sucursales
+  const { data: sucursales } = await supabase
+    .from('sucursales')
+    .select('*')
+    .eq('proveedor_id', currentUser.id);
+
+  const sel = document.getElementById('f-sucursal');
+  sel.innerHTML = '<option value="central">Central / Matriz</option>';
+  sucursales?.forEach(s => {
+    const opt = document.createElement('option');
+    opt.value = s.id; opt.textContent = s.nombre;
     sel.appendChild(opt);
   });
-});
-window.generarQR=async function(){
-  const rol=document.getElementById('f-rol').value;
-  const sucursal=document.getElementById('f-sucursal').value;
-  const venc=document.getElementById('f-vencimiento').value;
-  const empleado=document.getElementById('f-empleado').value.trim();
-  const token=Math.random().toString(36).slice(2,10).toUpperCase();
-  const payload=JSON.stringify({proveedorId:currentUser?.uid||'unknown',sucursal,rol,vencimiento:venc,empleado:empleado||'Sin asignar',token,generadoEn:new Date().toISOString()});
-  document.getElementById('qrcode').innerHTML='';
-  document.getElementById('qr-placeholder').style.display='none';
-  document.getElementById('qrcode').style.display='block';
-  if(qrcode){try{qrcode.clear();}catch(e){}}
-  qrcode=new QRCode(document.getElementById('qrcode'),{text:payload,width:260,height:260,colorDark:'#000000',colorLight:'#ffffff',correctLevel:QRCode.CorrectLevel.H});
-  document.getElementById('b-rol').textContent=ROLES[rol];
-  document.getElementById('b-exp').textContent=`Vence: ${VENC[venc]}${empleado?' · '+empleado:''}`;
-  document.getElementById('b-token').textContent='TOKEN: '+token;
-  document.getElementById('qr-badge').style.display='block';
-  document.getElementById('instrucciones').style.display='block';
-  historial.unshift({rol,venc,empleado,token,hora:new Date()});
-  renderHistorial();
-  if(currentUser){
-    try{
-      await addDoc(collection(db,'accesos'),{proveedorId:currentUser.uid,sucursal,rol,vencimiento:venc,empleado:empleado||'Sin asignar',token,creadoEn:serverTimestamp()});
-    }catch(e){console.warn(e);}
-  }
-};
-function renderHistorial(){
-  const lista=document.getElementById('hist-lista');
-  lista.innerHTML='';
-  historial.slice(0,5).forEach(h=>{
-    const div=document.createElement('div');
-    div.className='hist-item';
-    div.innerHTML=`<div><div class="hist-rol">${ROLES[h.rol]}</div><div class="hist-info">${h.empleado||'Sin nombre'} · ${h.hora.toLocaleTimeString('es-EC',{hour:'2-digit',minute:'2-digit'})}</div></div><div class="hist-exp">${VENC[h.venc]}</div>`;
+
+  cargarHistorial();
+}
+
+async function cargarHistorial() {
+  const { data: accesos } = await supabase
+    .from('accesos')
+    .select('*')
+    .eq('proveedor_id', currentUser.id)
+    .order('creado_at', { ascending: false })
+    .limit(5);
+
+  const lista = document.getElementById('hist-lista');
+  lista.innerHTML = accesos?.length ? '' : '<div style="color:#333;font-size:0.8rem;text-align:center;padding:20px;">Sin registros recientes</div>';
+  
+  accesos?.forEach(h => {
+    const hora = new Date(h.creado_at).toLocaleTimeString('es-EC', {hour:'2-digit', minute:'2-digit'});
+    const div = document.createElement('div');
+    div.className = 'hist-item';
+    div.innerHTML = `<div><div class="hist-rol">${ROLES[h.rol] || h.rol}</div><div class="hist-info">${h.empleado} · ${hora}</div></div><div class="hist-exp">${VENC[h.vencimiento] || h.vencimiento}</div>`;
     lista.appendChild(div);
   });
 }
+
+window.generarQR = async function() {
+  const rol = document.getElementById('f-rol').value;
+  const sucursal = document.getElementById('f-sucursal').value;
+  const venc = document.getElementById('f-vencimiento').value;
+  const empleado = document.getElementById('f-empleado').value.trim() || 'Sin asignar';
+  const token = Math.random().toString(36).slice(2, 10).toUpperCase();
+
+  const payload = JSON.stringify({
+    p_id: currentUser.id,
+    s_id: sucursal,
+    r: rol,
+    v: venc,
+    emp: empleado,
+    tk: token,
+    iat: new Date().toISOString()
+  });
+
+  // UI Updates
+  document.getElementById('qr-placeholder').style.display = 'none';
+  const qrDiv = document.getElementById('qrcode');
+  qrDiv.innerHTML = '';
+  qrDiv.style.display = 'block';
+
+  new QRCode(qrDiv, {
+    text: payload,
+    width: 260,
+    height: 260,
+    colorDark: "#000000",
+    colorLight: "#ffffff",
+    correctLevel: QRCode.CorrectLevel.H
+  });
+
+  document.getElementById('b-rol').textContent = ROLES[rol];
+  document.getElementById('b-exp').textContent = `Vence: ${VENC[venc]} · ${empleado}`;
+  document.getElementById('b-token').textContent = 'TOKEN: ' + token;
+  document.getElementById('qr-badge').style.display = 'block';
+  document.getElementById('instrucciones').style.display = 'block';
+
+  // Guardar en Supabase
+  await supabase.from('accesos').insert([{
+    proveedor_id: currentUser.id,
+    sucursal_id: sucursal,
+    rol: rol,
+    vencimiento: venc,
+    empleado: empleado,
+    token: token
+  }]);
+
+  cargarHistorial();
+};
+
+document.getElementById('btn-generar').onclick = generarQR;
+
+init();
 </script>
 </body>
 </html>
