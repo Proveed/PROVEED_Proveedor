@@ -75,85 +75,119 @@
   <a class="tab" href="chat.html"><svg viewBox="0 0 24 24"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg><span>Chat</span></a>
   <a class="tab" href="perfil.html"><svg viewBox="0 0 24 24"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg><span>Perfil</span></a>
 </nav>
+
 <script type="module">
-import { initializeApp } from "https://www.gstatic.com/firebasejs/11.0.0/firebase-app.js";
-import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/11.0.0/firebase-auth.js";
-import { getFirestore, collection, query, orderBy, onSnapshot, doc, getDoc, updateDoc } from "https://www.gstatic.com/firebasejs/11.0.0/firebase-firestore.js";
-const app=initializeApp({
-  apiKey:"AIzaSyAZQRlfdtJjmodrfmct5N3qrLO6hniO2o8",
-  authDomain:"proveed-8cb7c.firebaseapp.com",
-  projectId:"proveed-8cb7c",
-  storageBucket:"proveed-8cb7c.firebasestorage.app",
-  messagingSenderId:"235073250367",
-  appId:"1:235073250367:web:89ec59fea5f0b8a347448a"
-});
-const auth=getAuth(app);
-const db=getFirestore(app);
-let currentUser=null,empresa='',filtroActual='todos',todosPedidos=[];
-onAuthStateChanged(auth,async(user)=>{
-  if(!user){window.location.href='login.html';return;}
-  currentUser=user;
-  const snap=await getDoc(doc(db,'usuarios',user.uid));
-  if(snap.exists()) empresa=snap.data().empresa||snap.data().nombre||'';
-  const q=query(collection(db,'pedidos'),orderBy('creadoEn','desc'));
-  onSnapshot(q,snap=>{
-    todosPedidos=[];
-    snap.forEach(d=>{
-      const data=d.data();
-      const items=(data.items||[]).filter(i=>i.proveedor===empresa);
-      if(items.length) todosPedidos.push({id:d.id,...data});
+import { createClient } from 'https://cdn.jsdelivr.net/npm/@supabase/supabase-js/+esm'
+
+const supabaseUrl = 'https://pqoqirousggkjnkzxkhy.supabase.co'
+const supabaseKey = 'Sb_publishable_L8cdOOPzHe4ff3rkPr8x5Q_WTCF694I'
+const supabase = createClient(supabaseUrl, supabaseKey)
+
+let currentUid = null, empresa = '', filtroActual = 'todos', todosPedidos = [];
+
+async function checkAuth() {
+  const { data: { session } } = await supabase.auth.getSession();
+  if (!session) { window.location.href = 'login.html'; return; }
+  currentUid = session.user.id;
+
+  // Obtener nombre de la empresa para filtrar items
+  const { data: user } = await supabase.from('usuarios').select('empresa, nombre').eq('id', currentUid).single();
+  empresa = user?.empresa || user?.nombre || '';
+
+  escucharPedidos();
+}
+
+function escucharPedidos() {
+  // Suscripción en tiempo real a la tabla pedidos
+  supabase
+    .channel('public:pedidos')
+    .on('postgres_changes', { event: '*', schema: 'public', table: 'pedidos' }, () => cargarPedidos())
+    .subscribe();
+  
+  cargarPedidos();
+}
+
+async function cargarPedidos() {
+  const { data, error } = await supabase
+    .from('pedidos')
+    .select('*')
+    .order('creadoEn', { ascending: false });
+
+  if (!error) {
+    // Solo mostramos pedidos que contengan productos de ESTE proveedor
+    todosPedidos = (data || []).filter(p => {
+      const misItems = (p.items || []).filter(i => i.proveedor === empresa);
+      return misItems.length > 0;
     });
     renderLista();
-  });
-});
-window.filtrar=function(f,el){
-  filtroActual=f;
-  document.querySelectorAll('.vtab').forEach(t=>t.classList.remove('active'));
+  }
+}
+
+window.filtrar = function(f, el) {
+  filtroActual = f;
+  document.querySelectorAll('.vtab').forEach(t => t.classList.remove('active'));
   el.classList.add('active');
   renderLista();
 };
-function renderLista(){
-  const lista=document.getElementById('lista');
-  let pedidos=[...todosPedidos];
-  if(filtroActual!=='todos') pedidos=pedidos.filter(p=>p.estado===filtroActual);
-  if(!pedidos.length){lista.innerHTML=`<div class="empty"><svg viewBox="0 0 24 24"><path d="M1 3h15v13H1z"/></svg><p>Sin pedidos ${filtroActual!=='todos'?'en este estado':'aún'}</p></div>`;return;}
-  lista.innerHTML='';
-  pedidos.forEach(p=>{
-    const fecha=p.creadoEn?new Date(p.creadoEn.toDate()).toLocaleDateString('es-EC',{day:'2-digit',month:'short',hour:'2-digit',minute:'2-digit'}):'—';
-    const nombre=p.entrega?.nombre||'Cliente';
-    const est=p.estado||'pendiente';
-    const misItems=(p.items||[]).filter(i=>i.proveedor===empresa);
-    let acciones='';
-    if(est==='pendiente') acciones=`<button class="p-btn p-btn-chat" onclick="irChat('${p.emprendedorId}','${nombre}')">💬 Chat</button><button class="p-btn p-btn-proceso" onclick="cambiarEstado('${p.id}','proceso')">EN PROCESO →</button>`;
-    else if(est==='proceso') acciones=`<button class="p-btn p-btn-chat" onclick="irChat('${p.emprendedorId}','${nombre}')">💬 Chat</button><button class="p-btn p-btn-listo" onclick="cambiarEstado('${p.id}','completado')">✓ COMPLETAR</button>`;
-    else acciones=`<button class="p-btn p-btn-done" disabled>Completado ✓</button>`;
-    const div=document.createElement('div');
-    div.className='pedido-card';
-    div.innerHTML=`
+
+function renderLista() {
+  const lista = document.getElementById('lista');
+  let pedidos = [...todosPedidos];
+  if (filtroActual !== 'todos') pedidos = pedidos.filter(p => p.estado === filtroActual);
+
+  if (!pedidos.length) {
+    lista.innerHTML = `<div class="empty"><svg viewBox="0 0 24 24"><path d="M1 3h15v13H1z"/></svg><p>Sin pedidos ${filtroActual !== 'todos' ? 'en este estado' : 'aún'}</p></div>`;
+    return;
+  }
+
+  lista.innerHTML = '';
+  pedidos.forEach(p => {
+    const fecha = p.creadoEn ? new Date(p.creadoEn).toLocaleDateString('es-EC', { day: '2-digit', month: 'short', hour: '2-digit', minute: '2-digit' }) : '—';
+    const nombre = p.entrega?.nombre || 'Cliente';
+    const est = p.estado || 'pendiente';
+    const misItems = (p.items || []).filter(i => i.proveedor === empresa);
+    
+    let acciones = '';
+    if (est === 'pendiente') {
+      acciones = `<button class="p-btn p-btn-chat" onclick="irChat('${p.emprendedorId}','${nombre}')">💬 Chat</button><button class="p-btn p-btn-proceso" onclick="cambiarEstado('${p.id}','proceso')">EN PROCESO →</button>`;
+    } else if (est === 'proceso') {
+      acciones = `<button class="p-btn p-btn-chat" onclick="irChat('${p.emprendedorId}','${nombre}')">💬 Chat</button><button class="p-btn p-btn-listo" onclick="cambiarEstado('${p.id}','completado')">✓ COMPLETAR</button>`;
+    } else {
+      acciones = `<button class="p-btn p-btn-done" disabled>Completado ✓</button>`;
+    }
+
+    const div = document.createElement('div');
+    div.className = 'pedido-card';
+    div.innerHTML = `
       <div class="p-header">
-        <div><div class="p-num">#PV-${p.id.slice(-6).toUpperCase()}</div><div class="p-fecha">${fecha}</div></div>
-        <span class="estado-tag est-${est==='completado'?'completado':est}">${est}</span>
+        <div><div class="p-num">#PV-${p.id.toString().slice(-6).toUpperCase()}</div><div class="p-fecha">${fecha}</div></div>
+        <span class="estado-tag est-${est}">${est}</span>
       </div>
       <div class="p-body">
         <div class="p-cliente">
           <div class="p-avatar">${nombre[0].toUpperCase()}</div>
-          <div class="p-cliente-info"><b>${nombre}</b><small>${p.entrega?.ciudad||''}</small></div>
+          <div class="p-cliente-info"><b>${nombre}</b><small>${p.entrega?.ciudad || ''}</small></div>
         </div>
-        <div class="p-items">${misItems.map(i=>`<div class="p-item"><span class="p-item-name">${i.cantidad}× ${i.nombre}</span><span class="p-item-price">$${(i.precio*i.cantidad).toFixed(2)}</span></div>`).join('')}</div>
-        <div class="p-dir"><svg viewBox="0 0 24 24"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>${p.entrega?.direccion||'Sin dirección'} · ${p.entrega?.ciudad||''}</div>
-        ${p.notas?`<div style="font-size:0.78rem;color:#aaa;margin-bottom:10px;font-style:italic;">"${p.notas}"</div>`:''}
-        <div class="p-footer-info"><div class="p-total">$${Number(p.total||0).toFixed(2)}</div><div class="p-metodo">${p.metodoPago||'transferencia'}</div></div>
+        <div class="p-items">${misItems.map(i => `<div class="p-item"><span class="p-item-name">${i.cantidad}× ${i.nombre}</span><span class="p-item-price">$${(i.precio * i.cantidad).toFixed(2)}</span></div>`).join('')}</div>
+        <div class="p-dir"><svg viewBox="0 0 24 24"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>${p.entrega?.direccion || 'Sin dirección'} · ${p.entrega?.ciudad || ''}</div>
+        ${p.notas ? `<div style="font-size:0.78rem;color:#aaa;margin-bottom:10px;font-style:italic;">"${p.notas}"</div>` : ''}
+        <div class="p-footer-info"><div class="p-total">$${Number(p.total || 0).toFixed(2)}</div><div class="p-metodo">${p.metodoPago || 'transferencia'}</div></div>
         <div class="p-actions">${acciones}</div>
       </div>`;
     lista.appendChild(div);
   });
 }
-window.cambiarEstado=async function(id,nuevoEstado){
-  await updateDoc(doc(db,'pedidos',id),{estado:nuevoEstado});
+
+window.cambiarEstado = async function(id, nuevoEstado) {
+  const { error } = await supabase.from('pedidos').update({ estado: nuevoEstado }).eq('id', id);
+  if (!error) cargarPedidos();
 };
-window.irChat=function(emprendedorId,nombre){
-  window.location.href=`chat.html?emprendedorId=${emprendedorId}&nombre=${encodeURIComponent(nombre)}`;
+
+window.irChat = function(emprendedorId, nombre) {
+  window.location.href = `chat.html?emprendedorId=${emprendedorId}&nombre=${encodeURIComponent(nombre)}`;
 };
+
+checkAuth();
 </script>
 </body>
 </html>
