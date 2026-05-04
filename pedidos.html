@@ -2,192 +2,128 @@
 <html lang="es">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
 <title>PROVEED — Pedidos</title>
-<link href="https://fonts.googleapis.com/css2?family=Syne:wght@700;800;900&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
 <style>
   *{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent;}
-  :root{ --naranja:#FF8C00; --negro:#0A0A0A; --blanco:#F8F8F5; --gris:#F0F1EE; --verde:#32CD32; --azul:#007AFF; --rojo:#FF4D4D; }
-  body{ background:var(--gris); font-family:'DM Sans',sans-serif; padding-bottom:90px; }
-  .header{ background:var(--negro); color:var(--blanco); padding:48px 20px 20px; border-radius:0 0 28px 28px; display:flex; align-items:center; gap:14px; position:sticky; top:0; z-index:100; }
-  .back-btn{ width:36px; height:36px; border-radius:12px; background:rgba(255,255,255,0.08); display:flex; align-items:center; justify-content:center; cursor:pointer; flex-shrink:0; }
+  :root{ --naranja:#FF8C00; --verde:#A8E63D; --negro:#0A0A0A; --gris:#F5F6F2; --rojo:#FF4D4D; --azul:#007AFF; }
+  body{ background:var(--gris); font-family:'Inter',sans-serif; padding-bottom:90px; -webkit-font-smoothing:antialiased; }
+  .header{ background:var(--negro); padding:44px 16px 16px; display:flex; align-items:center; gap:12px; position:sticky; top:0; z-index:100; }
+  .back-btn{ width:36px; height:36px; background:rgba(255,255,255,0.08); border-radius:10px; display:flex; align-items:center; justify-content:center; cursor:pointer; border:none; }
   .back-btn svg{ width:18px; height:18px; stroke:white; fill:none; stroke-width:2.5; }
-  .page-title{ font-family:'Syne',sans-serif; font-size:1.1rem; font-weight:800; }
-  .tabs{ display:flex; gap:8px; padding:16px 20px 4px; overflow-x:auto; scrollbar-width:none; }
-  .vtab{ padding:8px 16px; border-radius:20px; font-size:0.78rem; font-weight:600; cursor:pointer; transition:0.2s; border:1.5px solid #e0e0e0; background:white; color:#777; white-space:nowrap; }
+  .page-title{ font-size:1.1rem; font-weight:700; color:white; }
+  .stats-row{ display:grid; grid-template-columns:repeat(3,1fr); gap:10px; padding:14px 16px 0; }
+  .stat-box{ background:white; border-radius:16px; padding:14px 10px; text-align:center; box-shadow:0 2px 8px rgba(0,0,0,0.04); }
+  .stat-val{ font-size:1.3rem; font-weight:800; color:var(--negro); }
+  .stat-val.azul{ color:var(--azul); }
+  .stat-val.naranja{ color:var(--naranja); }
+  .stat-val.verde{ color:var(--verde); }
+  .stat-lbl{ font-size:0.6rem; color:#bbb; font-weight:600; text-transform:uppercase; margin-top:3px; }
+  .tabs-row{ display:flex; gap:8px; padding:14px 16px; overflow-x:auto; scrollbar-width:none; }
+  .tabs-row::-webkit-scrollbar{ display:none; }
+  .vtab{ padding:7px 14px; border-radius:20px; border:1.5px solid #eee; background:white; font-size:0.76rem; font-weight:600; color:#aaa; cursor:pointer; white-space:nowrap; }
   .vtab.active{ background:var(--negro); color:white; border-color:var(--negro); }
-  .lista{ padding:8px 20px; }
-  .pedido-card{ background:white; border-radius:22px; margin-bottom:14px; box-shadow:0 2px 10px rgba(0,0,0,0.05); overflow:hidden; }
-  .p-header{ padding:16px 16px 12px; display:flex; justify-content:space-between; align-items:flex-start; border-bottom:1px solid #f5f5f5; }
-  .p-num{ font-family:'Syne',sans-serif; font-weight:800; font-size:0.95rem; }
-  .p-fecha{ font-size:0.7rem; color:#bbb; margin-top:2px; }
-  .estado-tag{ font-size:0.65rem; font-weight:800; padding:4px 10px; border-radius:10px; white-space:nowrap; text-transform:uppercase; }
+  .pedidos-lista{ padding:0 16px; }
+  .pedido-card{ background:white; border-radius:18px; margin-bottom:12px; overflow:hidden; box-shadow:0 2px 8px rgba(0,0,0,0.04); }
+  .ped-header{ padding:14px 16px; display:flex; align-items:center; justify-content:space-between; border-bottom:1px solid #f8f8f8; }
+  .ped-num{ font-size:0.88rem; font-weight:800; color:var(--negro); }
+  .ped-fecha{ font-size:0.7rem; color:#bbb; margin-top:1px; }
+  .est-badge{ font-size:0.65rem; font-weight:700; padding:4px 10px; border-radius:20px; }
   .est-pendiente{ background:rgba(0,122,255,0.1); color:var(--azul); }
   .est-proceso{ background:rgba(255,140,0,0.1); color:var(--naranja); }
-  .est-completado{ background:rgba(50,205,50,0.1); color:var(--verde); }
-  .p-body{ padding:14px 16px; }
-  .p-cliente{ display:flex; align-items:center; gap:8px; margin-bottom:10px; }
-  .p-avatar{ width:36px; height:36px; border-radius:10px; background:var(--gris); display:flex; align-items:center; justify-content:center; font-family:'Syne',sans-serif; font-weight:800; font-size:0.9rem; flex-shrink:0; }
-  .p-cliente-info b{ display:block; font-size:0.88rem; }
-  .p-cliente-info small{ font-size:0.72rem; color:#aaa; }
-  .p-items{ background:var(--gris); border-radius:14px; padding:10px 12px; margin-bottom:12px; }
-  .p-item{ display:flex; justify-content:space-between; font-size:0.82rem; padding:4px 0; border-bottom:1px solid rgba(0,0,0,0.04); }
-  .p-item:last-child{ border:none; }
-  .p-item-name{ color:#666; }
-  .p-item-price{ font-weight:700; color:var(--negro); }
-  .p-dir{ display:flex; align-items:center; gap:8px; font-size:0.78rem; color:#888; margin-bottom:12px; }
-  .p-dir svg{ width:14px; height:14px; stroke:#bbb; fill:none; stroke-width:2; flex-shrink:0; }
-  .p-footer-info{ display:flex; justify-content:space-between; align-items:center; margin-bottom:12px; }
-  .p-total{ font-family:'Syne',sans-serif; font-size:1.1rem; font-weight:900; color:var(--naranja); }
-  .p-metodo{ font-size:0.72rem; color:#aaa; background:var(--gris); padding:4px 10px; border-radius:8px; }
-  .p-actions{ display:flex; gap:8px; }
-  .p-btn{ flex:1; padding:12px; border-radius:14px; border:none; font-family:'DM Sans',sans-serif; font-size:0.82rem; font-weight:700; cursor:pointer; transition:0.2s; }
-  .p-btn:active{ transform:scale(0.97); }
-  .p-btn-chat{ background:var(--gris); color:var(--negro); }
-  .p-btn-proceso{ background:rgba(255,140,0,0.15); color:var(--naranja); }
-  .p-btn-listo{ background:var(--verde); color:#000; }
-  .p-btn-done{ background:var(--gris); color:#aaa; cursor:not-allowed; }
-  .empty{ text-align:center; padding:50px 20px; color:#bbb; }
-  .empty svg{ width:52px; height:52px; stroke:#ddd; fill:none; stroke-width:1.2; margin:0 auto 14px; display:block; }
-  .tab-bar{ position:fixed; bottom:0; width:100%; background:white; display:flex; justify-content:space-around; align-items:center; padding:10px 0 18px; border-top:1px solid #eee; box-shadow:0 -4px 20px rgba(0,0,0,0.06); z-index:200; }
+  .est-completado{ background:rgba(168,230,61,0.1); color:#3a7a00; }
+  .ped-cliente{ padding:12px 16px; background:#fafafa; display:flex; gap:10px; align-items:center; }
+  .ped-cliente-avatar{ width:36px; height:36px; border-radius:11px; background:var(--gris); display:flex; align-items:center; justify-content:center; font-size:0.88rem; font-weight:700; color:var(--negro); flex-shrink:0; }
+  .ped-cliente-info{ flex:1; }
+  .ped-cliente-nombre{ font-size:0.85rem; font-weight:700; color:var(--negro); }
+  .ped-cliente-sub{ font-size:0.7rem; color:#aaa; }
+  .ped-items{ padding:10px 16px; }
+  .ped-item-row{ display:flex; justify-content:space-between; font-size:0.8rem; padding:3px 0; color:#888; }
+  .ped-item-row.header{ color:#555; font-weight:600; margin-bottom:4px; }
+  .ped-footer{ padding:12px 16px; border-top:1px solid #f8f8f8; display:flex; align-items:center; justify-content:space-between; }
+  .ped-total{ font-size:1rem; font-weight:800; color:var(--naranja); }
+  .ped-actions{ display:flex; gap:6px; }
+  .ped-btn{ padding:7px 14px; border-radius:9px; border:none; font-family:'Inter',sans-serif; font-size:0.74rem; font-weight:700; cursor:pointer; }
+  .btn-proceso{ background:rgba(255,140,0,0.1); color:var(--naranja); }
+  .btn-completar{ background:rgba(168,230,61,0.1); color:#3a7a00; }
+  .empty{ text-align:center; padding:60px 20px; color:#bbb; }
+  .empty p{ font-size:0.85rem; }
+  .tab-bar{ position:fixed; bottom:0; width:100%; background:white; display:flex; justify-content:space-around; align-items:center; padding:10px 0 18px; border-top:1px solid #eee; z-index:200; }
   .tab{ display:flex; flex-direction:column; align-items:center; gap:4px; cursor:pointer; flex:1; color:#ccc; text-decoration:none; }
   .tab.active{ color:var(--naranja); }
-  .tab svg{ width:23px; height:23px; stroke:currentColor; fill:none; stroke-width:2; stroke-linecap:round; }
-  .tab span{ font-size:0.6rem; font-weight:700; text-transform:uppercase; letter-spacing:0.5px; }
+  .tab svg{ width:22px; height:22px; stroke:currentColor; fill:none; stroke-width:2; stroke-linecap:round; stroke-linejoin:round; }
+  .tab span{ font-size:0.56rem; font-weight:600; text-transform:uppercase; }
 </style>
 </head>
 <body>
 <div class="header">
-  <div class="back-btn" onclick="window.location.href='dashboard.html'"><svg viewBox="0 0 24 24"><path d="M19 12H5M12 19l-7-7 7-7"/></svg></div>
-  <div class="page-title">Gestión de Pedidos</div>
+  <button class="back-btn" onclick="window.location.href='dashboard.html'"><svg viewBox="0 0 24 24"><path d="M19 12H5M12 19l-7-7 7-7"/></svg></button>
+  <div class="page-title">Mis Pedidos</div>
 </div>
-<div class="tabs">
+<div class="stats-row">
+  <div class="stat-box"><div class="stat-val azul" id="st-pend">—</div><div class="stat-lbl">Pendientes</div></div>
+  <div class="stat-box"><div class="stat-val naranja" id="st-proc">—</div><div class="stat-lbl">En proceso</div></div>
+  <div class="stat-box"><div class="stat-val verde" id="st-comp">—</div><div class="stat-lbl">Completados</div></div>
+</div>
+<div class="tabs-row">
   <div class="vtab active" onclick="filtrar('todos',this)">Todos</div>
   <div class="vtab" onclick="filtrar('pendiente',this)">Pendientes</div>
   <div class="vtab" onclick="filtrar('proceso',this)">En proceso</div>
   <div class="vtab" onclick="filtrar('completado',this)">Completados</div>
 </div>
-<div class="lista" id="lista"></div>
+<div class="pedidos-lista" id="pedidos-lista"><div class="empty"><p>Cargando pedidos...</p></div></div>
+
 <nav class="tab-bar">
-  <a class="tab" href="dashboard.html"><svg viewBox="0 0 24 24"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/></svg><span>Panel</span></a>
+  <a class="tab" href="dashboard.html"><svg viewBox="0 0 24 24"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/></svg><span>Panel</span></a>
   <a class="tab" href="productos.html"><svg viewBox="0 0 24 24"><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"/></svg><span>Productos</span></a>
-  <a class="tab active" href="pedidos.html"><svg viewBox="0 0 24 24"><path d="M1 3h15v13H1zM16 8h4l3 3v5h-7M5 19a2 2 0 1 0 0 4 2 2 0 0 0 0-4zM18 19a2 2 0 1 0 0 4 2 2 0 0 0 0-4z"/></svg><span>Pedidos</span></a>
-  <a class="tab" href="chat.html"><svg viewBox="0 0 24 24"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg><span>Chat</span></a>
-  <a class="tab" href="perfil.html"><svg viewBox="0 0 24 24"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg><span>Perfil</span></a>
+  <a class="tab" href="tips.html"><svg viewBox="0 0 24 24"><path d="M15 10l4.553-2.069A1 1 0 0 1 21 8.87v6.26a1 1 0 0 1-1.447.894L15 14"/><rect x="1" y="6" width="15" height="12" rx="2" ry="2"/></svg><span>Tips</span></a>
+  <a class="tab active" href="pedidos.html"><svg viewBox="0 0 24 24"><rect x="1" y="3" width="15" height="13" rx="1"/><path d="M16 8h4l3 3v5h-7V8z"/><circle cx="5.5" cy="18.5" r="2.5"/><circle cx="18.5" cy="18.5" r="2.5"/></svg><span>Pedidos</span></a>
+  <a class="tab" href="plugins.html"><svg viewBox="0 0 24 24"><path d="M20.24 12.24a6 6 0 0 0-8.49-8.49L5 10.5V19h8.5l6.74-6.76z"/><line x1="16" y1="8" x2="2" y2="22"/></svg><span>Plugins</span></a>
 </nav>
 
-<script type="module">
-import { createClient } from 'https://cdn.jsdelivr.net/npm/@supabase/supabase-js/+esm'
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script>
+const { createClient } = supabase;
+const sb = createClient('https://hfmsyrmkewscnvwynzfq.supabase.co','sb_publishable_d1oLsq70a6ZV33vW3XkRgw_nYcN2Z9v');
+let todosPedidos=[], filtroActual='todos', empresa='';
 
-const supabaseUrl = 'https://pqoqirousggkjnkzxkhy.supabase.co'
-const supabaseKey = 'Sb_publishable_L8cdOOPzHe4ff3rkPr8x5Q_WTCF694I'
-const supabase = createClient(supabaseUrl, supabaseKey)
+(async()=>{
+  const { data:{session} } = await sb.auth.getSession();
+  if(!session){ window.location.href='login.html'; return; }
+  const { data:u } = await sb.from('usuarios').select('empresa,nombre').eq('id',session.user.id).single();
+  empresa=u?.empresa||u?.nombre||'';
+  const { data } = await sb.from('pedidos').select('*').order('created_at',{ascending:false});
+  todosPedidos=(data||[]).filter(p=>(p.items||[]).some(i=>i.proveedor===empresa));
+  document.getElementById('st-pend').textContent=todosPedidos.filter(p=>p.estado==='pendiente').length;
+  document.getElementById('st-proc').textContent=todosPedidos.filter(p=>p.estado==='proceso').length;
+  document.getElementById('st-comp').textContent=todosPedidos.filter(p=>p.estado==='completado').length;
+  renderPedidos();
+})();
 
-let currentUid = null, empresa = '', filtroActual = 'todos', todosPedidos = [];
-
-async function checkAuth() {
-  const { data: { session } } = await supabase.auth.getSession();
-  if (!session) { window.location.href = 'login.html'; return; }
-  currentUid = session.user.id;
-
-  // Obtener nombre de la empresa para filtrar items
-  const { data: user } = await supabase.from('usuarios').select('empresa, nombre').eq('id', currentUid).single();
-  empresa = user?.empresa || user?.nombre || '';
-
-  escucharPedidos();
-}
-
-function escucharPedidos() {
-  // Suscripción en tiempo real a la tabla pedidos
-  supabase
-    .channel('public:pedidos')
-    .on('postgres_changes', { event: '*', schema: 'public', table: 'pedidos' }, () => cargarPedidos())
-    .subscribe();
-  
-  cargarPedidos();
-}
-
-async function cargarPedidos() {
-  const { data, error } = await supabase
-    .from('pedidos')
-    .select('*')
-    .order('creadoEn', { ascending: false });
-
-  if (!error) {
-    // Solo mostramos pedidos que contengan productos de ESTE proveedor
-    todosPedidos = (data || []).filter(p => {
-      const misItems = (p.items || []).filter(i => i.proveedor === empresa);
-      return misItems.length > 0;
-    });
-    renderLista();
-  }
-}
-
-window.filtrar = function(f, el) {
-  filtroActual = f;
-  document.querySelectorAll('.vtab').forEach(t => t.classList.remove('active'));
-  el.classList.add('active');
-  renderLista();
-};
-
-function renderLista() {
-  const lista = document.getElementById('lista');
-  let pedidos = [...todosPedidos];
-  if (filtroActual !== 'todos') pedidos = pedidos.filter(p => p.estado === filtroActual);
-
-  if (!pedidos.length) {
-    lista.innerHTML = `<div class="empty"><svg viewBox="0 0 24 24"><path d="M1 3h15v13H1z"/></svg><p>Sin pedidos ${filtroActual !== 'todos' ? 'en este estado' : 'aún'}</p></div>`;
-    return;
-  }
-
-  lista.innerHTML = '';
-  pedidos.forEach(p => {
-    const fecha = p.creadoEn ? new Date(p.creadoEn).toLocaleDateString('es-EC', { day: '2-digit', month: 'short', hour: '2-digit', minute: '2-digit' }) : '—';
-    const nombre = p.entrega?.nombre || 'Cliente';
-    const est = p.estado || 'pendiente';
-    const misItems = (p.items || []).filter(i => i.proveedor === empresa);
-    
-    let acciones = '';
-    if (est === 'pendiente') {
-      acciones = `<button class="p-btn p-btn-chat" onclick="irChat('${p.emprendedorId}','${nombre}')">💬 Chat</button><button class="p-btn p-btn-proceso" onclick="cambiarEstado('${p.id}','proceso')">EN PROCESO →</button>`;
-    } else if (est === 'proceso') {
-      acciones = `<button class="p-btn p-btn-chat" onclick="irChat('${p.emprendedorId}','${nombre}')">💬 Chat</button><button class="p-btn p-btn-listo" onclick="cambiarEstado('${p.id}','completado')">✓ COMPLETAR</button>`;
-    } else {
-      acciones = `<button class="p-btn p-btn-done" disabled>Completado ✓</button>`;
-    }
-
-    const div = document.createElement('div');
-    div.className = 'pedido-card';
-    div.innerHTML = `
-      <div class="p-header">
-        <div><div class="p-num">#PV-${p.id.toString().slice(-6).toUpperCase()}</div><div class="p-fecha">${fecha}</div></div>
-        <span class="estado-tag est-${est}">${est}</span>
-      </div>
-      <div class="p-body">
-        <div class="p-cliente">
-          <div class="p-avatar">${nombre[0].toUpperCase()}</div>
-          <div class="p-cliente-info"><b>${nombre}</b><small>${p.entrega?.ciudad || ''}</small></div>
-        </div>
-        <div class="p-items">${misItems.map(i => `<div class="p-item"><span class="p-item-name">${i.cantidad}× ${i.nombre}</span><span class="p-item-price">$${(i.precio * i.cantidad).toFixed(2)}</span></div>`).join('')}</div>
-        <div class="p-dir"><svg viewBox="0 0 24 24"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>${p.entrega?.direccion || 'Sin dirección'} · ${p.entrega?.ciudad || ''}</div>
-        ${p.notas ? `<div style="font-size:0.78rem;color:#aaa;margin-bottom:10px;font-style:italic;">"${p.notas}"</div>` : ''}
-        <div class="p-footer-info"><div class="p-total">$${Number(p.total || 0).toFixed(2)}</div><div class="p-metodo">${p.metodoPago || 'transferencia'}</div></div>
-        <div class="p-actions">${acciones}</div>
-      </div>`;
-    lista.appendChild(div);
+function renderPedidos(){
+  let lista=[...todosPedidos];
+  if(filtroActual!=='todos') lista=lista.filter(p=>p.estado===filtroActual);
+  const cont=document.getElementById('pedidos-lista');
+  if(!lista.length){ cont.innerHTML='<div class="empty"><p>Sin pedidos en este estado</p></div>'; return; }
+  cont.innerHTML='';
+  lista.forEach(p=>{
+    const div=document.createElement('div'); div.className='pedido-card';
+    const est=p.estado||'pendiente';
+    const fecha=new Date(p.created_at).toLocaleDateString('es-EC',{day:'2-digit',month:'short',year:'numeric'});
+    const misItems=(p.items||[]).filter(i=>i.proveedor===empresa);
+    const miTotal=misItems.reduce((s,i)=>s+(i.precio*i.cantidad),0);
+    div.innerHTML=`
+      <div class="ped-header"><div><div class="ped-num">#PV-${p.id.slice(-6).toUpperCase()}</div><div class="ped-fecha">${fecha}</div></div><span class="est-badge est-${est}">${est}</span></div>
+      <div class="ped-cliente"><div class="ped-cliente-avatar">${(p.entrega?.nombre||'C')[0].toUpperCase()}</div><div class="ped-cliente-info"><div class="ped-cliente-nombre">${p.entrega?.nombre||'Cliente'}</div><div class="ped-cliente-sub">${p.entrega?.ciudad||'—'} · ${p.metodo_pago||'—'}</div></div></div>
+      <div class="ped-items"><div class="ped-item-row header"><span>Producto</span><span>Subtotal</span></div>${misItems.slice(0,3).map(i=>`<div class="ped-item-row"><span>${i.nombre} ×${i.cantidad}</span><span>$${(i.precio*i.cantidad).toFixed(2)}</span></div>`).join('')}${misItems.length>3?`<div class="ped-item-row"><span style="color:#ccc">+${misItems.length-3} más</span></div>`:''}</div>
+      <div class="ped-footer"><div class="ped-total">$${miTotal.toFixed(2)}</div><div class="ped-actions">${est==='pendiente'?`<button class="ped-btn btn-proceso" onclick="cambiarEstado('${p.id}','proceso')">→ Proceso</button>`:''}${est==='proceso'?`<button class="ped-btn btn-completar" onclick="cambiarEstado('${p.id}','completado')">✓ Completar</button>`:''}</div></div>`;
+    cont.appendChild(div);
   });
 }
 
-window.cambiarEstado = async function(id, nuevoEstado) {
-  const { error } = await supabase.from('pedidos').update({ estado: nuevoEstado }).eq('id', id);
-  if (!error) cargarPedidos();
-};
-
-window.irChat = function(emprendedorId, nombre) {
-  window.location.href = `chat.html?emprendedorId=${emprendedorId}&nombre=${encodeURIComponent(nombre)}`;
-};
-
-checkAuth();
+window.filtrar=(f,el)=>{ filtroActual=f; document.querySelectorAll('.vtab').forEach(t=>t.classList.remove('active')); el.classList.add('active'); renderPedidos(); };
+window.cambiarEstado=async(id,estado)=>{ await sb.from('pedidos').update({estado}).eq('id',id); const idx=todosPedidos.findIndex(p=>p.id===id); if(idx>=0) todosPedidos[idx].estado=estado; renderPedidos(); };
 </script>
 </body>
 </html>
