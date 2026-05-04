@@ -2,199 +2,127 @@
 <html lang="es">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>PROVEED — Acceso Proveedor</title>
-<link href="https://fonts.googleapis.com/css2?family=Syne:wght@700;800;900&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>PROVEED — Proveedor</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
 <style>
   *{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent;}
-  :root{ --naranja:#FF8C00; --negro:#0A0A0A; --gris:#1A1A1A; --blanco:#F8F8F5; --error:#FF4D4D; }
-  body{ background:var(--negro); color:var(--blanco); font-family:'DM Sans',sans-serif; min-height:100vh; display:flex; flex-direction:column; align-items:center; justify-content:center; padding:24px; }
-  body::before{ content:''; position:fixed; inset:0; pointer-events:none; background:radial-gradient(ellipse 70% 50% at 50% -10%, rgba(255,140,0,0.11) 0%, transparent 70%); }
-  .mini-logo{ display:flex; align-items:center; gap:10px; margin-bottom:36px; animation:fadeDown 0.6s ease both; }
-  .mini-logo svg{ width:38px; height:38px; }
-  .mini-logo span{ font-family:'Syne',sans-serif; font-size:1.4rem; font-weight:900; letter-spacing:-1px; }
-  .mini-logo small{ display:block; font-size:0.6rem; color:var(--naranja); letter-spacing:2px; text-transform:uppercase; margin-top:-2px; }
-  .card{ width:100%; max-width:420px; background:var(--gris); border-radius:28px; padding:32px 26px; border:1px solid rgba(255,255,255,0.05); box-shadow:0 30px 60px rgba(0,0,0,0.5); animation:fadeUp 0.7s cubic-bezier(0.16,1,0.3,1) both 0.1s; }
-  .card-title{ font-family:'Syne',sans-serif; font-size:1.5rem; font-weight:800; margin-bottom:4px; }
-  .card-sub{ font-size:0.85rem; color:#888; margin-bottom:24px; }
-  .tabs{ display:flex; background:#111; border-radius:14px; padding:4px; margin-bottom:24px; gap:4px; }
-  .tab{ flex:1; padding:10px; border-radius:11px; border:none; cursor:pointer; font-family:'DM Sans',sans-serif; font-size:0.85rem; font-weight:600; transition:0.25s; background:transparent; color:#888; }
-  .tab.active{ background:var(--naranja); color:#000; }
+  :root{ --naranja:#FF8C00; --verde:#A8E63D; --negro:#0A0A0A; --gris:#F5F6F2; --rojo:#FF4D4D; }
+  body{ background:var(--negro); font-family:'Inter',sans-serif; min-height:100vh; display:flex; flex-direction:column; align-items:center; justify-content:center; padding:20px; -webkit-font-smoothing:antialiased; }
+  .top-logo{ display:flex; align-items:center; gap:10px; margin-bottom:24px; }
+  .top-logo svg{ width:36px; height:36px; }
+  .top-logo-text{ font-size:1.3rem; font-weight:800; color:white; }
+  .top-logo-text span{ color:var(--naranja); }
+  .top-logo-sub{ font-size:0.58rem; color:#555; text-transform:uppercase; letter-spacing:1.5px; display:block; margin-top:-2px; }
+  .card{ width:100%; max-width:420px; background:#111; border-radius:24px; padding:28px 24px; border:1px solid #1e1e1e; }
+  .card-title{ font-size:1.4rem; font-weight:800; color:white; margin-bottom:4px; }
+  .card-sub{ font-size:0.85rem; color:#555; margin-bottom:22px; }
+  .tabs{ display:flex; background:#1a1a1a; border-radius:14px; padding:4px; gap:4px; margin-bottom:22px; }
+  .tab{ flex:1; padding:10px; border-radius:11px; border:none; cursor:pointer; font-family:'Inter',sans-serif; font-size:0.85rem; font-weight:600; transition:0.25s; background:transparent; color:#555; }
+  .tab.active{ background:var(--naranja); color:#000; font-weight:700; }
   .field{ margin-bottom:14px; }
-  .field label{ display:block; font-size:0.72rem; font-weight:600; color:#888; text-transform:uppercase; letter-spacing:0.8px; margin-bottom:6px; }
-  .field input,.field select{ width:100%; padding:13px 15px; background:#111; border:1.5px solid rgba(255,255,255,0.07); border-radius:14px; color:var(--blanco); font-family:'DM Sans',sans-serif; font-size:0.92rem; outline:none; transition:border-color 0.2s; box-sizing:border-box; }
+  .field label{ display:block; font-size:0.7rem; font-weight:700; color:#555; text-transform:uppercase; letter-spacing:0.8px; margin-bottom:6px; }
+  .field input,.field select{ width:100%; padding:13px 15px; background:#1a1a1a; border:1.5px solid #222; border-radius:13px; color:white; font-family:'Inter',sans-serif; font-size:0.95rem; outline:none; transition:border-color 0.2s; -webkit-appearance:none; }
   .field input:focus,.field select:focus{ border-color:var(--naranja); }
-  .field input::placeholder{ color:#3a3a3a; }
-  .field select option{ background:#1a1a1a; }
+  .field input::placeholder{ color:#444; }
   .field-row{ display:grid; grid-template-columns:1fr 1fr; gap:10px; }
-  .sep-label{ text-align:center; font-size:0.7rem; font-weight:600; color:#444; text-transform:uppercase; letter-spacing:1px; margin:16px 0; }
-  .btn-main{ width:100%; padding:16px; border:none; border-radius:16px; background:var(--naranja); color:#000; font-family:'Syne',sans-serif; font-size:1rem; font-weight:800; cursor:pointer; transition:0.2s; margin-top:8px; }
-  .btn-main:active{ transform:scale(0.98); }
-  .btn-main:disabled{ opacity:0.45; cursor:not-allowed; }
-  .btn-main.loading .btn-text{ display:none; }
-  .btn-main.loading .spinner{ display:block; }
-  .spinner{ display:none; width:18px; height:18px; border:2px solid rgba(0,0,0,0.2); border-top-color:#000; border-radius:50%; animation:spin 0.7s linear infinite; margin:0 auto; }
-  .msg-error{ display:none; background:rgba(255,77,77,0.1); border:1px solid rgba(255,77,77,0.3); border-radius:12px; padding:11px 14px; font-size:0.82rem; color:var(--error); margin-bottom:14px; }
+  .btn-main{ width:100%; padding:15px; border:none; border-radius:14px; background:var(--naranja); color:#000; font-family:'Inter',sans-serif; font-size:0.95rem; font-weight:800; cursor:pointer; transition:0.2s; margin-top:6px; }
+  .btn-main:disabled{ opacity:0.5; cursor:not-allowed; }
+  .msg-error{ display:none; background:rgba(255,77,77,0.1); border:1px solid rgba(255,77,77,0.3); border-radius:12px; padding:11px 14px; font-size:0.82rem; color:var(--rojo); margin-bottom:14px; }
   .msg-error.visible{ display:block; }
-  .switch-portal{ text-align:center; margin-top:26px; font-size:0.78rem; color:#444; }
-  .switch-portal a{ color:var(--naranja); text-decoration:none; font-weight:600; }
-  @keyframes fadeDown{ from{opacity:0;transform:translateY(-16px);} to{opacity:1;transform:translateY(0);} }
-  @keyframes fadeUp{ from{opacity:0;transform:translateY(24px);} to{opacity:1;transform:translateY(0);} }
-  @keyframes spin{ to{transform:rotate(360deg);} }
 </style>
 </head>
 <body>
-<div class="mini-logo">
-  <svg viewBox="0 0 100 100"><path d="M50 4 L93 28 V72 L50 96 L7 72 V28 Z" fill="#FF8C00"/><path d="M28 50 L42 64 L72 34" stroke="white" stroke-width="9" stroke-linecap="round" stroke-linejoin="round" fill="none"/></svg>
-  <div><span>PROVEED</span><small>Portal Proveedor</small></div>
+<div class="top-logo">
+  <svg viewBox="0 0 100 100"><defs><linearGradient id="g1" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" style="stop-color:#FF8C00"/><stop offset="100%" style="stop-color:#e67300"/></linearGradient></defs><path d="M50 4 L93 28 V72 L50 96 L7 72 V28 Z" fill="url(#g1)"/><path d="M30 52 L44 66 L70 36" stroke="white" stroke-width="7" stroke-linecap="round" stroke-linejoin="round" fill="none"/></svg>
+  <div><div class="top-logo-text">PRO<span>VEED</span></div><span class="top-logo-sub">Portal Proveedor</span></div>
 </div>
 <div class="card">
-  <div class="card-title">Panel de Proveedor</div>
-  <div class="card-sub">Gestiona tu empresa y vende al por mayor</div>
+  <div class="card-title">Acceso Proveedor</div>
+  <div class="card-sub">Gestiona tu negocio mayorista</div>
   <div class="tabs">
     <button class="tab active" id="tab-login" onclick="switchTab('login')">Iniciar sesión</button>
     <button class="tab" id="tab-reg" onclick="switchTab('reg')">Registrar empresa</button>
   </div>
   <div id="msg-error" class="msg-error"></div>
   <div id="form-login">
-    <div class="field"><label>Correo electrónico</label><input type="email" id="l-email" placeholder="empresa@correo.com"></div>
+    <div class="field"><label>Correo</label><input type="email" id="l-email" placeholder="empresa@ejemplo.com"></div>
     <div class="field"><label>Contraseña</label><input type="password" id="l-pass" placeholder="••••••••"></div>
-    <button class="btn-main" id="btn-login" onclick="doLogin()"><span class="btn-text">ACCEDER AL PANEL</span><div class="spinner"></div></button>
+    <button class="btn-main" id="btn-login" onclick="doLogin()">ENTRAR →</button>
   </div>
   <div id="form-reg" style="display:none;">
-    <div class="sep-label">Datos de la Empresa</div>
-    <div class="field"><label>Nombre comercial</label><input type="text" id="r-empresa" placeholder="Ej: Textiles San Juan S.A."></div>
-    <div class="field-row">
-      <div class="field"><label>RUC</label><input type="text" id="r-ruc" placeholder="1790XXXXXX001" maxlength="13"></div>
-      <div class="field"><label>Categoría</label>
-        <select id="r-categoria">
-          <option value="">Seleccionar</option>
-          <option value="textiles">Textiles</option>
-          <option value="tecnologia">Tecnología</option>
-          <option value="alimentos">Alimentos</option>
-          <option value="maquinaria">Maquinaria</option>
-          <option value="cosmeticos">Cosméticos</option>
-          <option value="construccion">Construcción</option>
-          <option value="agricultura">Agricultura</option>
-          <option value="automotriz">Automotriz</option>
-          <option value="otros">Otros</option>
-        </select>
-      </div>
-    </div>
-    <div class="field"><label>Ciudad</label><input type="text" id="r-ciudad" placeholder="Guayaquil, Quito..."></div>
-    <div class="sep-label">Administrador</div>
-    <div class="field"><label>Nombre del responsable</label><input type="text" id="r-nombre" placeholder="Tu nombre completo"></div>
-    <div class="field"><label>Correo electrónico</label><input type="email" id="r-email" placeholder="admin@empresa.com"></div>
+    <div class="field"><label>Nombre de la empresa</label><input type="text" id="r-empresa" placeholder="Mi Empresa S.A."></div>
+    <div class="field"><label>Responsable</label><input type="text" id="r-nombre" placeholder="Juan Torres"></div>
+    <div class="field"><label>Correo empresarial</label><input type="email" id="r-email" placeholder="empresa@ejemplo.com"></div>
     <div class="field"><label>Contraseña</label><input type="password" id="r-pass" placeholder="Mínimo 6 caracteres"></div>
-    <button class="btn-main" id="btn-reg" onclick="doRegistro()"><span class="btn-text">CREAR EMPRESA EN PROVEED</span><div class="spinner"></div></button>
+    <div class="field-row">
+      <div class="field"><label>RUC</label><input type="text" id="r-ruc" placeholder="1234567890001"></div>
+      <div class="field"><label>Ciudad</label><input type="text" id="r-ciudad" placeholder="Quito"></div>
+    </div>
+    <div class="field">
+      <label>Categoría principal</label>
+      <select id="r-cat">
+        <option value="">Seleccionar</option>
+        <option value="textiles">Textiles</option>
+        <option value="tecnologia">Tecnología</option>
+        <option value="alimentos">Alimentos</option>
+        <option value="maquinaria">Maquinaria</option>
+        <option value="cosmeticos">Cosméticos</option>
+        <option value="construccion">Construcción</option>
+        <option value="agricultura">Agricultura</option>
+        <option value="automotriz">Automotriz</option>
+        <option value="otros">Otros</option>
+      </select>
+    </div>
+    <button class="btn-main" id="btn-reg" onclick="doRegistro()">REGISTRAR EMPRESA →</button>
   </div>
 </div>
-<div class="switch-portal">¿Eres emprendedor? <a href="https://proveed-emprendedor.vercel.app">Entra aquí →</a></div>
 
-<script type="module">
-import { createClient } from 'https://cdn.jsdelivr.net/npm/@supabase/supabase-js/+esm'
-
-const supabaseUrl = 'https://pqoqirousggkjnkzxkhy.supabase.co'
-const supabaseKey = 'Sb_publishable_L8cdOOPzHe4ff3rkPr8x5Q_WTCF694I'
-const supabase = createClient(supabaseUrl, supabaseKey)
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script>
+const { createClient } = supabase;
+const sb = createClient('https://hfmsyrmkewscnvwynzfq.supabase.co','sb_publishable_d1oLsq70a6ZV33vW3XkRgw_nYcN2Z9v');
 
 window.switchTab = function(tab) {
-  document.getElementById('tab-login').classList.toggle('active', tab === 'login');
-  document.getElementById('tab-reg').classList.toggle('active', tab === 'reg');
-  document.getElementById('form-login').style.display = tab === 'login' ? 'block' : 'none';
-  document.getElementById('form-reg').style.display = tab === 'reg' ? 'block' : 'none';
+  document.getElementById('tab-login').classList.toggle('active',tab==='login');
+  document.getElementById('tab-reg').classList.toggle('active',tab==='reg');
+  document.getElementById('form-login').style.display=tab==='login'?'block':'none';
+  document.getElementById('form-reg').style.display=tab==='reg'?'block':'none';
   document.getElementById('msg-error').classList.remove('visible');
 };
 
-function showError(msg) {
-  const e = document.getElementById('msg-error');
-  e.textContent = msg;
-  e.classList.add('visible');
-}
-
-function setLoading(id, s) {
-  const b = document.getElementById(id);
-  b.classList.toggle('loading', s);
-  b.disabled = s;
-}
+function showError(msg){ const e=document.getElementById('msg-error'); e.textContent=msg; e.classList.add('visible'); }
 
 window.doLogin = async function() {
-  const email = document.getElementById('l-email').value.trim();
-  const password = document.getElementById('l-pass').value;
-  if (!email || !password) { showError('Completa todos los campos.'); return; }
-  
-  setLoading('btn-login', true);
-  const { data, error } = await supabase.auth.signInWithPassword({ email, password });
-  
-  if (error) {
-    showError(error.message === 'Invalid login credentials' ? 'Correo o contraseña incorrectos.' : error.message);
-    setLoading('btn-login', false);
-    return;
-  }
-
-  // Verificar si es proveedor en la tabla 'usuarios'
-  const { data: userProfile, error: profileError } = await supabase
-    .from('usuarios')
-    .select('rol')
-    .eq('id', data.user.id)
-    .single();
-
-  if (userProfile?.rol === 'emprendedor') {
-    await supabase.auth.signOut();
-    showError('Esta cuenta es de emprendedor.');
-    setLoading('btn-login', false);
-  } else {
-    window.location.href = 'dashboard.html';
-  }
+  const email=document.getElementById('l-email').value.trim();
+  const pass=document.getElementById('l-pass').value;
+  if(!email||!pass){ showError('Completa todos los campos'); return; }
+  document.getElementById('btn-login').disabled=true;
+  document.getElementById('btn-login').textContent='Entrando...';
+  const { data,error } = await sb.auth.signInWithPassword({email,password:pass});
+  if(error){ showError('Correo o contraseña incorrectos'); document.getElementById('btn-login').disabled=false; document.getElementById('btn-login').textContent='ENTRAR →'; return; }
+  const { data:usuario } = await sb.from('usuarios').select('rol').eq('id',data.user.id).single();
+  if(usuario?.rol==='emprendedor'){ await sb.auth.signOut(); showError('Esta cuenta es de emprendedor'); document.getElementById('btn-login').disabled=false; document.getElementById('btn-login').textContent='ENTRAR →'; return; }
+  window.location.href='dashboard.html';
 };
 
 window.doRegistro = async function() {
-  const empresa = document.getElementById('r-empresa').value.trim();
-  const ruc = document.getElementById('r-ruc').value.trim();
-  const categoria = document.getElementById('r-categoria').value;
-  const ciudad = document.getElementById('r-ciudad').value.trim();
-  const nombre = document.getElementById('r-nombre').value.trim();
-  const email = document.getElementById('r-email').value.trim();
-  const password = document.getElementById('r-pass').value;
-
-  if (!empresa || !ruc || !categoria || !ciudad || !nombre || !email || !password) {
-    showError('Todos los campos son obligatorios.'); return;
-  }
-
-  setLoading('btn-reg', true);
-  const { data, error } = await supabase.auth.signUp({ email, password });
-
-  if (error) {
-    showError(error.message);
-    setLoading('btn-reg', false);
-    return;
-  }
-
-  const uid = data.user.id;
-  
-  // Guardar en tablas correspondientes
-  const userUpdate = supabase.from('usuarios').insert([{
-    id: uid, nombre, email, empresa, ruc, categoria, ciudad, rol: 'proveedor', activo: true
-  }]);
-
-  const provUpdate = supabase.from('proveedores').insert([{
-    id: uid, nombre: empresa, responsable: nombre, email, ruc, categoria, ciudad, activo: true
-  }]);
-
-  const results = await Promise.all([userUpdate, provUpdate]);
-  const hasError = results.some(r => r.error);
-
-  if (hasError) {
-    showError("Error al guardar perfil. Contacta soporte.");
-    setLoading('btn-reg', false);
-  } else {
-    window.location.href = 'dashboard.html';
-  }
+  const empresa=document.getElementById('r-empresa').value.trim();
+  const nombre=document.getElementById('r-nombre').value.trim();
+  const email=document.getElementById('r-email').value.trim();
+  const pass=document.getElementById('r-pass').value;
+  const ruc=document.getElementById('r-ruc').value.trim();
+  const ciudad=document.getElementById('r-ciudad').value.trim();
+  const categoria=document.getElementById('r-cat').value;
+  if(!empresa||!nombre||!email||!pass||!ruc||!ciudad||!categoria){ showError('Todos los campos son obligatorios'); return; }
+  if(pass.length<6){ showError('Contraseña mínimo 6 caracteres'); return; }
+  document.getElementById('btn-reg').disabled=true;
+  document.getElementById('btn-reg').textContent='Registrando...';
+  const { data,error } = await sb.auth.signUp({email,password:pass});
+  if(error){ showError(error.message); document.getElementById('btn-reg').disabled=false; document.getElementById('btn-reg').textContent='REGISTRAR EMPRESA →'; return; }
+  await sb.from('usuarios').insert({id:data.user.id,nombre,empresa,email,ruc,ciudad,categoria,rol:'proveedor',activo:true});
+  window.location.href='dashboard.html';
 };
-
-document.addEventListener('keydown', e => {
-  if (e.key === 'Enter') document.getElementById('form-login').style.display !== 'none' ? window.doLogin() : window.doRegistro();
-});
 </script>
 </body>
 </html>
