@@ -3,203 +3,154 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-<title>PROVEED — Chat con Catálogo</title>
-<link href="https://fonts.googleapis.com/css2?family=Syne:wght@700;800;900&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+<title>PROVEED — Chat Proveedor</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
 <style>
-  *{margin:0;padding:0;box-sizing:border-box;}
-  :root{ --naranja:#FF8C00; --negro:#0A0A0A; --gris:#F0F1EE; --verde:#32CD32; }
-  body{ background:var(--gris); font-family:'DM Sans',sans-serif; height:100vh; display:flex; flex-direction:column; overflow:hidden; }
-  
-  /* Vistas */
-  #lista-view{ display:flex; flex-direction:column; height:100%; }
-  #vista-chat{ display:none; flex:1; flex-direction:column; overflow:hidden; background: var(--gris); }
-
-  /* Header */
-  .chat-header, .conv-header{ background:var(--negro); color:white; padding:48px 20px 18px; border-radius:0 0 24px 24px; }
-  .chat-title{ font-family:'Syne',sans-serif; font-size:1.1rem; font-weight:800; }
-  
-  /* Lista de Chats */
-  #lista-chats{ flex:1; overflow-y:auto; padding:12px; }
-  .chat-item{ display:flex; align-items:center; gap:14px; background:white; border-radius:20px; padding:16px; margin-bottom:10px; cursor:pointer; }
-  .chat-avatar{ width:50px; height:50px; border-radius:16px; background:var(--naranja); display:flex; align-items:center; justify-content:center; font-family:'Syne',sans-serif; font-size:1.2rem; font-weight:800; color:#000; }
-
-  /* Burbujas y Mensajes */
-  #mensajes{ flex:1; overflow-y:auto; padding:16px; display:flex; flex-direction:column; gap:10px; }
-  .burbuja{ max-width:80%; padding:12px 16px; border-radius:20px; font-size:0.88rem; line-height:1.5; }
-  .burbuja.enviado{ background:var(--naranja); color:#000; align-self:flex-end; border-bottom-right-radius:4px; font-weight:500; }
-  .burbuja.recibido{ background:white; color:var(--negro); align-self:flex-start; border-bottom-left-radius:4px; }
-
-  /* Burbuja de Producto (Catálogo) */
-  .prod-card-msg{ background: white; border-radius: 16px; overflow: hidden; border: 1px solid #eee; margin-top: 4px; width: 200px; }
-  .prod-img-msg{ width: 100%; height: 120px; object-fit: cover; background: #f9f9f9; }
-  .prod-info-msg{ padding: 10px; }
-  .prod-name-msg{ font-weight: 700; font-size: 0.8rem; display: block; }
-  .prod-price-msg{ color: var(--naranja); font-weight: 800; font-size: 0.9rem; }
-
-  /* Input Area */
-  .input-area{ background:white; padding:12px 16px 30px; display:flex; gap:10px; border-top:1px solid #eee; align-items: center; }
-  #msg-input{ flex:1; border:none; background:var(--gris); border-radius:20px; padding:12px 16px; outline:none; font-size:0.9rem; }
-  .action-btn{ width:44px; height:44px; border-radius:14px; background:#eee; border:none; display:flex; align-items:center; justify-content:center; cursor:pointer; }
-  .send-btn{ width:44px; height:44px; border-radius:14px; background:var(--naranja); border:none; display:flex; align-items:center; justify-content:center; cursor:pointer; }
-
-  /* Modal Catálogo */
-  #modal-catalogo{ display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.8); z-index:1000; flex-direction:column; justify-content: flex-end; }
-  .catalogo-sheet{ background:white; border-radius:28px 28px 0 0; height:70%; display:flex; flex-direction:column; padding:20px; }
-  .cat-header{ display:flex; justify-content:space-between; align-items:center; margin-bottom:15px; }
-  .cat-title{ font-family:'Syne'; font-weight:800; }
-  #lista-productos-cat{ flex:1; overflow-y:auto; display:grid; grid-template-columns: 1fr 1fr; gap:10px; }
-  .item-prod{ background:var(--gris); padding:10px; border-radius:16px; cursor:pointer; }
-  .item-prod img{ width:100%; height:80px; border-radius:10px; object-fit:cover; margin-bottom:5px; }
-  .item-prod b{ font-size:0.75rem; display:block; height:32px; overflow:hidden; }
+  *{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent;}
+  :root{ --naranja:#FF8C00; --verde:#A8E63D; --negro:#0A0A0A; --gris:#F5F6F2; --rojo:#FF4D4D; }
+  body{ background:var(--negro); font-family:'Inter',sans-serif; -webkit-font-smoothing:antialiased; }
+  .header{ background:var(--negro); padding:44px 16px 16px; display:flex; align-items:center; gap:12px; position:sticky; top:0; z-index:100; border-bottom:1px solid #1e1e1e; }
+  .back-btn{ width:36px; height:36px; background:rgba(255,255,255,0.08); border-radius:10px; display:flex; align-items:center; justify-content:center; cursor:pointer; border:none; }
+  .back-btn svg{ width:18px; height:18px; stroke:white; fill:none; stroke-width:2.5; }
+  .header-title{ font-size:1.1rem; font-weight:700; color:white; flex:1; }
+  .chat-lista{ padding:14px 16px; display:none; padding-bottom:90px; }
+  .chat-item{ display:flex; gap:12px; align-items:center; padding:14px; background:#111; border-radius:16px; margin-bottom:10px; cursor:pointer; border:1px solid #1e1e1e; transition:0.15s; }
+  .chat-item:active{ background:#1a1a1a; }
+  .chat-avatar{ width:48px; height:48px; border-radius:14px; background:rgba(168,230,61,0.15); display:flex; align-items:center; justify-content:center; font-size:1.1rem; font-weight:800; color:var(--verde); flex-shrink:0; }
+  .chat-info{ flex:1; min-width:0; }
+  .chat-nombre{ font-size:0.9rem; font-weight:700; color:white; }
+  .chat-preview{ font-size:0.76rem; color:#555; margin-top:2px; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
+  .chat-meta{ display:flex; flex-direction:column; align-items:flex-end; gap:4px; flex-shrink:0; }
+  .chat-hora{ font-size:0.68rem; color:#444; }
+  .chat-badge{ background:var(--naranja); color:#000; font-size:0.62rem; font-weight:800; padding:2px 7px; border-radius:10px; }
+  .conversacion{ display:none; flex-direction:column; height:100vh; background:var(--negro); }
+  .conv-header{ background:#111; padding:14px 16px; display:flex; align-items:center; gap:12px; border-bottom:1px solid #1e1e1e; }
+  .conv-back{ width:32px; height:32px; background:rgba(255,255,255,0.08); border-radius:9px; display:flex; align-items:center; justify-content:center; cursor:pointer; border:none; }
+  .conv-back svg{ width:16px; height:16px; stroke:white; fill:none; stroke-width:2.5; }
+  .conv-avatar{ width:38px; height:38px; border-radius:12px; background:rgba(168,230,61,0.15); display:flex; align-items:center; justify-content:center; font-size:0.9rem; font-weight:800; color:var(--verde); flex-shrink:0; }
+  .conv-nombre{ font-size:0.92rem; font-weight:700; color:white; }
+  .conv-estado{ font-size:0.7rem; color:var(--verde); }
+  .mensajes-wrap{ flex:1; overflow-y:auto; padding:16px; display:flex; flex-direction:column; gap:8px; }
+  .msg{ max-width:78%; padding:10px 13px; border-radius:16px; font-size:0.88rem; line-height:1.5; }
+  .msg-recibido{ background:#161616; color:white; border-radius:4px 16px 16px 16px; align-self:flex-start; border:1px solid #222; }
+  .msg-enviado{ background:var(--naranja); color:#000; border-radius:16px 4px 16px 16px; align-self:flex-end; }
+  .msg-hora{ font-size:0.62rem; margin-top:3px; color:rgba(0,0,0,0.4); text-align:right; }
+  .msg-recibido .msg-hora{ color:#555; text-align:left; }
+  .input-wrap{ background:#111; padding:12px 16px; border-top:1px solid #1e1e1e; display:flex; gap:10px; align-items:flex-end; }
+  .msg-input{ flex:1; background:#1a1a1a; border:1px solid #222; border-radius:20px; padding:11px 16px; font-family:'Inter',sans-serif; font-size:0.9rem; color:white; outline:none; resize:none; max-height:100px; line-height:1.4; }
+  .msg-input::placeholder{ color:#444; }
+  .send-btn{ width:40px; height:40px; border-radius:50%; background:var(--naranja); border:none; display:flex; align-items:center; justify-content:center; cursor:pointer; flex-shrink:0; }
+  .send-btn svg{ width:16px; height:16px; stroke:#000; fill:none; stroke-width:2.5; margin-left:2px; }
+  .empty{ text-align:center; padding:60px 20px; color:#444; }
+  .empty svg{ width:52px; height:52px; stroke:#333; fill:none; stroke-width:1.2; margin:0 auto 14px; display:block; }
+  .empty p{ font-size:0.85rem; }
+  .tab-bar{ position:fixed; bottom:0; width:100%; background:#111; display:flex; justify-content:space-around; align-items:center; padding:10px 0 22px; border-top:1px solid #1e1e1e; z-index:200; }
+  .tab{ display:flex; flex-direction:column; align-items:center; gap:4px; cursor:pointer; flex:1; color:#444; text-decoration:none; }
+  .tab.active{ color:var(--naranja); }
+  .tab svg{ width:22px; height:22px; stroke:currentColor; fill:none; stroke-width:2; stroke-linecap:round; stroke-linejoin:round; }
+  .tab span{ font-size:0.56rem; font-weight:600; text-transform:uppercase; }
 </style>
 </head>
 <body>
-
-<div id="lista-view">
-  <div class="chat-header"><div class="chat-title">Mensajes</div></div>
-  <div id="lista-chats"><div id="lista-content"></div></div>
+<div class="header">
+  <button class="back-btn" id="btn-back" onclick="volverLista()"><svg viewBox="0 0 24 24"><path d="M19 12H5M12 19l-7-7 7-7"/></svg></button>
+  <div class="header-title" id="header-title">Chats</div>
 </div>
 
-<div id="vista-chat">
-  <div class="conv-header" style="display:flex; align-items:center; gap:15px;">
-    <div onclick="volverLista()"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2.5"><path d="M19 12H5M12 19l-7-7 7-7"/></svg></div>
-    <div id="conv-nombre" style="font-family:'Syne';font-weight:800;">Emprendedor</div>
+<div class="chat-lista" id="chat-lista"></div>
+
+<div class="conversacion" id="conversacion">
+  <div class="conv-header">
+    <button class="conv-back" onclick="volverLista()"><svg viewBox="0 0 24 24"><path d="M19 12H5M12 19l-7-7 7-7"/></svg></button>
+    <div class="conv-avatar" id="conv-avatar">E</div>
+    <div><div class="conv-nombre" id="conv-nombre">Emprendedor</div><div class="conv-estado">Activo</div></div>
   </div>
-  <div id="mensajes"></div>
-  <div class="input-area">
-    <button class="action-btn" onclick="abrirCatalogo()">
-      <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#666" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M3 9h18M9 21V9"/></svg>
-    </button>
-    <textarea id="msg-input" placeholder="Mensaje..." rows="1"></textarea>
-    <button class="send-btn" onclick="enviarMensaje()">
-      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="black" stroke-width="2.5"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg>
-    </button>
+  <div class="mensajes-wrap" id="mensajes-wrap"></div>
+  <div class="input-wrap">
+    <textarea class="msg-input" id="msg-input" placeholder="Escribe un mensaje..." rows="1" onkeydown="if(event.key==='Enter'&&!event.shiftKey){event.preventDefault();enviarMensaje();}"></textarea>
+    <button class="send-btn" onclick="enviarMensaje()"><svg viewBox="0 0 24 24"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg></button>
   </div>
 </div>
 
-<div id="modal-catalogo" onclick="cerrarCatalogo(event)">
-  <div class="catalogo-sheet" onclick="event.stopPropagation()">
-    <div class="cat-header">
-      <div class="cat-title">Enviar Producto</div>
-      <div onclick="cerrarCatalogo()" style="color:#aaa; font-weight:800;">CERRAR</div>
-    </div>
-    <div id="lista-productos-cat"></div>
-  </div>
-</div>
+<nav class="tab-bar" id="tab-bar">
+  <a class="tab" href="dashboard.html"><svg viewBox="0 0 24 24"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/></svg><span>Panel</span></a>
+  <a class="tab" href="productos.html"><svg viewBox="0 0 24 24"><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"/></svg><span>Productos</span></a>
+  <a class="tab active" href="chat.html"><svg viewBox="0 0 24 24"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg><span>Chat</span></a>
+  <a class="tab" href="pedidos.html"><svg viewBox="0 0 24 24"><rect x="1" y="3" width="15" height="13" rx="1"/><path d="M16 8h4l3 3v5h-7V8z"/></svg><span>Pedidos</span></a>
+  <a class="tab" href="plugins.html"><svg viewBox="0 0 24 24"><path d="M20.24 12.24a6 6 0 0 0-8.49-8.49L5 10.5V19h8.5l6.74-6.76z"/><line x1="16" y1="8" x2="2" y2="22"/></svg><span>Plugins</span></a>
+</nav>
 
-<script type="module">
-import { createClient } from 'https://cdn.jsdelivr.net/npm/@supabase/supabase-js/+esm'
-const supabase = createClient('https://pqoqirousggkjnkzxkhy.supabase.co', 'Sb_publishable_L8cdOOPzHe4ff3rkPr8x5Q_WTCF694I')
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script>
+const { createClient } = supabase;
+const sb = createClient('https://hfmsyrmkewscnvwynzfq.supabase.co','sb_publishable_d1oLsq70a6ZV33vW3XkRgw_nYcN2Z9v');
+let userId='', chatActivo=null, suscripcion=null;
+const FILTROS=[/(\+?593|0)(9\d{8})/gi,/whatsapp/gi,/telegram/gi,/instagram/gi,/facebook/gi,/tiktok/gi,/@[a-z0-9._]+/gi,/https?:\/\/[^\s]+/gi];
+function filtrarMsg(t){ let r=t; FILTROS.forEach(f=>r=r.replace(f,'[bloqueado]')); return r; }
 
-let currentUser=null, chatActivoId=null;
-
-async function init() {
-  const { data: { session } } = await supabase.auth.getSession();
-  if(!session) return;
-  currentUser = session.user;
+(async()=>{
+  const { data:{session} } = await sb.auth.getSession();
+  if(!session){ window.location.href='login.html'; return; }
+  userId=session.user.id;
   cargarChats();
-}
+})();
 
-// 1. Cargar Chats
-async function cargarChats() {
-  const { data: chats } = await supabase.from('chats').select('*').eq('proveedor_id', currentUser.id).order('ultimo_mensaje_en', {ascending:false});
-  const cont = document.getElementById('lista-content');
-  cont.innerHTML = '';
-  chats?.forEach(c => {
-    const div = document.createElement('div');
-    div.className = 'chat-item';
-    div.innerHTML = `<div class="chat-avatar">${c.emprendedor_nombre[0]}</div>
-      <div class="chat-info"><div class="chat-nombre">${c.emprendedor_nombre}</div><div class="chat-preview">${c.ultimo_mensaje || '...'}</div></div>`;
-    div.onclick = () => abrirChat(c.id, c.emprendedor_nombre);
-    cont.appendChild(div);
+async function cargarChats(){
+  document.getElementById('chat-lista').style.display='block';
+  document.getElementById('conversacion').style.display='none';
+  document.getElementById('tab-bar').style.display='flex';
+  document.getElementById('header-title').textContent='Chats';
+  const { data } = await sb.from('chats').select('*').eq('proveedor_id',userId).order('created_at',{ascending:false});
+  const lista=document.getElementById('chat-lista');
+  if(!data?.length){ lista.innerHTML='<div class="empty"><svg viewBox="0 0 24 24"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg><p>Sin chats aún</p></div>'; return; }
+  lista.innerHTML='';
+  data.forEach(c=>{
+    const div=document.createElement('div'); div.className='chat-item';
+    div.onclick=()=>abrirChat(c);
+    const empNombre=c.emprendedor_nombre||'Emprendedor';
+    div.innerHTML=`<div class="chat-avatar">${empNombre[0].toUpperCase()}</div><div class="chat-info"><div class="chat-nombre">${empNombre}</div><div class="chat-preview">${c.ultimo_mensaje||'Iniciar conversación'}</div></div><div class="chat-meta"><div class="chat-hora">${c.created_at?new Date(c.created_at).toLocaleTimeString('es-EC',{hour:'2-digit',minute:'2-digit'}):''}</div>${c.no_leidos>0?`<div class="chat-badge">${c.no_leidos}</div>`:''}</div>`;
+    lista.appendChild(div);
   });
 }
 
-// 2. Abrir Chat
-async function abrirChat(chatId, nombre) {
-  chatActivoId = chatId;
-  document.getElementById('lista-view').style.display='none';
-  document.getElementById('vista-chat').style.display='flex';
-  document.getElementById('conv-nombre').textContent = nombre;
-
-  const { data: msgs } = await supabase.from('mensajes').select('*').eq('chat_id', chatId).order('enviado_en', {ascending:true});
-  const mDiv = document.getElementById('mensajes');
-  mDiv.innerHTML = '';
-  msgs?.forEach(m => renderMensaje(m));
-  mDiv.scrollTop = mDiv.scrollHeight;
+async function abrirChat(chat){
+  chatActivo=chat;
+  document.getElementById('chat-lista').style.display='none';
+  document.getElementById('conversacion').style.display='flex';
+  document.getElementById('tab-bar').style.display='none';
+  const empNombre=chat.emprendedor_nombre||'Emprendedor';
+  document.getElementById('conv-avatar').textContent=empNombre[0].toUpperCase();
+  document.getElementById('conv-nombre').textContent=empNombre;
+  await sb.from('chats').update({no_leidos:0}).eq('id',chat.id);
+  cargarMensajes(chat.id);
+  if(suscripcion) suscripcion.unsubscribe();
+  suscripcion=sb.channel('msgs-prov-'+chat.id).on('postgres_changes',{event:'INSERT',schema:'public',table:'mensajes',filter:`chat_id=eq.${chat.id}`},()=>cargarMensajes(chat.id)).subscribe();
 }
 
-function renderMensaje(m) {
-  const mDiv = document.getElementById('mensajes');
-  const b = document.createElement('div');
-  
-  if (m.tipo === 'producto') {
-    const p = JSON.parse(m.metadata || '{}');
-    b.className = m.remitente_id === currentUser.id ? 'enviado' : 'recibido';
-    b.style.background = 'transparent'; 
-    b.innerHTML = `
-      <div class="prod-card-msg">
-        <img src="${p.imagen}" class="prod-img-msg">
-        <div class="prod-info-msg">
-          <span class="prod-name-msg">${p.nombre}</span>
-          <span class="prod-price-msg">$${p.precio}</span>
-        </div>
-      </div>`;
-  } else {
-    b.className = `burbuja ${m.remitente_id === currentUser.id ? 'enviado' : 'recibido'}`;
-    b.textContent = m.texto;
-  }
-  
-  mDiv.appendChild(b);
-}
-
-// 3. Catálogo
-window.abrirCatalogo = async () => {
-  document.getElementById('modal-catalogo').style.display = 'flex';
-  const { data: productos } = await supabase.from('productos').select('*').eq('proveedor_id', currentUser.id).eq('activo', true);
-  const list = document.getElementById('lista-productos-cat');
-  list.innerHTML = '';
-  productos?.forEach(p => {
-    const d = document.createElement('div');
-    d.className = 'item-prod';
-    d.innerHTML = `<img src="${p.imagen_url || ''}"><b>${p.nombre}</b><span>$${p.precio}</span>`;
-    d.onclick = () => enviarProducto(p);
-    list.appendChild(d);
+async function cargarMensajes(chatId){
+  const { data } = await sb.from('mensajes').select('*').eq('chat_id',chatId).order('created_at',{ascending:true});
+  const wrap=document.getElementById('mensajes-wrap');
+  wrap.innerHTML='';
+  (data||[]).forEach(m=>{
+    const div=document.createElement('div');
+    div.className='msg '+(m.remitente_id===userId?'msg-enviado':'msg-recibido');
+    const hora=new Date(m.created_at).toLocaleTimeString('es-EC',{hour:'2-digit',minute:'2-digit'});
+    div.innerHTML=`${m.texto}<div class="msg-hora">${hora}</div>`;
+    wrap.appendChild(div);
   });
+  wrap.scrollTop=wrap.scrollHeight;
 }
 
-window.cerrarCatalogo = () => document.getElementById('modal-catalogo').style.display = 'none';
-
-async function enviarProducto(prod) {
-  cerrarCatalogo();
-  const metadata = JSON.stringify({ nombre: prod.nombre, precio: prod.precio, imagen: prod.imagen_url });
-  const msg = { chat_id: chatActivoId, remitente_id: currentUser.id, texto: `Producto: ${prod.nombre}`, tipo: 'producto', metadata: metadata };
-  
-  await supabase.from('mensajes').insert([msg]);
-  await supabase.from('chats').update({ ultimo_mensaje: 'Envió un producto', ultimo_mensaje_en: new Date() }).eq('id', chatActivoId);
-  
-  renderMensaje(msg); // Render local inmediato
-  document.getElementById('mensajes').scrollTop = document.getElementById('mensajes').scrollHeight;
-}
-
-window.enviarMensaje = async () => {
-  const input = document.getElementById('msg-input');
-  const texto = input.value.trim();
-  if(!texto) return;
-  const msg = { chat_id: chatActivoId, remitente_id: currentUser.id, texto, tipo: 'texto' };
-  input.value = '';
-  await supabase.from('mensajes').insert([msg]);
-  await supabase.from('chats').update({ ultimo_mensaje: texto, ultimo_mensaje_en: new Date() }).eq('id', chatActivoId);
-  renderMensaje(msg);
-  document.getElementById('mensajes').scrollTop = document.getElementById('mensajes').scrollHeight;
-}
-
-window.volverLista = () => {
-  document.getElementById('lista-view').style.display='flex';
-  document.getElementById('vista-chat').style.display='none';
+window.enviarMensaje=async function(){
+  const input=document.getElementById('msg-input');
+  const texto=filtrarMsg(input.value.trim());
+  if(!texto||!chatActivo) return;
+  input.value='';
+  await sb.from('mensajes').insert({chat_id:chatActivo.id,texto,remitente_id:userId,tipo:'texto'});
+  await sb.from('chats').update({ultimo_mensaje:texto}).eq('id',chatActivo.id);
 };
 
-init();
+window.volverLista=function(){ if(suscripcion){ suscripcion.unsubscribe(); suscripcion=null; } chatActivo=null; cargarChats(); };
 </script>
 </body>
 </html>
