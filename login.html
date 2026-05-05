@@ -44,16 +44,17 @@
   .foto-check svg{ width:12px; height:12px; stroke:#000; fill:none; stroke-width:3; }
   .selfie-wrap{ display:flex; flex-direction:column; align-items:center; gap:10px; margin-bottom:14px; }
   .selfie-circle{ width:100px; height:100px; border-radius:50%; border:3px dashed #222; display:flex; align-items:center; justify-content:center; cursor:pointer; position:relative; overflow:hidden; background:#111; transition:0.2s; }
-  .selfie-circle.filled{ border-color:var(--naranja); border-style:solid; }
-  .selfie-circle img{ width:100%; height:100%; object-fit:cover; display:none; }
-  .selfie-circle.filled img{ display:block; }
-  .selfie-placeholder{ display:flex; flex-direction:column; align-items:center; gap:4px; }
-  .selfie-circle.filled .selfie-placeholder{ display:none; }
-  .selfie-placeholder svg{ width:28px; height:28px; stroke:#444; fill:none; stroke-width:1.5; }
-  .selfie-placeholder span{ font-size:0.65rem; color:#555; font-weight:600; }
+  .logo-circle{ width:110px; height:110px; border-radius:20px; border:3px dashed #222; display:flex; align-items:center; justify-content:center; cursor:pointer; position:relative; overflow:hidden; background:#111; transition:0.2s; }
+  .selfie-circle.filled,.logo-circle.filled{ border-color:var(--naranja); border-style:solid; }
+  .selfie-circle img,.logo-circle img{ width:100%; height:100%; object-fit:cover; display:none; }
+  .selfie-circle.filled img,.logo-circle.filled img{ display:block; }
+  .selfie-placeholder,.logo-placeholder{ display:flex; flex-direction:column; align-items:center; gap:4px; }
+  .selfie-circle.filled .selfie-placeholder,.logo-circle.filled .logo-placeholder{ display:none; }
+  .selfie-placeholder svg,.logo-placeholder svg{ width:28px; height:28px; stroke:#444; fill:none; stroke-width:1.5; }
+  .selfie-placeholder span,.logo-placeholder span{ font-size:0.65rem; color:#555; font-weight:600; text-align:center; }
   .selfie-input{ position:absolute; inset:0; opacity:0; cursor:pointer; }
   .selfie-label{ font-size:0.75rem; color:#555; text-align:center; line-height:1.4; }
-  .correo-note{ background:rgba(255,140,0,0.08); border:1px solid rgba(255,140,0,0.2); border-radius:12px; padding:10px 14px; font-size:0.78rem; color:#FF8C00; margin-bottom:14px; display:flex; align-items:center; gap:8px; }
+  .correo-note{ background:rgba(255,140,0,0.08); border:1px solid rgba(255,140,0,0.2); border-radius:12px; padding:10px 14px; font-size:0.78rem; color:var(--naranja); margin-bottom:14px; display:flex; align-items:center; gap:8px; }
   .correo-note svg{ width:16px; height:16px; stroke:var(--naranja); fill:none; stroke-width:2; flex-shrink:0; }
   .btn-main{ width:100%; padding:15px; border:none; border-radius:14px; background:var(--naranja); color:#000; font-family:'Inter',sans-serif; font-size:0.95rem; font-weight:800; cursor:pointer; margin-top:8px; }
   .btn-main:disabled{ opacity:0.5; cursor:not-allowed; }
@@ -122,6 +123,19 @@
       </div>
     </div>
 
+    <div class="section-divider">Logo de la empresa</div>
+    <div class="selfie-wrap">
+      <div class="logo-circle" id="logo-circle">
+        <img id="logo-preview" src="" alt="">
+        <div class="logo-placeholder">
+          <svg viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg>
+          <span>Logo empresa</span>
+        </div>
+        <input type="file" accept="image/*" class="selfie-input" onchange="cargarLogo(this)">
+      </div>
+      <div class="selfie-label">Logo o imagen de tu empresa<br>se mostrará en tu perfil público</div>
+    </div>
+
     <div class="section-divider">Datos del encargado</div>
     <div class="field"><label>Nombre completo del encargado *</label><input type="text" id="r-nombre" placeholder="Juan Torres"></div>
     <div class="field-row">
@@ -185,21 +199,25 @@
 <script>
 const { createClient } = supabase;
 const sb = createClient('https://hfmsyrmkewscnvwynzfq.supabase.co','sb_publishable_d1oLsq70a6ZV33vW3XkRgw_nYcN2Z9v');
-let fotoFiles = { 'cedula-front': null, 'cedula-back': null, selfie: null };
+let fotoFiles = { 'cedula-front':null, 'cedula-back':null, selfie:null, logo:null };
 
 window.switchTab = function(tab) {
-  document.getElementById('tab-login').classList.toggle('active', tab==='login');
-  document.getElementById('tab-reg').classList.toggle('active', tab==='reg');
-  document.getElementById('form-login').style.display = tab==='login' ? 'block' : 'none';
-  document.getElementById('form-reg').style.display = tab==='reg' ? 'block' : 'none';
+  document.getElementById('tab-login').classList.toggle('active',tab==='login');
+  document.getElementById('tab-reg').classList.toggle('active',tab==='reg');
+  document.getElementById('form-login').style.display=tab==='login'?'block':'none';
+  document.getElementById('form-reg').style.display=tab==='reg'?'block':'none';
   document.getElementById('msg-error').classList.remove('visible');
 };
 
-function showError(msg){
-  const e=document.getElementById('msg-error');
-  e.textContent=msg; e.classList.add('visible');
-  window.scrollTo(0,0);
-}
+function showError(msg){ const e=document.getElementById('msg-error'); e.textContent=msg; e.classList.add('visible'); window.scrollTo(0,0); }
+
+window.cargarLogo = function(input) {
+  const file=input.files[0]; if(!file) return;
+  fotoFiles.logo=file;
+  const reader=new FileReader();
+  reader.onload=e=>{ document.getElementById('logo-preview').src=e.target.result; document.getElementById('logo-circle').classList.add('filled'); };
+  reader.readAsDataURL(file);
+};
 
 window.cargarSelfie = function(input) {
   const file=input.files[0]; if(!file) return;
@@ -209,7 +227,7 @@ window.cargarSelfie = function(input) {
   reader.readAsDataURL(file);
 };
 
-window.cargarFoto = function(input, tipo) {
+window.cargarFoto = function(input,tipo) {
   const file=input.files[0]; if(!file) return;
   fotoFiles[tipo]=file;
   const reader=new FileReader();
@@ -217,8 +235,8 @@ window.cargarFoto = function(input, tipo) {
   reader.readAsDataURL(file);
 };
 
-async function subirFoto(file, path) {
-  const { error } = await sb.storage.from('proveed-media').upload(path, file, { upsert: true });
+async function subirFoto(file,path) {
+  const { error } = await sb.storage.from('proveed-media').upload(path,file,{upsert:true});
   if(error) throw error;
   const { data } = sb.storage.from('proveed-media').getPublicUrl(path);
   return data.publicUrl;
@@ -235,7 +253,7 @@ window.doLogin = async function() {
   if(!email||!pass){ showError('Completa todos los campos'); return; }
   const btn=document.getElementById('btn-login');
   btn.disabled=true; btn.textContent='Entrando...';
-  const { data,error } = await sb.auth.signInWithPassword({ email, password: pass });
+  const { data,error } = await sb.auth.signInWithPassword({email,password:pass});
   if(error){ showError('Correo o contraseña incorrectos'); btn.disabled=false; btn.textContent='ENTRAR →'; return; }
   const { data:usuario } = await sb.from('usuarios').select('rol').eq('id',data.user.id).single();
   if(usuario?.rol==='emprendedor'){ await sb.auth.signOut(); showError('Esta cuenta es de emprendedor'); btn.disabled=false; btn.textContent='ENTRAR →'; return; }
@@ -260,6 +278,7 @@ window.doRegistro = async function() {
   }
   if(pass.length<6){ showError('Contraseña mínimo 6 caracteres'); return; }
   if(pass!==pass2){ showError('Las contraseñas no coinciden'); return; }
+  if(!fotoFiles.logo){ showError('Sube el logo o imagen de tu empresa'); return; }
   if(!fotoFiles.selfie){ showError('Sube la foto del encargado'); return; }
   if(!fotoFiles['cedula-front']){ showError('Sube la foto frontal de la cédula'); return; }
   if(!fotoFiles['cedula-back']){ showError('Sube la foto trasera de la cédula'); return; }
@@ -267,30 +286,32 @@ window.doRegistro = async function() {
   const btn=document.getElementById('btn-reg');
   btn.disabled=true;
   document.getElementById('upload-overlay').classList.add('show');
-
-  try {
+try {
     setProgress(10);
-    const { data,error } = await sb.auth.signUp({ email, password: pass });
+    const { data,error } = await sb.auth.signUp({email,password:pass});
     if(error) throw error;
     const uid=data.user.id;
-    setProgress(30);
-    const selfieUrl=await subirFoto(fotoFiles.selfie, `verificacion/${uid}/selfie`);
-    setProgress(55);
-    const cedulaFrontUrl=await subirFoto(fotoFiles['cedula-front'], `verificacion/${uid}/cedula-front`);
-    setProgress(75);
-    const cedulaBackUrl=await subirFoto(fotoFiles['cedula-back'], `verificacion/${uid}/cedula-back`);
+    setProgress(25);
+    const logoUrl=await subirFoto(fotoFiles.logo,`logos/${uid}/logo`);
+    setProgress(45);
+    const selfieUrl=await subirFoto(fotoFiles.selfie,`verificacion/${uid}/selfie`);
+    setProgress(62);
+    const cedulaFrontUrl=await subirFoto(fotoFiles['cedula-front'],`verificacion/${uid}/cedula-front`);
+    setProgress(78);
+    const cedulaBackUrl=await subirFoto(fotoFiles['cedula-back'],`verificacion/${uid}/cedula-back`);
     setProgress(90);
     await sb.from('usuarios').insert({
-      id: uid, nombre, empresa, email,
+      id:uid, nombre, empresa, email,
       ruc, cedula, telefono, tel_empresa,
       ciudad, categoria,
+      logo_empresa: logoUrl,
       foto_perfil: selfieUrl,
       cedula_frontal: cedulaFrontUrl,
       cedula_trasera: cedulaBackUrl,
-      rol: 'proveedor', activo: true, verificado: false
+      rol:'proveedor', activo:true, verificado:false
     });
     setProgress(100);
-    setTimeout(()=>{ document.getElementById('upload-overlay').classList.remove('show'); window.location.href='dashboard.html'; }, 800);
+    setTimeout(()=>{ document.getElementById('upload-overlay').classList.remove('show'); window.location.href='dashboard.html'; },800);
   } catch(e) {
     document.getElementById('upload-overlay').classList.remove('show');
     showError('Error: '+e.message);
