@@ -22,14 +22,13 @@
   .msg-error.visible{ display:block; }
   .field{ margin-bottom:14px; }
   .field label{ display:block; font-size:0.7rem; font-weight:700; color:#555; text-transform:uppercase; letter-spacing:0.8px; margin-bottom:6px; }
-  .field input,.field select,.field textarea{ width:100%; padding:13px 15px; background:#1a1a1a; border:1.5px solid #222; border-radius:13px; font-family:'Inter',sans-serif; font-size:0.9rem; color:white; outline:none; -webkit-appearance:none; transition:border-color 0.2s; }
+  .field input,.field select{ width:100%; padding:13px 15px; background:#1a1a1a; border:1.5px solid #222; border-radius:13px; font-family:'Inter',sans-serif; font-size:0.9rem; color:white; outline:none; -webkit-appearance:none; transition:border-color 0.2s; }
   .field input:focus,.field select:focus{ border-color:var(--naranja); }
   .field input::placeholder{ color:#444; }
   .field select option{ background:#1a1a1a; }
   .field-row{ display:grid; grid-template-columns:1fr 1fr; gap:10px; }
   .section-divider{ font-size:0.72rem; font-weight:700; color:#444; text-transform:uppercase; letter-spacing:1px; padding:16px 0 8px; display:flex; align-items:center; gap:8px; }
   .section-divider::after{ content:''; flex:1; height:1px; background:#1e1e1e; }
-
   .foto-upload-grid{ display:grid; grid-template-columns:1fr 1fr; gap:10px; margin-bottom:14px; }
   .foto-slot{ border:2px dashed #222; border-radius:16px; padding:16px 12px; text-align:center; cursor:pointer; position:relative; overflow:hidden; transition:0.2s; background:#111; }
   .foto-slot.filled{ border-color:var(--naranja); border-style:solid; }
@@ -43,7 +42,6 @@
   .foto-check{ position:absolute; top:8px; right:8px; width:22px; height:22px; background:var(--naranja); border-radius:50%; display:none; align-items:center; justify-content:center; }
   .foto-slot.filled .foto-check{ display:flex; }
   .foto-check svg{ width:12px; height:12px; stroke:#000; fill:none; stroke-width:3; }
-
   .selfie-wrap{ display:flex; flex-direction:column; align-items:center; gap:10px; margin-bottom:14px; }
   .selfie-circle{ width:100px; height:100px; border-radius:50%; border:3px dashed #222; display:flex; align-items:center; justify-content:center; cursor:pointer; position:relative; overflow:hidden; background:#111; transition:0.2s; }
   .selfie-circle.filled{ border-color:var(--naranja); border-style:solid; }
@@ -55,7 +53,8 @@
   .selfie-placeholder span{ font-size:0.65rem; color:#555; font-weight:600; }
   .selfie-input{ position:absolute; inset:0; opacity:0; cursor:pointer; }
   .selfie-label{ font-size:0.75rem; color:#555; text-align:center; line-height:1.4; }
-
+  .correo-note{ background:rgba(255,140,0,0.08); border:1px solid rgba(255,140,0,0.2); border-radius:12px; padding:10px 14px; font-size:0.78rem; color:#FF8C00; margin-bottom:14px; display:flex; align-items:center; gap:8px; }
+  .correo-note svg{ width:16px; height:16px; stroke:var(--naranja); fill:none; stroke-width:2; flex-shrink:0; }
   .btn-main{ width:100%; padding:15px; border:none; border-radius:14px; background:var(--naranja); color:#000; font-family:'Inter',sans-serif; font-size:0.95rem; font-weight:800; cursor:pointer; margin-top:8px; }
   .btn-main:disabled{ opacity:0.5; cursor:not-allowed; }
   .upload-overlay{ position:fixed; inset:0; background:rgba(0,0,0,0.8); display:none; flex-direction:column; align-items:center; justify-content:center; z-index:1000; }
@@ -85,7 +84,7 @@
 
   <!-- LOGIN -->
   <div id="form-login">
-    <div class="field"><label>Correo electrónico</label><input type="email" id="l-email" placeholder="empresa@ejemplo.com"></div>
+    <div class="field"><label>Correo de la empresa</label><input type="email" id="l-email" placeholder="empresa@ejemplo.com"></div>
     <div class="field"><label>Contraseña</label><input type="password" id="l-pass" placeholder="••••••••"></div>
     <button class="btn-main" id="btn-login" onclick="doLogin()">ENTRAR →</button>
   </div>
@@ -95,33 +94,40 @@
 
     <div class="section-divider">Datos de la empresa</div>
     <div class="field"><label>Nombre de la empresa *</label><input type="text" id="r-empresa" placeholder="Mi Empresa S.A."></div>
-    <div class="field-row">
-      <div class="field"><label>RUC *</label><input type="text" id="r-ruc" placeholder="1234567890001" maxlength="13"></div>
-      <div class="field"><label>Ciudad *</label><input type="text" id="r-ciudad" placeholder="Quito"></div>
+    <div class="correo-note">
+      <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+      El correo de la empresa será tu usuario de acceso
     </div>
-    <div class="field">
-      <label>Categoría principal *</label>
-      <select id="r-cat">
-        <option value="">Seleccionar</option>
-        <option value="textiles">Textiles</option>
-        <option value="tecnologia">Tecnología</option>
-        <option value="alimentos">Alimentos</option>
-        <option value="cosmeticos">Cosméticos</option>
-        <option value="construccion">Construcción</option>
-        <option value="maquinaria">Maquinaria</option>
-        <option value="agricultura">Agricultura</option>
-        <option value="automotriz">Automotriz</option>
-        <option value="otros">Otros</option>
-      </select>
+    <div class="field"><label>Correo de la empresa * (acceso)</label><input type="email" id="r-email" placeholder="empresa@ejemplo.com"></div>
+    <div class="field-row">
+      <div class="field"><label>Teléfono empresa *</label><input type="tel" id="r-tel-empresa" placeholder="022345678" maxlength="10"></div>
+      <div class="field"><label>RUC *</label><input type="text" id="r-ruc" placeholder="1234567890001" maxlength="13"></div>
+    </div>
+    <div class="field-row">
+      <div class="field"><label>Ciudad *</label><input type="text" id="r-ciudad" placeholder="Quito"></div>
+      <div class="field">
+        <label>Categoría *</label>
+        <select id="r-cat">
+          <option value="">Seleccionar</option>
+          <option value="textiles">Textiles</option>
+          <option value="tecnologia">Tecnología</option>
+          <option value="alimentos">Alimentos</option>
+          <option value="cosmeticos">Cosméticos</option>
+          <option value="construccion">Construcción</option>
+          <option value="maquinaria">Maquinaria</option>
+          <option value="agricultura">Agricultura</option>
+          <option value="automotriz">Automotriz</option>
+          <option value="otros">Otros</option>
+        </select>
+      </div>
     </div>
 
     <div class="section-divider">Datos del encargado</div>
     <div class="field"><label>Nombre completo del encargado *</label><input type="text" id="r-nombre" placeholder="Juan Torres"></div>
     <div class="field-row">
       <div class="field"><label>Cédula del encargado *</label><input type="text" id="r-cedula" placeholder="1712345678" maxlength="10"></div>
-      <div class="field"><label>Teléfono principal *</label><input type="tel" id="r-telefono" placeholder="0991234567" maxlength="10"></div>
+      <div class="field"><label>Teléfono encargado *</label><input type="tel" id="r-telefono" placeholder="0991234567" maxlength="10"></div>
     </div>
-    <div class="field"><label>Correo electrónico *</label><input type="email" id="r-email" placeholder="empresa@ejemplo.com"></div>
 
     <div class="section-divider">Foto del encargado</div>
     <div class="selfie-wrap">
@@ -160,6 +166,7 @@
 
     <div class="section-divider">Contraseña de acceso</div>
     <div class="field"><label>Contraseña *</label><input type="password" id="r-pass" placeholder="Mínimo 6 caracteres"></div>
+    <div class="field"><label>Confirmar contraseña *</label><input type="password" id="r-pass2" placeholder="Repite tu contraseña"></div>
 
     <button class="btn-main" id="btn-reg" onclick="doRegistro()">REGISTRAR EMPRESA →</button>
   </div>
@@ -188,27 +195,25 @@ window.switchTab = function(tab) {
   document.getElementById('msg-error').classList.remove('visible');
 };
 
-function showError(msg){ const e=document.getElementById('msg-error'); e.textContent=msg; e.classList.add('visible'); window.scrollTo(0,0); }
+function showError(msg){
+  const e=document.getElementById('msg-error');
+  e.textContent=msg; e.classList.add('visible');
+  window.scrollTo(0,0);
+}
 
 window.cargarSelfie = function(input) {
-  const file = input.files[0]; if(!file) return;
-  fotoFiles.selfie = file;
-  const reader = new FileReader();
-  reader.onload = e => {
-    document.getElementById('selfie-preview').src = e.target.result;
-    document.getElementById('selfie-circle').classList.add('filled');
-  };
+  const file=input.files[0]; if(!file) return;
+  fotoFiles.selfie=file;
+  const reader=new FileReader();
+  reader.onload=e=>{ document.getElementById('selfie-preview').src=e.target.result; document.getElementById('selfie-circle').classList.add('filled'); };
   reader.readAsDataURL(file);
 };
 
 window.cargarFoto = function(input, tipo) {
-  const file = input.files[0]; if(!file) return;
-  fotoFiles[tipo] = file;
-  const reader = new FileReader();
-  reader.onload = e => {
-    document.getElementById(tipo+'-preview').src = e.target.result;
-    document.getElementById(tipo+'-slot').classList.add('filled');
-  };
+  const file=input.files[0]; if(!file) return;
+  fotoFiles[tipo]=file;
+  const reader=new FileReader();
+  reader.onload=e=>{ document.getElementById(tipo+'-preview').src=e.target.result; document.getElementById(tipo+'-slot').classList.add('filled'); };
   reader.readAsDataURL(file);
 };
 
@@ -220,66 +225,75 @@ async function subirFoto(file, path) {
 }
 
 function setProgress(pct) {
-  document.getElementById('upload-bar').style.width = pct + '%';
-  document.getElementById('upload-pct').textContent = pct + '%';
+  document.getElementById('upload-bar').style.width=pct+'%';
+  document.getElementById('upload-pct').textContent=pct+'%';
 }
 
 window.doLogin = async function() {
-  const email = document.getElementById('l-email').value.trim();
-  const pass = document.getElementById('l-pass').value;
+  const email=document.getElementById('l-email').value.trim();
+  const pass=document.getElementById('l-pass').value;
   if(!email||!pass){ showError('Completa todos los campos'); return; }
-  const btn = document.getElementById('btn-login');
+  const btn=document.getElementById('btn-login');
   btn.disabled=true; btn.textContent='Entrando...';
-  const { data, error } = await sb.auth.signInWithPassword({ email, password: pass });
+  const { data,error } = await sb.auth.signInWithPassword({ email, password: pass });
   if(error){ showError('Correo o contraseña incorrectos'); btn.disabled=false; btn.textContent='ENTRAR →'; return; }
-  const { data:usuario } = await sb.from('usuarios').select('rol').eq('id', data.user.id).single();
+  const { data:usuario } = await sb.from('usuarios').select('rol').eq('id',data.user.id).single();
   if(usuario?.rol==='emprendedor'){ await sb.auth.signOut(); showError('Esta cuenta es de emprendedor'); btn.disabled=false; btn.textContent='ENTRAR →'; return; }
-  window.location.href = 'dashboard.html';
+  window.location.href='dashboard.html';
 };
 
 window.doRegistro = async function() {
-  const empresa = document.getElementById('r-empresa').value.trim();
-  const ruc = document.getElementById('r-ruc').value.trim();
-  const ciudad = document.getElementById('r-ciudad').value.trim();
-  const categoria = document.getElementById('r-cat').value;
-  const nombre = document.getElementById('r-nombre').value.trim();
-  const cedula = document.getElementById('r-cedula').value.trim();
-  const telefono = document.getElementById('r-telefono').value.trim();
-  const email = document.getElementById('r-email').value.trim();
-  const pass = document.getElementById('r-pass').value;
-  if(!empresa||!ruc||!ciudad||!categoria||!nombre||!cedula||!telefono||!email||!pass){ showError('Completa todos los campos obligatorios'); return; }
+  const empresa=document.getElementById('r-empresa').value.trim();
+  const email=document.getElementById('r-email').value.trim();
+  const tel_empresa=document.getElementById('r-tel-empresa').value.trim();
+  const ruc=document.getElementById('r-ruc').value.trim();
+  const ciudad=document.getElementById('r-ciudad').value.trim();
+  const categoria=document.getElementById('r-cat').value;
+  const nombre=document.getElementById('r-nombre').value.trim();
+  const cedula=document.getElementById('r-cedula').value.trim();
+  const telefono=document.getElementById('r-telefono').value.trim();
+  const pass=document.getElementById('r-pass').value;
+  const pass2=document.getElementById('r-pass2').value;
+
+  if(!empresa||!email||!tel_empresa||!ruc||!ciudad||!categoria||!nombre||!cedula||!telefono||!pass){
+    showError('Completa todos los campos obligatorios'); return;
+  }
   if(pass.length<6){ showError('Contraseña mínimo 6 caracteres'); return; }
+  if(pass!==pass2){ showError('Las contraseñas no coinciden'); return; }
   if(!fotoFiles.selfie){ showError('Sube la foto del encargado'); return; }
   if(!fotoFiles['cedula-front']){ showError('Sube la foto frontal de la cédula'); return; }
   if(!fotoFiles['cedula-back']){ showError('Sube la foto trasera de la cédula'); return; }
-  const btn = document.getElementById('btn-reg');
+
+  const btn=document.getElementById('btn-reg');
   btn.disabled=true;
   document.getElementById('upload-overlay').classList.add('show');
+
   try {
     setProgress(10);
-    const { data, error } = await sb.auth.signUp({ email, password: pass });
+    const { data,error } = await sb.auth.signUp({ email, password: pass });
     if(error) throw error;
-    const uid = data.user.id;
+    const uid=data.user.id;
     setProgress(30);
-    const selfieUrl = await subirFoto(fotoFiles.selfie, `verificacion/${uid}/selfie`);
+    const selfieUrl=await subirFoto(fotoFiles.selfie, `verificacion/${uid}/selfie`);
     setProgress(55);
-    const cedulaFrontUrl = await subirFoto(fotoFiles['cedula-front'], `verificacion/${uid}/cedula-front`);
+    const cedulaFrontUrl=await subirFoto(fotoFiles['cedula-front'], `verificacion/${uid}/cedula-front`);
     setProgress(75);
-    const cedulaBackUrl = await subirFoto(fotoFiles['cedula-back'], `verificacion/${uid}/cedula-back`);
+    const cedulaBackUrl=await subirFoto(fotoFiles['cedula-back'], `verificacion/${uid}/cedula-back`);
     setProgress(90);
     await sb.from('usuarios').insert({
-      id: uid, nombre, empresa, email, ruc, cedula,
-      telefono, ciudad, categoria,
+      id: uid, nombre, empresa, email,
+      ruc, cedula, telefono, tel_empresa,
+      ciudad, categoria,
       foto_perfil: selfieUrl,
       cedula_frontal: cedulaFrontUrl,
       cedula_trasera: cedulaBackUrl,
       rol: 'proveedor', activo: true, verificado: false
     });
-setProgress(100);
-    setTimeout(() => { document.getElementById('upload-overlay').classList.remove('show'); window.location.href = 'dashboard.html'; }, 800);
+    setProgress(100);
+    setTimeout(()=>{ document.getElementById('upload-overlay').classList.remove('show'); window.location.href='dashboard.html'; }, 800);
   } catch(e) {
     document.getElementById('upload-overlay').classList.remove('show');
-    showError('Error: ' + e.message);
+    showError('Error: '+e.message);
     btn.disabled=false;
   }
 };
