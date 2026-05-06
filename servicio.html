@@ -2,196 +2,144 @@
 <html lang="es">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
 <title>PROVEED — Servicio al Cliente</title>
-<link href="https://fonts.googleapis.com/css2?family=Syne:wght@700;800;900&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
 <style>
   *{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent;}
-  :root{ --naranja:#FF8C00; --negro:#0A0A0A; --blanco:#F8F8F5; --gris:#F0F1EE; --verde:#32CD32; --rojo:#FF4D4D; --azul:#007AFF; }
-  body{ background:var(--gris); font-family:'DM Sans',sans-serif; padding-bottom:90px; color:var(--negro); }
-  
-  /* HEADER */
-  .header{ background:var(--negro); color:var(--blanco); padding:48px 20px 22px; border-radius:0 0 28px 28px; position:sticky; top:0; z-index:100; }
-  .h-row{ display:flex; align-items:center; justify-content:space-between; }
-  .h-left{ display:flex; align-items:center; gap:12px; }
-  .back-btn{ width:36px; height:36px; border-radius:12px; background:rgba(255,255,255,0.08); display:flex; align-items:center; justify-content:center; cursor:pointer; }
+  :root{ --naranja:#FF8C00; --verde:#A8E63D; --negro:#0A0A0A; --rojo:#FF4D4D; --azul:#007AFF; }
+  body{ background:var(--negro); font-family:'Inter',sans-serif; padding-bottom:90px; -webkit-font-smoothing:antialiased; }
+  .header{ background:var(--negro); padding:44px 16px 16px; display:flex; align-items:center; gap:12px; position:sticky; top:0; z-index:100; border-bottom:1px solid #1e1e1e; }
+  .back-btn{ width:36px; height:36px; background:rgba(255,255,255,0.08); border-radius:10px; display:flex; align-items:center; justify-content:center; cursor:pointer; border:none; }
   .back-btn svg{ width:18px; height:18px; stroke:white; fill:none; stroke-width:2.5; }
-  .page-title{ font-family:'Syne',sans-serif; font-size:1.1rem; font-weight:800; }
-  .live-badge{ background:rgba(50,205,50,0.15); color:var(--verde); font-size:0.68rem; font-weight:800; padding:4px 10px; border-radius:10px; }
-
-  /* DASHBOARD KPI */
-  .kpi-row{ display:grid; grid-template-columns:repeat(3,1fr); gap:10px; padding:14px 20px 0; }
-  .kpi{ background:white; border-radius:16px; padding:14px 10px; text-align:center; box-shadow:0 2px 8px rgba(0,0,0,0.04); }
-  .kpi-val{ font-family:'Syne',sans-serif; font-size:1.4rem; font-weight:900; }
-  .kpi-lbl{ font-size:0.6rem; color:#aaa; font-weight:600; text-transform:uppercase; letter-spacing:0.5px; margin-top:3px; }
-
-  /* EQUIPO & ALERTAS */
-  .section{ padding:16px 20px 0; }
-  .section-title{ font-family:'Syne',sans-serif; font-size:0.82rem; font-weight:800; color:#aaa; text-transform:uppercase; letter-spacing:1px; margin-bottom:10px; }
-  .card-container{ background:white; border-radius:20px; overflow:hidden; box-shadow:0 2px 8px rgba(0,0,0,0.04); }
-  
-  .row-item{ display:flex; align-items:center; gap:12px; padding:14px 16px; border-bottom:1px solid #f5f5f5; }
-  .row-item:last-child{ border-bottom:none; }
-  .status-dot{ width:8px; height:8px; border-radius:50%; background:var(--verde); flex-shrink:0; }
-  .status-dot.off{ background:#e0e0e0; }
-  
-  .info-block{ flex:1; }
-  .main-txt{ font-weight:700; font-size:0.88rem; }
-  .sub-txt{ font-size:0.7rem; color:#aaa; }
-  
-  .alerta-row{ border-left:4px solid var(--naranja); }
-  .btn-atender{ background:var(--negro); color:white; border:none; border-radius:10px; padding:8px 14px; font-weight:700; cursor:pointer; font-size:0.72rem; }
-
-  /* OVERLAY CHAT */
-  .chat-overlay{ position:fixed; inset:0; background:var(--gris); z-index:500; display:none; flex-direction:column; }
-  .chat-overlay.open{ display:flex; animation:slideUp 0.3s ease-out; }
-  .co-header{ background:var(--negro); color:white; padding:48px 20px 16px; display:flex; align-items:center; gap:12px; }
-  .co-msgs{ flex:1; overflow-y:auto; padding:16px; display:flex; flex-direction:column; gap:10px; }
-  .bubble{ max-width:78%; padding:12px 16px; border-radius:20px; font-size:0.88rem; line-height:1.5; }
-  .bubble.in{ background:white; align-self:flex-start; border-bottom-left-radius:4px; }
-  .bubble.out{ background:var(--naranja); align-self:flex-end; border-bottom-right-radius:4px; font-weight:600; }
-  
-  .co-input-area{ background:white; padding:12px 16px 24px; display:flex; gap:10px; border-top:1px solid #eee; }
-  .co-input-area input{ flex:1; background:#f8f8f8; border:none; border-radius:20px; padding:11px 16px; outline:none; font-family:inherit; }
-
-  @keyframes slideUp{ from{transform:translateY(100%);} to{transform:translateY(0);} }
-
-  /* TAB BAR */
-  .tab-bar{ position:fixed; bottom:0; width:100%; background:white; display:flex; justify-content:space-around; padding:10px 0 18px; border-top:1px solid #eee; z-index:200; }
-  .tab{ display:flex; flex-direction:column; align-items:center; color:#ccc; text-decoration:none; flex:1; }
+  .page-title{ font-size:1.1rem; font-weight:700; color:white; }
+  .stats-row{ display:grid; grid-template-columns:repeat(3,1fr); gap:10px; padding:14px 16px 0; }
+  .stat-box{ background:#111; border:1px solid #1e1e1e; border-radius:16px; padding:14px 10px; text-align:center; }
+  .stat-val{ font-size:1.3rem; font-weight:800; color:white; }
+  .stat-val.verde{ color:var(--verde); }
+  .stat-val.rojo{ color:var(--rojo); }
+  .stat-val.naranja{ color:var(--naranja); }
+  .stat-lbl{ font-size:0.6rem; color:#555; font-weight:600; text-transform:uppercase; margin-top:3px; }
+  .tabs-row{ display:flex; gap:8px; padding:14px 16px; overflow-x:auto; scrollbar-width:none; }
+  .tabs-row::-webkit-scrollbar{ display:none; }
+  .vtab{ padding:7px 14px; border-radius:20px; border:1px solid #222; background:transparent; font-size:0.76rem; font-weight:600; color:#555; cursor:pointer; white-space:nowrap; font-family:'Inter',sans-serif; }
+  .vtab.active{ background:#1e1e1e; color:white; border-color:#333; }
+  .tickets-lista{ padding:0 16px; }
+  .ticket-card{ background:#111; border:1px solid #1e1e1e; border-radius:16px; padding:16px; margin-bottom:10px; cursor:pointer; transition:0.2s; }
+  .ticket-card:hover{ border-color:#333; }
+  .tick-header{ display:flex; align-items:center; justify-content:space-between; margin-bottom:10px; }
+  .tick-num{ font-size:0.85rem; font-weight:800; color:white; }
+  .tick-fecha{ font-size:0.7rem; color:#555; }
+  .tick-estado{ font-size:0.65rem; font-weight:700; padding:3px 10px; border-radius:20px; }
+  .est-abierto{ background:rgba(255,77,77,0.12); color:var(--rojo); }
+  .est-en-proceso{ background:rgba(255,140,0,0.12); color:var(--naranja); }
+  .est-resuelto{ background:rgba(168,230,61,0.12); color:var(--verde); }
+  .tick-cliente{ display:flex; align-items:center; gap:8px; margin-bottom:8px; }
+  .tick-avatar{ width:28px; height:28px; border-radius:8px; background:rgba(168,230,61,0.12); display:flex; align-items:center; justify-content:center; font-size:0.7rem; font-weight:800; color:var(--verde); flex-shrink:0; }
+  .tick-nombre{ font-size:0.8rem; color:#aaa; }
+  .tick-asunto{ font-size:0.85rem; font-weight:600; color:white; margin-bottom:4px; }
+  .tick-preview{ font-size:0.76rem; color:#555; display:-webkit-box; -webkit-line-clamp:2; -webkit-box-orient:vertical; overflow:hidden; margin-bottom:10px; }
+  .tick-prioridad{ font-size:0.62rem; font-weight:700; padding:2px 8px; border-radius:6px; }
+  .prio-alta{ background:rgba(255,77,77,0.12); color:var(--rojo); }
+  .prio-media{ background:rgba(255,140,0,0.12); color:var(--naranja); }
+  .prio-baja{ background:rgba(168,230,61,0.12); color:var(--verde); }
+  .tick-actions{ display:flex; gap:8px; margin-top:10px; }
+  .tick-btn{ flex:1; padding:8px; border-radius:9px; border:none; font-family:'Inter',sans-serif; font-size:0.74rem; font-weight:700; cursor:pointer; }
+  .btn-resolver{ background:rgba(168,230,61,0.1); color:#3a7a00; }
+  .btn-responder{ background:#1e1e1e; color:#aaa; }
+  .empty{ text-align:center; padding:60px 20px; color:#444; }
+  .empty svg{ width:52px; height:52px; stroke:#333; fill:none; stroke-width:1.2; margin:0 auto 14px; display:block; }
+  .empty h3{ font-size:0.95rem; font-weight:700; color:#555; margin-bottom:6px; }
+  .empty p{ font-size:0.82rem; }
+  .tab-bar{ position:fixed; bottom:0; width:100%; background:#111; display:flex; justify-content:space-around; align-items:center; padding:10px 0 22px; border-top:1px solid #1e1e1e; z-index:200; }
+  .tab{ display:flex; flex-direction:column; align-items:center; gap:4px; cursor:pointer; flex:1; color:#444; text-decoration:none; }
   .tab.active{ color:var(--naranja); }
-  .tab span{ font-size:0.6rem; font-weight:700; text-transform:uppercase; margin-top:4px; }
+  .tab svg{ width:22px; height:22px; stroke:currentColor; fill:none; stroke-width:2; stroke-linecap:round; stroke-linejoin:round; }
+  .tab span{ font-size:0.56rem; font-weight:600; text-transform:uppercase; }
 </style>
 </head>
 <body>
-
 <div class="header">
-  <div class="h-row">
-    <div class="h-left">
-      <div class="back-btn" onclick="history.back()"><svg viewBox="0 0 24 24"><path d="M19 12H5M12 19l-7-7 7-7"/></svg></div>
-      <div class="page-title">Soporte PROVEED</div>
-    </div>
-    <div class="live-badge">● LIVE</div>
-  </div>
+  <button class="back-btn" onclick="window.location.href='dashboard.html'"><svg viewBox="0 0 24 24"><path d="M19 12H5M12 19l-7-7 7-7"/></svg></button>
+  <div class="page-title">Servicio al Cliente</div>
 </div>
 
-<div class="kpi-row">
-  <div class="kpi"><div class="kpi-val" style="color:var(--naranja)" id="count-tickets">0</div><div class="kpi-lbl">Alertas</div></div>
-  <div class="kpi"><div class="kpi-val" style="color:var(--verde)">99%</div><div class="kpi-lbl">Eficiencia</div></div>
-  <div class="kpi"><div class="kpi-val" id="time-resp">1.5m</div><div class="kpi-lbl">Tiempo</div></div>
+<div class="stats-row">
+  <div class="stat-box"><div class="stat-val rojo" id="st-abiertos">—</div><div class="stat-lbl">Abiertos</div></div>
+  <div class="stat-box"><div class="stat-val naranja" id="st-proceso">—</div><div class="stat-lbl">En proceso</div></div>
+  <div class="stat-box"><div class="stat-val verde" id="st-resueltos">—</div><div class="stat-lbl">Resueltos</div></div>
 </div>
 
-<div class="section">
-  <div class="section-title">Alertas Prioritarias</div>
-  <div class="card-container" id="alertas-lista">
-    <p style="text-align:center; padding:30px; color:#aaa; font-size:0.8rem;">Analizando pedidos en tiempo real...</p>
-  </div>
+<div class="tabs-row">
+  <div class="vtab active" onclick="filtrar('todos',this)">Todos</div>
+  <div class="vtab" onclick="filtrar('abierto',this)">Abiertos</div>
+  <div class="vtab" onclick="filtrar('en-proceso',this)">En proceso</div>
+  <div class="vtab" onclick="filtrar('resuelto',this)">Resueltos</div>
 </div>
 
-<div class="section">
-  <div class="section-title">Agentes Activos</div>
-  <div class="card-container" id="equipo-lista">
-    <div class="row-item">
-      <div class="status-dot"></div>
-      <div class="info-block"><div class="main-txt">Soporte Central</div><div class="sub-txt">Nivel Administrativo</div></div>
-    </div>
-  </div>
-</div>
-
-<div class="chat-overlay" id="chat-overlay">
-  <div class="co-header">
-    <div class="back-btn" onclick="cerrarChat()"><svg viewBox="0 0 24 24"><path d="M19 12H5M12 19l-7-7 7-7"/></svg></div>
-    <div><div class="main-txt" id="chat-user-title">Cliente</div><div class="sub-txt" style="color:#666;">Ticket de Soporte Directo</div></div>
-  </div>
-  <div class="co-msgs" id="chat-box">
-    <div class="bubble in">Hola, necesito ayuda con mi pedido actual. No he recibido actualización de guía.</div>
-  </div>
-  <div class="co-input-area">
-    <input type="text" id="chat-input" placeholder="Escribe una solución...">
-    <button onclick="enviarMsg()" style="background:var(--negro); color:white; border:none; padding:10px 15px; border-radius:12px;">Enviar</button>
-  </div>
+<div class="tickets-lista" id="tickets-lista">
+  <div class="empty"><p>Cargando tickets...</p></div>
 </div>
 
 <nav class="tab-bar">
-  <a class="tab" href="dashboard.html"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/></svg><span>Panel</span></a>
-  <a class="tab" href="pedidos.html"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M1 3h15v13H1zM16 8h4l3 3v5h-7M5 19a2 2 0 1 0 0 4 2 2 0 0 0 0-4zM18 19a2 2 0 1 0 0 4 2 2 0 0 0 0-4z"/></svg><span>Pedidos</span></a>
-  <a class="tab active" href="servicio.html"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg><span>Soporte</span></a>
-  <a class="tab" href="chat.html"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg><span>Chat</span></a>
+  <a class="tab" href="dashboard.html"><svg viewBox="0 0 24 24"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/></svg><span>Panel</span></a>
+  <a class="tab" href="productos.html"><svg viewBox="0 0 24 24"><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"/></svg><span>Productos</span></a>
+  <a class="tab active" href="servicio.html"><svg viewBox="0 0 24 24"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07A19.5 19.5 0 0 1 4.69 12 19.79 19.79 0 0 1 1.62 3.38 2 2 0 0 1 3.62 1h3a2 2 0 0 1 2 1.72c.127.96.361 1.903.7 2.81a2 2 0 0 1-.45 2.11L8.09 8.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0 1 22 16.92z"/></svg><span>Servicio</span></a>
+  <a class="tab" href="pedidos.html"><svg viewBox="0 0 24 24"><rect x="1" y="3" width="15" height="13" rx="1"/><path d="M16 8h4l3 3v5h-7V8z"/></svg><span>Pedidos</span></a>
+  <a class="tab" href="plugins.html"><svg viewBox="0 0 24 24"><path d="M20.24 12.24a6 6 0 0 0-8.49-8.49L5 10.5V19h8.5l6.74-6.76z"/><line x1="16" y1="8" x2="2" y2="22"/></svg><span>Plugins</span></a>
 </nav>
 
-<script type="module">
-import { createClient } from 'https://cdn.jsdelivr.net/npm/@supabase/supabase-js/+esm'
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script>
+const { createClient } = supabase;
+const sb = createClient('https://hfmsyrmkewscnvwynzfq.supabase.co','sb_publishable_d1oLsq70a6ZV33vW3XkRgw_nYcN2Z9v');
+let userId='', tickets=[], filtroActual='todos';
 
-const supabaseUrl = 'https://pqoqirousggkjnkzxkhy.supabase.co'
-const supabaseKey = 'Sb_publishable_L8cdOOPzHe4ff3rkPr8x5Q_WTCF694I'
-const supabase = createClient(supabaseUrl, supabaseKey)
+(async()=>{
+  const { data:{session} } = await sb.auth.getSession();
+  if(!session){ window.location.href='login.html'; return; }
+  userId=session.user.id;
+  cargarTickets();
+})();
 
-let currentUid = null;
-
-async function init() {
-  const { data: { session } } = await supabase.auth.getSession();
-  if (!session) { window.location.href = 'login.html'; return; }
-  currentUid = session.user.id;
-  
-  fetchAlertas();
-  // Suscripción en tiempo real opcional para alertas
+async function cargarTickets(){
+  const { data } = await sb.from('tickets').select('*').eq('proveedor_id',userId).order('created_at',{ascending:false});
+  tickets=data||[];
+  document.getElementById('st-abiertos').textContent=tickets.filter(t=>t.estado==='abierto').length;
+  document.getElementById('st-proceso').textContent=tickets.filter(t=>t.estado==='en-proceso').length;
+  document.getElementById('st-resueltos').textContent=tickets.filter(t=>t.estado==='resuelto').length;
+  renderTickets();
 }
 
-async function fetchAlertas() {
-  const container = document.getElementById('alertas-lista');
-  
-  // Buscamos pedidos con estado 'pendiente' o 'retrasado' vinculados al proveedor
-  const { data: pedidos, error } = await supabase
-    .from('pedidos')
-    .select('*')
-    .eq('proveedorId', currentUid)
-    .in('estado', ['pendiente', 'revision'])
-    .limit(5);
-
-  if (error || !pedidos || pedidos.length === 0) {
-    container.innerHTML = '<div style="text-align:center;padding:30px;color:#bbb;">Sin incidencias críticas ✓</div>';
-    document.getElementById('count-tickets').textContent = '0';
+function renderTickets(){
+  let lista=[...tickets];
+  if(filtroActual!=='todos') lista=lista.filter(t=>t.estado===filtroActual);
+  const cont=document.getElementById('tickets-lista');
+  if(!lista.length){
+    cont.innerHTML=`<div class="empty"><svg viewBox="0 0 24 24"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07A19.5 19.5 0 0 1 4.69 12 19.79 19.79 0 0 1 1.62 3.38 2 2 0 0 1 3.62 1h3a2 2 0 0 1 2 1.72c.127.96.361 1.903.7 2.81a2 2 0 0 1-.45 2.11L8.09 8.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0 1 22 16.92z"/></svg><h3>Sin tickets</h3><p>Los tickets de soporte de tus clientes aparecerán aquí</p></div>`;
     return;
   }
-
-  document.getElementById('count-tickets').textContent = pedidos.length;
-  container.innerHTML = pedidos.map(p => `
-    <div class="row-item alerta-row">
-      <div class="info-block">
-        <div class="main-txt">Incidencia #${p.id.slice(-5).toUpperCase()}</div>
-        <div class="sub-txt">${p.cliente_nombre || 'Cliente'} · Esperando respuesta</div>
-      </div>
-      <button class="btn-atender" onclick="abrirChat('${p.cliente_nombre || 'Cliente'}')">ATENDER</button>
-    </div>
-  `).join('');
+  cont.innerHTML='';
+  lista.forEach(t=>{
+    const div=document.createElement('div'); div.className='ticket-card';
+    const est=t.estado||'abierto';
+    const fecha=new Date(t.created_at).toLocaleDateString('es-EC',{day:'2-digit',month:'short'});
+    const prio=t.prioridad||'media';
+    div.innerHTML=`
+      <div class="tick-header"><div><div class="tick-num">#TKT-${t.id.slice(-6).toUpperCase()}</div><div class="tick-fecha">${fecha}</div></div><span class="tick-estado est-${est}">${est}</span></div>
+      <div class="tick-cliente"><div class="tick-avatar">${(t.cliente||'C')[0].toUpperCase()}</div><div class="tick-nombre">${t.cliente||'Cliente'}</div><span class="tick-prioridad prio-${prio}" style="margin-left:auto">${prio}</span></div>
+      <div class="tick-asunto">${t.asunto||'Sin asunto'}</div>
+      <div class="tick-preview">${t.descripcion||''}</div>
+      <div class="tick-actions">
+        <button class="tick-btn btn-responder" onclick="window.location.href='chat.html'">💬 Responder</button>
+        ${est!=='resuelto'?`<button class="tick-btn btn-resolver" onclick="resolverTicket('${t.id}')">✓ Resolver</button>`:''}
+      </div>`;
+    cont.appendChild(div);
+  });
 }
 
-window.abrirChat = (nombre) => {
-  document.getElementById('chat-user-title').textContent = nombre;
-  document.getElementById('chat-overlay').classList.add('open');
-}
-
-window.cerrarChat = () => {
-  document.getElementById('chat-overlay').classList.remove('open');
-}
-
-window.enviarMsg = () => {
-  const input = document.getElementById('chat-input');
-  const msg = input.value.trim();
-  if(!msg) return;
-
-  const box = document.getElementById('chat-box');
-  const div = document.createElement('div');
-  div.className = 'bubble out';
-  div.textContent = msg;
-  box.appendChild(div);
-  
-  input.value = '';
-  box.scrollTop = box.scrollHeight;
-}
-
-init();
+window.filtrar=(f,el)=>{ filtroActual=f; document.querySelectorAll('.vtab').forEach(t=>t.classList.remove('active')); el.classList.add('active'); renderTickets(); };
+window.resolverTicket=async function(id){ await sb.from('tickets').update({estado:'resuelto'}).eq('id',id); cargarTickets(); };
 </script>
-
 </body>
 </html>
