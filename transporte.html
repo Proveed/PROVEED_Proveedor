@@ -2,157 +2,195 @@
 <html lang="es">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>PROVEED — Transporte y Envíos</title>
-<link href="https://fonts.googleapis.com/css2?family=Syne:wght@700;800;900&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>PROVEED — Transporte</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
 <style>
   *{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent;}
-  :root{ --naranja:#FF8C00; --negro:#0A0A0A; --blanco:#F8F8F5; --gris:#F0F1EE; --verde:#32CD32; --azul:#007AFF; --rojo:#FF4D4D; }
-  body{ background:var(--negro); font-family:'DM Sans',sans-serif; padding-bottom:90px; color:white; min-height:100vh; }
-  .header{ background:#000; padding:48px 20px 20px; border-bottom:1px solid #1a1a1a; }
-  .h-row{ display:flex; align-items:center; gap:12px; }
-  .back-btn{ width:36px; height:36px; border-radius:12px; background:rgba(255,255,255,0.06); display:flex; align-items:center; justify-content:center; cursor:pointer; }
+  :root{ --naranja:#FF8C00; --verde:#A8E63D; --negro:#0A0A0A; --rojo:#FF4D4D; --azul:#007AFF; }
+  body{ background:var(--negro); font-family:'Inter',sans-serif; padding-bottom:90px; -webkit-font-smoothing:antialiased; }
+  .header{ background:var(--negro); padding:44px 16px 16px; display:flex; align-items:center; justify-content:space-between; position:sticky; top:0; z-index:100; border-bottom:1px solid #1e1e1e; }
+  .h-left{ display:flex; align-items:center; gap:12px; }
+  .back-btn{ width:36px; height:36px; background:rgba(255,255,255,0.08); border-radius:10px; display:flex; align-items:center; justify-content:center; cursor:pointer; border:none; }
   .back-btn svg{ width:18px; height:18px; stroke:white; fill:none; stroke-width:2.5; }
-  .page-title{ font-family:'Syne',sans-serif; font-size:1.1rem; font-weight:800; }
-  .search-wrap{ margin:16px 20px; background:#111; border:1px solid #1a1a1a; border-radius:14px; padding:12px 16px; display:flex; align-items:center; gap:10px; }
-  .search-wrap input{ flex:1; background:transparent; border:none; outline:none; color:white; font-family:'DM Sans',sans-serif; font-size:0.92rem; }
-  .search-wrap input::placeholder{ color:#444; }
-  .search-wrap svg{ width:17px; height:17px; stroke:#444; fill:none; stroke-width:2.5; }
-  .envios-lista{ padding:0 20px 20px; }
-  .envio-card{ background:#111; border:1px solid #1a1a1a; border-radius:20px; margin-bottom:12px; overflow:hidden; }
-  .envio-header{ padding:14px 16px; display:flex; align-items:center; justify-content:space-between; border-bottom:1px solid #1a1a1a; }
-  .envio-fecha{ font-weight:700; font-size:0.88rem; }
-  .envio-fecha small{ display:block; font-size:0.68rem; color:#555; font-weight:400; }
-  .trans-badge{ font-size:0.65rem; font-weight:800; padding:4px 10px; border-radius:8px; border:1px solid var(--azul); color:var(--azul); background:rgba(0,122,255,0.08); }
-  .envio-body{ padding:14px 16px; }
-  .cliente-row{ display:flex; align-items:center; gap:10px; margin-bottom:10px; }
-  .cli-avatar{ width:36px; height:36px; border-radius:10px; background:#1a1a1a; display:flex; align-items:center; justify-content:center; font-family:'Syne',sans-serif; font-weight:800; color:var(--naranja); font-size:0.9rem; flex-shrink:0; }
-  .cli-info b{ display:block; font-size:0.88rem; }
-  .cli-info small{ font-size:0.7rem; color:#555; }
-  .prods-list{ background:#000; border-radius:12px; padding:10px 12px; margin-bottom:10px; }
-  .prod-line{ font-size:0.78rem; color:#888; padding:3px 0; }
-  .prod-line b{ color:var(--naranja); }
-  .envio-footer{ display:flex; align-items:center; justify-content:space-between; }
-  .guia{ font-family:monospace; font-size:0.72rem; color:#555; }
-  .latest-tag{ background:var(--verde); color:#000; font-size:0.58rem; font-weight:800; padding:2px 7px; border-radius:6px; margin-left:8px; }
-  .empty{ text-align:center; padding:50px 20px; color:#444; }
-  .empty svg{ width:52px; height:52px; stroke:#2a2a2a; fill:none; stroke-width:1.2; margin:0 auto 14px; display:block; }
-  .tab-bar{ position:fixed; bottom:0; width:100%; background:#000; display:flex; justify-content:space-around; align-items:center; padding:10px 0 18px; border-top:1px solid #1a1a1a; z-index:200; }
-  .tab{ display:flex; flex-direction:column; align-items:center; gap:4px; cursor:pointer; flex:1; color:#333; text-decoration:none; }
+  .page-title{ font-size:1.1rem; font-weight:700; color:white; }
+  .btn-nueva{ background:var(--naranja); color:#000; border:none; padding:10px 16px; border-radius:12px; font-family:'Inter',sans-serif; font-weight:700; font-size:0.82rem; cursor:pointer; }
+  .section{ padding:14px 16px 0; }
+  .section-title{ font-size:0.7rem; font-weight:700; color:#444; text-transform:uppercase; letter-spacing:1px; margin-bottom:12px; }
+  .transportadoras-grid{ display:grid; grid-template-columns:1fr 1fr; gap:10px; }
+  .trans-card{ background:#111; border:1px solid #1e1e1e; border-radius:16px; padding:16px; text-align:center; cursor:pointer; transition:0.2s; }
+  .trans-card.activa{ border-color:var(--naranja); background:rgba(255,140,0,0.05); }
+  .trans-card:active{ transform:scale(0.97); }
+  .trans-logo{ width:48px; height:48px; border-radius:14px; margin:0 auto 10px; display:flex; align-items:center; justify-content:center; font-size:1.4rem; }
+  .trans-nombre{ font-size:0.82rem; font-weight:700; color:white; margin-bottom:4px; }
+  .trans-estado{ font-size:0.65rem; font-weight:700; padding:3px 8px; border-radius:6px; }
+  .est-conectada{ background:rgba(168,230,61,0.12); color:var(--verde); }
+  .est-no-conectada{ background:#1e1e1e; color:#555; }
+  .envios-lista{ padding:0 16px; }
+  .envio-card{ background:#111; border:1px solid #1e1e1e; border-radius:16px; padding:14px; margin-bottom:10px; }
+  .env-header{ display:flex; align-items:center; justify-content:space-between; margin-bottom:10px; }
+  .env-num{ font-size:0.85rem; font-weight:700; color:white; }
+  .env-trans{ font-size:0.72rem; color:#555; }
+  .env-estado{ font-size:0.65rem; font-weight:700; padding:3px 10px; border-radius:20px; }
+  .est-entregado{ background:rgba(168,230,61,0.12); color:var(--verde); }
+  .est-en-camino{ background:rgba(255,140,0,0.12); color:var(--naranja); }
+  .est-preparando{ background:rgba(0,122,255,0.12); color:var(--azul); }
+  .env-ruta{ display:flex; align-items:center; gap:8px; font-size:0.78rem; color:#aaa; margin-bottom:8px; }
+  .env-ruta svg{ width:14px; height:14px; stroke:#555; fill:none; stroke-width:2; flex-shrink:0; }
+  .env-footer{ display:flex; justify-content:space-between; align-items:center; }
+  .env-fecha{ font-size:0.7rem; color:#555; }
+  .env-precio{ font-size:0.88rem; font-weight:700; color:var(--naranja); }
+  .tabs-row{ display:flex; gap:8px; padding:0 16px 12px; overflow-x:auto; scrollbar-width:none; }
+  .tabs-row::-webkit-scrollbar{ display:none; }
+  .vtab{ padding:7px 14px; border-radius:20px; border:1px solid #222; background:transparent; font-size:0.76rem; font-weight:600; color:#555; cursor:pointer; white-space:nowrap; font-family:'Inter',sans-serif; }
+  .vtab.active{ background:#1e1e1e; color:white; border-color:#333; }
+  .empty{ text-align:center; padding:48px 20px; color:#444; }
+  .empty p{ font-size:0.85rem; }
+  .modal-overlay{ position:fixed; inset:0; background:rgba(0,0,0,0.7); display:none; z-index:500; align-items:flex-end; }
+  .modal-overlay.show{ display:flex; }
+  .modal-sheet{ background:#111; width:100%; border-radius:24px 24px 0 0; padding:24px 20px 36px; transform:translateY(100%); transition:0.4s cubic-bezier(0.16,1,0.3,1); border:1px solid #1e1e1e; border-bottom:none; max-height:85vh; overflow-y:auto; }
+  .modal-overlay.show .modal-sheet{ transform:translateY(0); }
+  .drag{ width:36px; height:4px; background:#333; border-radius:4px; margin:0 auto 20px; }
+  .modal-title{ font-size:1rem; font-weight:700; color:white; margin-bottom:20px; }
+  .field{ margin-bottom:14px; }
+  .field label{ display:block; font-size:0.7rem; font-weight:700; color:#555; text-transform:uppercase; letter-spacing:0.8px; margin-bottom:6px; }
+  .field input,.field select{ width:100%; padding:12px 14px; background:#1a1a1a; border:1px solid #222; border-radius:12px; outline:none; font-family:'Inter',sans-serif; font-size:0.9rem; color:white; -webkit-appearance:none; }
+  .field input:focus{ border-color:var(--naranja); }
+  .field input::placeholder{ color:#444; }
+  .field select option{ background:#1a1a1a; }
+  .field-row{ display:grid; grid-template-columns:1fr 1fr; gap:10px; }
+  .btn-guardar{ width:100%; padding:14px; background:var(--naranja); color:#000; border:none; border-radius:14px; font-family:'Inter',sans-serif; font-size:0.95rem; font-weight:800; cursor:pointer; }
+  .tab-bar{ position:fixed; bottom:0; width:100%; background:#111; display:flex; justify-content:space-around; align-items:center; padding:10px 0 22px; border-top:1px solid #1e1e1e; z-index:200; }
+  .tab{ display:flex; flex-direction:column; align-items:center; gap:4px; cursor:pointer; flex:1; color:#444; text-decoration:none; }
   .tab.active{ color:var(--naranja); }
-  .tab svg{ width:23px; height:23px; stroke:currentColor; fill:none; stroke-width:2; stroke-linecap:round; }
-  .tab span{ font-size:0.6rem; font-weight:700; text-transform:uppercase; letter-spacing:0.5px; }
+  .tab svg{ width:22px; height:22px; stroke:currentColor; fill:none; stroke-width:2; stroke-linecap:round; stroke-linejoin:round; }
+  .tab span{ font-size:0.56rem; font-weight:600; text-transform:uppercase; }
 </style>
 </head>
 <body>
 <div class="header">
-  <div class="h-row">
-    <div class="back-btn" onclick="window.location.href='dashboard.html'"><svg viewBox="0 0 24 24"><path d="M19 12H5M12 19l-7-7 7-7"/></svg></div>
-    <div class="page-title">Control de Despachos</div>
+  <div class="h-left">
+    <button class="back-btn" onclick="window.location.href='dashboard.html'"><svg viewBox="0 0 24 24"><path d="M19 12H5M12 19l-7-7 7-7"/></svg></button>
+    <div class="page-title">Transporte</div>
+  </div>
+  <button class="btn-nueva" onclick="abrirModal()">+ Nuevo envío</button>
+</div>
+
+<div class="section">
+  <div class="section-title">Transportadoras disponibles</div>
+  <div class="transportadoras-grid">
+    <div class="trans-card activa"><div class="trans-logo" style="background:rgba(255,140,0,0.12)">🚚</div><div class="trans-nombre">Servientrega</div><span class="trans-estado est-conectada">Disponible</span></div>
+    <div class="trans-card"><div class="trans-logo" style="background:rgba(0,122,255,0.12)">✈️</div><div class="trans-nombre">DHL Ecuador</div><span class="trans-estado est-no-conectada">Próximamente</span></div>
+    <div class="trans-card"><div class="trans-logo" style="background:rgba(168,230,61,0.12)">📦</div><div class="trans-nombre">Correos Ecuador</div><span class="trans-estado est-conectada">Disponible</span></div>
+    <div class="trans-card"><div class="trans-logo" style="background:rgba(175,82,222,0.12)">🏍️</div><div class="trans-nombre">Mensajería propia</div><span class="trans-estado est-conectada">Disponible</span></div>
   </div>
 </div>
-<div class="search-wrap">
-  <svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/></svg>
-  <input type="text" id="search" placeholder="Buscar por cliente, ciudad, guía...">
-</div>
-<div class="envios-lista" id="envios-lista">
-  <div class="empty">
-    <svg viewBox="0 0 24 24"><path d="M1 3h15v13H1zM16 8h4l3 3v5h-7M5 19a2 2 0 1 0 0 4 2 2 0 0 0 0-4zM18 19a2 2 0 1 0 0 4 2 2 0 0 0 0-4z"/></svg>
-    <p>Cargando historial de envíos...</p>
+
+<div class="section" style="margin-top:8px;">
+  <div class="section-title">Mis envíos</div>
+  <div class="tabs-row">
+    <div class="vtab active" onclick="filtrar('todos',this)">Todos</div>
+    <div class="vtab" onclick="filtrar('preparando',this)">Preparando</div>
+    <div class="vtab" onclick="filtrar('en-camino',this)">En camino</div>
+    <div class="vtab" onclick="filtrar('entregado',this)">Entregados</div>
+  </div>
+  <div class="envios-lista" id="envios-lista">
+    <div class="empty"><p>Cargando envíos...</p></div>
   </div>
 </div>
+
+<div class="modal-overlay" id="modal-overlay" onclick="cerrarModal(event)">
+  <div class="modal-sheet">
+    <div class="drag"></div>
+    <div class="modal-title">Registrar envío</div>
+    <div class="field"><label>Destinatario *</label><input type="text" id="f-dest" placeholder="Nombre del cliente"></div>
+    <div class="field-row">
+      <div class="field"><label>Ciudad destino</label><input type="text" id="f-ciudad" placeholder="Guayaquil"></div>
+      <div class="field"><label>Transportadora</label>
+        <select id="f-trans">
+          <option value="Servientrega">Servientrega</option>
+          <option value="Correos Ecuador">Correos Ecuador</option>
+          <option value="Mensajería propia">Mensajería propia</option>
+          <option value="DHL">DHL</option>
+        </select>
+      </div>
+    </div>
+    <div class="field"><label>Dirección de entrega</label><input type="text" id="f-dir" placeholder="Calle y número"></div>
+    <div class="field-row">
+      <div class="field"><label>Peso (kg)</label><input type="number" id="f-peso" placeholder="1.5" step="0.1"></div>
+      <div class="field"><label>Costo envío ($)</label><input type="number" id="f-costo" placeholder="5.00" step="0.01"></div>
+    </div>
+    <div class="field"><label>Número de guía</label><input type="text" id="f-guia" placeholder="Ej: SRV123456789"></div>
+    <button class="btn-guardar" onclick="crearEnvio()">REGISTRAR ENVÍO →</button>
+  </div>
+</div>
+
 <nav class="tab-bar">
-  <a class="tab" href="dashboard.html"><svg viewBox="0 0 24 24"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/></svg><span>Panel</span></a>
-  <a class="tab active" href="transporte.html"><svg viewBox="0 0 24 24"><path d="M1 3h15v13H1zM16 8h4l3 3v5h-7M5 19a2 2 0 1 0 0 4 2 2 0 0 0 0-4zM18 19a2 2 0 1 0 0 4 2 2 0 0 0 0-4z"/></svg><span>Envíos</span></a>
+  <a class="tab" href="dashboard.html"><svg viewBox="0 0 24 24"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/></svg><span>Panel</span></a>
+  <a class="tab" href="productos.html"><svg viewBox="0 0 24 24"><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"/></svg><span>Productos</span></a>
+  <a class="tab active" href="transporte.html"><svg viewBox="0 0 24 24"><rect x="1" y="3" width="15" height="13" rx="1"/><path d="M16 8h4l3 3v5h-7V8z"/><circle cx="5.5" cy="18.5" r="2.5"/><circle cx="18.5" cy="18.5" r="2.5"/></svg><span>Transporte</span></a>
   <a class="tab" href="pedidos.html"><svg viewBox="0 0 24 24"><path d="M9 5H7a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2h-2"/><rect x="9" y="3" width="6" height="4" rx="1"/></svg><span>Pedidos</span></a>
-  <a class="tab" href="chat.html"><svg viewBox="0 0 24 24"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg><span>Chat</span></a>
-  <a class="tab" href="perfil.html"><svg viewBox="0 0 24 24"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg><span>Perfil</span></a>
+  <a class="tab" href="plugins.html"><svg viewBox="0 0 24 24"><path d="M20.24 12.24a6 6 0 0 0-8.49-8.49L5 10.5V19h8.5l6.74-6.76z"/><line x1="16" y1="8" x2="2" y2="22"/></svg><span>Plugins</span></a>
 </nav>
 
-<script type="module">
-import { createClient } from 'https://cdn.jsdelivr.net/npm/@supabase/supabase-js/+esm'
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script>
+const { createClient } = supabase;
+const sb = createClient('https://hfmsyrmkewscnvwynzfq.supabase.co','sb_publishable_d1oLsq70a6ZV33vW3XkRgw_nYcN2Z9v');
+let userId='', envios=[], filtroActual='todos';
 
-const supabase = createClient('https://pqoqirousggkjnkzxkhy.supabase.co', 'Sb_publishable_L8cdOOPzHe4ff3rkPr8x5Q_WTCF694I')
+(async()=>{
+  const { data:{session} } = await sb.auth.getSession();
+  if(!session){ window.location.href='login.html'; return; }
+  userId=session.user.id;
+  cargarEnvios();
+})();
 
-const TRANSPORTES = ['SERVIENTREGA', 'COOP. LOJA', 'ENVÍOS ECUADOR', 'SPEED', 'TCC', 'LAAR'];
-let todosEnvios = [];
-
-async function init() {
-  const { data: { session } } = await supabase.auth.getSession();
-  if (!session) { window.location.href = 'login.html'; return; }
-  
-  const currentUser = session.user;
-
-  // Obtenemos los pedidos donde el proveedor_id coincida (esto asume tu estructura de DB en Supabase)
-  const { data: pedidos, error } = await supabase
-    .from('pedidos')
-    .select('*')
-    .eq('proveedor_id', currentUser.id)
-    .in('estado', ['proceso', 'completado'])
-    .order('creado_en', { ascending: false });
-
-  if (error) { console.error(error); return; }
-
-  todosEnvios = (pedidos || []).map(data => {
-    // Generación de data ficticia para transporte si no existe en DB
-    const trans = data.transporte || TRANSPORTES[Math.floor(Math.random() * TRANSPORTES.length)];
-    const guia = data.guia_numero || '#G-' + Math.floor(Math.random() * 900000 + 100000);
-    return { ...data, trans, guia };
-  });
-
-  renderEnvios(todosEnvios);
+async function cargarEnvios(){
+  const { data } = await sb.from('envios').select('*').eq('proveedor_id',userId).order('created_at',{ascending:false});
+  envios=data||[];
+  renderEnvios();
 }
 
-function renderEnvios(lista) {
-  const cont = document.getElementById('envios-lista');
-  if (!lista.length) {
-    cont.innerHTML = `<div class="empty"><svg viewBox="0 0 24 24"><path d="M1 3h15v13H1zM16 8h4l3 3v5h-7M5 19a2 2 0 1 0 0 4 2 2 0 0 0 0-4zM18 19a2 2 0 1 0 0 4 2 2 0 0 0 0-4z"/></svg><p>Sin envíos despachados aún</p></div>`;
-    return;
-  }
-  cont.innerHTML = '';
-  lista.forEach((e, idx) => {
-    const d = new Date(e.creado_en);
-    const fecha = d.toLocaleDateString('es-EC', { day: '2-digit', month: 'short', year: 'numeric' });
-    const hora = d.toLocaleTimeString('es-EC', { hour: '2-digit', minute: '2-digit' });
-    
-    // Asumiendo que entrega es un objeto JSON en Supabase
-    const nombre = e.entrega?.nombre || 'Cliente';
-    const ciudad = e.entrega?.ciudad || 'Sin ciudad';
-    const card = document.createElement('div');
-    card.className = 'envio-card';
-    card.dataset.search = `${nombre} ${ciudad} ${e.guia}`.toLowerCase();
-    
-    // Mapeo de items (si vienen como array JSON)
-    const itemsHtml = (e.items || []).map(i => `<div class="prod-line"><b>${i.cantidad}×</b> ${i.nombre}</div>`).join('');
-
-    card.innerHTML = `
-      <div class="envio-header">
-        <div class="envio-fecha">${idx === 0 ? `<span class="latest-tag">HOY</span> ` : ''}${fecha}<small>${hora}</small></div>
-        <span class="trans-badge">🚚 ${e.trans}</span>
-      </div>
-      <div class="envio-body">
-        <div class="cliente-row">
-          <div class="cli-avatar">${nombre[0].toUpperCase()}</div>
-          <div class="cli-info"><b>${nombre}</b><small>${ciudad} · ${e.entrega?.direccion || ''}</small></div>
-        </div>
-        <div class="prods-list">${itemsHtml}</div>
-        <div class="envio-footer">
-          <div class="guia">Guía: ${e.guia}</div>
-          <div style="font-family:'Syne',sans-serif;font-weight:800;color:var(--naranja);">$${Number(e.total || 0).toFixed(2)}</div>
-        </div>
-      </div>`;
-    cont.appendChild(card);
+function renderEnvios(){
+  let lista=[...envios];
+  if(filtroActual!=='todos') lista=lista.filter(e=>e.estado===filtroActual);
+  const cont=document.getElementById('envios-lista');
+  if(!lista.length){ cont.innerHTML='<div class="empty"><p>Sin envíos registrados</p></div>'; return; }
+  cont.innerHTML='';
+  lista.forEach(e=>{
+    const div=document.createElement('div'); div.className='envio-card';
+    const est=e.estado||'preparando';
+    const fecha=new Date(e.created_at).toLocaleDateString('es-EC',{day:'2-digit',month:'short'});
+    div.innerHTML=`
+      <div class="env-header"><div><div class="env-num">${e.guia?e.guia:'#ENV-'+e.id.slice(-6).toUpperCase()}</div><div class="env-trans">${e.transportadora||'—'}</div></div><span class="env-estado est-${est}">${est}</span></div>
+      <div class="env-ruta"><svg viewBox="0 0 24 24"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>${e.destinatario} — ${e.ciudad_destino||'—'}</div>
+      <div class="env-footer"><div class="env-fecha">${fecha}</div><div class="env-precio">$${Number(e.costo||0).toFixed(2)}</div></div>`;
+    cont.appendChild(div);
   });
 }
 
-document.getElementById('search').addEventListener('input', e => {
-  const t = e.target.value.toLowerCase();
-  document.querySelectorAll('.envio-card').forEach(card => {
-    card.style.display = card.dataset.search.includes(t) ? 'block' : 'none';
-  });
-});
+window.filtrar=(f,el)=>{ filtroActual=f; document.querySelectorAll('.vtab').forEach(t=>t.classList.remove('active')); el.classList.add('active'); renderEnvios(); };
+window.abrirModal=()=>document.getElementById('modal-overlay').classList.add('show');
+window.cerrarModal=e=>{ if(e.target===document.getElementById('modal-overlay')) document.getElementById('modal-overlay').classList.remove('show'); };
 
-init();
+window.crearEnvio=async function(){
+  const dest=document.getElementById('f-dest').value.trim();
+  if(!dest){ alert('El destinatario es obligatorio'); return; }
+  await sb.from('envios').insert({
+    proveedor_id:userId,
+    destinatario:dest,
+    ciudad_destino:document.getElementById('f-ciudad').value.trim(),
+    transportadora:document.getElementById('f-trans').value,
+    direccion:document.getElementById('f-dir').value.trim(),
+    peso:parseFloat(document.getElementById('f-peso').value)||0,
+    costo:parseFloat(document.getElementById('f-costo').value)||0,
+    guia:document.getElementById('f-guia').value.trim(),
+    estado:'preparando'
+  });
+  document.getElementById('modal-overlay').classList.remove('show');
+  cargarEnvios();
+};
 </script>
 </body>
 </html>
