@@ -2,230 +2,206 @@
 <html lang="es">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>PROVEED — Accesos de Sede</title>
-<link href="https://fonts.googleapis.com/css2?family=Syne:wght@700;800;900&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
-<script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>PROVEED — Accesos</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
 <style>
   *{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent;}
-  :root{ --naranja:#FF8C00; --negro:#0A0A0A; --blanco:#F8F8F5; --gris:#F0F1EE; --verde:#32CD32; --azul:#007AFF; }
-  body{ background:var(--negro); font-family:'DM Sans',sans-serif; min-height:100vh; color:white; }
-  .wrapper{ display:flex; flex-direction:column; min-height:100vh; }
-  @media(min-width:900px){ .wrapper{ flex-direction:row; } }
-  .config{ background:#000; padding:48px 22px 28px; border-bottom:1px solid #1a1a1a; }
-  @media(min-width:900px){ .config{ width:340px; min-height:100vh; border-right:1px solid #1a1a1a; border-bottom:none; padding:40px 22px; position:sticky; top:0; height:100vh; overflow-y:auto; } }
-  .back-row{ display:flex; align-items:center; gap:10px; margin-bottom:24px; cursor:pointer; color:#555; transition: 0.2s; }
-  .back-row svg{ width:18px; height:18px; stroke:currentColor; fill:none; stroke-width:2.5; }
-  .back-row:hover{ color:var(--naranja); }
-  .panel-title{ font-family:'Syne',sans-serif; font-size:1.1rem; font-weight:800; color:var(--naranja); border-left:4px solid var(--naranja); padding-left:10px; margin-bottom:6px; }
-  .panel-sub{ font-size:0.75rem; color:#555; margin-bottom:24px; }
-  .field{ margin-bottom:16px; }
-  .field label{ display:block; font-size:0.65rem; font-weight:700; color:#555; text-transform:uppercase; letter-spacing:0.8px; margin-bottom:6px; }
-  .field select,.field input{ width:100%; background:#111; border:1px solid #2a2a2a; padding:12px 14px; border-radius:12px; color:white; font-family:'DM Sans',sans-serif; font-size:0.92rem; outline:none; transition:border-color 0.2s; box-sizing:border-box; }
-  .field select:focus,.field input:focus{ border-color:var(--naranja); }
-  .btn-gen{ width:100%; padding:15px; background:var(--naranja); color:#000; border:none; border-radius:14px; font-family:'Syne',sans-serif; font-size:0.95rem; font-weight:800; cursor:pointer; transition:0.2s; }
-  .btn-gen:active{ transform:scale(0.98); }
-  .qr-main{ flex:1; padding:24px; display:flex; flex-direction:column; align-items:center; justify-content:center; }
-  @media(min-width:900px){ .qr-main{ padding:40px; } }
-  .qr-container{ background:white; border-radius:24px; padding:32px; display:flex; flex-direction:column; align-items:center; box-shadow:0 20px 60px rgba(0,0,0,0.5); max-width:380px; width:100%; }
-  .qr-placeholder{ width:260px; height:260px; background:#f5f5f5; border-radius:16px; display:flex; flex-direction:column; align-items:center; justify-content:center; border:2px dashed #ddd; color:#bbb; }
-  .qr-placeholder svg{ width:60px; height:60px; margin-bottom:12px; }
-  #qrcode{ display:none; }
-  #qrcode img,#qrcode canvas{ border-radius:12px; max-width:260px; }
-  .qr-badge{ margin-top:16px; padding:10px 18px; background:#f8f8f8; border-radius:12px; text-align:center; display:none; width:100%; }
-  .qr-badge .rol{ font-family:'Syne',sans-serif; font-weight:800; color:var(--negro); font-size:1rem; }
-  .qr-badge .exp{ font-size:0.72rem; color:#888; margin-top:3px; }
-  .qr-badge .token{ font-family:monospace; font-size:0.65rem; color:#bbb; margin-top:6px; }
-  .instrucciones{ background:rgba(0,122,255,0.08); border:1px solid rgba(0,122,255,0.2); border-radius:14px; padding:14px; margin-top:16px; display:none; width:100%; max-width:380px; }
-  .instrucciones p{ font-size:0.78rem; color:#aaa; line-height:1.6; }
-  .historial{ width:100%; max-width:380px; margin-top:20px; }
-  .hist-title{ font-family:'Syne',sans-serif; font-size:0.78rem; font-weight:800; color:#555; text-transform:uppercase; letter-spacing:1px; margin-bottom:10px; }
-  .hist-item{ background:#111; border:1px solid #1a1a1a; border-radius:12px; padding:12px 14px; margin-bottom:8px; display:flex; justify-content:space-between; align-items:center; }
-  .hist-rol{ font-size:0.82rem; font-weight:700; color: white; }
-  .hist-info{ font-size:0.68rem; color:#555; margin-top:2px; }
-  .hist-exp{ font-size:0.65rem; color:#555; }
+  :root{ --naranja:#FF8C00; --verde:#A8E63D; --negro:#0A0A0A; --rojo:#FF4D4D; --azul:#007AFF; }
+  body{ background:var(--negro); font-family:'Inter',sans-serif; padding-bottom:90px; -webkit-font-smoothing:antialiased; }
+  .header{ background:var(--negro); padding:44px 16px 16px; display:flex; align-items:center; justify-content:space-between; position:sticky; top:0; z-index:100; border-bottom:1px solid #1e1e1e; }
+  .h-left{ display:flex; align-items:center; gap:12px; }
+  .back-btn{ width:36px; height:36px; background:rgba(255,255,255,0.08); border-radius:10px; display:flex; align-items:center; justify-content:center; cursor:pointer; border:none; }
+  .back-btn svg{ width:18px; height:18px; stroke:white; fill:none; stroke-width:2.5; }
+  .page-title{ font-size:1.1rem; font-weight:700; color:white; }
+  .btn-nueva{ background:var(--naranja); color:#000; border:none; padding:10px 16px; border-radius:12px; font-family:'Inter',sans-serif; font-weight:700; font-size:0.82rem; cursor:pointer; }
+  .info-card{ margin:14px 16px; background:rgba(0,122,255,0.08); border:1px solid rgba(0,122,255,0.2); border-radius:16px; padding:14px; display:flex; gap:12px; }
+  .info-card svg{ width:20px; height:20px; stroke:var(--azul); fill:none; stroke-width:2; flex-shrink:0; margin-top:2px; }
+  .info-card p{ font-size:0.8rem; color:#aaa; line-height:1.5; }
+  .accesos-lista{ padding:0 16px; }
+  .acceso-card{ background:#111; border:1px solid #1e1e1e; border-radius:16px; padding:16px; margin-bottom:10px; transition:0.2s; }
+  .acceso-header{ display:flex; align-items:center; gap:12px; margin-bottom:12px; }
+  .acc-avatar{ width:44px; height:44px; border-radius:14px; background:rgba(255,140,0,0.12); display:flex; align-items:center; justify-content:center; font-size:1rem; font-weight:800; color:var(--naranja); flex-shrink:0; }
+  .acc-info{ flex:1; }
+  .acc-nombre{ font-size:0.9rem; font-weight:700; color:white; }
+  .acc-email{ font-size:0.72rem; color:#555; margin-top:2px; }
+  .acc-rol{ font-size:0.62rem; font-weight:700; padding:3px 8px; border-radius:6px; }
+  .rol-admin{ background:rgba(255,140,0,0.12); color:var(--naranja); }
+  .rol-vendedor{ background:rgba(0,122,255,0.12); color:var(--azul); }
+  .rol-bodega{ background:rgba(168,230,61,0.12); color:var(--verde); }
+  .acc-permisos{ display:flex; flex-wrap:wrap; gap:6px; margin-bottom:12px; }
+  .permiso-tag{ background:#1a1a1a; border-radius:8px; padding:4px 10px; font-size:0.66rem; color:#666; font-weight:600; }
+  .acc-actions{ display:flex; gap:8px; }
+  .acc-btn{ flex:1; padding:9px; border-radius:10px; border:none; font-family:'Inter',sans-serif; font-size:0.76rem; font-weight:700; cursor:pointer; }
+  .btn-edit{ background:#1e1e1e; color:#aaa; }
+  .btn-del{ background:rgba(255,77,77,0.08); color:var(--rojo); }
+  .empty{ text-align:center; padding:60px 20px; color:#444; }
+  .empty svg{ width:52px; height:52px; stroke:#333; fill:none; stroke-width:1.2; margin:0 auto 14px; display:block; }
+  .empty h3{ font-size:0.95rem; font-weight:700; color:#555; margin-bottom:6px; }
+  .empty p{ font-size:0.82rem; }
+  .btn-crear{ background:var(--naranja); color:#000; border:none; padding:12px 24px; border-radius:12px; font-family:'Inter',sans-serif; font-weight:700; font-size:0.85rem; cursor:pointer; margin-top:16px; }
+  .modal-overlay{ position:fixed; inset:0; background:rgba(0,0,0,0.7); display:none; z-index:500; align-items:flex-end; }
+  .modal-overlay.show{ display:flex; }
+  .modal-sheet{ background:#111; width:100%; max-height:90vh; border-radius:24px 24px 0 0; transform:translateY(100%); transition:0.4s cubic-bezier(0.16,1,0.3,1); display:flex; flex-direction:column; overflow:hidden; border:1px solid #1e1e1e; border-bottom:none; }
+  .modal-overlay.show .modal-sheet{ transform:translateY(0); }
+  .drag{ width:36px; height:4px; background:#333; border-radius:4px; margin:14px auto 0; flex-shrink:0; }
+  .modal-header{ padding:12px 16px; display:flex; justify-content:space-between; align-items:center; border-bottom:1px solid #1e1e1e; flex-shrink:0; }
+  .modal-title{ font-size:1rem; font-weight:700; color:white; }
+  .close-btn{ width:30px; height:30px; background:#1e1e1e; border-radius:8px; display:flex; align-items:center; justify-content:center; cursor:pointer; border:none; }
+  .close-btn svg{ width:14px; height:14px; stroke:#666; fill:none; stroke-width:2.5; }
+  .modal-body{ overflow-y:auto; padding:16px 16px 32px; flex:1; }
+  .field{ margin-bottom:14px; }
+  .field label{ display:block; font-size:0.7rem; font-weight:700; color:#555; text-transform:uppercase; letter-spacing:0.8px; margin-bottom:6px; }
+  .field input,.field select{ width:100%; padding:12px 14px; background:#1a1a1a; border:1px solid #222; border-radius:12px; outline:none; font-family:'Inter',sans-serif; font-size:0.9rem; color:white; -webkit-appearance:none; }
+  .field input:focus{ border-color:var(--naranja); }
+  .field input::placeholder{ color:#444; }
+  .field select option{ background:#1a1a1a; }
+  .permisos-grid{ display:grid; grid-template-columns:1fr 1fr; gap:8px; }
+  .permiso-check{ display:flex; align-items:center; gap:10px; background:#1a1a1a; border-radius:11px; padding:11px 12px; cursor:pointer; border:1.5px solid transparent; transition:0.2s; }
+  .permiso-check.selected{ border-color:var(--naranja); background:rgba(255,140,0,0.06); }
+  .permiso-check-box{ width:18px; height:18px; border:2px solid #333; border-radius:5px; flex-shrink:0; display:flex; align-items:center; justify-content:center; }
+  .permiso-check.selected .permiso-check-box{ border-color:var(--naranja); background:var(--naranja); }
+  .permiso-check.selected .permiso-check-box::after{ content:'✓'; font-size:0.65rem; color:#000; font-weight:800; }
+  .permiso-check-label{ font-size:0.78rem; color:#aaa; font-weight:600; }
+  .btn-guardar{ width:100%; padding:14px; background:var(--naranja); color:#000; border:none; border-radius:14px; font-family:'Inter',sans-serif; font-size:0.95rem; font-weight:800; cursor:pointer; margin-top:8px; }
+  .tab-bar{ position:fixed; bottom:0; width:100%; background:#111; display:flex; justify-content:space-around; align-items:center; padding:10px 0 22px; border-top:1px solid #1e1e1e; z-index:200; }
+  .tab{ display:flex; flex-direction:column; align-items:center; gap:4px; cursor:pointer; flex:1; color:#444; text-decoration:none; }
+  .tab.active{ color:var(--naranja); }
+  .tab svg{ width:22px; height:22px; stroke:currentColor; fill:none; stroke-width:2; stroke-linecap:round; stroke-linejoin:round; }
+  .tab span{ font-size:0.56rem; font-weight:600; text-transform:uppercase; }
 </style>
 </head>
 <body>
-<div class="wrapper">
-  <aside class="config">
-    <div class="back-row" onclick="window.location.href='dashboard.html'">
-      <svg viewBox="0 0 24 24"><path d="M19 12H5M12 19l-7-7 7-7"/></svg>
-      Volver al panel
-    </div>
-    <div class="panel-title">Generador de Accesos</div>
-    <div class="panel-sub">Crea un QR para vincular un dispositivo de empleado.</div>
-    
-    <div class="field">
-      <label>Función del dispositivo</label>
-      <select id="f-rol">
-        <option value="bodega">📦 Bodega / Despacho</option>
-        <option value="caja">💰 Punto de Venta</option>
-        <option value="vendedor">📱 Vendedor de Piso</option>
-        <option value="admin">🏢 Administración</option>
-        <option value="soporte">💬 Servicio al Cliente</option>
-      </select>
-    </div>
-
-    <div class="field">
-      <label>Sucursal asignada</label>
-      <select id="f-sucursal">
-        <option value="central">Cargando sucursales...</option>
-      </select>
-    </div>
-
-    <div class="field">
-      <label>Vencimiento</label>
-      <select id="f-vencimiento">
-        <option value="8h">Turno laboral (8 horas)</option>
-        <option value="24h">24 horas</option>
-        <option value="7d">7 días</option>
-        <option value="perm">Permanente</option>
-      </select>
-    </div>
-
-    <div class="field">
-      <label>Nombre del empleado (opcional)</label>
-      <input type="text" id="f-empleado" placeholder="Ej: Juan Pérez">
-    </div>
-
-    <button class="btn-gen" id="btn-generar">GENERAR CÓDIGO QR</button>
-  </aside>
-
-  <main class="qr-main">
-    <div class="qr-container">
-      <div class="qr-placeholder" id="qr-placeholder">
-        <svg viewBox="0 0 24 24" fill="none" stroke="#ccc" stroke-width="1.2">
-          <rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/>
-          <rect x="3" y="14" width="7" height="7" rx="1"/>
-          <rect x="14" y="14" width="3" height="3"/><rect x="18" y="14" width="3" height="3"/>
-          <rect x="14" y="18" width="3" height="3"/><rect x="18" y="18" width="3" height="3"/>
-        </svg>
-        <p style="font-size:0.78rem; text-align:center; color:#bbb;">Configura el acceso<br>y pulsa "Generar"</p>
-      </div>
-      <div id="qrcode"></div>
-      <div class="qr-badge" id="qr-badge">
-        <div class="rol" id="b-rol">—</div>
-        <div class="exp" id="b-exp">—</div>
-        <div class="token" id="b-token">—</div>
-      </div>
-    </div>
-    <div class="instrucciones" id="instrucciones">
-      <p style="color:#aaa; font-size:0.78rem; line-height:1.6;"><strong>Instrucciones:</strong><br>Escanea este código desde la App de Punto de Venta para autorizar el dispositivo automáticamente.</p>
-    </div>
-    <div class="historial">
-      <div class="hist-title">Accesos recientes</div>
-      <div id="hist-lista"></div>
-    </div>
-  </main>
+<div class="header">
+  <div class="h-left">
+    <button class="back-btn" onclick="window.location.href='dashboard.html'"><svg viewBox="0 0 24 24"><path d="M19 12H5M12 19l-7-7 7-7"/></svg></button>
+    <div class="page-title">Gestión de Accesos</div>
+  </div>
+  <button class="btn-nueva" onclick="abrirModal()">+ Agregar</button>
 </div>
 
-<script type="module">
-import { createClient } from 'https://cdn.jsdelivr.net/npm/@supabase/supabase-js/+esm'
+<div class="info-card">
+  <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+  <p>Agrega colaboradores a tu empresa con diferentes niveles de acceso. Cada uno tendrá su propio usuario y contraseña.</p>
+</div>
 
-const supabase = createClient('https://pqoqirousggkjnkzxkhy.supabase.co', 'Sb_publishable_L8cdOOPzHe4ff3rkPr8x5Q_WTCF694I')
+<div class="accesos-lista" id="accesos-lista">
+  <div class="empty"><p>Cargando...</p></div>
+</div>
 
-let currentUser = null;
-let qrcodeInstance = null;
-const ROLES = {bodega:'📦 Bodega', caja:'💰 Caja', vendedor:'📱 Vendedor', admin:'🏢 Admin', soporte:'💬 Soporte'};
-const VENC = {'8h':'8 horas', '24h':'24 horas', '7d':'7 días', 'perm':'Permanente'};
+<div class="modal-overlay" id="modal-overlay" onclick="cerrarModal(event)">
+  <div class="modal-sheet">
+    <div class="drag"></div>
+    <div class="modal-header">
+      <span class="modal-title">Nuevo Acceso</span>
+      <button class="close-btn" onclick="cerrarModalDirecto()"><svg viewBox="0 0 24 24"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg></button>
+    </div>
+    <div class="modal-body">
+      <div class="field"><label>Nombre completo *</label><input type="text" id="f-nombre" placeholder="Juan Torres"></div>
+      <div class="field"><label>Correo electrónico *</label><input type="email" id="f-email" placeholder="juan@empresa.com"></div>
+      <div class="field"><label>Contraseña temporal *</label><input type="password" id="f-pass" placeholder="Mínimo 6 caracteres"></div>
+      <div class="field">
+        <label>Rol</label>
+        <select id="f-rol">
+          <option value="vendedor">Vendedor</option>
+          <option value="bodega">Bodega</option>
+          <option value="admin">Administrador</option>
+        </select>
+      </div>
+      <div class="field">
+        <label>Permisos específicos</label>
+        <div class="permisos-grid">
+          <div class="permiso-check selected" onclick="togglePermiso(this,'productos')"><div class="permiso-check-box"></div><div class="permiso-check-label">Productos</div></div>
+          <div class="permiso-check selected" onclick="togglePermiso(this,'pedidos')"><div class="permiso-check-box"></div><div class="permiso-check-label">Pedidos</div></div>
+          <div class="permiso-check" onclick="togglePermiso(this,'estadisticas')"><div class="permiso-check-box"></div><div class="permiso-check-label">Estadísticas</div></div>
+          <div class="permiso-check" onclick="togglePermiso(this,'facturador')"><div class="permiso-check-box"></div><div class="permiso-check-label">Facturador</div></div>
+          <div class="permiso-check selected" onclick="togglePermiso(this,'chat')"><div class="permiso-check-box"></div><div class="permiso-check-label">Chat</div></div>
+          <div class="permiso-check" onclick="togglePermiso(this,'inventario')"><div class="permiso-check-box"></div><div class="permiso-check-label">Inventario</div></div>
+        </div>
+      </div>
+      <button class="btn-guardar" onclick="crearAcceso()">CREAR ACCESO →</button>
+    </div>
+  </div>
+</div>
 
-async function init() {
-  const { data: { session } } = await supabase.auth.getSession();
-  if (!session) { window.location.href = 'login.html'; return; }
-  currentUser = session.user;
+<nav class="tab-bar">
+  <a class="tab" href="dashboard.html"><svg viewBox="0 0 24 24"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/></svg><span>Panel</span></a>
+  <a class="tab" href="productos.html"><svg viewBox="0 0 24 24"><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"/></svg><span>Productos</span></a>
+  <a class="tab active" href="acceso.html"><svg viewBox="0 0 24 24"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg><span>Accesos</span></a>
+  <a class="tab" href="pedidos.html"><svg viewBox="0 0 24 24"><rect x="1" y="3" width="15" height="13" rx="1"/><path d="M16 8h4l3 3v5h-7V8z"/></svg><span>Pedidos</span></a>
+  <a class="tab" href="plugins.html"><svg viewBox="0 0 24 24"><path d="M20.24 12.24a6 6 0 0 0-8.49-8.49L5 10.5V19h8.5l6.74-6.76z"/><line x1="16" y1="8" x2="2" y2="22"/></svg><span>Plugins</span></a>
+</nav>
 
-  // Cargar Sucursales
-  const { data: sucursales } = await supabase
-    .from('sucursales')
-    .select('*')
-    .eq('proveedor_id', currentUser.id);
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script>
+const { createClient } = supabase;
+const sb = createClient('https://hfmsyrmkewscnvwynzfq.supabase.co','sb_publishable_d1oLsq70a6ZV33vW3XkRgw_nYcN2Z9v');
+let userId='', empresa='', accesos=[];
 
-  const sel = document.getElementById('f-sucursal');
-  sel.innerHTML = '<option value="central">Central / Matriz</option>';
-  sucursales?.forEach(s => {
-    const opt = document.createElement('option');
-    opt.value = s.id; opt.textContent = s.nombre;
-    sel.appendChild(opt);
-  });
+(async()=>{
+  const { data:{session} } = await sb.auth.getSession();
+  if(!session){ window.location.href='login.html'; return; }
+  userId=session.user.id;
+  const { data:u } = await sb.from('usuarios').select('empresa,nombre').eq('id',userId).single();
+  empresa=u?.empresa||u?.nombre||'';
+  cargarAccesos();
+})();
 
-  cargarHistorial();
+async function cargarAccesos(){
+  const { data } = await sb.from('accesos_empresa').select('*').eq('proveedor_id',userId).order('created_at',{ascending:false});
+  accesos=data||[];
+  renderAccesos();
 }
 
-async function cargarHistorial() {
-  const { data: accesos } = await supabase
-    .from('accesos')
-    .select('*')
-    .eq('proveedor_id', currentUser.id)
-    .order('creado_at', { ascending: false })
-    .limit(5);
-
-  const lista = document.getElementById('hist-lista');
-  lista.innerHTML = accesos?.length ? '' : '<div style="color:#333;font-size:0.8rem;text-align:center;padding:20px;">Sin registros recientes</div>';
-  
-  accesos?.forEach(h => {
-    const hora = new Date(h.creado_at).toLocaleTimeString('es-EC', {hour:'2-digit', minute:'2-digit'});
-    const div = document.createElement('div');
-    div.className = 'hist-item';
-    div.innerHTML = `<div><div class="hist-rol">${ROLES[h.rol] || h.rol}</div><div class="hist-info">${h.empleado} · ${hora}</div></div><div class="hist-exp">${VENC[h.vencimiento] || h.vencimiento}</div>`;
-    lista.appendChild(div);
+function renderAccesos(){
+  const cont=document.getElementById('accesos-lista');
+  if(!accesos.length){
+    cont.innerHTML=`<div class="empty"><svg viewBox="0 0 24 24"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg><h3>Sin colaboradores</h3><p>Agrega personas a tu equipo con acceso limitado</p><button class="btn-crear" onclick="abrirModal()">+ Agregar colaborador</button></div>`;
+    return;
+  }
+  cont.innerHTML='';
+  accesos.forEach(a=>{
+    const div=document.createElement('div'); div.className='acceso-card';
+    const rolClass=a.rol==='admin'?'rol-admin':a.rol==='bodega'?'rol-bodega':'rol-vendedor';
+    const permisos=a.permisos||[];
+    div.innerHTML=`
+      <div class="acceso-header">
+        <div class="acc-avatar">${(a.nombre||'U')[0].toUpperCase()}</div>
+        <div class="acc-info"><div class="acc-nombre">${a.nombre}</div><div class="acc-email">${a.email}</div></div>
+        <span class="acc-rol ${rolClass}">${a.rol||'vendedor'}</span>
+      </div>
+      <div class="acc-permisos">${permisos.map(p=>`<span class="permiso-tag">${p}</span>`).join('')}</div>
+      <div class="acc-actions">
+        <button class="acc-btn btn-edit">Editar</button>
+        <button class="acc-btn btn-del" onclick="eliminarAcceso('${a.id}')">Eliminar</button>
+      </div>`;
+    cont.appendChild(div);
   });
 }
 
-window.generarQR = async function() {
-  const rol = document.getElementById('f-rol').value;
-  const sucursal = document.getElementById('f-sucursal').value;
-  const venc = document.getElementById('f-vencimiento').value;
-  const empleado = document.getElementById('f-empleado').value.trim() || 'Sin asignar';
-  const token = Math.random().toString(36).slice(2, 10).toUpperCase();
+window.togglePermiso=function(el,permiso){ el.classList.toggle('selected'); };
+window.abrirModal=()=>document.getElementById('modal-overlay').classList.add('show');
+window.cerrarModal=e=>{ if(e.target===document.getElementById('modal-overlay')) document.getElementById('modal-overlay').classList.remove('show'); };
+window.cerrarModalDirecto=()=>document.getElementById('modal-overlay').classList.remove('show');
 
-  const payload = JSON.stringify({
-    p_id: currentUser.id,
-    s_id: sucursal,
-    r: rol,
-    v: venc,
-    emp: empleado,
-    tk: token,
-    iat: new Date().toISOString()
-  });
-
-  // UI Updates
-  document.getElementById('qr-placeholder').style.display = 'none';
-  const qrDiv = document.getElementById('qrcode');
-  qrDiv.innerHTML = '';
-  qrDiv.style.display = 'block';
-
-  new QRCode(qrDiv, {
-    text: payload,
-    width: 260,
-    height: 260,
-    colorDark: "#000000",
-    colorLight: "#ffffff",
-    correctLevel: QRCode.CorrectLevel.H
-  });
-
-  document.getElementById('b-rol').textContent = ROLES[rol];
-  document.getElementById('b-exp').textContent = `Vence: ${VENC[venc]} · ${empleado}`;
-  document.getElementById('b-token').textContent = 'TOKEN: ' + token;
-  document.getElementById('qr-badge').style.display = 'block';
-  document.getElementById('instrucciones').style.display = 'block';
-
-  // Guardar en Supabase
-  await supabase.from('accesos').insert([{
-    proveedor_id: currentUser.id,
-    sucursal_id: sucursal,
-    rol: rol,
-    vencimiento: venc,
-    empleado: empleado,
-    token: token
-  }]);
-
-  cargarHistorial();
+window.crearAcceso=async function(){
+  const nombre=document.getElementById('f-nombre').value.trim();
+  const email=document.getElementById('f-email').value.trim();
+  const pass=document.getElementById('f-pass').value;
+  const rol=document.getElementById('f-rol').value;
+  if(!nombre||!email||!pass){ alert('Completa todos los campos'); return; }
+  if(pass.length<6){ alert('Contraseña mínimo 6 caracteres'); return; }
+  const permisos=[...document.querySelectorAll('.permiso-check.selected')].map(el=>el.querySelector('.permiso-check-label').textContent.toLowerCase());
+  await sb.from('accesos_empresa').insert({ proveedor_id:userId, empresa, nombre, email, rol, permisos, activo:true });
+  document.getElementById('modal-overlay').classList.remove('show');
+  cargarAccesos();
 };
 
-document.getElementById('btn-generar').onclick = generarQR;
-
-init();
+window.eliminarAcceso=async function(id){
+  if(!confirm('¿Eliminar este acceso?')) return;
+  await sb.from('accesos_empresa').delete().eq('id',id);
+  cargarAccesos();
+};
 </script>
 </body>
 </html>
