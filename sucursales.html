@@ -2,242 +2,227 @@
 <html lang="es">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
 <title>PROVEED — Sucursales</title>
-<link href="https://fonts.googleapis.com/css2?family=Syne:wght@700;800;900&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
 <style>
   *{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent;}
-  :root{ --naranja:#FF8C00; --negro:#0A0A0A; --blanco:#F8F8F5; --gris:#111; --verde:#32CD32; --rojo:#FF4D4D; --azul:#007AFF; }
-  body{ background:var(--negro); font-family:'DM Sans',sans-serif; min-height:100vh; color:white; overflow-x:hidden; }
-  
-  .layout{ display:flex; flex-direction:column; min-height:100vh; }
-  @media(min-width:900px){ .layout{ flex-direction:row; } }
-
-  /* SIDEBAR */
-  .sidebar{ background:#000; border-bottom:1px solid #1a1a1a; padding:48px 20px 24px; z-index:10; }
-  @media(min-width:900px){ 
-    .sidebar{ width:300px; min-height:100vh; border-right:1px solid #1a1a1a; border-bottom:none; position:sticky; top:0; height:100vh; overflow-y:auto; } 
-  }
-  .brand{ font-family:'Syne',sans-serif; font-size:1.3rem; font-weight:900; color:var(--naranja); letter-spacing:-0.5px; }
-  .brand-sub{ font-size:0.65rem; color:#444; text-transform:uppercase; letter-spacing:1.5px; margin-bottom:30px; margin-top:4px; }
-  
-  .back-link{ display:flex; align-items:center; gap:8px; color:#666; font-size:0.8rem; cursor:pointer; margin-bottom:25px; transition:0.2s; }
-  .back-link:hover{ color:var(--naranja); }
-  
-  /* CARDS SUCURSAL */
-  #sucursales-lista{ margin-bottom:20px; }
-  .suc-card{ background:#080808; border:1px solid #1a1a1a; border-radius:16px; padding:16px; margin-bottom:12px; cursor:pointer; transition:all 0.3s cubic-bezier(0.4, 0, 0.2, 1); position:relative; overflow:hidden; }
-  .suc-card:hover{ border-color:var(--naranja); transform:translateY(-2px); }
-  .suc-card.active{ border-color:var(--naranja); background:rgba(255,140,0,0.06); box-shadow:0 10px 20px rgba(0,0,0,0.2); }
-  .suc-card.active::before{ content:''; position:absolute; left:0; top:0; bottom:0; width:4px; background:var(--naranja); }
-  
-  .suc-nombre{ font-weight:700; font-size:0.95rem; color:var(--blanco); }
-  .suc-info{ font-size:0.72rem; color:#555; margin-top:4px; }
-  .suc-badge{ font-size:0.6rem; font-weight:800; padding:3px 8px; border-radius:6px; display:inline-block; margin-top:8px; text-transform:uppercase; }
-  .badge-on{ background:rgba(50,205,50,0.1); color:var(--verde); }
-
-  .btn-add{ width:100%; padding:14px; background:#111; border:1px dashed #333; border-radius:14px; color:#666; font-weight:600; cursor:pointer; margin-top:10px; transition:0.2s; }
-  .btn-add:hover{ border-color:var(--naranja); color:var(--naranja); }
-  .btn-panic{ width:100%; padding:14px; background:rgba(255,77,77,0.1); border:1px solid rgba(255,77,77,0.2); border-radius:14px; color:var(--rojo); font-weight:700; cursor:pointer; margin-top:15px; font-size:0.75rem; letter-spacing:0.5px; }
-
-  /* MAIN CONTENT */
-  .main{ flex:1; padding:24px 20px; background:#050505; }
-  @media(min-width:900px){ .main{ padding:50px; } }
-  .main-header{ margin-bottom:30px; }
-  .main-title{ font-family:'Syne',sans-serif; font-size:1.8rem; font-weight:900; letter-spacing:-1px; }
-  .main-sub{ font-size:0.9rem; color:#555; margin-top:5px; }
-
-  /* KPI GRID */
-  .kpi-grid{ display:grid; grid-template-columns:repeat(2,1fr); gap:12px; margin-bottom:30px; }
-  @media(min-width:600px){ .kpi-grid{ grid-template-columns:repeat(4,1fr); } }
-  .kpi{ background:#0a0a0a; border:1px solid #161616; border-radius:20px; padding:20px; text-align:center; }
-  .kpi-val{ font-family:'Syne',sans-serif; font-size:1.6rem; font-weight:900; color:var(--naranja); }
-  .kpi-lbl{ font-size:0.65rem; color:#444; text-transform:uppercase; font-weight:700; margin-top:5px; letter-spacing:0.8px; }
-
-  /* PANEL EQUIPO */
-  .panel{ background:#0a0a0a; border:1px solid #161616; border-radius:24px; padding:24px; margin-bottom:24px; }
-  .panel-title{ font-family:'Syne',sans-serif; font-size:1rem; font-weight:800; margin-bottom:20px; color:var(--naranja); display:flex; align-items:center; gap:10px; }
-  .panel-title::after{ content:''; flex:1; height:1px; background:#1a1a1a; }
-
-  .emp-row{ display:flex; align-items:center; justify-content:space-between; padding:15px 0; border-bottom:1px solid #161616; }
-  .emp-info b{ display:block; font-size:0.9rem; color:var(--blanco); }
-  .emp-info span{ font-size:0.72rem; color:#444; }
-  .permisos-flex{ display:flex; gap:8px; }
-  .chip{ font-size:0.62rem; font-weight:700; padding:4px 10px; border-radius:8px; background:#161616; color:#444; cursor:pointer; }
-  .chip.on{ background:rgba(50,205,50,0.12); color:var(--verde); }
-
-  /* MODAL */
-  .modal-overlay{ position:fixed; inset:0; background:rgba(0,0,0,0.85); backdrop-filter:blur(8px); display:none; align-items:center; justify-content:center; z-index:1000; padding:20px; }
+  :root{ --naranja:#FF8C00; --verde:#A8E63D; --negro:#0A0A0A; --rojo:#FF4D4D; --azul:#007AFF; }
+  body{ background:var(--negro); font-family:'Inter',sans-serif; padding-bottom:90px; -webkit-font-smoothing:antialiased; }
+  .header{ background:var(--negro); padding:44px 16px 16px; display:flex; align-items:center; justify-content:space-between; position:sticky; top:0; z-index:100; border-bottom:1px solid #1e1e1e; }
+  .h-left{ display:flex; align-items:center; gap:12px; }
+  .back-btn{ width:36px; height:36px; background:rgba(255,255,255,0.08); border-radius:10px; display:flex; align-items:center; justify-content:center; cursor:pointer; border:none; }
+  .back-btn svg{ width:18px; height:18px; stroke:white; fill:none; stroke-width:2.5; }
+  .page-title{ font-size:1.1rem; font-weight:700; color:white; }
+  .btn-nueva{ background:var(--naranja); color:#000; border:none; padding:10px 16px; border-radius:12px; font-family:'Inter',sans-serif; font-weight:700; font-size:0.82rem; cursor:pointer; }
+  .sucursales-lista{ padding:14px 16px; }
+  .suc-card{ background:#111; border:1px solid #1e1e1e; border-radius:18px; padding:18px; margin-bottom:12px; transition:0.2s; }
+  .suc-card:hover{ border-color:#333; }
+  .suc-header{ display:flex; align-items:center; gap:12px; margin-bottom:12px; }
+  .suc-icon{ width:44px; height:44px; border-radius:14px; background:rgba(255,140,0,0.12); display:flex; align-items:center; justify-content:center; flex-shrink:0; }
+  .suc-icon svg{ width:22px; height:22px; stroke:var(--naranja); fill:none; stroke-width:2; }
+  .suc-info{ flex:1; }
+  .suc-nombre{ font-size:0.92rem; font-weight:700; color:white; }
+  .suc-ciudad{ font-size:0.75rem; color:#555; margin-top:2px; }
+  .suc-badge{ font-size:0.62rem; font-weight:700; padding:3px 8px; border-radius:6px; }
+  .badge-principal{ background:rgba(168,230,61,0.12); color:var(--verde); }
+  .badge-activa{ background:rgba(0,122,255,0.12); color:var(--azul); }
+  .suc-datos{ display:grid; grid-template-columns:1fr 1fr; gap:8px; margin-bottom:12px; }
+  .suc-dato{ background:#1a1a1a; border-radius:10px; padding:10px 12px; }
+  .suc-dato-label{ font-size:0.62rem; color:#555; font-weight:600; text-transform:uppercase; margin-bottom:3px; }
+  .suc-dato-val{ font-size:0.82rem; color:#aaa; font-weight:600; }
+  .suc-actions{ display:flex; gap:8px; }
+  .suc-btn{ flex:1; padding:9px; border-radius:10px; border:none; font-family:'Inter',sans-serif; font-size:0.76rem; font-weight:700; cursor:pointer; }
+  .btn-edit{ background:#1e1e1e; color:#aaa; }
+  .btn-del{ background:rgba(255,77,77,0.08); color:var(--rojo); }
+  .empty{ text-align:center; padding:60px 20px; color:#444; }
+  .empty svg{ width:52px; height:52px; stroke:#333; fill:none; stroke-width:1.2; margin:0 auto 14px; display:block; }
+  .empty h3{ font-size:0.95rem; font-weight:700; color:#555; margin-bottom:6px; }
+  .empty p{ font-size:0.82rem; }
+  .btn-crear{ background:var(--naranja); color:#000; border:none; padding:12px 24px; border-radius:12px; font-family:'Inter',sans-serif; font-weight:700; font-size:0.85rem; cursor:pointer; margin-top:16px; }
+  .modal-overlay{ position:fixed; inset:0; background:rgba(0,0,0,0.7); display:none; z-index:500; align-items:flex-end; }
   .modal-overlay.show{ display:flex; }
-  .modal-card{ background:#111; border:1px solid #222; width:100%; max-width:450px; border-radius:30px; padding:30px; animation:scaleUp 0.3s ease; }
-  .modal-title{ font-family:'Syne',sans-serif; font-size:1.3rem; font-weight:800; margin-bottom:20px; }
-  .input-group{ margin-bottom:15px; }
-  .input-group label{ display:block; font-size:0.65rem; font-weight:700; color:#555; text-transform:uppercase; margin-bottom:6px; letter-spacing:1px; }
-  .input-group input{ width:100%; background:#000; border:1px solid #222; padding:14px; border-radius:12px; color:white; font-family:inherit; outline:none; }
-  .input-group input:focus{ border-color:var(--naranja); }
-  .btn-submit{ width:100%; padding:16px; background:var(--naranja); border:none; border-radius:15px; font-weight:800; font-family:'Syne',sans-serif; cursor:pointer; margin-top:10px; }
-
-  @keyframes scaleUp{ from{transform:scale(0.95); opacity:0;} to{transform:scale(1); opacity:1;} }
+  .modal-sheet{ background:#111; width:100%; max-height:90vh; border-radius:24px 24px 0 0; transform:translateY(100%); transition:0.4s cubic-bezier(0.16,1,0.3,1); display:flex; flex-direction:column; overflow:hidden; border:1px solid #1e1e1e; border-bottom:none; }
+  .modal-overlay.show .modal-sheet{ transform:translateY(0); }
+  .drag{ width:36px; height:4px; background:#333; border-radius:4px; margin:14px auto 0; flex-shrink:0; }
+  .modal-header{ padding:12px 16px; display:flex; justify-content:space-between; align-items:center; border-bottom:1px solid #1e1e1e; flex-shrink:0; }
+  .modal-title{ font-size:1rem; font-weight:700; color:white; }
+  .close-btn{ width:30px; height:30px; background:#1e1e1e; border-radius:8px; display:flex; align-items:center; justify-content:center; cursor:pointer; border:none; }
+  .close-btn svg{ width:14px; height:14px; stroke:#666; fill:none; stroke-width:2.5; }
+  .modal-body{ overflow-y:auto; padding:16px 16px 32px; flex:1; }
+  .field{ margin-bottom:14px; }
+  .field label{ display:block; font-size:0.7rem; font-weight:700; color:#555; text-transform:uppercase; letter-spacing:0.8px; margin-bottom:6px; }
+  .field input,.field select{ width:100%; padding:12px 14px; background:#1a1a1a; border:1px solid #222; border-radius:12px; outline:none; font-family:'Inter',sans-serif; font-size:0.9rem; color:white; -webkit-appearance:none; }
+  .field input:focus{ border-color:var(--naranja); }
+  .field input::placeholder{ color:#444; }
+  .field-row{ display:grid; grid-template-columns:1fr 1fr; gap:10px; }
+  .toggle-field{ display:flex; align-items:center; justify-content:space-between; background:#1a1a1a; border:1px solid #222; border-radius:12px; padding:12px 14px; }
+  .toggle-label{ font-size:0.88rem; color:#aaa; }
+  .toggle{ width:44px; height:24px; background:#222; border-radius:12px; position:relative; cursor:pointer; border:none; transition:0.3s; }
+  .toggle.on{ background:var(--naranja); }
+  .toggle::after{ content:''; position:absolute; top:2px; left:2px; width:20px; height:20px; border-radius:50%; background:white; transition:0.3s; }
+  .toggle.on::after{ left:22px; }
+  .btn-guardar{ width:100%; padding:14px; background:var(--naranja); color:#000; border:none; border-radius:14px; font-family:'Inter',sans-serif; font-size:0.95rem; font-weight:800; cursor:pointer; margin-top:8px; }
+  .tab-bar{ position:fixed; bottom:0; width:100%; background:#111; display:flex; justify-content:space-around; align-items:center; padding:10px 0 22px; border-top:1px solid #1e1e1e; z-index:200; }
+  .tab{ display:flex; flex-direction:column; align-items:center; gap:4px; cursor:pointer; flex:1; color:#444; text-decoration:none; }
+  .tab.active{ color:var(--naranja); }
+  .tab svg{ width:22px; height:22px; stroke:currentColor; fill:none; stroke-width:2; stroke-linecap:round; stroke-linejoin:round; }
+  .tab span{ font-size:0.56rem; font-weight:600; text-transform:uppercase; }
 </style>
 </head>
 <body>
-
-<div class="layout">
-  <aside class="sidebar">
-    <div class="brand">PROVEED</div>
-    <div class="brand-sub">Sucursales & HUB Logístico</div>
-    
-    <div class="back-link" onclick="location.href='dashboard.html'">
-      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M19 12H5M12 19l-7-7 7-7"/></svg>
-      Volver al Dashboard
-    </div>
-
-    <div id="sucursales-lista">
-      </div>
-
-    <button class="btn-add" onclick="toggleModal(true)">+ Añadir Nueva Sede</button>
-    <button class="btn-panic" onclick="emergencyLock()">⚠ BLOQUEO DE SEGURIDAD</button>
-  </aside>
-
-  <main class="main">
-    <div id="empty-state" style="height:80vh; display:flex; flex-direction:column; align-items:center; justify-content:center; text-align:center;">
-      <div style="font-size:3rem; margin-bottom:20px; opacity:0.2;">🏢</div>
-      <div class="main-title" style="color:#222;">Selecciona una Sucursal</div>
-      <p style="color:#333; max-width:250px;">Gestiona inventario, empleados y métricas por ubicación.</p>
-    </div>
-
-    <div id="sucursal-detalle" style="display:none;">
-      <header class="main-header">
-        <div class="main-title" id="det-nombre">Sede Guayaquil</div>
-        <div class="main-sub" id="det-info">C.C. Policentro · Local 14</div>
-      </header>
-
-      <div class="kpi-grid">
-        <div class="kpi"><div class="kpi-val" id="k-ventas">$0.00</div><div class="kpi-lbl">Ventas Hoy</div></div>
-        <div class="kpi"><div class="kpi-val" id="k-pedidos">0</div><div class="kpi-lbl">Pedidos</div></div>
-        <div class="kpi"><div class="kpi-val" id="k-stock">--</div><div class="kpi-lbl">SKUs Activos</div></div>
-        <div class="kpi"><div class="kpi-val" id="k-personal">1</div><div class="kpi-lbl">Agentes</div></div>
-      </div>
-
-      <div class="panel">
-        <div class="panel-title">Agentes de Venta & Permisos</div>
-        <div id="empleados-lista">
-          </div>
-        <div style="display:flex; gap:10px; margin-top:20px;">
-          <input type="text" id="inp-empleado" placeholder="Nuevo Agente..." style="flex:1; background:#000; border:1px solid #1a1a1a; padding:12px; border-radius:12px; color:white; outline:none;">
-          <button onclick="addAgente()" style="background:var(--naranja); border:none; padding:0 20px; border-radius:12px; font-weight:800; cursor:pointer;">+</button>
-        </div>
-      </div>
-    </div>
-  </main>
+<div class="header">
+  <div class="h-left">
+    <button class="back-btn" onclick="window.location.href='dashboard.html'"><svg viewBox="0 0 24 24"><path d="M19 12H5M12 19l-7-7 7-7"/></svg></button>
+    <div class="page-title">Sucursales</div>
+  </div>
+  <button class="btn-nueva" onclick="abrirModal()">+ Nueva</button>
 </div>
 
-<div class="modal-overlay" id="modal-suc">
-  <div class="modal-card">
-    <div class="modal-title">Configurar Sede</div>
-    <div class="input-group">
-      <label>Nombre Identificador</label>
-      <input type="text" id="s-nombre" placeholder="Ej: Matriz Quito">
+<div class="sucursales-lista" id="sucursales-lista">
+  <div class="empty"><p>Cargando...</p></div>
+</div>
+
+<div class="modal-overlay" id="modal-overlay" onclick="cerrarModal(event)">
+  <div class="modal-sheet">
+    <div class="drag"></div>
+    <div class="modal-header">
+      <span class="modal-title" id="modal-titulo">Nueva Sucursal</span>
+      <button class="close-btn" onclick="cerrarModalDirecto()"><svg viewBox="0 0 24 24"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg></button>
     </div>
-    <div class="input-group">
-      <label>Ubicación / Dirección</label>
-      <input type="text" id="s-dir" placeholder="Av. Amazonas y Naciones Unidas">
-    </div>
-    <div class="input-group">
-      <label>Gerente Responsable</label>
-      <input type="text" id="s-ger" placeholder="Nombre del encargado">
-    </div>
-    <div style="display:flex; gap:10px;">
-      <button class="btn-submit" style="background:#222; color:#555;" onclick="toggleModal(false)">Cancelar</button>
-      <button class="btn-submit" onclick="saveSucursal()">Guardar Sede</button>
+    <div class="modal-body">
+      <div class="field"><label>Nombre de la sucursal *</label><input type="text" id="f-nombre" placeholder="Ej: Sucursal Norte"></div>
+      <div class="field-row">
+        <div class="field"><label>Ciudad *</label><input type="text" id="f-ciudad" placeholder="Quito"></div>
+        <div class="field"><label>Teléfono</label><input type="tel" id="f-telefono" placeholder="022345678"></div>
+      </div>
+      <div class="field"><label>Dirección *</label><input type="text" id="f-direccion" placeholder="Av. Principal y Calle Secundaria"></div>
+      <div class="field"><label>Horario de atención</label><input type="text" id="f-horario" placeholder="Lun-Vie 8:00-18:00"></div>
+      <div class="field"><label>Responsable</label><input type="text" id="f-responsable" placeholder="Nombre del encargado"></div>
+      <div class="field" style="margin-bottom:8px;">
+        <div class="toggle-field">
+          <span class="toggle-label">Sucursal principal</span>
+          <button class="toggle" id="toggle-principal" onclick="this.classList.toggle('on')"></button>
+        </div>
+      </div>
+      <div class="field">
+        <div class="toggle-field">
+          <span class="toggle-label">Sucursal activa</span>
+          <button class="toggle on" id="toggle-activa" onclick="this.classList.toggle('on')"></button>
+        </div>
+      </div>
+      <button class="btn-guardar" onclick="guardarSucursal()">GUARDAR SUCURSAL</button>
     </div>
   </div>
 </div>
 
-<script type="module">
-import { createClient } from 'https://cdn.jsdelivr.net/npm/@supabase/supabase-js/+esm'
+<nav class="tab-bar">
+  <a class="tab" href="dashboard.html"><svg viewBox="0 0 24 24"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/></svg><span>Panel</span></a>
+  <a class="tab" href="productos.html"><svg viewBox="0 0 24 24"><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"/></svg><span>Productos</span></a>
+  <a class="tab active" href="sucursales.html"><svg viewBox="0 0 24 24"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg><span>Sucursales</span></a>
+  <a class="tab" href="pedidos.html"><svg viewBox="0 0 24 24"><rect x="1" y="3" width="15" height="13" rx="1"/><path d="M16 8h4l3 3v5h-7V8z"/></svg><span>Pedidos</span></a>
+  <a class="tab" href="plugins.html"><svg viewBox="0 0 24 24"><path d="M20.24 12.24a6 6 0 0 0-8.49-8.49L5 10.5V19h8.5l6.74-6.76z"/><line x1="16" y1="8" x2="2" y2="22"/></svg><span>Plugins</span></a>
+</nav>
 
-const supabaseUrl = 'https://pqoqirousggkjnkzxkhy.supabase.co'
-const supabaseKey = 'Sb_publishable_L8cdOOPzHe4ff3rkPr8x5Q_WTCF694I'
-const supabase = createClient(supabaseUrl, supabaseKey)
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script>
+const { createClient } = supabase;
+const sb = createClient('https://hfmsyrmkewscnvwynzfq.supabase.co','sb_publishable_d1oLsq70a6ZV33vW3XkRgw_nYcN2Z9v');
+let userId='', sucursales=[], editandoId=null;
 
-let currentUid = null;
-let activeSucursalId = null;
+(async()=>{
+  const { data:{session} } = await sb.auth.getSession();
+  if(!session){ window.location.href='login.html'; return; }
+  userId=session.user.id;
+  cargarSucursales();
+})();
 
-async function init() {
-  const { data: { session } } = await supabase.auth.getSession();
-  if (!session) { location.href = 'login.html'; return; }
-  currentUid = session.user.id;
-  loadSucursales();
+async function cargarSucursales(){
+  const { data } = await sb.from('sucursales').select('*').eq('proveedor_id',userId).order('created_at',{ascending:true});
+  sucursales=data||[];
+  renderSucursales();
 }
 
-async function loadSucursales() {
-  const { data: sucursales } = await supabase
-    .from('sucursales')
-    .select('*')
-    .eq('proveedor_id', currentUid);
-
-  const lista = document.getElementById('sucursales-lista');
-  if (!sucursales || sucursales.length === 0) {
-    lista.innerHTML = '<p style="color:#333; font-size:0.7rem; text-align:center;">No hay sedes registradas.</p>';
+function renderSucursales(){
+  const cont=document.getElementById('sucursales-lista');
+  if(!sucursales.length){
+    cont.innerHTML=`<div class="empty"><svg viewBox="0 0 24 24"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg><h3>Sin sucursales</h3><p>Agrega tus puntos de venta o bodegas</p><button class="btn-crear" onclick="abrirModal()">+ Agregar sucursal</button></div>`;
     return;
   }
-
-  lista.innerHTML = sucursales.map(s => `
-    <div class="suc-card ${activeSucursalId === s.id ? 'active' : ''}" onclick="selectSucursal('${s.id}', '${s.nombre}', '${s.direccion}')">
-      <div class="suc-nombre">${s.nombre}</div>
-      <div class="suc-info">${s.direccion}</div>
-      <div class="suc-badge badge-on">Operativa</div>
-    </div>
-  `).join('');
+  cont.innerHTML='';
+  sucursales.forEach(s=>{
+    const div=document.createElement('div'); div.className='suc-card';
+    div.innerHTML=`
+      <div class="suc-header">
+        <div class="suc-icon"><svg viewBox="0 0 24 24"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg></div>
+        <div class="suc-info"><div class="suc-nombre">${s.nombre}</div><div class="suc-ciudad">${s.ciudad||'—'}</div></div>
+        <span class="suc-badge ${s.principal?'badge-principal':'badge-activa'}">${s.principal?'Principal':'Activa'}</span>
+      </div>
+      <div class="suc-datos">
+        <div class="suc-dato"><div class="suc-dato-label">Dirección</div><div class="suc-dato-val">${s.direccion||'—'}</div></div>
+        <div class="suc-dato"><div class="suc-dato-label">Teléfono</div><div class="suc-dato-val">${s.telefono||'—'}</div></div>
+        <div class="suc-dato"><div class="suc-dato-label">Horario</div><div class="suc-dato-val">${s.horario||'—'}</div></div>
+        <div class="suc-dato"><div class="suc-dato-label">Responsable</div><div class="suc-dato-val">${s.responsable||'—'}</div></div>
+      </div>
+      <div class="suc-actions">
+        <button class="suc-btn btn-edit" onclick="editarSucursal('${s.id}')">Editar</button>
+        <button class="suc-btn btn-del" onclick="eliminarSucursal('${s.id}')">Eliminar</button>
+      </div>`;
+    cont.appendChild(div);
+  });
 }
 
-window.selectSucursal = (id, nombre, direccion) => {
-  activeSucursalId = id;
-  document.getElementById('empty-state').style.display = 'none';
-  document.getElementById('sucursal-detalle').style.display = 'block';
-  document.getElementById('det-nombre').textContent = nombre;
-  document.getElementById('det-info').textContent = direccion;
-  loadSucursales(); // Refresh active state
-  loadKPIs();
+window.abrirModal=function(){
+  editandoId=null;
+  document.getElementById('modal-titulo').textContent='Nueva Sucursal';
+  ['nombre','ciudad','telefono','direccion','horario','responsable'].forEach(f=>{ document.getElementById('f-'+f).value=''; });
+  document.getElementById('toggle-principal').classList.remove('on');
+  document.getElementById('toggle-activa').classList.add('on');
+  document.getElementById('modal-overlay').classList.add('show');
 };
 
-async function loadKPIs() {
-  // Simulación de carga de KPIs específicos por sede
-  document.getElementById('k-ventas').textContent = `$${(Math.random()*500).toFixed(2)}`;
-  document.getElementById('k-pedidos').textContent = Math.floor(Math.random()*15);
-}
-
-window.saveSucursal = async () => {
-  const nombre = document.getElementById('s-nombre').value;
-  const direccion = document.getElementById('s-dir').value;
-  const gerente = document.getElementById('s-ger').value;
-
-  if(!nombre) return alert("Nombre obligatorio");
-
-  const { error } = await supabase.from('sucursales').insert([{
-    nombre, direccion, gerente, proveedor_id: currentUid
-  }]);
-
-  if(!error) {
-    toggleModal(false);
-    loadSucursales();
-  }
+window.editarSucursal=function(id){
+  const s=sucursales.find(s=>s.id===id); if(!s) return;
+  editandoId=id;
+  document.getElementById('modal-titulo').textContent='Editar Sucursal';
+  document.getElementById('f-nombre').value=s.nombre||'';
+  document.getElementById('f-ciudad').value=s.ciudad||'';
+  document.getElementById('f-telefono').value=s.telefono||'';
+  document.getElementById('f-direccion').value=s.direccion||'';
+  document.getElementById('f-horario').value=s.horario||'';
+  document.getElementById('f-responsable').value=s.responsable||'';
+  s.principal?document.getElementById('toggle-principal').classList.add('on'):document.getElementById('toggle-principal').classList.remove('on');
+  s.activa!==false?document.getElementById('toggle-activa').classList.add('on'):document.getElementById('toggle-activa').classList.remove('on');
+  document.getElementById('modal-overlay').classList.add('show');
 };
 
-window.toggleModal = (show) => {
-  document.getElementById('modal-suc').classList.toggle('show', show);
+window.guardarSucursal=async function(){
+  const nombre=document.getElementById('f-nombre').value.trim();
+  const ciudad=document.getElementById('f-ciudad').value.trim();
+  const direccion=document.getElementById('f-direccion').value.trim();
+  if(!nombre||!ciudad||!direccion){ alert('Nombre, ciudad y dirección son obligatorios'); return; }
+  const datos={
+    proveedor_id:userId, nombre, ciudad, direccion,
+    telefono:document.getElementById('f-telefono').value.trim(),
+    horario:document.getElementById('f-horario').value.trim(),
+    responsable:document.getElementById('f-responsable').value.trim(),
+    principal:document.getElementById('toggle-principal').classList.contains('on'),
+    activa:document.getElementById('toggle-activa').classList.contains('on')
+  };
+  if(editandoId) await sb.from('sucursales').update(datos).eq('id',editandoId);
+  else await sb.from('sucursales').insert(datos);
+  document.getElementById('modal-overlay').classList.remove('show');
+  cargarSucursales();
 };
 
-window.emergencyLock = () => {
-  if(confirm("⚠ ¿BLOQUEAR ACCESO TOTAL?\nEsto cerrará todas las sesiones de esta sede.")){
-    document.body.style.filter = "grayscale(1) brightness(0.3)";
-    alert("Protocolo de seguridad activado. Sedes encriptadas.");
-  }
+window.eliminarSucursal=async function(id){
+  if(!confirm('¿Eliminar esta sucursal?')) return;
+  await sb.from('sucursales').delete().eq('id',id);
+  cargarSucursales();
 };
 
-init();
+window.cerrarModal=e=>{ if(e.target===document.getElementById('modal-overlay')) document.getElementById('modal-overlay').classList.remove('show'); };
+window.cerrarModalDirecto=()=>document.getElementById('modal-overlay').classList.remove('show');
 </script>
-
 </body>
 </html>
