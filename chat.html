@@ -7,17 +7,14 @@
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
 <style>
   *{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent;}
-  :root{ --naranja:#FF8C00; --verde:#A8E63D; --negro:#0A0A0A; --gris:#F5F6F2; --rojo:#FF4D4D; }
+  :root{ --naranja:#FF8C00; --verde:#A8E63D; --negro:#0A0A0A; --gris:#F5F6F2; --rojo:#FF4D4D; --azul:#007AFF; }
   body{ background:var(--negro); font-family:'Inter',sans-serif; -webkit-font-smoothing:antialiased; }
-
   .lista-view{ display:block; }
   .conv-view{ display:none; flex-direction:column; height:100vh; background:var(--negro); }
-
   .header{ background:var(--negro); padding:44px 16px 16px; display:flex; align-items:center; gap:12px; position:sticky; top:0; z-index:100; border-bottom:1px solid #1e1e1e; }
   .back-btn{ width:36px; height:36px; background:rgba(255,255,255,0.08); border-radius:10px; display:flex; align-items:center; justify-content:center; cursor:pointer; border:none; flex-shrink:0; }
   .back-btn svg{ width:18px; height:18px; stroke:white; fill:none; stroke-width:2.5; }
   .header-title{ font-size:1.1rem; font-weight:700; color:white; flex:1; }
-
   .chat-lista{ padding:14px 16px; padding-bottom:90px; }
   .chat-item{ display:flex; gap:12px; align-items:center; padding:14px; background:#111; border-radius:16px; margin-bottom:10px; cursor:pointer; border:1px solid #1e1e1e; transition:0.15s; }
   .chat-item:active{ background:#1a1a1a; }
@@ -33,38 +30,131 @@
   .empty svg{ width:52px; height:52px; stroke:#333; fill:none; stroke-width:1.2; margin:0 auto 14px; display:block; }
   .empty p{ font-size:0.85rem; }
 
-  .conv-header{ background:#111; padding:44px 16px 16px; display:flex; align-items:center; gap:12px; border-bottom:1px solid #1e1e1e; flex-shrink:0; }
+  /* CONVERSACIÓN */
+  .conv-header{ background:#111; padding:44px 16px 12px; display:flex; align-items:center; gap:12px; border-bottom:1px solid #1e1e1e; flex-shrink:0; }
   .conv-avatar{ width:38px; height:38px; border-radius:12px; background:rgba(168,230,61,0.15); display:flex; align-items:center; justify-content:center; font-size:0.9rem; font-weight:800; color:var(--verde); flex-shrink:0; overflow:hidden; }
   .conv-avatar img{ width:100%; height:100%; object-fit:cover; }
+  .conv-info{ flex:1; }
   .conv-nombre{ font-size:0.92rem; font-weight:700; color:white; }
   .conv-estado{ font-size:0.7rem; color:var(--verde); }
+  .btn-generar-orden{ background:var(--naranja); color:#000; border:none; padding:7px 12px; border-radius:10px; font-family:'Inter',sans-serif; font-size:0.72rem; font-weight:700; cursor:pointer; white-space:nowrap; flex-shrink:0; }
 
+  /* MENSAJES */
   .mensajes-wrap{ flex:1; overflow-y:auto; padding:14px 16px; display:flex; flex-direction:column; gap:8px; -webkit-overflow-scrolling:touch; }
   .msg-grupo{ display:flex; flex-direction:column; gap:4px; }
   .msg-grupo.enviado{ align-items:flex-end; }
   .msg-grupo.recibido{ align-items:flex-start; }
   .msg-sender{ font-size:0.65rem; color:#555; font-weight:600; padding:0 4px; margin-bottom:2px; }
-  .msg{ max-width:78%; padding:10px 13px; border-radius:18px; font-size:0.88rem; line-height:1.5; word-break:break-word; }
+  .msg{ max-width:82%; padding:10px 13px; border-radius:18px; font-size:0.88rem; line-height:1.5; word-break:break-word; }
   .msg.enviado{ background:var(--naranja); color:#000; border-radius:18px 4px 18px 18px; }
   .msg.recibido{ background:#161616; color:white; border-radius:4px 18px 18px 18px; border:1px solid #222; }
-  .msg-hora{ font-size:0.6rem; color:rgba(0,0,0,0.4); text-align:right; margin-top:3px; }
+  .msg-hora{ font-size:0.6rem; color:rgba(0,0,0,0.35); text-align:right; margin-top:3px; }
   .msg.recibido .msg-hora{ color:#555; text-align:left; }
 
-  .input-area{ background:#111; border-top:1px solid #1e1e1e; padding:10px 12px; padding-bottom:max(10px,env(safe-area-inset-bottom)); flex-shrink:0; }
-  .input-row{ display:flex; gap:8px; align-items:flex-end; }
+  /* CARD PRODUCTO EN CHAT */
+  .msg-prod-card{ max-width:240px; background:#1a1a1a; border:1px solid #2a2a2a; border-radius:16px; overflow:hidden; cursor:pointer; }
+  .msg-prod-card.enviado{ background:rgba(255,140,0,0.12); border-color:rgba(255,140,0,0.3); }
+  .msg-prod-img{ width:100%; height:130px; object-fit:cover; display:block; }
+  .msg-prod-video{ width:100%; height:130px; object-fit:cover; display:block; }
+  .msg-prod-body{ padding:10px 12px; }
+  .msg-prod-nombre{ font-size:0.82rem; font-weight:700; color:white; margin-bottom:2px; }
+  .msg-prod-card.enviado .msg-prod-nombre{ color:#000; }
+  .msg-prod-precio{ font-size:0.9rem; font-weight:800; color:var(--naranja); margin-bottom:8px; }
+  .msg-prod-card.enviado .msg-prod-precio{ color:#000; }
+  .btn-comprar-msg{ width:100%; padding:8px; background:var(--naranja); color:#000; border:none; border-radius:8px; font-family:'Inter',sans-serif; font-size:0.78rem; font-weight:700; cursor:pointer; }
+  .btn-comprar-msg.prov{ background:rgba(255,255,255,0.15); color:white; }
+  .msg-orden-card{ max-width:240px; background:#1a1a1a; border:1px solid #2a2a2a; border-radius:16px; padding:14px; }
+  .msg-orden-card.enviado{ background:rgba(255,140,0,0.12); border-color:rgba(255,140,0,0.3); }
+  .msg-orden-titulo{ font-size:0.72rem; font-weight:700; color:#555; text-transform:uppercase; margin-bottom:6px; }
+  .msg-orden-card.enviado .msg-orden-titulo{ color:rgba(0,0,0,0.5); }
+  .msg-orden-total{ font-size:1.1rem; font-weight:800; color:var(--naranja); margin-bottom:4px; }
+  .msg-orden-card.enviado .msg-orden-total{ color:#000; }
+  .msg-orden-items{ font-size:0.76rem; color:#666; margin-bottom:10px; }
+  .msg-orden-card.enviado .msg-orden-items{ color:rgba(0,0,0,0.5); }
+  .btn-pagar-orden{ width:100%; padding:8px; background:var(--verde); color:#000; border:none; border-radius:8px; font-family:'Inter',sans-serif; font-size:0.78rem; font-weight:700; cursor:pointer; }
+
+  /* INPUT */
+  .input-area{ background:#111; border-top:1px solid #1e1e1e; flex-shrink:0; }
+  .acciones-row{ display:flex; gap:8px; padding:8px 12px 4px; overflow-x:auto; scrollbar-width:none; }
+  .acciones-row::-webkit-scrollbar{ display:none; }
+  .accion-btn{ display:flex; align-items:center; gap:5px; background:#1a1a1a; border:1px solid #2a2a2a; border-radius:20px; padding:6px 12px; cursor:pointer; white-space:nowrap; border:none; font-family:'Inter',sans-serif; }
+  .accion-btn svg{ width:14px; height:14px; stroke:var(--naranja); fill:none; stroke-width:2; flex-shrink:0; }
+  .accion-btn span{ font-size:0.72rem; color:#aaa; font-weight:600; }
+  .input-row{ display:flex; gap:8px; align-items:flex-end; padding:8px 12px; padding-bottom:max(10px,env(safe-area-inset-bottom)); }
   .msg-input{ flex:1; background:#1a1a1a; border:1.5px solid #222; border-radius:20px; padding:10px 16px; font-family:'Inter',sans-serif; font-size:0.9rem; color:white; outline:none; resize:none; max-height:120px; line-height:1.4; -webkit-appearance:none; }
   .msg-input::placeholder{ color:#444; }
   .msg-input:focus{ border-color:var(--naranja); }
-  .send-btn{ width:42px; height:42px; border-radius:50%; background:var(--naranja); border:none; display:flex; align-items:center; justify-content:center; cursor:pointer; flex-shrink:0; transition:0.2s; }
+  .send-btn{ width:42px; height:42px; border-radius:50%; background:var(--naranja); border:none; display:flex; align-items:center; justify-content:center; cursor:pointer; flex-shrink:0; }
   .send-btn:active{ transform:scale(0.9); }
   .send-btn svg{ width:16px; height:16px; stroke:#000; fill:none; stroke-width:2.5; margin-left:2px; }
-  .send-btn:disabled{ opacity:0.4; cursor:not-allowed; }
+  .send-btn:disabled{ opacity:0.4; }
+
+  /* MODALES */
+  .modal-overlay{ position:fixed; inset:0; background:rgba(0,0,0,0.75); display:none; z-index:500; align-items:flex-end; }
+  .modal-overlay.show{ display:flex; }
+  .modal-sheet{ background:#111; width:100%; max-height:85vh; border-radius:24px 24px 0 0; transform:translateY(100%); transition:0.4s cubic-bezier(0.16,1,0.3,1); display:flex; flex-direction:column; overflow:hidden; border:1px solid #1e1e1e; border-bottom:none; }
+  .modal-overlay.show .modal-sheet{ transform:translateY(0); }
+  .drag{ width:36px; height:4px; background:#333; border-radius:4px; margin:14px auto 0; flex-shrink:0; }
+  .modal-header{ padding:12px 16px; display:flex; justify-content:space-between; align-items:center; border-bottom:1px solid #1e1e1e; flex-shrink:0; }
+  .modal-title{ font-size:1rem; font-weight:700; color:white; }
+  .close-btn{ width:30px; height:30px; background:#1e1e1e; border-radius:8px; display:flex; align-items:center; justify-content:center; cursor:pointer; border:none; }
+  .close-btn svg{ width:14px; height:14px; stroke:#666; fill:none; stroke-width:2.5; }
+  .modal-body{ overflow-y:auto; padding:14px 16px 28px; flex:1; }
+  .catalogo-grid{ display:grid; grid-template-columns:repeat(2,1fr); gap:10px; }
+  .cat-prod-card{ background:#1a1a1a; border-radius:14px; overflow:hidden; cursor:pointer; border:2px solid transparent; transition:0.2s; }
+  .cat-prod-card.selected{ border-color:var(--naranja); }
+  .cat-prod-img{ width:100%; height:100px; object-fit:cover; background:#222; }
+  .cat-prod-body{ padding:8px 10px; }
+  .cat-prod-nombre{ font-size:0.78rem; font-weight:700; color:white; margin-bottom:2px; display:-webkit-box; -webkit-line-clamp:2; -webkit-box-orient:vertical; overflow:hidden; }
+  .cat-prod-precio{ font-size:0.82rem; font-weight:700; color:var(--naranja); }
+  .cat-prod-tipo{ display:flex; gap:4px; margin-top:4px; }
+  .tipo-tag{ font-size:0.58rem; font-weight:700; padding:2px 6px; border-radius:4px; background:rgba(0,122,255,0.15); color:var(--azul); }
+  .tipo-tag.video{ background:rgba(168,230,61,0.12); color:var(--verde); }
+  .btn-enviar-catalogo{ width:100%; padding:13px; background:var(--naranja); color:#000; border:none; border-radius:14px; font-family:'Inter',sans-serif; font-size:0.9rem; font-weight:700; cursor:pointer; margin-top:12px; }
+  .btn-enviar-catalogo:disabled{ opacity:0.4; cursor:not-allowed; }
+
+  /* VIDEO MODAL */
+  .video-rec-area{ border:2px dashed #2a2a2a; border-radius:16px; padding:24px; text-align:center; margin-bottom:14px; cursor:pointer; position:relative; background:#1a1a1a; }
+  .video-rec-area svg{ width:36px; height:36px; stroke:#555; fill:none; stroke-width:1.5; display:block; margin:0 auto 8px; }
+  .video-rec-area p{ font-size:0.82rem; color:#555; }
+  .video-rec-area small{ font-size:0.7rem; color:#444; display:block; margin-top:4px; }
+  .video-file-inp{ position:absolute; inset:0; opacity:0; cursor:pointer; }
+  .video-prev-wrap{ width:100%; height:200px; background:#000; border-radius:14px; overflow:hidden; margin-bottom:14px; display:none; }
+  .video-prev-wrap.show{ display:block; }
+  .video-prev-wrap video{ width:100%; height:100%; object-fit:cover; }
+  .video-warn{ background:rgba(255,77,77,0.1); border:1px solid rgba(255,77,77,0.2); border-radius:10px; padding:10px 12px; font-size:0.76rem; color:var(--rojo); margin-bottom:14px; display:none; }
+  .video-warn.show{ display:block; }
+  .btn-enviar-video{ width:100%; padding:13px; background:var(--verde); color:#000; border:none; border-radius:14px; font-family:'Inter',sans-serif; font-size:0.9rem; font-weight:700; cursor:pointer; }
+  .btn-enviar-video:disabled{ opacity:0.4; }
+
+  /* ORDEN MODAL */
+  .orden-resumen{ background:#1a1a1a; border-radius:14px; padding:14px; margin-bottom:14px; }
+  .orden-prod-row{ display:flex; gap:10px; align-items:center; margin-bottom:10px; padding-bottom:10px; border-bottom:1px solid #222; }
+  .orden-prod-img{ width:44px; height:44px; border-radius:10px; object-fit:cover; background:#222; flex-shrink:0; }
+  .orden-prod-info{ flex:1; }
+  .orden-prod-nombre{ font-size:0.82rem; font-weight:600; color:white; }
+  .orden-prod-precio{ font-size:0.75rem; color:var(--naranja); margin-top:2px; }
+  .cantidad-controls{ display:flex; align-items:center; gap:12px; justify-content:center; margin-bottom:14px; }
+  .cant-btn{ width:40px; height:40px; border-radius:12px; background:#1e1e1e; border:none; cursor:pointer; display:flex; align-items:center; justify-content:center; }
+  .cant-btn svg{ width:18px; height:18px; stroke:white; fill:none; stroke-width:2.5; }
+  .cant-num{ font-size:1.4rem; font-weight:800; color:white; min-width:50px; text-align:center; }
+  .orden-total{ font-size:1.1rem; font-weight:800; color:var(--naranja); text-align:center; margin-bottom:14px; }
+  .btn-confirmar-orden{ width:100%; padding:13px; background:var(--naranja); color:#000; border:none; border-radius:14px; font-family:'Inter',sans-serif; font-size:0.9rem; font-weight:700; cursor:pointer; }
 
   .tab-bar{ position:fixed; bottom:0; width:100%; background:#111; display:flex; justify-content:space-around; align-items:center; padding:10px 0 22px; border-top:1px solid #1e1e1e; z-index:200; }
   .tab{ display:flex; flex-direction:column; align-items:center; gap:4px; cursor:pointer; flex:1; color:#444; text-decoration:none; }
   .tab.active{ color:var(--naranja); }
   .tab svg{ width:22px; height:22px; stroke:currentColor; fill:none; stroke-width:2; stroke-linecap:round; stroke-linejoin:round; }
   .tab span{ font-size:0.56rem; font-weight:600; text-transform:uppercase; }
+
+  .upload-overlay{ position:fixed; inset:0; background:rgba(0,0,0,0.8); display:none; flex-direction:column; align-items:center; justify-content:center; z-index:1000; }
+  .upload-overlay.show{ display:flex; }
+  .upload-box{ background:#111; border-radius:20px; padding:28px 24px; width:82%; max-width:300px; text-align:center; border:1px solid #222; }
+  .upload-box h3{ font-size:1rem; font-weight:700; color:white; margin-bottom:6px; }
+  .upload-box p{ font-size:0.82rem; color:#555; margin-bottom:16px; }
+  .upload-bar-track{ height:6px; background:#1e1e1e; border-radius:6px; overflow:hidden; }
+  .upload-bar{ height:100%; background:var(--naranja); border-radius:6px; width:0%; transition:width 0.3s; }
+  .upload-pct{ font-size:1.2rem; font-weight:800; color:var(--naranja); margin-top:10px; }
 </style>
 </head>
 <body>
@@ -76,7 +166,7 @@
     <div class="header-title">Chats</div>
   </div>
   <div class="chat-lista" id="chat-lista">
-    <div class="empty"><svg viewBox="0 0 24 24"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg><p>Cargando chats...</p></div>
+    <div class="empty"><svg viewBox="0 0 24 24"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg><p>Cargando...</p></div>
   </div>
   <nav class="tab-bar">
     <a class="tab" href="dashboard.html"><svg viewBox="0 0 24 24"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/></svg><span>Panel</span></a>
@@ -92,13 +182,24 @@
   <div class="conv-header">
     <button class="back-btn" onclick="volverLista()"><svg viewBox="0 0 24 24"><path d="M19 12H5M12 19l-7-7 7-7"/></svg></button>
     <div class="conv-avatar" id="conv-avatar">E</div>
-    <div>
+    <div class="conv-info">
       <div class="conv-nombre" id="conv-nombre">Emprendedor</div>
       <div class="conv-estado">Activo</div>
     </div>
+    <button class="btn-generar-orden" onclick="abrirOrdenModal()">📋 Generar orden</button>
   </div>
   <div class="mensajes-wrap" id="mensajes-wrap"></div>
   <div class="input-area">
+    <div class="acciones-row">
+      <button class="accion-btn" onclick="abrirCatalogoModal()">
+        <svg viewBox="0 0 24 24"><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"/></svg>
+        <span>Enviar producto</span>
+      </button>
+      <button class="accion-btn" onclick="abrirVideoModal()">
+        <svg viewBox="0 0 24 24"><path d="M15 10l4.553-2.069A1 1 0 0 1 21 8.87v6.26a1 1 0 0 1-1.447.894L15 14"/><rect x="1" y="6" width="15" height="12" rx="2" ry="2"/></svg>
+        <span>Enviar video</span>
+      </button>
+    </div>
     <div class="input-row">
       <textarea class="msg-input" id="msg-input" placeholder="Escribe un mensaje..." rows="1"></textarea>
       <button class="send-btn" id="send-btn" onclick="enviarMensaje()">
@@ -108,12 +209,87 @@
   </div>
 </div>
 
+<!-- MODAL CATÁLOGO -->
+<div class="modal-overlay" id="catalogo-modal" onclick="cerrarCatalogo(event)">
+  <div class="modal-sheet">
+    <div class="drag"></div>
+    <div class="modal-header">
+      <span class="modal-title">Enviar producto del catálogo</span>
+      <button class="close-btn" onclick="document.getElementById('catalogo-modal').classList.remove('show')"><svg viewBox="0 0 24 24"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg></button>
+    </div>
+    <div class="modal-body">
+      <div class="catalogo-grid" id="catalogo-grid"></div>
+      <button class="btn-enviar-catalogo" id="btn-enviar-cat" onclick="enviarProductoChat()" disabled>Enviar producto seleccionado</button>
+    </div>
+  </div>
+</div>
+
+<!-- MODAL VIDEO -->
+<div class="modal-overlay" id="video-modal" onclick="cerrarVideoModal(event)">
+  <div class="modal-sheet">
+    <div class="drag"></div>
+    <div class="modal-header">
+      <span class="modal-title">Enviar video de producto</span>
+      <button class="close-btn" onclick="document.getElementById('video-modal').classList.remove('show')"><svg viewBox="0 0 24 24"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg></button>
+    </div>
+    <div class="modal-body">
+      <div class="video-warn" id="video-warn">⚠️ Se detectó información de contacto en el video. El video fue bloqueado.</div>
+      <div class="video-prev-wrap" id="video-prev-wrap">
+        <video id="video-prev" playsinline muted controls></video>
+      </div>
+      <div class="video-rec-area" id="video-rec-area">
+        <svg viewBox="0 0 24 24"><path d="M15 10l4.553-2.069A1 1 0 0 1 21 8.87v6.26a1 1 0 0 1-1.447.894L15 14"/><rect x="1" y="6" width="15" height="12" rx="2" ry="2"/></svg>
+        <p>Toca para seleccionar video</p>
+        <small>Máximo 60 segundos · MP4 · MOV</small>
+        <input type="file" accept="video/*" class="video-file-inp" id="video-file-inp" onchange="seleccionarVideoChat(this)">
+      </div>
+      <button class="btn-enviar-video" id="btn-enviar-video" onclick="enviarVideoChat()" disabled>Enviar video</button>
+    </div>
+  </div>
+</div>
+
+<!-- MODAL GENERAR ORDEN -->
+<div class="modal-overlay" id="orden-modal" onclick="cerrarOrdenModal(event)">
+  <div class="modal-sheet">
+    <div class="drag"></div>
+    <div class="modal-header">
+      <span class="modal-title">Generar orden</span>
+      <button class="close-btn" onclick="document.getElementById('orden-modal').classList.remove('show')"><svg viewBox="0 0 24 24"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg></button>
+    </div>
+    <div class="modal-body">
+      <p style="font-size:0.82rem;color:#555;margin-bottom:12px;">Selecciona el producto para generar la orden:</p>
+      <div class="catalogo-grid" id="orden-catalogo-grid"></div>
+      <div id="orden-cantidad-wrap" style="display:none;margin-top:14px;">
+        <div class="orden-resumen" id="orden-resumen"></div>
+        <div class="cantidad-controls">
+          <button class="cant-btn" onclick="cambiarCantidadOrden(-1)"><svg viewBox="0 0 24 24"><line x1="5" y1="12" x2="19" y2="12"/></svg></button>
+          <div class="cant-num" id="orden-cant">1</div>
+          <button class="cant-btn" onclick="cambiarCantidadOrden(1)"><svg viewBox="0 0 24 24"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg></button>
+        </div>
+        <div class="orden-total" id="orden-total-disp">Total: $0.00</div>
+        <button class="btn-confirmar-orden" onclick="confirmarOrden()">📋 Enviar orden al emprendedor</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="upload-overlay" id="upload-overlay">
+  <div class="upload-box">
+    <h3>Subiendo video</h3>
+    <p>Por favor espera...</p>
+    <div class="upload-bar-track"><div class="upload-bar" id="upload-bar"></div></div>
+    <div class="upload-pct" id="upload-pct">0%</div>
+  </div>
+</div>
+
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script>
 const { createClient } = supabase;
 const sb = createClient('https://hfmsyrmkewscnvwynzfq.supabase.co','sb_publishable_d1oLsq70a6ZV33vW3XkRgw_nYcN2Z9v');
 
 let userId='', userName='', empresa='', chatActivo=null, suscripcion=null;
+let misProductos=[], prodSeleccionado=null, videoFile=null;
+let ordenProd=null, ordenCant=1;
 
 const FILTROS=[/(\+?593|0)(9\d{8})/gi,/whatsapp/gi,/telegram/gi,/instagram/gi,/facebook/gi,/tiktok/gi,/@[a-z0-9._]+/gi,/https?:\/\/[^\s]+/gi,/\b\d{7,}\b/g];
 function filtrarMsg(t){ let r=t; FILTROS.forEach(f=>r=r.replace(f,'[bloqueado]')); return r; }
@@ -125,6 +301,8 @@ function filtrarMsg(t){ let r=t; FILTROS.forEach(f=>r=r.replace(f,'[bloqueado]')
   const { data:u } = await sb.from('usuarios').select('nombre,empresa').eq('id',userId).single();
   userName=u?.nombre||'Proveedor';
   empresa=u?.empresa||u?.nombre||'Proveedor';
+  const { data:prods } = await sb.from('productos').select('*').eq('proveedor_id',userId).eq('activo',true);
+  misProductos=prods||[];
   cargarChats();
 })();
 
@@ -133,13 +311,9 @@ async function cargarChats(){
   document.getElementById('conv-view').style.display='none';
   const { data } = await sb.from('chats').select('*').eq('proveedor_id',userId).order('updated_at',{ascending:false,nullsFirst:false});
   const lista=document.getElementById('chat-lista');
-  if(!data?.length){
-    lista.innerHTML='<div class="empty"><svg viewBox="0 0 24 24"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg><p>Sin chats aún</p></div>';
-    return;
-  }
+  if(!data?.length){ lista.innerHTML='<div class="empty"><svg viewBox="0 0 24 24"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg><p>Sin chats aún</p></div>'; return; }
   lista.innerHTML='';
   for(const c of data){
-    // Cargar foto del emprendedor
     const { data:emp } = await sb.from('usuarios').select('foto_perfil,nombre').eq('id',c.emprendedor_id).single();
     const foto=emp?.foto_perfil||'';
     const empNombre=c.emprendedor_nombre||emp?.nombre||'Emprendedor';
@@ -148,70 +322,90 @@ async function cargarChats(){
     const hora=c.updated_at?new Date(c.updated_at).toLocaleTimeString('es-EC',{hour:'2-digit',minute:'2-digit'}):'';
     div.innerHTML=`
       <div class="chat-avatar">${foto?`<img src="${foto}" alt="">`:empNombre[0].toUpperCase()}</div>
-      <div class="chat-info">
-        <div class="chat-nombre">${empNombre}</div>
-        <div class="chat-preview">${c.ultimo_mensaje||'Iniciar conversación'}</div>
-      </div>
-      <div class="chat-meta">
-        <div class="chat-hora">${hora}</div>
-        ${c.no_leidos>0?`<div class="chat-badge">${c.no_leidos}</div>`:''}
-      </div>`;
+      <div class="chat-info"><div class="chat-nombre">${empNombre}</div><div class="chat-preview">${c.ultimo_mensaje||'Iniciar conversación'}</div></div>
+      <div class="chat-meta"><div class="chat-hora">${hora}</div>${c.no_leidos>0?`<div class="chat-badge">${c.no_leidos}</div>`:''}</div>`;
     lista.appendChild(div);
   }
 }
 
-async function abrirChat(chat, empNombre, empFoto){
+async function abrirChat(chat,empNombre,empFoto){
   chatActivo=chat;
   document.getElementById('lista-view').style.display='none';
   document.getElementById('conv-view').style.display='flex';
-
   const nombre=empNombre||chat.emprendedor_nombre||'Emprendedor';
   const avatar=document.getElementById('conv-avatar');
   if(empFoto) avatar.innerHTML=`<img src="${empFoto}" alt="">`;
   else avatar.textContent=nombre[0].toUpperCase();
   document.getElementById('conv-nombre').textContent=nombre;
-
   await sb.from('chats').update({no_leidos:0}).eq('id',chat.id);
   cargarMensajes();
-
   if(suscripcion){ suscripcion.unsubscribe(); suscripcion=null; }
   suscripcion=sb.channel('chat-prov-'+chat.id)
     .on('postgres_changes',{event:'INSERT',schema:'public',table:'mensajes',filter:`chat_id=eq.${chat.id}`},
-      payload=>{ agregarMensajeUI(payload.new,nombre); })
+      payload=>agregarMensajeUI(payload.new,nombre))
     .subscribe();
-
   const input=document.getElementById('msg-input');
-  input.addEventListener('input',()=>{
-    input.style.height='auto';
-    input.style.height=Math.min(input.scrollHeight,120)+'px';
-  });
-  input.addEventListener('keydown',e=>{
-    if(e.key==='Enter'&&!e.shiftKey){ e.preventDefault(); enviarMensaje(); }
-  });
+  input.oninput=()=>{ input.style.height='auto'; input.style.height=Math.min(input.scrollHeight,120)+'px'; };
+  input.onkeydown=e=>{ if(e.key==='Enter'&&!e.shiftKey){ e.preventDefault(); enviarMensaje(); } };
 }
 
 async function cargarMensajes(){
   const { data } = await sb.from('mensajes').select('*').eq('chat_id',chatActivo.id).order('created_at',{ascending:true});
-  const wrap=document.getElementById('mensajes-wrap');
-  wrap.innerHTML='';
+  const wrap=document.getElementById('mensajes-wrap'); wrap.innerHTML='';
   const empNombre=document.getElementById('conv-nombre').textContent;
   (data||[]).forEach(m=>agregarMensajeUI(m,empNombre,false));
   wrap.scrollTop=wrap.scrollHeight;
 }
 
-function agregarMensajeUI(m, empNombre, scroll=true){
+function agregarMensajeUI(m,empNombre,scroll=true){
   const wrap=document.getElementById('mensajes-wrap');
   const esEnviado=m.remitente_id===userId;
   const grupo=document.createElement('div');
   grupo.className='msg-grupo '+(esEnviado?'enviado':'recibido');
   const hora=new Date(m.created_at).toLocaleTimeString('es-EC',{hour:'2-digit',minute:'2-digit'});
   const senderName=esEnviado?'Tú':(empNombre||'Emprendedor');
-  grupo.innerHTML=`
-    <div class="msg-sender">${senderName}</div>
-    <div class="msg ${esEnviado?'enviado':'recibido'}">
-      ${m.texto}
-      <div class="msg-hora">${hora}</div>
-    </div>`;
+
+  if(m.tipo==='producto'){
+    const d=m.datos_producto||{};
+    grupo.innerHTML=`
+      <div class="msg-sender">${senderName}</div>
+      <div class="msg-prod-card ${esEnviado?'enviado':''}" onclick="window.location.href='productos.html'">
+        ${d.imagen?`<img class="msg-prod-img" src="${d.imagen}" alt="">`:''}
+        <div class="msg-prod-body">
+          <div class="msg-prod-nombre">${d.nombre||'Producto'}</div>
+          <div class="msg-prod-precio">$${Number(d.precio||0).toFixed(2)} / ${d.unidad||'und'}</div>
+          <button class="btn-comprar-msg prov">📦 Producto enviado</button>
+        </div>
+      </div>
+      <div class="msg-hora" style="color:#555;font-size:0.6rem;margin-top:2px;">${hora}</div>`;
+  } else if(m.tipo==='video_producto'){
+    const d=m.datos_producto||{};
+    grupo.innerHTML=`
+      <div class="msg-sender">${senderName}</div>
+      <div class="msg-prod-card ${esEnviado?'enviado':''}">
+        <video class="msg-prod-video" src="${d.video_url}" controls playsinline preload="metadata"></video>
+        <div class="msg-prod-body">
+          <div class="msg-prod-nombre">${d.nombre||'Video de producto'}</div>
+          ${d.precio?`<div class="msg-prod-precio">$${Number(d.precio).toFixed(2)}</div>`:''}
+        </div>
+      </div>
+      <div class="msg-hora" style="color:#555;font-size:0.6rem;margin-top:2px;">${hora}</div>`;
+  } else if(m.tipo==='orden'){
+    const d=m.datos_orden||{};
+    grupo.innerHTML=`
+      <div class="msg-sender">${senderName}</div>
+      <div class="msg-orden-card ${esEnviado?'enviado':''}">
+        <div class="msg-orden-titulo">📋 Orden generada</div>
+        <div class="msg-orden-total">$${Number(d.total||0).toFixed(2)}</div>
+        <div class="msg-orden-items">${d.cantidad||1}x ${d.producto_nombre||'Producto'}</div>
+        ${!esEnviado?`<button class="btn-pagar-orden" onclick="irAPagar('${m.id}')">✓ Aceptar y pagar</button>`:'<div style="font-size:0.72rem;color:rgba(0,0,0,0.4);text-align:center;">Esperando confirmación del emprendedor</div>'}
+      </div>
+      <div class="msg-hora" style="color:#555;font-size:0.6rem;margin-top:2px;">${hora}</div>`;
+  } else {
+    grupo.innerHTML=`
+      <div class="msg-sender">${senderName}</div>
+      <div class="msg ${esEnviado?'enviado':'recibido'}">${m.texto||''}<div class="msg-hora">${hora}</div></div>`;
+  }
   wrap.appendChild(grupo);
   if(scroll) wrap.scrollTop=wrap.scrollHeight;
 }
@@ -220,33 +414,187 @@ window.enviarMensaje=async function(){
   const input=document.getElementById('msg-input');
   const texto=filtrarMsg(input.value.trim());
   if(!texto||!chatActivo) return;
-  const btn=document.getElementById('send-btn');
-  btn.disabled=true;
-  input.value='';
-  input.style.height='auto';
+  const btn=document.getElementById('send-btn'); btn.disabled=true;
+  input.value=''; input.style.height='auto';
+  await sb.from('mensajes').insert({chat_id:chatActivo.id,texto,remitente_id:userId,remitente_nombre:empresa,tipo:'texto'});
+  await sb.from('chats').update({ultimo_mensaje:texto,updated_at:new Date().toISOString()}).eq('id',chatActivo.id);
+  btn.disabled=false; input.focus();
+};
 
-  await sb.from('mensajes').insert({
-    chat_id:chatActivo.id,
-    texto,
-    remitente_id:userId,
-    remitente_nombre:empresa,
-    tipo:'texto'
+// CATÁLOGO
+window.abrirCatalogoModal=function(){
+  prodSeleccionado=null;
+  document.getElementById('btn-enviar-cat').disabled=true;
+  const grid=document.getElementById('catalogo-grid'); grid.innerHTML='';
+  misProductos.forEach(p=>{
+    const img=p.imagenes?.[0]||p.imagen||'';
+    const div=document.createElement('div'); div.className='cat-prod-card';
+    div.innerHTML=`${img?`<img class="cat-prod-img" src="${img}" alt="">`:'<div class="cat-prod-img" style="display:flex;align-items:center;justify-content:center;"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#444" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2"/></svg></div>'}
+      <div class="cat-prod-body">
+        <div class="cat-prod-nombre">${p.nombre||'Producto'}</div>
+        <div class="cat-prod-precio">$${Number(p.precio||0).toFixed(2)}</div>
+        <div class="cat-prod-tipo">
+          ${img?`<span class="tipo-tag">Foto</span>`:''}
+          ${p.video_url?`<span class="tipo-tag video">Video</span>`:''}
+        </div>
+      </div>`;
+    div.onclick=()=>{
+      document.querySelectorAll('#catalogo-grid .cat-prod-card').forEach(c=>c.classList.remove('selected'));
+      div.classList.add('selected'); prodSeleccionado=p;
+      document.getElementById('btn-enviar-cat').disabled=false;
+    };
+    grid.appendChild(div);
   });
-
-  await sb.from('chats').update({
-    ultimo_mensaje:texto,
-    updated_at:new Date().toISOString()
-  }).eq('id',chatActivo.id);
-
-  btn.disabled=false;
-  input.focus();
+  document.getElementById('catalogo-modal').classList.add('show');
 };
 
-window.volverLista=function(){
-  if(suscripcion){ suscripcion.unsubscribe(); suscripcion=null; }
-  chatActivo=null;
-  cargarChats();
+window.enviarProductoChat=async function(){
+  if(!prodSeleccionado||!chatActivo) return;
+  const img=prodSeleccionado.imagenes?.[0]||prodSeleccionado.imagen||'';
+  await sb.from('mensajes').insert({
+    chat_id:chatActivo.id, tipo:'producto',
+    texto:`Producto: ${prodSeleccionado.nombre}`,
+    remitente_id:userId, remitente_nombre:empresa,
+    datos_producto:{ id:prodSeleccionado.id, nombre:prodSeleccionado.nombre, precio:prodSeleccionado.precio, imagen:img, unidad:prodSeleccionado.unidad||'und', minimo:prodSeleccionado.minimo||1 }
+  });
+  await sb.from('chats').update({ultimo_mensaje:`📦 ${prodSeleccionado.nombre}`,updated_at:new Date().toISOString()}).eq('id',chatActivo.id);
+  document.getElementById('catalogo-modal').classList.remove('show');
 };
+
+// VIDEO
+window.abrirVideoModal=function(){
+  videoFile=null;
+  document.getElementById('video-prev-wrap').classList.remove('show');
+  document.getElementById('video-warn').classList.remove('show');
+  document.getElementById('btn-enviar-video').disabled=true;
+  document.getElementById('video-file-inp').value='';
+  document.getElementById('video-modal').classList.add('show');
+};
+
+window.seleccionarVideoChat=function(input){
+  const file=input.files[0]; if(!file) return;
+  const url=URL.createObjectURL(file);
+  const vid=document.createElement('video');
+  vid.src=url; vid.preload='metadata';
+  vid.onloadedmetadata=()=>{
+    const duracion=vid.duration;
+    if(duracion>60){
+      document.getElementById('video-warn').textContent='⚠️ El video supera 60 segundos. Por favor usa un video más corto.';
+      document.getElementById('video-warn').classList.add('show');
+      document.getElementById('btn-enviar-video').disabled=true;
+      input.value=''; return;
+    }
+    // Verificar nombre archivo por patrones sospechosos
+    const nombreArchivo=file.name.toLowerCase();
+    const patronesTelefono=[/09\d{8}/,/\+593/,/whatsapp/,/contacto/];
+    const sospechoso=patronesTelefono.some(p=>p.test(nombreArchivo));
+    if(sospechoso){
+      document.getElementById('video-warn').textContent='⚠️ Se detectó información de contacto. Video bloqueado.';
+      document.getElementById('video-warn').classList.add('show');
+      document.getElementById('btn-enviar-video').disabled=true;
+      input.value=''; return;
+    }
+    document.getElementById('video-warn').classList.remove('show');
+    videoFile=file;
+    const preview=document.getElementById('video-prev');
+    preview.src=url;
+    document.getElementById('video-prev-wrap').classList.add('show');
+    document.getElementById('btn-enviar-video').disabled=false;
+  };
+};
+
+window.enviarVideoChat=async function(){
+  if(!videoFile||!chatActivo) return;
+  document.getElementById('video-modal').classList.remove('show');
+  document.getElementById('upload-overlay').classList.add('show');
+  try{
+    const path=`chat_videos/${chatActivo.id}/${Date.now()}`;
+    document.getElementById('upload-bar').style.width='30%';
+    document.getElementById('upload-pct').textContent='30%';
+    const { error } = await sb.storage.from('proveed-media').upload(path,videoFile,{upsert:true});
+    if(error) throw error;
+    document.getElementById('upload-bar').style.width='80%';
+    document.getElementById('upload-pct').textContent='80%';
+    const { data:urlData } = sb.storage.from('proveed-media').getPublicUrl(path);
+    await sb.from('mensajes').insert({
+      chat_id:chatActivo.id, tipo:'video_producto',
+      texto:'Video de producto',
+      remitente_id:userId, remitente_nombre:empresa,
+      datos_producto:{ video_url:urlData.publicUrl, nombre:'Video de producto' }
+    });
+    await sb.from('chats').update({ultimo_mensaje:'🎬 Video de producto',updated_at:new Date().toISOString()}).eq('id',chatActivo.id);
+    document.getElementById('upload-bar').style.width='100%';
+    document.getElementById('upload-pct').textContent='100%';
+    setTimeout(()=>document.getElementById('upload-overlay').classList.remove('show'),600);
+  } catch(e){
+    document.getElementById('upload-overlay').classList.remove('show');
+    alert('Error: '+e.message);
+  }
+};
+
+// ORDEN
+window.abrirOrdenModal=function(){
+  ordenProd=null; ordenCant=1;
+  document.getElementById('orden-cantidad-wrap').style.display='none';
+  const grid=document.getElementById('orden-catalogo-grid'); grid.innerHTML='';
+  misProductos.forEach(p=>{
+    const img=p.imagenes?.[0]||p.imagen||'';
+    const div=document.createElement('div'); div.className='cat-prod-card';
+    div.innerHTML=`${img?`<img class="cat-prod-img" src="${img}" alt="">`:'<div class="cat-prod-img"></div>'}
+      <div class="cat-prod-body"><div class="cat-prod-nombre">${p.nombre||'Producto'}</div><div class="cat-prod-precio">$${Number(p.precio||0).toFixed(2)}</div></div>`;
+    div.onclick=()=>{
+      document.querySelectorAll('#orden-catalogo-grid .cat-prod-card').forEach(c=>c.classList.remove('selected'));
+      div.classList.add('selected'); ordenProd=p; ordenCant=p.minimo||1;
+      mostrarCantidadOrden();
+    };
+    grid.appendChild(div);
+  });
+  document.getElementById('orden-modal').classList.add('show');
+};
+
+function mostrarCantidadOrden(){
+  if(!ordenProd) return;
+  const img=ordenProd.imagenes?.[0]||ordenProd.imagen||'';
+  document.getElementById('orden-resumen').innerHTML=`
+    <div class="orden-prod-row">
+      ${img?`<img class="orden-prod-img" src="${img}" alt="">`:''}
+      <div class="orden-prod-info">
+        <div class="orden-prod-nombre">${ordenProd.nombre}</div>
+        <div class="orden-prod-precio">$${Number(ordenProd.precio||0).toFixed(2)} por ${ordenProd.unidad||'und'}</div>
+      </div>
+    </div>`;
+  document.getElementById('orden-cant').textContent=ordenCant;
+  document.getElementById('orden-total-disp').textContent='Total: $'+(ordenCant*ordenProd.precio).toFixed(2);
+  document.getElementById('orden-cantidad-wrap').style.display='block';
+}
+
+window.cambiarCantidadOrden=function(delta){
+  if(!ordenProd) return;
+  const min=ordenProd.minimo||1;
+  ordenCant=Math.max(min,ordenCant+delta);
+  document.getElementById('orden-cant').textContent=ordenCant;
+  document.getElementById('orden-total-disp').textContent='Total: $'+(ordenCant*ordenProd.precio).toFixed(2);
+};
+
+window.confirmarOrden=async function(){
+  if(!ordenProd||!chatActivo) return;
+  const total=ordenCant*ordenProd.precio;
+  const datos_orden={ producto_id:ordenProd.id, producto_nombre:ordenProd.nombre, cantidad:ordenCant, precio_unit:ordenProd.precio, total, emprendedor_id:chatActivo.emprendedor_id, proveedor_id:userId, empresa };
+  await sb.from('mensajes').insert({
+    chat_id:chatActivo.id, tipo:'orden',
+    texto:`Orden: ${ordenCant}x ${ordenProd.nombre} = $${total.toFixed(2)}`,
+    remitente_id:userId, remitente_nombre:empresa,
+    datos_orden
+  });
+  await sb.from('chats').update({ultimo_mensaje:`📋 Orden: $${total.toFixed(2)}`,updated_at:new Date().toISOString()}).eq('id',chatActivo.id);
+  document.getElementById('orden-modal').classList.remove('show');
+};
+
+window.irAPagar=function(msgId){ window.location.href=`pagar.html?msg=${msgId}`; };
+window.volverLista=function(){ if(suscripcion){ suscripcion.unsubscribe(); suscripcion=null; } chatActivo=null; cargarChats(); };
+window.cerrarCatalogo=e=>{ if(e.target===document.getElementById('catalogo-modal')) document.getElementById('catalogo-modal').classList.remove('show'); };
+window.cerrarVideoModal=e=>{ if(e.target===document.getElementById('video-modal')) document.getElementById('video-modal').classList.remove('show'); };
+window.cerrarOrdenModal=e=>{ if(e.target===document.getElementById('orden-modal')) document.getElementById('orden-modal').classList.remove('show'); };
 </script>
 </body>
 </html>
