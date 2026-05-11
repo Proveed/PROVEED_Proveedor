@@ -3,53 +3,93 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-<title>PROVEED — Mi Perfil Proveedor</title>
+<title>PROVEED — Perfil Empresa</title>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
 <style>
   *{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent;}
   :root{ --naranja:#FF8C00; --verde:#A8E63D; --negro:#0A0A0A; --gris:#F5F6F2; --rojo:#FF4D4D; }
   body{ background:var(--negro); font-family:'Inter',sans-serif; padding-bottom:90px; -webkit-font-smoothing:antialiased; }
-  .header{ background:var(--negro); padding:44px 20px 24px; }
+  .header{ background:#111; padding:44px 16px 24px; border-bottom:1px solid #1e1e1e; }
   .header-top{ display:flex; align-items:center; justify-content:space-between; margin-bottom:20px; }
   .back-btn{ width:36px; height:36px; background:rgba(255,255,255,0.08); border-radius:10px; display:flex; align-items:center; justify-content:center; cursor:pointer; border:none; }
   .back-btn svg{ width:18px; height:18px; stroke:white; fill:none; stroke-width:2.5; }
   .header-title{ font-size:1.1rem; font-weight:700; color:white; }
   .btn-editar{ background:rgba(255,255,255,0.08); color:white; border:none; padding:8px 14px; border-radius:10px; font-family:'Inter',sans-serif; font-size:0.78rem; font-weight:600; cursor:pointer; }
   .perfil-hero{ display:flex; align-items:center; gap:14px; }
-  .perfil-avatar{ width:64px; height:64px; border-radius:20px; background:var(--naranja); display:flex; align-items:center; justify-content:center; font-size:1.6rem; font-weight:800; color:#000; flex-shrink:0; }
+  .perfil-avatar-wrap{ position:relative; flex-shrink:0; }
+  .perfil-avatar{ width:68px; height:68px; border-radius:20px; background:var(--naranja); display:flex; align-items:center; justify-content:center; font-size:1.5rem; font-weight:800; color:#000; overflow:hidden; }
+  .perfil-avatar img{ width:100%; height:100%; object-fit:cover; }
+  .cambiar-foto-btn{ position:absolute; bottom:-4px; right:-4px; width:24px; height:24px; background:#111; border-radius:8px; display:flex; align-items:center; justify-content:center; cursor:pointer; border:2px solid var(--negro); }
+  .cambiar-foto-btn svg{ width:12px; height:12px; stroke:var(--naranja); fill:none; stroke-width:2.5; }
   .perfil-info{ flex:1; }
-  .perfil-nombre{ font-size:1.2rem; font-weight:800; color:white; }
-  .perfil-empresa{ font-size:0.82rem; color:var(--naranja); margin-top:2px; font-weight:600; }
-  .perfil-ciudad{ font-size:0.76rem; color:#555; margin-top:4px; }
-  .stats-grid{ display:grid; grid-template-columns:repeat(3,1fr); gap:10px; padding:16px 20px; }
-  .stat-card{ background:#111; border-radius:16px; padding:14px 10px; text-align:center; border:1px solid #1e1e1e; }
+  .perfil-empresa{ font-size:1.1rem; font-weight:800; color:white; }
+  .perfil-nombre{ font-size:0.82rem; color:#555; margin-top:2px; }
+  .perfil-email{ font-size:0.76rem; color:#444; margin-top:2px; }
+  .perfil-verificado{ font-size:0.68rem; color:var(--verde); margin-top:4px; font-weight:700; }
+  .stats-grid{ display:grid; grid-template-columns:repeat(3,1fr); gap:10px; padding:14px 16px; }
+  .stat-card{ background:#111; border:1px solid #1e1e1e; border-radius:16px; padding:14px 10px; text-align:center; }
   .stat-val{ font-size:1.3rem; font-weight:800; color:white; }
   .stat-val.naranja{ color:var(--naranja); }
-  .stat-lbl{ font-size:0.6rem; color:#555; font-weight:600; margin-top:3px; text-transform:uppercase; }
-  .section-card{ margin:0 20px 12px; background:#111; border-radius:18px; overflow:hidden; border:1px solid #1e1e1e; }
-  .section-title{ font-size:0.7rem; font-weight:700; color:#444; text-transform:uppercase; letter-spacing:1px; padding:14px 16px 8px; }
+  .stat-lbl{ font-size:0.6rem; color:#555; font-weight:600; margin-top:3px; }
+  .section-card{ margin:0 16px 12px; background:#111; border-radius:18px; overflow:hidden; border:1px solid #1e1e1e; }
+  .section-title-bar{ font-size:0.7rem; font-weight:700; color:#444; text-transform:uppercase; letter-spacing:1px; padding:14px 16px 8px; }
   .menu-item{ display:flex; align-items:center; gap:12px; padding:14px 16px; border-bottom:1px solid #161616; cursor:pointer; transition:0.15s; }
   .menu-item:last-child{ border-bottom:none; }
-  .menu-item:active{ background:#161616; }
+  .menu-item:active{ background:#1a1a1a; }
   .menu-icon{ width:36px; height:36px; border-radius:11px; display:flex; align-items:center; justify-content:center; flex-shrink:0; }
   .menu-icon svg{ width:18px; height:18px; fill:none; stroke-width:2; }
-  .menu-label{ flex:1; font-size:0.88rem; font-weight:600; color:#aaa; }
+  .menu-label{ flex:1; font-size:0.88rem; font-weight:600; color:white; }
+  .menu-sub{ font-size:0.72rem; color:#555; margin-top:2px; }
   .menu-arrow{ width:16px; height:16px; stroke:#333; fill:none; stroke-width:2.5; }
   .menu-item.danger .menu-label{ color:var(--rojo); }
-  .menu-item.danger .menu-icon{ background:rgba(255,77,77,0.1); }
+  .menu-item.danger .menu-icon{ background:rgba(255,77,77,0.08); }
   .menu-item.danger .menu-icon svg{ stroke:var(--rojo); }
-  .edit-modal{ position:fixed; inset:0; background:rgba(0,0,0,0.7); display:none; align-items:flex-end; z-index:500; }
-  .edit-modal.show{ display:flex; }
-  .edit-sheet{ background:#111; width:100%; border-radius:24px 24px 0 0; padding:24px 20px 36px; transform:translateY(100%); transition:0.4s cubic-bezier(0.16,1,0.3,1); max-height:85vh; overflow-y:auto; border:1px solid #1e1e1e; border-bottom:none; }
-  .edit-modal.show .edit-sheet{ transform:translateY(0); }
-  .drag{ width:36px; height:4px; background:#333; border-radius:4px; margin:0 auto 20px; }
-  .edit-title{ font-size:1rem; font-weight:700; color:white; margin-bottom:18px; }
-  .field{ margin-bottom:12px; }
+  .huella-badge{ font-size:0.62rem; font-weight:700; padding:3px 8px; border-radius:6px; }
+  .huella-on{ background:rgba(168,230,61,0.12); color:var(--verde); }
+  .huella-off{ background:#1e1e1e; color:#555; }
+  .modal-overlay{ position:fixed; inset:0; background:rgba(0,0,0,0.75); display:none; align-items:flex-end; z-index:500; }
+  .modal-overlay.show{ display:flex; }
+  .modal-sheet{ background:#111; width:100%; border-radius:24px 24px 0 0; transform:translateY(100%); transition:0.4s cubic-bezier(0.16,1,0.3,1); max-height:90vh; display:flex; flex-direction:column; overflow:hidden; border:1px solid #1e1e1e; border-bottom:none; }
+  .modal-overlay.show .modal-sheet{ transform:translateY(0); }
+  .drag{ width:36px; height:4px; background:#333; border-radius:4px; margin:14px auto 0; flex-shrink:0; }
+  .modal-header{ padding:12px 16px; display:flex; justify-content:space-between; align-items:center; border-bottom:1px solid #1e1e1e; flex-shrink:0; }
+  .modal-title{ font-size:1rem; font-weight:700; color:white; }
+  .close-btn{ width:30px; height:30px; background:#1e1e1e; border-radius:8px; display:flex; align-items:center; justify-content:center; cursor:pointer; border:none; }
+  .close-btn svg{ width:14px; height:14px; stroke:#666; fill:none; stroke-width:2.5; }
+  .modal-body{ overflow-y:auto; padding:16px 16px 32px; flex:1; }
+  .field{ margin-bottom:14px; }
   .field label{ display:block; font-size:0.7rem; font-weight:700; color:#555; text-transform:uppercase; letter-spacing:0.8px; margin-bottom:6px; }
-  .field input,.field textarea,.field select{ width:100%; padding:12px 14px; background:#1a1a1a; border:1px solid #222; border-radius:12px; font-family:'Inter',sans-serif; font-size:0.9rem; color:white; outline:none; -webkit-appearance:none; }
-  .field input:focus,.field textarea:focus{ border-color:var(--naranja); }
-  .field textarea{ height:70px; resize:none; line-height:1.5; }
-  .btn-guardar{ width:100%; padding:14px; background:var(--naranja); color:#000; border:none; border-radius:14px; font-family:'Inter',sans-serif; font-size:0.95rem; font-weight:800; cursor:pointer; margin-top:8px; }
+  .field input,.field select,.field textarea{ width:100%; padding:13px 15px; background:#1a1a1a; border:1.5px solid #222; border-radius:13px; font-family:'Inter',sans-serif; font-size:0.9rem; color:white; outline:none; -webkit-appearance:none; }
+  .field input:focus{ border-color:var(--naranja); }
+  .field input::placeholder{ color:#444; }
+  .field-row{ display:grid; grid-template-columns:1fr 1fr; gap:10px; }
+  .btn-guardar{ width:100%; padding:14px; background:var(--naranja); color:#000; border:none; border-radius:14px; font-family:'Inter',sans-serif; font-size:0.95rem; font-weight:800; cursor:pointer; margin-top:4px; }
+  .msg-ok{ display:none; background:rgba(168,230,61,0.1); border:1px solid rgba(168,230,61,0.2); border-radius:12px; padding:10px 14px; font-size:0.82rem; color:var(--verde); margin-bottom:12px; }
+  .msg-ok.show{ display:block; }
+  .msg-err{ display:none; background:rgba(255,77,77,0.08); border:1px solid rgba(255,77,77,0.2); border-radius:12px; padding:10px 14px; font-size:0.82rem; color:var(--rojo); margin-bottom:12px; }
+  .msg-err.show{ display:block; }
+  .huella-screen{ text-align:center; padding:20px 0; }
+  .huella-icon{ width:80px; height:80px; background:#1a1a1a; border-radius:50%; display:flex; align-items:center; justify-content:center; margin:0 auto 16px; }
+  .huella-icon svg{ width:36px; height:36px; stroke:#555; fill:none; stroke-width:1.5; }
+  .huella-icon.activa{ background:rgba(168,230,61,0.1); }
+  .huella-icon.activa svg{ stroke:var(--verde); }
+  .huella-title{ font-size:1rem; font-weight:700; color:white; margin-bottom:6px; }
+  .huella-sub{ font-size:0.82rem; color:#555; line-height:1.5; margin-bottom:20px; }
+  .btn-huella{ width:100%; padding:14px; background:var(--naranja); color:#000; border:none; border-radius:14px; font-family:'Inter',sans-serif; font-size:0.92rem; font-weight:700; cursor:pointer; }
+  .btn-huella-off{ width:100%; padding:14px; background:rgba(255,77,77,0.08); color:var(--rojo); border:none; border-radius:14px; font-family:'Inter',sans-serif; font-size:0.92rem; font-weight:700; cursor:pointer; margin-top:8px; }
+  .foto-opciones{ display:grid; grid-template-columns:1fr 1fr; gap:10px; }
+  .foto-opcion{ background:#1a1a1a; border-radius:14px; padding:20px 14px; text-align:center; cursor:pointer; border:none; font-family:'Inter',sans-serif; transition:0.2s; }
+  .foto-opcion svg{ width:28px; height:28px; stroke:#aaa; fill:none; stroke-width:1.5; display:block; margin:0 auto 8px; }
+  .foto-opcion span{ font-size:0.78rem; font-weight:600; color:#aaa; }
+  .foto-input-hidden{ display:none; }
+  .foto-preview-wrap{ text-align:center; margin-bottom:14px; }
+  .foto-preview-wrap img{ width:100px; height:100px; border-radius:20px; object-fit:cover; }
+  .upload-overlay{ position:fixed; inset:0; background:rgba(0,0,0,0.75); display:none; flex-direction:column; align-items:center; justify-content:center; z-index:1000; }
+  .upload-overlay.show{ display:flex; }
+  .upload-box{ background:#111; border-radius:20px; padding:24px; width:80%; max-width:280px; text-align:center; border:1px solid #222; }
+  .upload-box p{ font-size:0.88rem; color:#555; margin-top:8px; }
+  .spinner{ width:36px; height:36px; border:3px solid #222; border-top-color:var(--naranja); border-radius:50%; animation:spin 0.7s linear infinite; margin:0 auto; }
+  @keyframes spin{ to{ transform:rotate(360deg); } }
   .tab-bar{ position:fixed; bottom:0; width:100%; background:#111; display:flex; justify-content:space-around; align-items:center; padding:10px 0 22px; border-top:1px solid #1e1e1e; z-index:200; }
   .tab{ display:flex; flex-direction:column; align-items:center; gap:4px; cursor:pointer; flex:1; color:#444; text-decoration:none; }
   .tab.active{ color:var(--naranja); }
@@ -58,56 +98,212 @@
 </style>
 </head>
 <body>
+
 <div class="header">
   <div class="header-top">
     <button class="back-btn" onclick="window.location.href='dashboard.html'"><svg viewBox="0 0 24 24"><path d="M19 12H5M12 19l-7-7 7-7"/></svg></button>
     <div class="header-title">Mi Perfil</div>
-    <button class="btn-editar" onclick="abrirEdit()">Editar</button>
+    <button class="btn-editar" onclick="abrirEditar()">Editar</button>
   </div>
   <div class="perfil-hero">
-    <div class="perfil-avatar" id="p-avatar">P</div>
+    <div class="perfil-avatar-wrap">
+      <div class="perfil-avatar" id="p-avatar">E</div>
+      <div class="cambiar-foto-btn" onclick="abrirFotoModal()">
+        <svg viewBox="0 0 24 24"><path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"/><circle cx="12" cy="13" r="4"/></svg>
+      </div>
+    </div>
     <div class="perfil-info">
-      <div class="perfil-nombre" id="p-nombre">Cargando...</div>
-      <div class="perfil-empresa" id="p-empresa">—</div>
-      <div class="perfil-ciudad" id="p-ciudad">—</div>
+      <div class="perfil-empresa" id="p-empresa">Cargando...</div>
+      <div class="perfil-nombre" id="p-nombre">—</div>
+      <div class="perfil-email" id="p-email">—</div>
+      <div class="perfil-verificado" id="p-verificado"></div>
     </div>
   </div>
 </div>
 
 <div class="stats-grid">
-  <div class="stat-card"><div class="stat-val" id="st-prods">—</div><div class="stat-lbl">Productos</div></div>
   <div class="stat-card"><div class="stat-val naranja" id="st-ventas">—</div><div class="stat-lbl">Ventas</div></div>
-  <div class="stat-card"><div class="stat-val" id="st-chats">—</div><div class="stat-lbl">Chats</div></div>
+  <div class="stat-card"><div class="stat-val" id="st-productos">—</div><div class="stat-lbl">Productos</div></div>
+  <div class="stat-card"><div class="stat-val" id="st-pedidos">—</div><div class="stat-lbl">Pedidos</div></div>
 </div>
 
 <div class="section-card">
-  <div class="section-title">Gestión</div>
-  <div class="menu-item" onclick="window.location.href='productos.html'"><div class="menu-icon" style="background:rgba(255,140,0,0.1)"><svg style="stroke:var(--naranja)" viewBox="0 0 24 24"><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"/></svg></div><div class="menu-label">Mis productos</div><svg class="menu-arrow" viewBox="0 0 24 24"><polyline points="9 18 15 12 9 6"/></svg></div>
-  <div class="menu-item" onclick="window.location.href='pedidos.html'"><div class="menu-icon" style="background:rgba(0,122,255,0.1)"><svg style="stroke:#007AFF" viewBox="0 0 24 24"><rect x="1" y="3" width="15" height="13" rx="1"/><path d="M16 8h4l3 3v5h-7V8z"/><circle cx="5.5" cy="18.5" r="2.5"/><circle cx="18.5" cy="18.5" r="2.5"/></svg></div><div class="menu-label">Mis pedidos</div><svg class="menu-arrow" viewBox="0 0 24 24"><polyline points="9 18 15 12 9 6"/></svg></div>
-  <div class="menu-item" onclick="window.location.href='plugins.html'"><div class="menu-icon" style="background:rgba(175,82,222,0.1)"><svg style="stroke:#AF52DE" viewBox="0 0 24 24"><path d="M20.24 12.24a6 6 0 0 0-8.49-8.49L5 10.5V19h8.5l6.74-6.76z"/><line x1="16" y1="8" x2="2" y2="22"/></svg></div><div class="menu-label">Mis plugins</div><svg class="menu-arrow" viewBox="0 0 24 24"><polyline points="9 18 15 12 9 6"/></svg></div>
+  <div class="section-title-bar">Empresa</div>
+  <div class="menu-item" onclick="abrirEditar()">
+    <div class="menu-icon" style="background:rgba(255,140,0,0.1)"><svg style="stroke:var(--naranja)" viewBox="0 0 24 24"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg></div>
+    <div><div class="menu-label">Datos de la empresa</div><div class="menu-sub">Nombre, RUC, ciudad, categoría</div></div>
+    <svg class="menu-arrow" viewBox="0 0 24 24"><polyline points="9 18 15 12 9 6"/></svg>
+  </div>
+  <div class="menu-item" onclick="abrirFacturacion()">
+    <div class="menu-icon" style="background:rgba(168,230,61,0.1)"><svg style="stroke:var(--verde)" viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg></div>
+    <div><div class="menu-label">Datos de facturación</div><div class="menu-sub" id="fact-sub">Configurar datos para facturas</div></div>
+    <svg class="menu-arrow" viewBox="0 0 24 24"><polyline points="9 18 15 12 9 6"/></svg>
+  </div>
+  <div class="menu-item" onclick="window.location.href='productos.html'">
+    <div class="menu-icon" style="background:rgba(0,122,255,0.1)"><svg style="stroke:#007AFF" viewBox="0 0 24 24"><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"/></svg></div>
+    <div class="menu-label">Mis productos</div>
+    <svg class="menu-arrow" viewBox="0 0 24 24"><polyline points="9 18 15 12 9 6"/></svg>
+  </div>
 </div>
 
 <div class="section-card">
-  <div class="menu-item danger" onclick="cerrarSesion()"><div class="menu-icon"><svg viewBox="0 0 24 24"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/></svg></div><div class="menu-label">Cerrar sesión</div></div>
+  <div class="section-title-bar">Seguridad</div>
+  <div class="menu-item" onclick="abrirCambioPass()">
+    <div class="menu-icon" style="background:rgba(0,122,255,0.08)"><svg style="stroke:#007AFF" viewBox="0 0 24 24"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg></div>
+    <div class="menu-label">Cambiar contraseña</div>
+    <svg class="menu-arrow" viewBox="0 0 24 24"><polyline points="9 18 15 12 9 6"/></svg>
+  </div>
+  <div class="menu-item" onclick="abrirHuella()">
+    <div class="menu-icon" style="background:rgba(175,82,222,0.08)"><svg style="stroke:#AF52DE" viewBox="0 0 24 24"><path d="M12 22C6.5 22 2 17.5 2 12S6.5 2 12 2s10 4.5 10 10-4.5 10-10 10z"/><circle cx="12" cy="12" r="3"/></svg></div>
+    <div><div class="menu-label">Acceso con huella</div><div class="menu-sub">Touch ID / Face ID</div></div>
+    <span class="huella-badge" id="huella-badge">Desactivado</span>
+  </div>
 </div>
 
-<div class="edit-modal" id="edit-modal" onclick="cerrarEdit(event)">
-  <div class="edit-sheet">
+<div class="section-card">
+  <div class="menu-item danger" onclick="cerrarSesion()">
+    <div class="menu-icon"><svg viewBox="0 0 24 24"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/></svg></div>
+    <div class="menu-label">Cerrar sesión</div>
+  </div>
+</div>
+
+<!-- MODAL EDITAR -->
+<div class="modal-overlay" id="modal-editar" onclick="cerrarModal('modal-editar',event)">
+  <div class="modal-sheet">
     <div class="drag"></div>
-    <div class="edit-title">Editar perfil</div>
-    <div class="field"><label>Nombre del responsable</label><input type="text" id="e-nombre"></div>
-    <div class="field"><label>Nombre de la empresa</label><input type="text" id="e-empresa"></div>
-    <div class="field"><label>Ciudad</label><input type="text" id="e-ciudad"></div>
-    <div class="field"><label>RUC</label><input type="text" id="e-ruc"></div>
-    <div class="field"><label>Descripción de la empresa</label><textarea id="e-desc" placeholder="Cuéntanos sobre tu empresa..."></textarea></div>
-    <button class="btn-guardar" onclick="guardarPerfil()">GUARDAR CAMBIOS</button>
+    <div class="modal-header">
+      <span class="modal-title">Editar empresa</span>
+      <button class="close-btn" onclick="document.getElementById('modal-editar').classList.remove('show')"><svg viewBox="0 0 24 24"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg></button>
+    </div>
+    <div class="modal-body">
+      <div class="msg-ok" id="edit-ok">✓ Datos actualizados</div>
+      <div class="field"><label>Nombre empresa</label><input type="text" id="e-empresa" placeholder="Mi Empresa S.A."></div>
+      <div class="field"><label>Nombre encargado</label><input type="text" id="e-nombre" placeholder="Juan Torres"></div>
+      <div class="field-row">
+        <div class="field"><label>Ciudad</label><input type="text" id="e-ciudad" placeholder="Quito"></div>
+        <div class="field"><label>Teléfono empresa</label><input type="tel" id="e-tel" placeholder="022345678"></div>
+      </div>
+      <div class="field"><label>Teléfono encargado</label><input type="tel" id="e-tel-enc" placeholder="0991234567"></div>
+      <div class="field"><label>Categoría</label>
+        <select id="e-cat">
+          <option value="">Seleccionar</option>
+          <option value="textiles">Textiles</option>
+          <option value="tecnologia">Tecnología</option>
+          <option value="alimentos">Alimentos</option>
+          <option value="cosmeticos">Cosméticos</option>
+          <option value="construccion">Construcción</option>
+          <option value="maquinaria">Maquinaria</option>
+          <option value="agricultura">Agricultura</option>
+          <option value="automotriz">Automotriz</option>
+          <option value="otros">Otros</option>
+        </select>
+      </div>
+      <button class="btn-guardar" onclick="guardarPerfil()">Guardar cambios</button>
+    </div>
+  </div>
+</div>
+
+<!-- MODAL CONTRASEÑA -->
+<div class="modal-overlay" id="modal-pass" onclick="cerrarModal('modal-pass',event)">
+  <div class="modal-sheet">
+    <div class="drag"></div>
+    <div class="modal-header">
+      <span class="modal-title">Cambiar contraseña</span>
+      <button class="close-btn" onclick="document.getElementById('modal-pass').classList.remove('show')"><svg viewBox="0 0 24 24"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg></button>
+    </div>
+    <div class="modal-body">
+      <div class="msg-ok" id="pass-ok">✓ Contraseña actualizada</div>
+      <div class="msg-err" id="pass-err">Las contraseñas no coinciden</div>
+      <div class="field"><label>Nueva contraseña *</label><input type="password" id="p-nueva" placeholder="Mínimo 6 caracteres"></div>
+      <div class="field"><label>Confirmar contraseña *</label><input type="password" id="p-confirmar" placeholder="Repite la contraseña"></div>
+      <button class="btn-guardar" onclick="cambiarPassword()">Cambiar contraseña</button>
+    </div>
+  </div>
+</div>
+
+<!-- MODAL HUELLA -->
+<div class="modal-overlay" id="modal-huella" onclick="cerrarModal('modal-huella',event)">
+  <div class="modal-sheet">
+    <div class="drag"></div>
+    <div class="modal-header">
+      <span class="modal-title">Acceso biométrico</span>
+      <button class="close-btn" onclick="document.getElementById('modal-huella').classList.remove('show')"><svg viewBox="0 0 24 24"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg></button>
+    </div>
+    <div class="modal-body">
+      <div class="huella-screen">
+        <div class="huella-icon" id="huella-icon"><svg viewBox="0 0 24 24"><path d="M12 22C6.5 22 2 17.5 2 12S6.5 2 12 2s10 4.5 10 10-4.5 10-10 10z"/><circle cx="12" cy="12" r="3"/></svg></div>
+        <div class="huella-title" id="huella-title">Activar acceso biométrico</div>
+        <div class="huella-sub" id="huella-sub">Usa tu huella dactilar o Face ID para entrar sin escribir tu contraseña</div>
+        <button class="btn-huella" id="btn-huella-accion" onclick="toggleHuella()">🔒 Activar huella / Face ID</button>
+        <div id="btn-huella-off-wrap"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- MODAL FACTURACIÓN -->
+<div class="modal-overlay" id="modal-factura" onclick="cerrarModal('modal-factura',event)">
+  <div class="modal-sheet">
+    <div class="drag"></div>
+    <div class="modal-header">
+      <span class="modal-title">Datos de facturación</span>
+      <button class="close-btn" onclick="document.getElementById('modal-factura').classList.remove('show')"><svg viewBox="0 0 24 24"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg></button>
+    </div>
+    <div class="modal-body">
+      <div class="msg-ok" id="fact-ok">✓ Datos de facturación guardados</div>
+      <p style="font-size:0.8rem;color:#555;margin-bottom:14px;">Se usarán automáticamente en facturas y pedidos.</p>
+      <div class="field"><label>Razón social / Empresa *</label><input type="text" id="f-nombre" placeholder="Mi Empresa S.A."></div>
+      <div class="field"><label>RUC *</label><input type="text" id="f-ruc" placeholder="1234567890001" maxlength="13"></div>
+      <div class="field"><label>Correo para facturas *</label><input type="email" id="f-email" placeholder="facturas@empresa.com"></div>
+      <div class="field"><label>Teléfono</label><input type="tel" id="f-tel" placeholder="022345678"></div>
+      <div class="field"><label>Dirección completa *</label><input type="text" id="f-dir" placeholder="Av. Principal y Calle 5, Of. 301"></div>
+      <div class="field-row">
+        <div class="field"><label>Ciudad *</label><input type="text" id="f-ciudad" placeholder="Quito"></div>
+        <div class="field"><label>Provincia</label><input type="text" id="f-provincia" placeholder="Pichincha"></div>
+      </div>
+      <button class="btn-guardar" onclick="guardarFacturacion()">Guardar datos</button>
+    </div>
+  </div>
+</div>
+
+<!-- MODAL FOTO -->
+<div class="modal-overlay" id="modal-foto" onclick="cerrarModal('modal-foto',event)">
+  <div class="modal-sheet">
+    <div class="drag"></div>
+    <div class="modal-header">
+      <span class="modal-title">Cambiar logo / foto</span>
+      <button class="close-btn" onclick="document.getElementById('modal-foto').classList.remove('show')"><svg viewBox="0 0 24 24"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg></button>
+    </div>
+    <div class="modal-body">
+      <div class="foto-preview-wrap" id="foto-preview-wrap" style="display:none;"><img id="foto-preview-img" src="" alt=""></div>
+      <div class="foto-opciones">
+        <button class="foto-opcion" onclick="document.getElementById('foto-camara').click()">
+          <svg viewBox="0 0 24 24"><path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"/><circle cx="12" cy="13" r="4"/></svg>
+          <span>Tomar foto</span>
+        </button>
+        <button class="foto-opcion" onclick="document.getElementById('foto-galeria').click()">
+          <svg viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg>
+          <span>Galería</span>
+        </button>
+      </div>
+      <input type="file" id="foto-camara" accept="image/*" capture="environment" class="foto-input-hidden" onchange="previsualizarFoto(this)">
+      <input type="file" id="foto-galeria" accept="image/*" class="foto-input-hidden" onchange="previsualizarFoto(this)">
+      <button class="btn-guardar" id="btn-subir-foto" onclick="subirFoto()" style="display:none;margin-top:14px;">Guardar foto</button>
+    </div>
+  </div>
+</div>
+
+<div class="upload-overlay" id="upload-overlay">
+  <div class="upload-box">
+    <div class="spinner"></div>
+    <p>Subiendo imagen...</p>
   </div>
 </div>
 
 <nav class="tab-bar">
   <a class="tab" href="dashboard.html"><svg viewBox="0 0 24 24"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/></svg><span>Panel</span></a>
   <a class="tab" href="productos.html"><svg viewBox="0 0 24 24"><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"/></svg><span>Productos</span></a>
-  <a class="tab" href="tips.html"><svg viewBox="0 0 24 24"><path d="M15 10l4.553-2.069A1 1 0 0 1 21 8.87v6.26a1 1 0 0 1-1.447.894L15 14"/><rect x="1" y="6" width="15" height="12" rx="2" ry="2"/></svg><span>Tips</span></a>
+  <a class="tab" href="chat.html"><svg viewBox="0 0 24 24"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg><span>Chat</span></a>
   <a class="tab" href="pedidos.html"><svg viewBox="0 0 24 24"><rect x="1" y="3" width="15" height="13" rx="1"/><path d="M16 8h4l3 3v5h-7V8z"/></svg><span>Pedidos</span></a>
   <a class="tab active" href="perfil.html"><svg viewBox="0 0 24 24"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg><span>Perfil</span></a>
 </nav>
@@ -116,52 +312,201 @@
 <script>
 const { createClient } = supabase;
 const sb = createClient('https://hfmsyrmkewscnvwynzfq.supabase.co','sb_publishable_d1oLsq70a6ZV33vW3XkRgw_nYcN2Z9v');
-let userId='';
+let userId='', userData={}, fotoNueva=null;
+const HUELLA_KEY='proveed_biometrico_prov';
 
 (async()=>{
   const { data:{session} } = await sb.auth.getSession();
   if(!session){ window.location.href='login.html'; return; }
   userId=session.user.id;
-  const { data:u } = await sb.from('usuarios').select('*').eq('id',userId).single();
+  const cached=localStorage.getItem('proveed_perfil_prov');
+  if(cached){ mostrarPerfil(JSON.parse(cached),session.user.email); }
+  const [{ data:u },{ data:prods },{ data:peds }] = await Promise.all([
+    sb.from('usuarios').select('*').eq('id',userId).single(),
+    sb.from('productos').select('id').eq('proveedor_id',userId),
+    sb.from('pedidos').select('total').eq('proveedor_id',userId)
+  ]);
   if(u){
-    const nombre=u.nombre||'Proveedor';
-    const empresa=u.empresa||'—';
-    document.getElementById('p-avatar').textContent=empresa[0].toUpperCase();
-    document.getElementById('p-nombre').textContent=nombre;
-    document.getElementById('p-empresa').textContent=empresa;
-    document.getElementById('p-ciudad').textContent=(u.ciudad||'—')+' · RUC: '+(u.ruc||'—');
-    document.getElementById('e-nombre').value=nombre;
-    document.getElementById('e-empresa').value=empresa;
-    document.getElementById('e-ciudad').value=u.ciudad||'';
-    document.getElementById('e-ruc').value=u.ruc||'';
-    document.getElementById('e-desc').value=u.descripcion||'';
+    userData=u; localStorage.setItem('proveed_perfil_prov',JSON.stringify(u));
+    mostrarPerfil(u,session.user.email);
+    precargarForms(u);
   }
-  const { count:prods } = await sb.from('productos').select('*',{count:'exact',head:true}).eq('proveedor_id',userId);
-  const { data:pedidos } = await sb.from('pedidos').select('total,items');
-  const { count:chats } = await sb.from('chats').select('*',{count:'exact',head:true}).eq('proveedor_id',userId);
-  document.getElementById('st-prods').textContent=prods||0;
-  document.getElementById('st-ventas').textContent='$'+((pedidos||[]).reduce((s,p)=>s+(p.total||0),0)).toFixed(0);
-  document.getElementById('st-chats').textContent=chats||0;
+  const totalVentas=(peds||[]).reduce((s,p)=>s+(p.total||0),0);
+  document.getElementById('st-ventas').textContent='$'+totalVentas.toFixed(0);
+  document.getElementById('st-productos').textContent=(prods||[]).length;
+  document.getElementById('st-pedidos').textContent=(peds||[]).length;
+  verificarHuella();
 })();
 
-window.abrirEdit=()=>document.getElementById('edit-modal').classList.add('show');
-window.cerrarEdit=e=>{ if(e.target===document.getElementById('edit-modal')) document.getElementById('edit-modal').classList.remove('show'); };
-
-window.guardarPerfil=async function(){
-  const nombre=document.getElementById('e-nombre').value.trim();
-  const empresa=document.getElementById('e-empresa').value.trim();
-  const ciudad=document.getElementById('e-ciudad').value.trim();
-  const ruc=document.getElementById('e-ruc').value.trim();
-  const descripcion=document.getElementById('e-desc').value.trim();
-  await sb.from('usuarios').update({nombre,empresa,ciudad,ruc,descripcion}).eq('id',userId);
-  document.getElementById('p-nombre').textContent=nombre;
+function mostrarPerfil(u,email){
+  const empresa=u.empresa||u.nombre||'Empresa';
+  const avatar=document.getElementById('p-avatar');
+  const logo=u.logo_empresa||u.foto_perfil||'';
+  if(logo){ avatar.innerHTML=`<img src="${logo}" alt="">`; }
+  else { avatar.textContent=empresa[0].toUpperCase(); }
   document.getElementById('p-empresa').textContent=empresa;
-  document.getElementById('p-avatar').textContent=empresa[0].toUpperCase();
-  document.getElementById('p-ciudad').textContent=ciudad+' · RUC: '+ruc;
-  document.getElementById('edit-modal').classList.remove('show');
+  document.getElementById('p-nombre').textContent=u.nombre||'—';
+  document.getElementById('p-email').textContent=email||'—';
+  document.getElementById('p-verificado').textContent=u.verificado?'✓ Empresa verificada':'';
+  if(u.facturacion?.nombre) document.getElementById('fact-sub').textContent=u.facturacion.nombre+' · '+(u.facturacion.ruc||'');
+}
+
+function precargarForms(u){
+  document.getElementById('e-empresa').value=u.empresa||'';
+  document.getElementById('e-nombre').value=u.nombre||'';
+  document.getElementById('e-ciudad').value=u.ciudad||'';
+  document.getElementById('e-tel').value=u.tel_empresa||'';
+  document.getElementById('e-tel-enc').value=u.telefono||'';
+  document.getElementById('e-cat').value=u.categoria||'';
+  const f=u.facturacion||{};
+  document.getElementById('f-nombre').value=f.nombre||u.empresa||'';
+  document.getElementById('f-ruc').value=f.ruc||u.ruc||'';
+  document.getElementById('f-email').value=f.email||'';
+  document.getElementById('f-tel').value=f.telefono||u.tel_empresa||'';
+  document.getElementById('f-dir').value=f.direccion||'';
+  document.getElementById('f-ciudad').value=f.ciudad||u.ciudad||'';
+  document.getElementById('f-provincia').value=f.provincia||'';
+}
+
+window.abrirEditar=()=>document.getElementById('modal-editar').classList.add('show');
+window.guardarPerfil=async function(){
+  const empresa=document.getElementById('e-empresa').value.trim();
+  const nombre=document.getElementById('e-nombre').value.trim();
+  const ciudad=document.getElementById('e-ciudad').value.trim();
+  const tel_empresa=document.getElementById('e-tel').value.trim();
+  const telefono=document.getElementById('e-tel-enc').value.trim();
+  const categoria=document.getElementById('e-cat').value;
+  await sb.from('usuarios').update({empresa,nombre,ciudad,tel_empresa,telefono,categoria}).eq('id',userId);
+  const updated={...userData,empresa,nombre,ciudad,tel_empresa,telefono,categoria};
+  userData=updated; localStorage.setItem('proveed_perfil_prov',JSON.stringify(updated));
+  const { data:{session} }=await sb.auth.getSession();
+  mostrarPerfil(updated,session.user.email);
+  document.getElementById('edit-ok').classList.add('show');
+  setTimeout(()=>{ document.getElementById('edit-ok').classList.remove('show'); document.getElementById('modal-editar').classList.remove('show'); },1500);
 };
 
-window.cerrarSesion=async function(){ await sb.auth.signOut(); window.location.href='login.html'; };
+window.abrirCambioPass=()=>{ document.getElementById('pass-ok').classList.remove('show'); document.getElementById('pass-err').classList.remove('show'); document.getElementById('modal-pass').classList.add('show'); };
+window.cambiarPassword=async function(){
+  const nueva=document.getElementById('p-nueva').value;
+  const confirmar=document.getElementById('p-confirmar').value;
+  document.getElementById('pass-err').classList.remove('show');
+  if(nueva.length<6){ document.getElementById('pass-err').textContent='Mínimo 6 caracteres'; document.getElementById('pass-err').classList.add('show'); return; }
+  if(nueva!==confirmar){ document.getElementById('pass-err').classList.add('show'); return; }
+  const { error }=await sb.auth.updateUser({password:nueva});
+  if(error){ document.getElementById('pass-err').textContent='Error: '+error.message; document.getElementById('pass-err').classList.add('show'); return; }
+  document.getElementById('pass-ok').classList.add('show');
+  document.getElementById('p-nueva').value=''; document.getElementById('p-confirmar').value='';
+  setTimeout(()=>document.getElementById('modal-pass').classList.remove('show'),2000);
+};
+
+function verificarHuella(){
+  const activa=localStorage.getItem(HUELLA_KEY)==='true';
+  const badge=document.getElementById('huella-badge');
+  badge.textContent=activa?'Activado':'Desactivado';
+  badge.className='huella-badge '+(activa?'huella-on':'huella-off');
+}
+
+window.abrirHuella=function(){
+  const activa=localStorage.getItem(HUELLA_KEY)==='true';
+  const icon=document.getElementById('huella-icon');
+  const btn=document.getElementById('btn-huella-accion');
+  const offWrap=document.getElementById('btn-huella-off-wrap');
+  if(activa){
+    icon.classList.add('activa');
+    document.getElementById('huella-title').textContent='Huella activa';
+    document.getElementById('huella-sub').textContent='El acceso biométrico está activado.';
+    btn.textContent='🔓 Probar huella ahora'; btn.onclick=probarHuella;
+    offWrap.innerHTML=`<button class="btn-huella-off" onclick="desactivarHuella()">Desactivar acceso biométrico</button>`;
+  } else {
+    icon.classList.remove('activa');
+    document.getElementById('huella-title').textContent='Activar acceso biométrico';
+    document.getElementById('huella-sub').textContent='Usa tu huella dactilar o Face ID para entrar más rápido.';
+    btn.textContent='🔒 Activar huella / Face ID'; btn.onclick=toggleHuella;
+    offWrap.innerHTML='';
+  }
+  document.getElementById('modal-huella').classList.add('show');
+};
+
+window.toggleHuella=async function(){
+  if(!window.PublicKeyCredential){ alert('Tu dispositivo no soporta autenticación biométrica'); return; }
+  try{
+    const available=await PublicKeyCredential.isUserVerifyingPlatformAuthenticatorAvailable();
+    if(!available){ alert('No se detectó huella dactilar o Face ID'); return; }
+    const credential=await navigator.credentials.create({publicKey:{
+      challenge:new Uint8Array(32),
+      rp:{name:'PROVEED',id:window.location.hostname},
+      user:{id:new TextEncoder().encode(userId),name:userData.email||userId,displayName:userData.empresa||userData.nombre||'Usuario'},
+      pubKeyCredParams:[{alg:-7,type:'public-key'},{alg:-257,type:'public-key'}],
+      authenticatorSelection:{authenticatorAttachment:'platform',userVerification:'required'},
+      timeout:60000
+    }});
+    if(credential){ localStorage.setItem(HUELLA_KEY,'true'); verificarHuella(); abrirHuella(); }
+  } catch(e){ if(e.name!=='NotAllowedError') alert('Error: '+e.message); }
+};
+
+window.probarHuella=async function(){
+  try{ await navigator.credentials.get({publicKey:{challenge:new Uint8Array(32),timeout:60000,userVerification:'required'}}); alert('✓ Biometría verificada'); } catch(e){ alert('Error: '+e.message); }
+};
+
+window.desactivarHuella=function(){
+  if(!confirm('¿Desactivar acceso biométrico?')) return;
+  localStorage.removeItem(HUELLA_KEY); verificarHuella();
+  document.getElementById('modal-huella').classList.remove('show');
+};
+
+window.abrirFacturacion=()=>{ document.getElementById('fact-ok').classList.remove('show'); document.getElementById('modal-factura').classList.add('show'); };
+window.guardarFacturacion=async function(){
+  const facturacion={
+    nombre:document.getElementById('f-nombre').value.trim(),
+    ruc:document.getElementById('f-ruc').value.trim(),
+    email:document.getElementById('f-email').value.trim(),
+    telefono:document.getElementById('f-tel').value.trim(),
+    direccion:document.getElementById('f-dir').value.trim(),
+    ciudad:document.getElementById('f-ciudad').value.trim(),
+    provincia:document.getElementById('f-provincia').value.trim(),
+    pais:'Ecuador'
+  };
+  if(!facturacion.nombre||!facturacion.ruc||!facturacion.direccion){ alert('Completa nombre, RUC y dirección'); return; }
+  await sb.from('usuarios').update({facturacion}).eq('id',userId);
+  userData={...userData,facturacion}; localStorage.setItem('proveed_perfil_prov',JSON.stringify(userData));
+  document.getElementById('fact-sub').textContent=facturacion.nombre+' · '+facturacion.ruc;
+  document.getElementById('fact-ok').classList.add('show');
+  setTimeout(()=>{ document.getElementById('fact-ok').classList.remove('show'); document.getElementById('modal-factura').classList.remove('show'); },1800);
+};
+
+window.abrirFotoModal=()=>{ fotoNueva=null; document.getElementById('foto-preview-wrap').style.display='none'; document.getElementById('btn-subir-foto').style.display='none'; document.getElementById('modal-foto').classList.add('show'); };
+window.previsualizarFoto=function(input){
+  const file=input.files[0]; if(!file) return; fotoNueva=file;
+  const reader=new FileReader();
+  reader.onload=e=>{ document.getElementById('foto-preview-img').src=e.target.result; document.getElementById('foto-preview-wrap').style.display='block'; document.getElementById('btn-subir-foto').style.display='block'; };
+  reader.readAsDataURL(file);
+};
+
+window.subirFoto=async function(){
+  if(!fotoNueva) return;
+  document.getElementById('modal-foto').classList.remove('show');
+  document.getElementById('upload-overlay').classList.add('show');
+  try{
+    const ext=fotoNueva.name.split('.').pop();
+    const path=`logos/${userId}/logo.${ext}`;
+    const { error }=await sb.storage.from('proveed-media').upload(path,fotoNueva,{upsert:true});
+    if(error) throw error;
+    const { data }=sb.storage.from('proveed-media').getPublicUrl(path);
+    await sb.from('usuarios').update({logo_empresa:data.publicUrl,foto_perfil:data.publicUrl}).eq('id',userId);
+    userData={...userData,logo_empresa:data.publicUrl,foto_perfil:data.publicUrl};
+    localStorage.setItem('proveed_perfil_prov',JSON.stringify(userData));
+    document.getElementById('p-avatar').innerHTML=`<img src="${data.publicUrl}?t=${Date.now()}" alt="">`;
+  } catch(e){ alert('Error: '+e.message); }
+  document.getElementById('upload-overlay').classList.remove('show');
+};
+
+window.cerrarSesion=async function(){
+  localStorage.removeItem('proveed_perfil_prov');
+  await sb.auth.signOut();
+  window.location.href='login.html';
+};
+
+window.cerrarModal=(id,e)=>{ if(e.target===document.getElementById(id)) document.getElementById(id).classList.remove('show'); };
 </script>
 </body>
 </html>
