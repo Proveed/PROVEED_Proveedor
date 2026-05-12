@@ -3,91 +3,95 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-<title>PROVEED — PROVEED STORE</title>
+<title>PROVEED — Plugins</title>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
 <style>
   *{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent;}
-  :root{ --naranja:#FF8C00; --verde:#A8E63D; --negro:#0A0A0A; --gris:#F2F3F0; --rojo:#FF4D4D; --azul:#007AFF; --morado:#AF52DE; }
+  :root{ --naranja:#FF8C00; --verde:#A8E63D; --negro:#0A0A0A; --gris:#F5F6F2; --rojo:#FF4D4D; --azul:#007AFF; }
   body{ background:var(--negro); font-family:'Inter',sans-serif; padding-bottom:90px; -webkit-font-smoothing:antialiased; }
   .header{ background:var(--negro); padding:44px 16px 16px; display:flex; align-items:center; gap:12px; position:sticky; top:0; z-index:100; border-bottom:1px solid #1e1e1e; }
   .back-btn{ width:36px; height:36px; background:rgba(255,255,255,0.08); border-radius:10px; display:flex; align-items:center; justify-content:center; cursor:pointer; border:none; }
   .back-btn svg{ width:18px; height:18px; stroke:white; fill:none; stroke-width:2.5; }
-  .header-info{ flex:1; }
-  .header-title{ font-size:1.1rem; font-weight:700; color:white; }
-  .header-sub{ font-size:0.72rem; color:#555; margin-top:1px; }
+  .page-title{ font-size:1.1rem; font-weight:700; color:white; }
 
-  /* HERO */
-  .hero{ margin:16px; background:linear-gradient(135deg,#1a0a2e,#0a1628); border-radius:20px; padding:22px; position:relative; overflow:hidden; border:1px solid #2a1a4e; }
-  .hero::before{ content:''; position:absolute; right:-20px; top:-20px; width:150px; height:150px; background:radial-gradient(circle,rgba(175,82,222,0.2) 0%,transparent 70%); }
-  .hero-badge{ background:var(--morado); color:white; font-size:0.62rem; font-weight:700; padding:3px 10px; border-radius:20px; display:inline-block; margin-bottom:8px; text-transform:uppercase; }
-  .hero-title{ font-size:1.2rem; font-weight:700; color:white; margin-bottom:5px; line-height:1.3; }
-  .hero-sub{ font-size:0.78rem; color:#888; margin-bottom:14px; }
-  .hero-stats{ display:flex; gap:16px; }
-  .hero-stat{ text-align:center; }
-  .hero-stat b{ display:block; font-size:1.1rem; font-weight:800; color:white; }
-  .hero-stat span{ font-size:0.62rem; color:#555; }
+  .hero-banner{ margin:14px 16px; background:linear-gradient(135deg,#0f2a0f,#1a4a1a); border-radius:20px; padding:20px; position:relative; overflow:hidden; border:1px solid rgba(168,230,61,0.15); }
+  .hero-banner::before{ content:''; position:absolute; right:-20px; top:-20px; width:120px; height:120px; background:radial-gradient(circle,rgba(168,230,61,0.15) 0%,transparent 70%); }
+  .hero-tag{ background:var(--verde); color:var(--negro); font-size:0.6rem; font-weight:800; padding:3px 10px; border-radius:20px; display:inline-block; margin-bottom:8px; text-transform:uppercase; }
+  .hero-title{ font-size:1.1rem; font-weight:800; color:white; line-height:1.3; margin-bottom:4px; }
+  .hero-sub{ font-size:0.75rem; color:#888; }
 
-  /* TABS CATEGORÍAS */
-  .cats-scroll{ display:flex; gap:8px; padding:14px 16px; overflow-x:auto; scrollbar-width:none; }
-  .cats-scroll::-webkit-scrollbar{ display:none; }
-  .cat-pill{ padding:7px 14px; border-radius:20px; white-space:nowrap; border:1px solid #222; background:#161616; font-size:0.76rem; font-weight:600; color:#555; cursor:pointer; transition:0.2s; }
-  .cat-pill.active{ background:var(--morado); color:white; border-color:var(--morado); }
+  .filtros{ display:flex; gap:8px; padding:12px 16px; overflow-x:auto; scrollbar-width:none; }
+  .filtros::-webkit-scrollbar{ display:none; }
+  .filtro-btn{ padding:7px 14px; border-radius:20px; border:1px solid #222; background:transparent; font-size:0.72rem; font-weight:600; color:#555; cursor:pointer; white-space:nowrap; font-family:'Inter',sans-serif; }
+  .filtro-btn.active{ background:#1e1e1e; color:white; border-color:#333; }
 
-  /* PLUGINS GRID */
-  .plugins-section{ padding:0 16px; }
-  .section-title{ font-size:0.7rem; font-weight:700; color:#444; text-transform:uppercase; letter-spacing:1px; margin-bottom:12px; }
-  .plugins-grid{ display:grid; grid-template-columns:1fr; gap:12px; }
-  @media(min-width:400px){ .plugins-grid{ grid-template-columns:repeat(2,1fr); } }
-
-  .plugin-card{ background:#111; border:1px solid #1e1e1e; border-radius:18px; overflow:hidden; transition:0.2s; }
-  .plugin-card:hover{ border-color:#333; }
-  .plugin-card.activo{ border-color:rgba(168,230,61,0.3); }
-  .plugin-img{ width:100%; height:130px; object-fit:cover; background:#1a1a1a; display:flex; align-items:center; justify-content:center; position:relative; }
-  .plugin-img img{ width:100%; height:100%; object-fit:cover; }
-  .plugin-img-placeholder{ width:100%; height:100%; display:flex; align-items:center; justify-content:center; }
-  .plugin-img-placeholder svg{ width:40px; height:40px; fill:none; stroke-width:1.5; }
-  .plugin-badge-activo{ position:absolute; top:10px; right:10px; background:var(--verde); color:#000; font-size:0.6rem; font-weight:800; padding:3px 8px; border-radius:20px; }
-  .plugin-badge-nuevo{ position:absolute; top:10px; left:10px; background:var(--morado); color:white; font-size:0.6rem; font-weight:800; padding:3px 8px; border-radius:20px; }
-  .plugin-body{ padding:14px; }
-  .plugin-nombre{ font-size:0.88rem; font-weight:700; color:white; margin-bottom:4px; }
-  .plugin-desc{ font-size:0.74rem; color:#555; line-height:1.4; margin-bottom:10px; display:-webkit-box; -webkit-line-clamp:2; -webkit-box-orient:vertical; overflow:hidden; }
-  .plugin-meta{ display:flex; align-items:center; justify-content:space-between; margin-bottom:10px; }
-  .plugin-precio{ font-size:0.9rem; font-weight:800; color:var(--naranja); }
+  .plugins-lista{ padding:0 16px; }
+  .plugin-card{ background:#111; border:1px solid #1e1e1e; border-radius:20px; padding:18px; margin-bottom:12px; transition:0.2s; }
+  .plugin-card.activado{ border-color:rgba(168,230,61,0.3); background:rgba(168,230,61,0.03); }
+  .plugin-card.destacado{ border-color:rgba(255,140,0,0.3); background:rgba(255,140,0,0.03); }
+  .plugin-header{ display:flex; align-items:flex-start; gap:14px; margin-bottom:12px; }
+  .plugin-icono{ width:52px; height:52px; border-radius:16px; display:flex; align-items:center; justify-content:center; font-size:1.5rem; flex-shrink:0; }
+  .plugin-info{ flex:1; }
+  .plugin-nombre{ font-size:0.95rem; font-weight:800; color:white; margin-bottom:3px; }
+  .plugin-desc{ font-size:0.76rem; color:#555; line-height:1.5; }
+  .plugin-badges{ display:flex; gap:6px; flex-wrap:wrap; margin-top:6px; }
+  .plugin-badge{ font-size:0.6rem; font-weight:700; padding:2px 8px; border-radius:6px; }
+  .badge-gratis{ background:rgba(168,230,61,0.12); color:var(--verde); }
+  .badge-pro{ background:rgba(255,140,0,0.12); color:var(--naranja); }
+  .badge-nuevo{ background:rgba(0,122,255,0.12); color:var(--azul); }
+  .badge-activo{ background:rgba(168,230,61,0.2); color:var(--verde); }
+  .plugin-features{ display:grid; grid-template-columns:1fr 1fr; gap:6px; margin-bottom:14px; }
+  .feature-item{ display:flex; align-items:center; gap:6px; font-size:0.72rem; color:#666; }
+  .feature-item::before{ content:'✓'; color:var(--verde); font-weight:800; font-size:0.7rem; flex-shrink:0; }
+  .plugin-footer{ display:flex; align-items:center; justify-content:space-between; }
+  .plugin-precio{ font-size:0.88rem; font-weight:700; color:white; }
   .plugin-precio.gratis{ color:var(--verde); }
-  .plugin-tipo{ font-size:0.62rem; color:#444; }
-  .plugin-features{ display:flex; flex-wrap:wrap; gap:4px; margin-bottom:12px; }
-  .feature-tag{ background:#1a1a1a; border-radius:6px; padding:3px 8px; font-size:0.62rem; color:#666; }
-  .btn-activar{ width:100%; padding:11px; border:none; border-radius:12px; font-family:'Inter',sans-serif; font-size:0.82rem; font-weight:700; cursor:pointer; transition:0.2s; }
-  .btn-activar.inactivo{ background:var(--morado); color:white; }
-  .btn-activar.inactivo:active{ transform:scale(0.98); }
-  .btn-activar.activo{ background:rgba(168,230,61,0.1); color:#3a7a00; border:1px solid rgba(168,230,61,0.3); }
-  .btn-activar.pendiente{ background:rgba(255,140,0,0.1); color:var(--naranja); border:1px solid rgba(255,140,0,0.3); cursor:not-allowed; }
+  .btn-activar{ padding:10px 18px; border-radius:12px; border:none; font-family:'Inter',sans-serif; font-size:0.8rem; font-weight:800; cursor:pointer; transition:0.2s; }
+  .btn-activar.off{ background:#1e1e1e; color:#aaa; }
+  .btn-activar.on{ background:rgba(168,230,61,0.15); color:var(--verde); border:1px solid rgba(168,230,61,0.3); }
+  .btn-activar:active{ transform:scale(0.95); }
 
-  /* MODAL CONFIRMACIÓN */
-  .modal-overlay{ position:fixed; inset:0; background:rgba(0,0,0,0.7); display:none; z-index:500; align-items:flex-end; }
+  /* MODAL TIENDA */
+  .modal-overlay{ position:fixed; inset:0; background:rgba(0,0,0,0.8); display:none; z-index:500; align-items:flex-end; }
   .modal-overlay.show{ display:flex; }
-  .modal-sheet{ background:#111; width:100%; border-radius:24px 24px 0 0; padding:24px 20px 36px; transform:translateY(100%); transition:0.4s cubic-bezier(0.16,1,0.3,1); border:1px solid #1e1e1e; border-bottom:none; }
+  .modal-sheet{ background:#111; width:100%; max-height:92vh; border-radius:24px 24px 0 0; transform:translateY(100%); transition:0.4s cubic-bezier(0.16,1,0.3,1); display:flex; flex-direction:column; overflow:hidden; border:1px solid #1e1e1e; border-bottom:none; }
   .modal-overlay.show .modal-sheet{ transform:translateY(0); }
-  .drag{ width:36px; height:4px; background:#333; border-radius:4px; margin:0 auto 20px; }
-  .modal-plugin-img{ width:80px; height:80px; border-radius:16px; background:#1a1a1a; margin:0 auto 14px; display:flex; align-items:center; justify-content:center; overflow:hidden; }
-  .modal-plugin-img img{ width:100%; height:100%; object-fit:cover; }
-  .modal-plugin-img svg{ width:36px; height:36px; fill:none; stroke-width:1.5; }
-  .modal-title{ font-size:1.1rem; font-weight:700; color:white; text-align:center; margin-bottom:6px; }
-  .modal-sub{ font-size:0.82rem; color:#555; text-align:center; margin-bottom:20px; line-height:1.5; }
-  .modal-precio-wrap{ background:#1a1a1a; border-radius:14px; padding:16px; margin-bottom:20px; display:flex; justify-content:space-between; align-items:center; border:1px solid #222; }
-  .modal-precio-label{ font-size:0.8rem; color:#555; }
-  .modal-precio-val{ font-size:1.2rem; font-weight:800; color:var(--naranja); }
-  .modal-precio-val.gratis{ color:var(--verde); }
-  .modal-info{ font-size:0.76rem; color:#444; text-align:center; margin-bottom:20px; line-height:1.5; }
-  .btn-confirmar{ width:100%; padding:15px; background:var(--morado); color:white; border:none; border-radius:14px; font-family:'Inter',sans-serif; font-size:0.95rem; font-weight:800; cursor:pointer; margin-bottom:10px; }
-  .btn-cancelar{ width:100%; padding:14px; background:#1a1a1a; color:#555; border:none; border-radius:14px; font-family:'Inter',sans-serif; font-size:0.88rem; font-weight:600; cursor:pointer; }
+  .drag{ width:36px; height:4px; background:#333; border-radius:4px; margin:14px auto 0; flex-shrink:0; }
+  .modal-header{ padding:12px 16px; display:flex; justify-content:space-between; align-items:center; border-bottom:1px solid #1e1e1e; flex-shrink:0; }
+  .modal-title{ font-size:1rem; font-weight:700; color:white; }
+  .close-btn{ width:30px; height:30px; background:#1e1e1e; border-radius:8px; display:flex; align-items:center; justify-content:center; cursor:pointer; border:none; }
+  .close-btn svg{ width:14px; height:14px; stroke:#666; fill:none; stroke-width:2.5; }
+  .modal-body{ overflow-y:auto; padding:16px 16px 32px; flex:1; }
 
-  .toast{ position:fixed; top:80px; left:50%; transform:translateX(-50%) translateY(-20px); background:#1e1e1e; color:white; padding:11px 20px; border-radius:24px; font-size:0.82rem; font-weight:600; opacity:0; transition:0.3s; pointer-events:none; z-index:600; white-space:nowrap; border:1px solid #333; }
+  /* TIENDA PREVIEW */
+  .tienda-preview{ background:#1a1a1a; border-radius:16px; padding:16px; margin-bottom:16px; }
+  .tienda-preview-header{ display:flex; align-items:center; gap:10px; margin-bottom:12px; }
+  .tienda-logo-prev{ width:44px; height:44px; border-radius:12px; object-fit:cover; background:#222; display:flex; align-items:center; justify-content:center; font-size:1rem; font-weight:800; color:var(--naranja); overflow:hidden; }
+  .tienda-logo-prev img{ width:100%; height:100%; object-fit:cover; }
+  .tienda-nombre-prev{ font-size:0.92rem; font-weight:800; color:white; }
+  .tienda-url-prev{ font-size:0.7rem; color:#555; margin-top:2px; word-break:break-all; }
+  .tienda-stats-prev{ display:grid; grid-template-columns:repeat(3,1fr); gap:8px; }
+  .tienda-stat-prev{ background:#222; border-radius:10px; padding:10px; text-align:center; }
+  .tienda-stat-val{ font-size:1rem; font-weight:800; color:var(--naranja); }
+  .tienda-stat-lbl{ font-size:0.58rem; color:#555; font-weight:600; text-transform:uppercase; margin-top:2px; }
+
+  .field{ margin-bottom:12px; }
+  .field label{ display:block; font-size:0.7rem; font-weight:700; color:#555; text-transform:uppercase; margin-bottom:6px; }
+  .field input{ width:100%; padding:12px 14px; background:#1a1a1a; border:1.5px solid #222; border-radius:12px; font-family:'Inter',sans-serif; font-size:0.9rem; color:white; outline:none; -webkit-appearance:none; }
+  .field input:focus{ border-color:var(--naranja); }
+  .field input::placeholder{ color:#444; }
+  .color-row{ display:flex; align-items:center; gap:10px; margin-bottom:12px; }
+  .color-prev-dot{ width:40px; height:40px; border-radius:12px; border:2px solid #222; flex-shrink:0; }
+  .color-picker-input{ flex:1; height:44px; border-radius:12px; border:1.5px solid #222; cursor:pointer; padding:4px; background:#1a1a1a; }
+  .btn-abrir-tienda{ width:100%; padding:14px; background:var(--verde); color:var(--negro); border:none; border-radius:14px; font-family:'Inter',sans-serif; font-size:0.92rem; font-weight:800; cursor:pointer; margin-bottom:8px; }
+  .btn-desactivar{ width:100%; padding:12px; background:rgba(255,77,77,0.08); color:var(--rojo); border:none; border-radius:14px; font-family:'Inter',sans-serif; font-size:0.82rem; font-weight:700; cursor:pointer; }
+  .btn-guardar-config{ width:100%; padding:13px; background:#1e1e1e; color:white; border:none; border-radius:14px; font-family:'Inter',sans-serif; font-size:0.88rem; font-weight:700; cursor:pointer; margin-bottom:8px; }
+
+  .info-box{ background:rgba(168,230,61,0.06); border:1px solid rgba(168,230,61,0.15); border-radius:12px; padding:12px 14px; font-size:0.76rem; color:#666; margin-bottom:14px; }
+  .info-box strong{ color:var(--verde); display:block; margin-bottom:4px; }
+
+  .toast{ position:fixed; bottom:20px; left:50%; transform:translateX(-50%) translateY(20px); background:var(--verde); color:var(--negro); padding:10px 20px; border-radius:24px; font-size:0.82rem; font-weight:700; opacity:0; transition:0.3s; pointer-events:none; z-index:1000; white-space:nowrap; }
   .toast.show{ opacity:1; transform:translateX(-50%) translateY(0); }
-
-  .empty{ text-align:center; padding:48px 20px; color:#444; }
-  .empty svg{ width:52px; height:52px; stroke:#333; fill:none; stroke-width:1.2; margin:0 auto 14px; display:block; }
-  .empty p{ font-size:0.85rem; }
 
   .tab-bar{ position:fixed; bottom:0; width:100%; background:#111; display:flex; justify-content:space-around; align-items:center; padding:10px 0 22px; border-top:1px solid #1e1e1e; z-index:200; }
   .tab{ display:flex; flex-direction:column; align-items:center; gap:4px; cursor:pointer; flex:1; color:#444; text-decoration:none; }
@@ -102,54 +106,81 @@
   <button class="back-btn" onclick="window.location.href='dashboard.html'">
     <svg viewBox="0 0 24 24"><path d="M19 12H5M12 19l-7-7 7-7"/></svg>
   </button>
-  <div class="header-info">
-    <div class="header-title">Plugins y Servicios</div>
-    <div class="header-sub">Potencia tu negocio en PROVEED</div>
-  </div>
+  <div class="page-title">Plugins & Herramientas</div>
 </div>
 
-<div class="hero">
-  <div class="hero-badge">⚡ Marketplace</div>
-  <div class="hero-title">Activa servicios premium para tu negocio</div>
-  <div class="hero-sub">Herramientas que se activan con un clic y se facturan junto a tu plan</div>
-  <div class="hero-stats">
-    <div class="hero-stat"><b id="hero-total">—</b><span>Plugins</span></div>
-    <div class="hero-stat"><b id="hero-activos" style="color:var(--verde)">—</b><span>Activos</span></div>
-    <div class="hero-stat"><b id="hero-factura" style="color:var(--naranja)">$—</b><span>Este mes</span></div>
-  </div>
-</div>
-<div class="cats-scroll">
-  <div class="cat-pill active" data-cat="todos" onclick="filtrar('todos',this)">Todos</div>
-  <div class="cat-pill" data-cat="marketing" onclick="filtrar('marketing',this)">Marketing</div>
-  <div class="cat-pill" data-cat="integraciones" onclick="filtrar('integraciones',this)">Integraciones</div>
-  <div class="cat-pill" data-cat="analytics" onclick="filtrar('analytics',this)">Analytics</div>
-  <div class="cat-pill" data-cat="comunicacion" onclick="filtrar('comunicacion',this)">Comunicación</div>
-  <div class="cat-pill" data-cat="logistica" onclick="filtrar('logistica',this)">Logística</div>
+<div class="hero-banner">
+  <div class="hero-tag">⚡ Marketplace de plugins</div>
+  <div class="hero-title">Potencia tu negocio con herramientas profesionales</div>
+  <div class="hero-sub">Activa las funciones que necesitas para crecer</div>
 </div>
 
-<div class="plugins-section">
-  <div class="section-title">Disponibles para tu plan</div>
-  <div class="plugins-grid" id="plugins-grid">
-    <div style="grid-column:1/-1;text-align:center;padding:30px;color:#444;font-size:0.85rem;">Cargando plugins...</div>
-  </div>
+<div class="filtros">
+  <button class="filtro-btn active" onclick="filtrar('todos',this)">Todos</button>
+  <button class="filtro-btn" onclick="filtrar('ventas',this)">Ventas</button>
+  <button class="filtro-btn" onclick="filtrar('marketing',this)">Marketing</button>
+  <button class="filtro-btn" onclick="filtrar('gestion',this)">Gestión</button>
+  <button class="filtro-btn" onclick="filtrar('activos',this)">Activos</button>
 </div>
 
-<!-- MODAL ACTIVACIÓN -->
-<div class="modal-overlay" id="modal-overlay" onclick="cerrarModal(event)">
+<div class="plugins-lista" id="plugins-lista">
+  <div style="text-align:center;padding:40px;color:#444;">Cargando plugins...</div>
+</div>
+
+<!-- MODAL TIENDA ONLINE -->
+<div class="modal-overlay" id="modal-tienda" onclick="cerrarModal(event)">
   <div class="modal-sheet">
     <div class="drag"></div>
-    <div class="modal-plugin-img" id="modal-img">
-      <svg viewBox="0 0 24 24" style="stroke:#555"><path d="M20.24 12.24a6 6 0 0 0-8.49-8.49L5 10.5V19h8.5l6.74-6.76z"/></svg>
+    <div class="modal-header">
+      <span class="modal-title">🛍️ Tienda Online</span>
+      <button class="close-btn" onclick="document.getElementById('modal-tienda').classList.remove('show')">
+        <svg viewBox="0 0 24 24"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+      </button>
     </div>
-    <div class="modal-title" id="modal-nombre">Plugin</div>
-    <div class="modal-sub" id="modal-desc">Descripción del plugin</div>
-    <div class="modal-precio-wrap">
-      <div class="modal-precio-label">Costo mensual</div>
-      <div class="modal-precio-val" id="modal-precio">$0</div>
+    <div class="modal-body">
+      <div class="tienda-preview" id="tienda-preview">
+        <div class="tienda-preview-header">
+          <div class="tienda-logo-prev" id="prev-logo">T</div>
+          <div>
+            <div class="tienda-nombre-prev" id="prev-nombre">Tu tienda</div>
+            <div class="tienda-url-prev" id="prev-url">Cargando URL...</div>
+          </div>
+        </div>
+        <div class="tienda-stats-prev">
+          <div class="tienda-stat-prev"><div class="tienda-stat-val" id="prev-prods">0</div><div class="tienda-stat-lbl">Productos</div></div>
+          <div class="tienda-stat-prev"><div class="tienda-stat-val" id="prev-pedidos">0</div><div class="tienda-stat-lbl">Pedidos</div></div>
+          <div class="tienda-stat-prev"><div class="tienda-stat-val" id="prev-ventas">$0</div><div class="tienda-stat-lbl">Ventas</div></div>
+        </div>
+      </div>
+
+      <div class="info-box">
+        <strong>✓ Sincronización automática</strong>
+        Tu nombre de empresa, logo y todos tus productos se sincronizan automáticamente. No necesitas configurar nada extra.
+      </div>
+
+      <div class="field">
+        <label>Color principal de tu tienda</label>
+        <div class="color-row">
+          <div class="color-prev-dot" id="color-dot" style="background:#FF8C00;"></div>
+          <input type="color" id="color-picker" class="color-picker-input" value="#FF8C00" oninput="prevColor(this.value)">
+        </div>
+        <input type="text" id="color-hex-input" placeholder="#FF8C00" value="#FF8C00" oninput="prevColorHex(this.value)">
+      </div>
+
+      <div class="field">
+        <label>Mensaje del banner superior</label>
+        <input type="text" id="tienda-ann" placeholder="🚚 Envíos a nivel nacional" value="🚚 Envíos a nivel nacional">
+      </div>
+
+      <div class="field">
+        <label>Título del banner principal</label>
+        <input type="text" id="tienda-banner-titulo" placeholder="Bienvenido a mi tienda">
+      </div>
+
+      <button class="btn-guardar-config" onclick="guardarConfigTienda()">💾 Guardar configuración</button>
+      <button class="btn-abrir-tienda" id="btn-abrir-tienda" onclick="abrirTienda()">🛍️ Abrir mi tienda online →</button>
+      <button class="btn-desactivar" id="btn-desactivar-tienda" onclick="desactivarTienda()" style="display:none;">Desactivar tienda</button>
     </div>
-    <div class="modal-info">Este servicio se activará inmediatamente y se facturará junto a tu cuenta PROVEED al final del mes.</div>
-    <button class="btn-confirmar" id="btn-confirmar" onclick="confirmarActivacion()">ACTIVAR AHORA →</button>
-    <button class="btn-cancelar" onclick="cerrarModalDirecto()">Cancelar</button>
   </div>
 </div>
 
@@ -158,9 +189,9 @@
 <nav class="tab-bar">
   <a class="tab" href="dashboard.html"><svg viewBox="0 0 24 24"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/></svg><span>Panel</span></a>
   <a class="tab" href="productos.html"><svg viewBox="0 0 24 24"><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"/></svg><span>Productos</span></a>
-  <a class="tab" href="tips.html"><svg viewBox="0 0 24 24"><path d="M15 10l4.553-2.069A1 1 0 0 1 21 8.87v6.26a1 1 0 0 1-1.447.894L15 14"/><rect x="1" y="6" width="15" height="12" rx="2" ry="2"/></svg><span>Tips</span></a>
-  <a class="tab" href="pedidos.html"><svg viewBox="0 0 24 24"><rect x="1" y="3" width="15" height="13" rx="1"/><path d="M16 8h4l3 3v5h-7V8z"/><circle cx="5.5" cy="18.5" r="2.5"/><circle cx="18.5" cy="18.5" r="2.5"/></svg><span>Pedidos</span></a>
-  <a class="tab active" href="plugins.html"><svg viewBox="0 0 24 24"><path d="M20.24 12.24a6 6 0 0 0-8.49-8.49L5 10.5V19h8.5l6.74-6.76z"/><line x1="16" y1="8" x2="2" y2="22"/><line x1="17.5" y1="15" x2="9" y2="15"/></svg><span>Plugins</span></a>
+  <a class="tab" href="chat.html"><svg viewBox="0 0 24 24"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg><span>Chat</span></a>
+  <a class="tab active" href="plugins.html"><svg viewBox="0 0 24 24"><path d="M20.24 12.24a6 6 0 0 0-8.49-8.49L5 10.5V19h8.5l6.74-6.76z"/><line x1="16" y1="8" x2="2" y2="22"/></svg><span>Plugins</span></a>
+  <a class="tab" href="perfil.html"><svg viewBox="0 0 24 24"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg><span>Perfil</span></a>
 </nav>
 
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
@@ -168,126 +199,226 @@
 const { createClient } = supabase;
 const sb = createClient('https://hfmsyrmkewscnvwynzfq.supabase.co','sb_publishable_d1oLsq70a6ZV33vW3XkRgw_nYcN2Z9v');
 
-let userId='', todosPlugins=[], misPlugins=[], catActiva='todos', pluginSeleccionado=null;
+let userId='', userData={}, pluginsActivados=[], filtroActual='todos';
+let tiendaActivada=false;
 
-// PLUGINS POR DEFECTO si no hay en BD
 const PLUGINS_DEFAULT = [
-  { id:'p1', nombre:'WhatsApp Business', descripcion:'Integra tu catálogo con WhatsApp Business API. Recibe pedidos directamente por WhatsApp.', imagen:'', precio:29, tipo_cobro:'mensual', categoria:'comunicacion', activo:true, features:['Catálogo automático','Pedidos por WhatsApp','Notificaciones'] },
-  { id:'p2', nombre:'SEO Boost', descripcion:'Optimiza tus productos para aparecer en Google. Más visibilidad, más ventas.', imagen:'', precio:19, tipo_cobro:'mensual', categoria:'marketing', activo:true, features:['Meta tags automáticos','Sitemap XML','Schema markup'] },
-  { id:'p3', nombre:'Analytics Pro', descripcion:'Panel de estadísticas avanzado con métricas detalladas de ventas, clientes y productos.', imagen:'', precio:15, tipo_cobro:'mensual', categoria:'analytics', activo:true, features:['Gráficos avanzados','Exportar reportes','Comparativas'] },
-  { id:'p4', nombre:'Integración SRI', descripcion:'Emite facturas electrónicas directamente desde PROVEED con validación SRI Ecuador.', imagen:'', precio:39, tipo_cobro:'mensual', categoria:'integraciones', activo:true, features:['Facturas electrónicas','Validación SRI','XML automático'] },
-  { id:'p5', nombre:'Transportadora Plus', descripcion:'Conecta con Servientrega, DHL y correos del Ecuador para tracking automático.', imagen:'', precio:25, tipo_cobro:'mensual', categoria:'logistica', activo:true, features:['Tracking en tiempo real','Multi-transportadora','Notificaciones'] },
-  { id:'p6', nombre:'Email Marketing', descripcion:'Envía campañas de email a tus clientes con plantillas profesionales y métricas.', imagen:'', precio:12, tipo_cobro:'mensual', categoria:'marketing', activo:true, features:['Plantillas', '5000 emails/mes','Métricas de apertura'] },
-  { id:'p7', nombre:'Chat Prioritario', descripcion:'Tu chat aparece primero para los emprendedores. Más visibilidad, más consultas.', imagen:'', precio:9, tipo_cobro:'mensual', categoria:'comunicacion', activo:true, features:['Posición prioritaria','Badge destacado','Respuesta rápida'] },
-  { id:'p8', nombre:'Multi-idioma', descripcion:'Muestra tu catálogo en español, inglés y portugués para llegar a más mercados.', imagen:'', precio:0, tipo_cobro:'gratis', categoria:'marketing', activo:true, features:['3 idiomas','Traducción automática','Sin costo adicional'] },
+  {
+    id:'tienda-online', nombre:'Tienda Online', icono:'🛍️',
+    desc:'Tu catálogo de productos en una tienda pública profesional. Los clientes pueden comprar directamente.',
+    categoria:'ventas', precio:0,
+    features:['Catálogo sincronizado','Pagos integrados','Reseñas de clientes','Panel de pedidos','Color personalizable','URL pública'],
+    destacado:true
+  },
+  {
+    id:'whatsapp-catalogo', nombre:'Catálogo WhatsApp', icono:'💬',
+    desc:'Comparte tu catálogo directamente por WhatsApp con un link especial.',
+    categoria:'ventas', precio:0,
+    features:['Link de catálogo','Compartir productos','Vista optimizada']
+  },
+  {
+    id:'factura-auto', nombre:'Facturación Automática', icono:'🧾',
+    desc:'Genera facturas PDF automáticamente con cada pedido confirmado.',
+    categoria:'gestion', precio:0,
+    features:['PDF automático','Datos de empresa','Logo en factura','Numeración automática']
+  },
+  {
+    id:'estadisticas-pro', nombre:'Estadísticas Pro', icono:'📊',
+    desc:'Análisis avanzado de ventas, productos más vendidos y comportamiento de clientes.',
+    categoria:'gestion', precio:0,
+    features:['Gráficos avanzados','Top productos','Análisis de clientes','Exportar datos']
+  },
+  {
+    id:'descuentos', nombre:'Cupones y Descuentos', icono:'🏷️',
+    desc:'Crea códigos de descuento y promociones para tus clientes.',
+    categoria:'marketing', precio:0,
+    features:['Códigos de descuento','% o monto fijo','Fecha de vencimiento','Límite de usos']
+  },
+  {
+    id:'catalogo-pdf', nombre:'Catálogo PDF', icono:'📄',
+    desc:'Genera un catálogo PDF profesional con todos tus productos para compartir.',
+    categoria:'marketing', precio:0,
+    features:['Diseño profesional','Con precios','Logo incluido','Descarga directa']
+  }
 ];
 
-const ICONOS_CATEGORIA = {
-  marketing:'<path d="M22 12h-4l-3 9L9 3l-3 9H2"/>',
-  integraciones:'<path d="M20.24 12.24a6 6 0 0 0-8.49-8.49L5 10.5V19h8.5l6.74-6.76z"/><line x1="16" y1="8" x2="2" y2="22"/>',
-  analytics:'<line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/>',
-  comunicacion:'<path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/>',
-  logistica:'<rect x="1" y="3" width="15" height="13" rx="1"/><path d="M16 8h4l3 3v5h-7V8z"/>',
-};
-
-(async () => {
-  const { data: { session } } = await sb.auth.getSession();
+(async()=>{
+  const { data:{session} } = await sb.auth.getSession();
   if(!session){ window.location.href='login.html'; return; }
-  userId = session.user.id;
-  await cargarPlugins();
+  userId=session.user.id;
+  const { data:u } = await sb.from('usuarios').select('*').eq('id',userId).single();
+  if(u) userData=u;
+
+  // Cargar plugins activados
+  const { data:activados } = await sb.from('plugins_activados').select('*').eq('proveedor_id',userId);
+  pluginsActivados=activados||[];
+
+  // Verificar si tienda está activada
+  tiendaActivada=pluginsActivados.some(p=>p.plugin_id==='tienda-online'||p.nombre==='Tienda Online');
+
+  renderPlugins();
+  cargarStatsTienda();
 })();
 
-async function cargarPlugins() {
-  const { data: pluginsBD } = await sb.from('plugins').select('*').eq('activo',true);
-  todosPlugins = pluginsBD?.length ? pluginsBD : PLUGINS_DEFAULT;
-  const { data: activados } = await sb.from('plugins_activados').select('*').eq('proveedor_id',userId);
-  misPlugins = activados||[];
-  const activos = misPlugins.filter(p=>p.estado==='activo').length;
-  const factura = todosPlugins.filter(p => misPlugins.find(m=>m.plugin_id===p.id&&m.estado==='activo')).reduce((s,p)=>s+p.precio,0);
-  document.getElementById('hero-total').textContent = todosPlugins.length;
-  document.getElementById('hero-activos').textContent = activos;
-  document.getElementById('hero-factura').textContent = '$'+factura.toFixed(0);
-  renderPlugins(todosPlugins);
+async function cargarStatsTienda(){
+  const [{ count:numProds },{ data:pedidos }] = await Promise.all([
+    sb.from('productos').select('*',{count:'exact',head:true}).eq('proveedor_id',userId).eq('activo',true),
+    sb.from('pedidos').select('total').eq('proveedor_id',userId)
+  ]);
+  document.getElementById('prev-prods').textContent=numProds||0;
+  document.getElementById('prev-pedidos').textContent=(pedidos||[]).length;
+  const totalVentas=(pedidos||[]).reduce((s,p)=>s+(p.total||0),0);
+  document.getElementById('prev-ventas').textContent='$'+totalVentas.toFixed(0);
+
+  // URL de la tienda
+  const tiendaUrl=window.location.origin+'/tienda-online.html';
+  document.getElementById('prev-url').textContent=tiendaUrl;
+
+  // Logo y nombre
+  const logo=userData.logo_empresa||userData.foto_perfil||'';
+  const nombre=userData.empresa||userData.nombre||'Tu tienda';
+  const logoEl=document.getElementById('prev-logo');
+  if(logo) logoEl.innerHTML=`<img src="${logo}" alt="">`;
+  else logoEl.textContent=nombre[0].toUpperCase();
+  document.getElementById('prev-nombre').textContent=nombre;
+
+  // Cargar config guardada
+  const colorGuardado=localStorage.getItem(`tienda_color_${userId}`)||'#FF8C00';
+  document.getElementById('color-picker').value=colorGuardado;
+  document.getElementById('color-hex-input').value=colorGuardado;
+  document.getElementById('color-dot').style.background=colorGuardado;
+  document.getElementById('tienda-banner-titulo').value=localStorage.getItem(`tienda_banner_titulo_${userId}`)||`Bienvenido a ${nombre}`;
+  document.getElementById('tienda-ann').value=localStorage.getItem(`tienda_ann_${userId}`)||'🚚 Envíos a nivel nacional';
 }
 
-function renderPlugins(lista) {
-  const grid = document.getElementById('plugins-grid');
-  if(!lista.length){ grid.innerHTML='<div class="empty"><svg viewBox="0 0 24 24"><path d="M20.24 12.24a6 6 0 0 0-8.49-8.49L5 10.5V19h8.5l6.74-6.76z"/></svg><p>Sin plugins en esta categoría</p></div>'; return; }
-  grid.innerHTML='';
-  lista.forEach(p => {
-    const activado = misPlugins.find(m => (m.plugin_id===p.id||m.plugin_id===p.id) && m.estado==='activo');
-    const iconPath = ICONOS_CATEGORIA[p.categoria] || '<path d="M20.24 12.24a6 6 0 0 0-8.49-8.49L5 10.5V19h8.5l6.74-6.76z"/>';
-    const div = document.createElement('div');
-    div.className = 'plugin-card' + (activado?' activo':'');
-    div.innerHTML = `
-      <div class="plugin-img">
-        ${p.imagen ? `<img src="${p.imagen}" alt="${p.nombre}">` : `<div class="plugin-img-placeholder"><svg viewBox="0 0 24 24" style="stroke:${activado?'var(--verde)':'#444'}">${iconPath}</svg></div>`}
-        ${activado ? '<div class="plugin-badge-activo">✓ Activo</div>' : ''}
-        ${!activado && p.precio===0 ? '<div class="plugin-badge-nuevo">GRATIS</div>' : ''}
-      </div>
-      <div class="plugin-body">
-        <div class="plugin-nombre">${p.nombre}</div>
-        <div class="plugin-desc">${p.descripcion}</div>
-        <div class="plugin-meta">
-          <div class="plugin-precio ${p.precio===0?'gratis':''}">${p.precio===0?'Gratis':'$'+p.precio+'/mes'}</div>
-          <div class="plugin-tipo">${p.tipo_cobro==='mensual'?'Mensual':p.tipo_cobro==='unico'?'Pago único':'Gratis'}</div>
+function renderPlugins(){
+  let lista=[...PLUGINS_DEFAULT];
+  if(filtroActual==='activos') lista=lista.filter(p=>pluginsActivados.some(a=>a.plugin_id===p.id||a.nombre===p.nombre));
+  else if(filtroActual!=='todos') lista=lista.filter(p=>p.categoria===filtroActual);
+
+  const cont=document.getElementById('plugins-lista');
+  cont.innerHTML='';
+  lista.forEach(p=>{
+    const activo=pluginsActivados.some(a=>a.plugin_id===p.id||a.nombre===p.nombre);
+    const div=document.createElement('div');
+    div.className=`plugin-card${activo?' activado':''}${p.destacado?' destacado':''}`;
+    div.innerHTML=`
+      <div class="plugin-header">
+        <div class="plugin-icono" style="background:${activo?'rgba(168,230,61,0.1)':'rgba(255,255,255,0.05)'}">${p.icono}</div>
+        <div class="plugin-info">
+          <div class="plugin-nombre">${p.nombre}</div>
+          <div class="plugin-desc">${p.desc}</div>
+          <div class="plugin-badges">
+            <span class="plugin-badge badge-gratis">Gratis</span>
+            ${activo?'<span class="plugin-badge badge-activo">✓ Activo</span>':''}
+            ${p.destacado?'<span class="plugin-badge badge-nuevo">Destacado</span>':''}
+</div>
         </div>
-        ${p.features?.length ? `<div class="plugin-features">${p.features.map(f=>`<span class="feature-tag">${f}</span>`).join('')}</div>` : ''}
-        <button class="btn-activar ${activado?'activo':'inactivo'}" onclick="clickPlugin('${p.id}',${activado?'true':'false'})">
-          ${activado ? '✓ Activo — Ver detalles' : p.precio===0 ? 'Activar gratis →' : 'Activar — $'+p.precio+'/mes →'}
+      </div>
+      <div class="plugin-features">
+        ${p.features.map(f=>`<div class="feature-item">${f}</div>`).join('')}
+      </div>
+      <div class="plugin-footer">
+        <div class="plugin-precio gratis">Gratis</div>
+        <button class="btn-activar ${activo?'on':'off'}" onclick="accionPlugin('${p.id}','${p.nombre}',${activo})">
+          ${activo?(p.id==='tienda-online'?'⚙️ Configurar':'✓ Activado'):'Activar'}
         </button>
       </div>`;
-    grid.appendChild(div);
+    cont.appendChild(div);
   });
 }
 
-window.filtrar = function(cat, el) {
-  catActiva=cat;
-  document.querySelectorAll('.cat-pill').forEach(p=>p.classList.remove('active'));
-  el.classList.add('active');
-  const filtrado = cat==='todos' ? todosPlugins : todosPlugins.filter(p=>p.categoria===cat);
-  renderPlugins(filtrado);
-};
-
-window.clickPlugin = function(id, estaActivo) {
-  if(estaActivo){ showToast('✓ Plugin ya activo. Contáctanos para desactivar.'); return; }
-  pluginSeleccionado = todosPlugins.find(p=>p.id===id);
-  if(!pluginSeleccionado) return;
-  const iconPath = ICONOS_CATEGORIA[pluginSeleccionado.categoria]||'<path d="M20.24 12.24a6 6 0 0 0-8.49-8.49L5 10.5V19h8.5l6.74-6.76z"/>';
-  document.getElementById('modal-img').innerHTML = pluginSeleccionado.imagen ? `<img src="${pluginSeleccionado.imagen}" alt="">` : `<svg viewBox="0 0 24 24" style="stroke:var(--morado)">${iconPath}</svg>`;
-  document.getElementById('modal-nombre').textContent = pluginSeleccionado.nombre;
-  document.getElementById('modal-desc').textContent = pluginSeleccionado.descripcion;
-  const precioEl = document.getElementById('modal-precio');
-  precioEl.textContent = pluginSeleccionado.precio===0 ? 'Gratis' : '$'+pluginSeleccionado.precio+'/mes';
-  precioEl.className = 'modal-precio-val' + (pluginSeleccionado.precio===0?' gratis':'');
-  document.getElementById('btn-confirmar').textContent = pluginSeleccionado.precio===0 ? 'ACTIVAR GRATIS →' : `ACTIVAR — $${pluginSeleccionado.precio}/mes →`;
-  document.getElementById('modal-overlay').classList.add('show');
-};
-
-window.confirmarActivacion = async function() {
-  if(!pluginSeleccionado) return;
-  document.getElementById('btn-confirmar').disabled=true;
-  document.getElementById('btn-confirmar').textContent='Activando...';
-  try {
-    await sb.from('plugins_activados').insert({ plugin_id: pluginSeleccionado.id, proveedor_id: userId, estado:'activo' });
-    document.getElementById('modal-overlay').classList.remove('show');
-    showToast('✓ ' + pluginSeleccionado.nombre + ' activado con éxito');
-    await cargarPlugins();
-  } catch(e) {
-    showToast('Error al activar: ' + e.message);
+window.accionPlugin=async function(pluginId, nombre, activo){
+  if(pluginId==='tienda-online'){
+    abrirModalTienda();
+    return;
   }
-  document.getElementById('btn-confirmar').disabled=false;
-  document.getElementById('btn-confirmar').textContent='ACTIVAR AHORA →';
-  pluginSeleccionado=null;
+  if(activo){
+    await sb.from('plugins_activados').delete().eq('proveedor_id',userId).eq('plugin_id',pluginId);
+    pluginsActivados=pluginsActivados.filter(p=>p.plugin_id!==pluginId);
+    showToast(`${nombre} desactivado`);
+  } else {
+    await sb.from('plugins_activados').insert({proveedor_id:userId,plugin_id:pluginId,nombre,activo:true});
+    pluginsActivados.push({plugin_id:pluginId,nombre,activo:true});
+    showToast(`✓ ${nombre} activado`);
+  }
+  renderPlugins();
 };
 
-window.cerrarModal = e => { if(e.target===document.getElementById('modal-overlay')) document.getElementById('modal-overlay').classList.remove('show'); };
-window.cerrarModalDirecto = () => document.getElementById('modal-overlay').classList.remove('show');
+window.abrirModalTienda=function(){
+  cargarStatsTienda();
+  const activo=tiendaActivada;
+  document.getElementById('btn-desactivar-tienda').style.display=activo?'block':'none';
+  document.getElementById('btn-abrir-tienda').textContent=activo?'🛍️ Abrir mi tienda online →':'🚀 Activar y abrir tienda';
+  document.getElementById('modal-tienda').classList.add('show');
+};
 
-function showToast(msg) {
-  const t=document.getElementById('toast');
-  t.textContent=msg; t.classList.add('show');
-  setTimeout(()=>t.classList.remove('show'),3000);
+window.guardarConfigTienda=async function(){
+  const color=document.getElementById('color-hex-input').value||document.getElementById('color-picker').value;
+  const ann=document.getElementById('tienda-ann').value.trim();
+  const bannerTitulo=document.getElementById('tienda-banner-titulo').value.trim();
+
+  localStorage.setItem(`tienda_color_${userId}`,color);
+  localStorage.setItem(`tienda_ann_${userId}`,ann);
+  localStorage.setItem(`tienda_banner_titulo_${userId}`,bannerTitulo);
+
+  // Guardar en Supabase en plugins_activados config
+  if(!tiendaActivada){
+    await sb.from('plugins_activados').insert({
+      proveedor_id:userId, plugin_id:'tienda-online',
+      nombre:'Tienda Online', activo:true,
+      config:{ color, ann, bannerTitulo, activada:true }
+    });
+    tiendaActivada=true;
+    pluginsActivados.push({plugin_id:'tienda-online',nombre:'Tienda Online',activo:true});
+  } else {
+    await sb.from('plugins_activados').update({
+      config:{ color, ann, bannerTitulo, activada:true }
+    }).eq('proveedor_id',userId).eq('plugin_id','tienda-online');
+  }
+  renderPlugins();
+  showToast('✓ Configuración guardada');
+};
+
+window.abrirTienda=async function(){
+  await guardarConfigTienda();
+  window.open('tienda-online.html','_blank');
+};
+
+window.desactivarTienda=async function(){
+  if(!confirm('¿Desactivar la tienda online? Los clientes no podrán acceder a ella.')) return;
+  await sb.from('plugins_activados').delete().eq('proveedor_id',userId).eq('plugin_id','tienda-online');
+  tiendaActivada=false;
+  pluginsActivados=pluginsActivados.filter(p=>p.plugin_id!=='tienda-online');
+  document.getElementById('modal-tienda').classList.remove('show');
+  renderPlugins();
+  showToast('Tienda desactivada');
+};
+
+window.prevColor=function(val){
+  document.getElementById('color-dot').style.background=val;
+  document.getElementById('color-hex-input').value=val;
+};
+
+window.prevColorHex=function(val){
+  if(/^#[0-9A-Fa-f]{6}$/.test(val)){
+    document.getElementById('color-dot').style.background=val;
+    document.getElementById('color-picker').value=val;
+  }
+};
+
+window.filtrar=(f,el)=>{
+  filtroActual=f;
+  document.querySelectorAll('.filtro-btn').forEach(b=>b.classList.remove('active'));
+  el.classList.add('active');
+  renderPlugins();
+};
+
+window.cerrarModal=e=>{ if(e.target===document.getElementById('modal-tienda')) document.getElementById('modal-tienda').classList.remove('show'); };
+
+function showToast(msg){
+  const t=document.getElementById('toast'); t.textContent=msg; t.classList.add('show');
+  setTimeout(()=>t.classList.remove('show'),2500);
 }
 </script>
 </body>
