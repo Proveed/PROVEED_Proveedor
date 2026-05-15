@@ -429,4 +429,358 @@
     </div>
   </div>
 </div
+<!-- MODAL SERVICIO B2B -->
+<div class="modal-overlay" id="modal-servicio" onclick="cerrarModal('modal-servicio',event)">
+  <div class="modal-sheet">
+    <div class="drag"></div>
+    <div class="modal-header">
+      <span class="modal-title">Registrar Servicio B2B</span>
+      <button class="close-btn" onclick="document.getElementById('modal-servicio').classList.remove('show')"><svg viewBox="0 0 24 24"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg></button>
+    </div>
+    <div class="modal-body">
+      <div style="background:rgba(255,140,0,0.06);border:1px solid rgba(255,140,0,0.15);border-radius:12px;padding:12px;margin-bottom:14px;font-size:0.76rem;color:#666;">
+        ⚠️ Debes subir al menos una foto de evidencia del servicio prestado para poder autorizar el pago.
+      </div>
+      <div class="field"><label>Empresa / Proveedor externo *</label><input type="text" id="serv-empresa" placeholder="Nombre de la empresa"></div>
+      <div class="field"><label>Descripción del servicio *</label><textarea id="serv-desc" placeholder="Ej: Mantenimiento de equipos, Servicio de limpieza..."></textarea></div>
+      <div class="field-row">
+        <div class="field"><label>Monto ($) *</label><input type="number" id="serv-monto" placeholder="0.00" step="0.01"></div>
+        <div class="field"><label>Fecha del servicio</label><input type="date" id="serv-fecha"></div>
+      </div>
+      <div class="field"><label>Evidencias fotográficas * (mínimo 1)</label></div>
+      <div class="foto-upload-area" id="serv-foto-area">
+        <svg viewBox="0 0 24 24"><path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"/><circle cx="12" cy="13" r="4"/></svg>
+        <p>Toca para agregar fotos de evidencia</p>
+        <input type="file" accept="image/*" multiple class="foto-file-input" id="serv-fotos-input" onchange="selServFotos(this)">
+      </div>
+      <div class="fotos-preview" id="serv-fotos-preview"></div>
+      <button class="btn-submit" onclick="guardarServicio()">Registrar servicio</button>
+    </div>
+  </div>
+</div>
+
+<!-- MODAL ASISTENCIA MANUAL -->
+<div class="modal-overlay" id="modal-asistencia" onclick="cerrarModal('modal-asistencia',event)">
+  <div class="modal-sheet">
+    <div class="drag"></div>
+    <div class="modal-header">
+      <span class="modal-title">Registro manual</span>
+      <button class="close-btn" onclick="document.getElementById('modal-asistencia').classList.remove('show')"><svg viewBox="0 0 24 24"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg></button>
+    </div>
+    <div class="modal-body">
+      <div class="field"><label>Empleado *</label><select id="asist-empleado"></select></div>
+      <div class="field-row">
+        <div class="field"><label>Fecha</label><input type="date" id="asist-fecha"></div>
+        <div class="field"><label>Hora entrada</label><input type="time" id="asist-hora"></div>
+      </div>
+      <div class="field"><label>Estado</label>
+        <select id="asist-estado">
+          <option value="puntual">Puntual</option>
+          <option value="tarde">Tarde</option>
+          <option value="falta">Falta</option>
+          <option value="permiso">Permiso</option>
+        </select>
+      </div>
+      <div class="field"><label>Foto del empleado (opcional)</label>
+        <div class="foto-upload-area" id="asist-foto-area">
+          <svg viewBox="0 0 24 24"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+          <p>Foto de verificación</p>
+          <input type="file" accept="image/*" capture="user" class="foto-file-input" id="asist-foto-input" onchange="selAsistFoto(this)">
+        </div>
+      </div>
+      <button class="btn-submit btn-verde" onclick="guardarAsistencia()">Registrar asistencia</button>
+    </div>
+  </div>
+</div>
+
+
+
+<!-- MODAL DETALLE EMPLEADO -->
+<div class="modal-overlay" id="modal-detalle-emp" onclick="cerrarModal('modal-detalle-emp',event)">
+  <div class="modal-sheet">
+    <div class="drag"></div>
+    <div class="modal-header">
+      <span class="modal-title">Perfil del empleado</span>
+      <button class="close-btn" onclick="document.getElementById('modal-detalle-emp').classList.remove('show')"><svg viewBox="0 0 24 24"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg></button>
+    </div>
+    <div class="modal-body" id="detalle-emp-body"></div>
+  </div>
+</div>
+
+<div class="upload-overlay" id="upload-overlay">
+  <div class="upload-box"><div class="spinner"></div><p>Guardando...</p></div>
+</div>
+<div class="toast" id="toast"></div>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script>
+const { createClient } = supabase;
+const sb = createClient('https://hfmsyrmkewscnvwynzfq.supabase.co','sb_publishable_d1oLsq70a6ZV33vW3XkRgw_nYcN2Z9v');
+
+let userId='', userData={}, empleados=[], sucursales=[], contratos=[], nominas=[], servicios=[], asistencias=[];
+let empFotoFile=null, servFotosFiles=[], asistFotoFile=null, contratoScanFile=null;
+let editandoEmpId=null;
+
+const SBU=450; // Salario Básico Unificado Ecuador 2026
+
+(async()=>{
+  const { data:{session} } = await sb.auth.getSession();
+  if(!session){ window.location.href='login.html'; return; }
+  userId=session.user.id;
+  const { data:u } = await sb.from('usuarios').select('*').eq('id',userId).single();
+  if(u){
+    userData=u;
+    document.getElementById('empresa-sub').textContent=u.empresa||u.nombre||'Mi empresa';
+  }
+  // Verificar que el plugin esté activo
+  const { data:plugin } = await sb.from('plugins_activados').select('*').eq('proveedor_id',userId).eq('plugin_id','rrhh-pro').single();
+  if(!plugin){
+    // Activar automáticamente si entran directamente
+    await sb.from('plugins_activados').upsert({proveedor_id:userId,plugin_id:'rrhh-pro',nombre:'RR.HH. PRO',activo:true});
+  }
+
+  // Cargar todo en paralelo
+  await cargarTodo();
+  inicializarFechas();
+})();
+
+function inicializarFechas(){
+  const hoy=new Date().toISOString().split('T')[0];
+  const mes=new Date().toISOString().slice(0,7);
+  if(document.getElementById('asist-fecha')) document.getElementById('asist-fecha').value=hoy;
+  if(document.getElementById('asist-hora')) document.getElementById('asist-hora').value=new Date().toTimeString().slice(0,5);
+  if(document.getElementById('nom-periodo')) document.getElementById('nom-periodo').value=mes;
+  if(document.getElementById('serv-fecha')) document.getElementById('serv-fecha').value=hoy;
+  if(document.getElementById('cont-inicio')) document.getElementById('cont-inicio').value=hoy;
+  generarCodigoContrato();
+}
+
+async function cargarTodo(){
+  const [empR,sucR,contrR,nomR,servR,asistR] = await Promise.all([
+    sb.from('rrhh_empleados').select('*').eq('proveedor_id',userId).order('created_at',{ascending:false}),
+    sb.from('sucursales').select('*').eq('proveedor_id',userId),
+    sb.from('rrhh_contratos').select('*').eq('proveedor_id',userId).order('created_at',{ascending:false}),
+    sb.from('rrhh_nomina').select('*').eq('proveedor_id',userId).order('created_at',{ascending:false}),
+    sb.from('rrhh_servicios_b2b').select('*').eq('proveedor_id',userId).order('created_at',{ascending:false}),
+    sb.from('rrhh_asistencia').select('*').eq('proveedor_id',userId).order('fecha',{ascending:false}).limit(50)
+  ]);
+  empleados=empR.data||[];
+  sucursales=sucR.data||[];
+  contratos=contrR.data||[];
+  nominas=nomR.data||[];
+  servicios=servR.data||[];
+  asistencias=asistR.data||[];
+  renderTodo();
+}
+
+function renderTodo(){
+  renderDashboard();
+  renderEmpleados();
+  renderAsistencia();
+  renderNomina();
+  renderContratos();
+  renderServicios();
+  poblarSelects();
+}
+
+function renderDashboard(){
+  const activos=empleados.filter(e=>e.activo!==false).length;
+  const hoy=new Date().toISOString().split('T')[0];
+  const asistHoy=asistencias.filter(a=>a.fecha===hoy).length;
+  const totalNomina=nominas.reduce((s,n)=>s+(n.salario_neto||0),0);
+
+  // Alertas: empleados con atrasos graves
+  const alertas=empleados.filter(e=>(e.score_desempeno||100)<60).length;
+
+  document.getElementById('k-empleados').textContent=activos;
+  document.getElementById('k-asistencia').textContent=asistHoy+'/'+activos;
+  document.getElementById('k-nomina').textContent='$'+totalNomina.toFixed(0);
+  document.getElementById('k-alertas').textContent=alertas;
+
+  // Sucursal principal
+  const sucPrincipal=sucursales.find(s=>s.principal)||sucursales[0];
+  if(sucPrincipal){
+    document.getElementById('sucursal-info-dash').innerHTML=`
+      <div class="sucursal-chip"><svg viewBox="0 0 24 24"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg><span>${sucPrincipal.nombre}</span></div>
+      <div style="font-size:0.78rem;color:#666;">${sucPrincipal.ciudad||'—'} · ${sucPrincipal.direccion||'—'}</div>
+      <div style="font-size:0.72rem;color:#aaa;margin-top:4px;">${sucPrincipal.horario||'Horario no configurado'}</div>`;
+  }
+
+  // Alertas lista
+  const alertasEmp=empleados.filter(e=>(e.score_desempeno||100)<70);
+  const alertasLista=document.getElementById('alertas-lista');
+  if(!alertasEmp.length){ alertasLista.innerHTML='<div class="empty-state"><svg viewBox="0 0 24 24"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg><p>Sin alertas activas</p></div>'; }
+  else{
+    alertasLista.innerHTML='';
+    alertasEmp.forEach(e=>{
+      const div=document.createElement('div');
+      div.className='card';
+      div.style.borderColor='rgba(255,77,77,0.2)';
+      div.style.background='rgba(255,77,77,0.02)';
+      div.innerHTML=`<div style="display:flex;align-items:center;gap:10px;"><div style="font-size:1.2rem;">⚠️</div><div><div style="font-size:0.85rem;font-weight:700;color:var(--negro);">${e.nombre}</div><div style="font-size:0.72rem;color:var(--rojo);">Score de desempeño: ${e.score_desempeno||100}% — Riesgo de despido</div></div></div>`;
+      alertasLista.appendChild(div);
+    });
+  }
+
+  // Resumen asistencia 7 días
+  const resumen=document.getElementById('resumen-asist');
+  const dias=[];
+  for(let i=6;i>=0;i--){
+    const d=new Date(); d.setDate(d.getDate()-i);
+    const fechaStr=d.toISOString().split('T')[0];
+    const asistDia=asistencias.filter(a=>a.fecha===fechaStr);
+    dias.push({fecha:fechaStr,dia:d.toLocaleDateString('es-EC',{weekday:'short'}),total:asistDia.length,puntuales:asistDia.filter(a=>a.estado==='puntual').length,tarde:asistDia.filter(a=>a.estado==='tarde').length,faltas:asistDia.filter(a=>a.estado==='falta').length});
+  }
+  resumen.innerHTML=dias.map(d=>`
+    <div style="display:flex;align-items:center;gap:10px;padding:6px 0;border-bottom:1px solid #f5f5f5;">
+      <div style="font-size:0.72rem;font-weight:700;color:#aaa;width:30px;">${d.dia}</div>
+      <div style="flex:1;height:6px;background:#eee;border-radius:6px;overflow:hidden;"><div style="height:100%;width:${d.total>0?Math.round(d.puntuales/Math.max(activos,1)*100):0}%;background:var(--verde);border-radius:6px;"></div></div>
+      <div style="font-size:0.68rem;color:#aaa;">${d.puntuales}✓ ${d.tarde}⚠ ${d.faltas}✗</div>
+    </div>`).join('');
+}
+
+function renderEmpleados(){
+  const cont=document.getElementById('empleados-lista');
+  if(!empleados.length){ cont.innerHTML='<div class="empty-state"><svg viewBox="0 0 24 24"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg><p>Sin empleados registrados</p></div>'; return; }
+  cont.innerHTML='';
+  empleados.forEach(e=>{
+    const div=document.createElement('div'); div.className='empleado-item';
+    div.onclick=()=>verDetalleEmpleado(e);
+    const score=e.score_desempeno||100;
+    const badgeClass=score>=80?'badge-activo':score>=60?'badge-pendiente':'badge-riesgo';
+    const badgeTxt=score>=80?'Óptimo':score>=60?'Observación':'Riesgo';
+    const bgColor=e.activo!==false?'rgba(50,205,50,0.1)':'rgba(255,77,77,0.1)';
+    const foto=e.foto||'';
+    div.innerHTML=`
+      <div class="emp-avatar" style="background:${bgColor};">${foto?`<img src="${foto}" alt="">`:`<span style="color:var(--verde);font-size:0.9rem;font-weight:800;">${(e.nombre||'E')[0].toUpperCase()}</span>`}</div>
+      <div class="emp-info">
+        <div class="emp-nombre">${e.nombre||'Sin nombre'}</div>
+        <div class="emp-cargo">${e.cargo||'—'} · ${e.sucursal_nombre||'Sin sucursal'}</div>
+        <div class="emp-cedula">CI: ${e.cedula||'—'} · $${Number(e.salario||0).toFixed(0)}/mes</div>
+      </div>
+      <span class="emp-badge ${badgeClass}">${badgeTxt}</span>`;
+    cont.appendChild(div);
+  });
+}
+
+function renderAsistencia(){
+  const hoy=new Date().toISOString().split('T')[0];
+  const asistHoy=asistencias.filter(a=>a.fecha===hoy);
+  const cont=document.getElementById('asistencia-lista');
+
+  // Geofence info
+  const geoConfig=JSON.parse(localStorage.getItem(`geo_config_${userId}`)||'{}');
+  const sucPrincipal=sucursales.find(s=>s.principal)||sucursales[0];
+  if(sucPrincipal) document.getElementById('geo-info-txt').textContent=`${sucPrincipal.nombre} · ${geoConfig.radio||200}m radio · ${geoConfig.horaIni||'08:00'}-${geoConfig.horaFin||'08:40'}`;
+
+  if(!asistHoy.length){ cont.innerHTML='<div class="empty-state"><p>Sin registros de asistencia hoy</p></div>'; return; }
+  cont.innerHTML='';
+  asistHoy.forEach(a=>{
+    const div=document.createElement('div'); div.className='asist-item';
+    const horaEntrada=a.hora_entrada||'—';
+    const minAtraso=calcularAtraso(horaEntrada,geoConfig.horaFin||'08:40');
+    const atrasoClass=minAtraso<=0?'atraso-ok':minAtraso<=15?'atraso-warning':'atraso-danger';
+    const atrasoTxt=minAtraso<=0?'Puntual':`+${minAtraso} min tarde`;
+    const estClass=a.estado==='puntual'?'est-puntual':a.estado==='tarde'?'est-tarde':'est-falta';
+    div.innerHTML=`
+      <div class="asist-foto">${a.foto_url?`<img src="${a.foto_url}" alt="">`:(a.nombre||'?')[0].toUpperCase()}</div>
+      <div class="asist-info">
+        <div class="asist-nombre">${a.empleado_nombre||'Empleado'}</div>
+        <div class="asist-hora">Entrada: ${horaEntrada}</div>
+        <div class="asist-atraso ${atrasoClass}">${atrasoTxt}</div>
+      </div>
+      <div class="asist-estado ${estClass}">${a.estado||'—'}</div>`;
+    cont.appendChild(div);
+  });
+}
+
+function calcularAtraso(horaEntrada, horaLimite){
+  if(!horaEntrada||horaEntrada==='—') return 0;
+  const [h1,m1]=horaEntrada.split(':').map(Number);
+  const [h2,m2]=horaLimite.split(':').map(Number);
+  return (h1*60+m1)-(h2*60+m2);
+}
+
+function renderNomina(){
+  const cont=document.getElementById('nomina-lista');
+  let total=0;
+  if(!nominas.length){ cont.innerHTML='<div class="empty-state"><p>Sin registros de nómina</p></div>'; document.getElementById('total-nomina').textContent='$0.00'; return; }
+  cont.innerHTML='';
+  nominas.forEach(n=>{
+    const salBruto=n.salario_base||0;
+    const iess=salBruto*(n.porcentaje_iess||9.45)/100;
+    const descuentos=n.otros_descuentos||0;
+    const salNeto=salBruto-iess-descuentos;
+    total+=salNeto;
+    const decTercero=(salBruto/12).toFixed(2);
+    const decCuarto=(SBU/12).toFixed(2);
+    const div=document.createElement('div'); div.className='nomina-item';
+    div.innerHTML=`
+      <div class="nom-header"><div class="nom-nombre">${n.empleado_nombre||'Empleado'}</div><div class="nom-salario">$${salNeto.toFixed(2)}</div></div>
+      <div class="nom-detalles">
+        <div class="nom-det">Bruto: <span>$${salBruto.toFixed(2)}</span></div>
+        <div class="nom-det">IESS (${n.porcentaje_iess||9.45}%): <span>-$${iess.toFixed(2)}</span></div>
+        <div class="nom-det">Décimo 13°: <span>$${decTercero}</span></div>
+        <div class="nom-det">Décimo 14°: <span>$${decCuarto}</span></div>
+        <div class="nom-det">Banco: <span>${n.banco||'—'}</span></div>
+        <div class="nom-det">Cuenta: <span>${n.cuenta||'—'}</span></div>
+      </div>`;
+    cont.appendChild(div);
+  });
+  document.getElementById('total-nomina').textContent='$'+total.toFixed(2);
+}
+
+function renderContratos(){
+  const cont=document.getElementById('contratos-lista');
+  if(!contratos.length){ cont.innerHTML='<div class="empty-state"><svg viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/></svg><p>Sin contratos registrados</p></div>'; return; }
+  cont.innerHTML='';
+  contratos.forEach(c=>{
+    const div=document.createElement('div'); div.className='contrato-item';
+    div.innerHTML=`
+      <div class="cont-header">
+        <div class="cont-code">${c.codigo||'CT-—'}</div>
+        <span class="emp-badge badge-activo">${c.tipo||'—'}</span>
+      </div>
+      <div class="cont-nombre">${c.empleado_nombre||'Empleado'}</div>
+      <div class="cont-tipo">${c.fecha_inicio||'—'} → ${c.fecha_fin||'Indefinido'} · $${Number(c.salario||0).toFixed(2)}/mes</div>
+      <div class="cont-acciones">
+        ${c.scan_url?`<button class="cont-btn" style="background:rgba(50,205,50,0.1);color:var(--verde);" onclick="verContrato('${c.scan_url}')">📄 Ver escáner</button>`:'<span style="font-size:0.7rem;color:#bbb;">Sin escáner</span>'}
+      </div>`;
+    cont.appendChild(div);
+  });
+}
+
+function renderServicios(){
+  const cont=document.getElementById('servicios-lista');
+  if(!servicios.length){ cont.innerHTML='<div class="empty-state"><p>Sin servicios B2B registrados</p></div>'; return; }
+  cont.innerHTML='';
+  servicios.forEach(s=>{
+    const div=document.createElement('div'); div.className='servicio-item';
+    const fotos=s.fotos_evidencia||[];
+    div.innerHTML=`
+      <div class="serv-header"><div class="serv-empresa">${s.empresa||'Empresa'}</div><div class="serv-monto">$${Number(s.monto||0).toFixed(2)}</div></div>
+      <div class="serv-desc">${s.descripcion||'—'}</div>
+      ${fotos.length?`<div class="serv-evidencias">${fotos.map(f=>`<img src="${f}" class="serv-foto" alt="" onclick="window.open('${f}','_blank')">`).join('')}</div>`:'<div style="font-size:0.72rem;color:var(--rojo);margin-bottom:8px;">⚠ Sin evidencias</div>'}
+      <div style="display:flex;align-items:center;justify-content:space-between;">
+        <span class="serv-estado serv-${s.estado||'pendiente'}">${s.estado||'pendiente'}</span>
+        ${s.estado==='pendiente'&&fotos.length?`<button onclick="aprobarServicio('${s.id}')" style="background:rgba(50,205,50,0.1);color:var(--verde);border:none;padding:6px 12px;border-radius:8px;font-family:'Inter',sans-serif;font-size:0.72rem;font-weight:700;cursor:pointer;">✓ Autorizar pago</button>`:''}
+      </div>`;
+    cont.appendChild(div);
+  });
+}
+
+function poblarSelects(){
+  const selects=['nom-empleado','cont-empleado','asist-empleado','emp-sucursal'];
+  selects.forEach(id=>{
+    const el=document.getElementById(id);
+    if(!el) return;
+    if(id==='emp-sucursal'){
+      el.innerHTML='<option value="">Sin sucursal</option>';
+      sucursales.forEach(s=>{ el.innerHTML+=`<option value="${s.id}">${s.nombre}</option>`; });
+    } else {
+      el.innerHTML='<option value="">Seleccionar empleado</option>';
+      empleados.forEach(e=>{ el.innerHTML+=`<option value="${e.id}">${e.nombre}</option>`; });
+    }
+  });
+}
 
