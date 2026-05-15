@@ -7,28 +7,25 @@
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
 <style>
   *{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent;}
-  :root{ --naranja:#FF8C00; --verde:#A8E63D; --negro:#0A0A0A; --gris:#F5F6F2; --rojo:#FF4D4D; --azul:#007AFF; }
+  :root{ --naranja:#FF8C00; --verde:#A8E63D; --negro:#0A0A0A; --gris:#F5F6F2; --rojo:#FF4D4D; --azul:#007AFF; --morado:#AF52DE; }
   body{ background:var(--negro); font-family:'Inter',sans-serif; padding-bottom:90px; -webkit-font-smoothing:antialiased; }
   .header{ background:var(--negro); padding:44px 16px 16px; display:flex; align-items:center; gap:12px; position:sticky; top:0; z-index:100; border-bottom:1px solid #1e1e1e; }
   .back-btn{ width:36px; height:36px; background:rgba(255,255,255,0.08); border-radius:10px; display:flex; align-items:center; justify-content:center; cursor:pointer; border:none; }
   .back-btn svg{ width:18px; height:18px; stroke:white; fill:none; stroke-width:2.5; }
   .page-title{ font-size:1.1rem; font-weight:700; color:white; }
-
   .hero-banner{ margin:14px 16px; background:linear-gradient(135deg,#0f2a0f,#1a4a1a); border-radius:20px; padding:20px; position:relative; overflow:hidden; border:1px solid rgba(168,230,61,0.15); }
   .hero-banner::before{ content:''; position:absolute; right:-20px; top:-20px; width:120px; height:120px; background:radial-gradient(circle,rgba(168,230,61,0.15) 0%,transparent 70%); }
   .hero-tag{ background:var(--verde); color:var(--negro); font-size:0.6rem; font-weight:800; padding:3px 10px; border-radius:20px; display:inline-block; margin-bottom:8px; text-transform:uppercase; }
   .hero-title{ font-size:1.1rem; font-weight:800; color:white; line-height:1.3; margin-bottom:4px; }
   .hero-sub{ font-size:0.75rem; color:#888; }
-
   .filtros{ display:flex; gap:8px; padding:12px 16px; overflow-x:auto; scrollbar-width:none; }
   .filtros::-webkit-scrollbar{ display:none; }
   .filtro-btn{ padding:7px 14px; border-radius:20px; border:1px solid #222; background:transparent; font-size:0.72rem; font-weight:600; color:#555; cursor:pointer; white-space:nowrap; font-family:'Inter',sans-serif; }
   .filtro-btn.active{ background:#1e1e1e; color:white; border-color:#333; }
-
   .plugins-lista{ padding:0 16px; }
   .plugin-card{ background:#111; border:1px solid #1e1e1e; border-radius:20px; padding:18px; margin-bottom:12px; transition:0.2s; }
   .plugin-card.activado{ border-color:rgba(168,230,61,0.3); background:rgba(168,230,61,0.03); }
-  .plugin-card.destacado{ border-color:rgba(255,140,0,0.3); background:rgba(255,140,0,0.03); }
+  .plugin-card.destacado{ border-color:rgba(255,140,0,0.2); }
   .plugin-header{ display:flex; align-items:flex-start; gap:14px; margin-bottom:12px; }
   .plugin-icono{ width:52px; height:52px; border-radius:16px; display:flex; align-items:center; justify-content:center; font-size:1.5rem; flex-shrink:0; }
   .plugin-info{ flex:1; }
@@ -37,21 +34,18 @@
   .plugin-badges{ display:flex; gap:6px; flex-wrap:wrap; margin-top:6px; }
   .plugin-badge{ font-size:0.6rem; font-weight:700; padding:2px 8px; border-radius:6px; }
   .badge-gratis{ background:rgba(168,230,61,0.12); color:var(--verde); }
-  .badge-pro{ background:rgba(255,140,0,0.12); color:var(--naranja); }
-  .badge-nuevo{ background:rgba(0,122,255,0.12); color:var(--azul); }
   .badge-activo{ background:rgba(168,230,61,0.2); color:var(--verde); }
+  .badge-nuevo{ background:rgba(0,122,255,0.12); color:var(--azul); }
   .plugin-features{ display:grid; grid-template-columns:1fr 1fr; gap:6px; margin-bottom:14px; }
   .feature-item{ display:flex; align-items:center; gap:6px; font-size:0.72rem; color:#666; }
   .feature-item::before{ content:'✓'; color:var(--verde); font-weight:800; font-size:0.7rem; flex-shrink:0; }
   .plugin-footer{ display:flex; align-items:center; justify-content:space-between; }
-  .plugin-precio{ font-size:0.88rem; font-weight:700; color:white; }
-  .plugin-precio.gratis{ color:var(--verde); }
+  .plugin-precio.gratis{ color:var(--verde); font-size:0.88rem; font-weight:700; }
   .btn-activar{ padding:10px 18px; border-radius:12px; border:none; font-family:'Inter',sans-serif; font-size:0.8rem; font-weight:800; cursor:pointer; transition:0.2s; }
   .btn-activar.off{ background:#1e1e1e; color:#aaa; }
   .btn-activar.on{ background:rgba(168,230,61,0.15); color:var(--verde); border:1px solid rgba(168,230,61,0.3); }
-  .btn-activar:active{ transform:scale(0.95); }
 
-  /* MODAL TIENDA */
+  /* MODALES */
   .modal-overlay{ position:fixed; inset:0; background:rgba(0,0,0,0.8); display:none; z-index:500; align-items:flex-end; }
   .modal-overlay.show{ display:flex; }
   .modal-sheet{ background:#111; width:100%; max-height:92vh; border-radius:24px 24px 0 0; transform:translateY(100%); transition:0.4s cubic-bezier(0.16,1,0.3,1); display:flex; flex-direction:column; overflow:hidden; border:1px solid #1e1e1e; border-bottom:none; }
@@ -63,36 +57,70 @@
   .close-btn svg{ width:14px; height:14px; stroke:#666; fill:none; stroke-width:2.5; }
   .modal-body{ overflow-y:auto; padding:16px 16px 32px; flex:1; }
 
-  /* TIENDA PREVIEW */
-  .tienda-preview{ background:#1a1a1a; border-radius:16px; padding:16px; margin-bottom:16px; }
-  .tienda-preview-header{ display:flex; align-items:center; gap:10px; margin-bottom:12px; }
-  .tienda-logo-prev{ width:44px; height:44px; border-radius:12px; object-fit:cover; background:#222; display:flex; align-items:center; justify-content:center; font-size:1rem; font-weight:800; color:var(--naranja); overflow:hidden; }
-  .tienda-logo-prev img{ width:100%; height:100%; object-fit:cover; }
-  .tienda-nombre-prev{ font-size:0.92rem; font-weight:800; color:white; }
-  .tienda-url-prev{ font-size:0.7rem; color:#555; margin-top:2px; word-break:break-all; }
-  .tienda-stats-prev{ display:grid; grid-template-columns:repeat(3,1fr); gap:8px; }
-  .tienda-stat-prev{ background:#222; border-radius:10px; padding:10px; text-align:center; }
-  .tienda-stat-val{ font-size:1rem; font-weight:800; color:var(--naranja); }
-  .tienda-stat-lbl{ font-size:0.58rem; color:#555; font-weight:600; text-transform:uppercase; margin-top:2px; }
+  /* PREVIEW CARDS */
+  .preview-card{ background:#1a1a1a; border-radius:16px; padding:16px; margin-bottom:16px; }
+  .preview-header{ display:flex; align-items:center; gap:10px; margin-bottom:12px; }
+  .preview-logo{ width:46px; height:46px; border-radius:12px; overflow:hidden; flex-shrink:0; display:flex; align-items:center; justify-content:center; font-size:1rem; font-weight:800; }
+  .preview-logo img{ width:100%; height:100%; object-fit:cover; }
+  .preview-empresa{ font-size:0.92rem; font-weight:800; color:white; }
+  .preview-url{ font-size:0.68rem; color:#555; margin-top:2px; word-break:break-all; }
+  .preview-stats{ display:grid; grid-template-columns:repeat(3,1fr); gap:8px; }
+  .preview-stat{ background:#222; border-radius:10px; padding:10px; text-align:center; }
+  .preview-stat-val{ font-size:1rem; font-weight:800; color:white; }
+  .preview-stat-lbl{ font-size:0.58rem; color:#555; font-weight:600; text-transform:uppercase; margin-top:2px; }
 
-  .field{ margin-bottom:12px; }
-  .field label{ display:block; font-size:0.7rem; font-weight:700; color:#555; text-transform:uppercase; margin-bottom:6px; }
-  .field input{ width:100%; padding:12px 14px; background:#1a1a1a; border:1.5px solid #222; border-radius:12px; font-family:'Inter',sans-serif; font-size:0.9rem; color:white; outline:none; -webkit-appearance:none; }
-  .field input:focus{ border-color:var(--naranja); }
-  .field input::placeholder{ color:#444; }
+  /* MARCA SECTION */
+  .marca-section{ background:#1a1a1a; border-radius:16px; padding:16px; margin-bottom:14px; }
+  .marca-section-title{ font-size:0.78rem; font-weight:800; color:white; margin-bottom:4px; }
+  .marca-section-sub{ font-size:0.72rem; color:#555; margin-bottom:14px; }
   .color-row{ display:flex; align-items:center; gap:10px; margin-bottom:12px; }
-  .color-prev-dot{ width:40px; height:40px; border-radius:12px; border:2px solid #222; flex-shrink:0; }
-  .color-picker-input{ flex:1; height:44px; border-radius:12px; border:1.5px solid #222; cursor:pointer; padding:4px; background:#1a1a1a; }
-  .btn-abrir-tienda{ width:100%; padding:14px; background:var(--verde); color:var(--negro); border:none; border-radius:14px; font-family:'Inter',sans-serif; font-size:0.92rem; font-weight:800; cursor:pointer; margin-bottom:8px; }
-  .btn-desactivar{ width:100%; padding:12px; background:rgba(255,77,77,0.08); color:var(--rojo); border:none; border-radius:14px; font-family:'Inter',sans-serif; font-size:0.82rem; font-weight:700; cursor:pointer; }
-  .btn-guardar-config{ width:100%; padding:13px; background:#1e1e1e; color:white; border:none; border-radius:14px; font-family:'Inter',sans-serif; font-size:0.88rem; font-weight:700; cursor:pointer; margin-bottom:8px; }
+  .color-dot{ width:42px; height:42px; border-radius:12px; border:2px solid #2a2a2a; flex-shrink:0; transition:0.2s; }
+  .color-picker-inp{ flex:1; height:42px; border-radius:12px; border:1.5px solid #2a2a2a; cursor:pointer; padding:4px; background:#1a1a1a; }
+  .adm-input{ width:100%; padding:12px 14px; background:#222; border:1.5px solid #2a2a2a; border-radius:12px; font-family:'Inter',sans-serif; font-size:0.9rem; color:white; outline:none; -webkit-appearance:none; margin-bottom:12px; }
+  .adm-input:focus{ border-color:var(--verde); }
+  .adm-input::placeholder{ color:#444; }
 
-  .info-box{ background:rgba(168,230,61,0.06); border:1px solid rgba(168,230,61,0.15); border-radius:12px; padding:12px 14px; font-size:0.76rem; color:#666; margin-bottom:14px; }
-  .info-box strong{ color:var(--verde); display:block; margin-bottom:4px; }
+  /* LOGO UPLOAD */
+  .logo-upload-area{ border:2px dashed #2a2a2a; border-radius:14px; padding:16px; text-align:center; cursor:pointer; position:relative; background:#222; transition:0.2s; margin-bottom:12px; }
+  .logo-upload-area.filled{ border-color:var(--verde); background:rgba(168,230,61,0.04); }
+  .logo-upload-area svg{ width:24px; height:24px; stroke:#444; fill:none; stroke-width:1.5; display:block; margin:0 auto 6px; }
+  .logo-upload-area.filled svg{ stroke:var(--verde); }
+  .logo-upload-area p{ font-size:0.76rem; color:#555; }
+  .logo-upload-area.filled p{ color:var(--verde); }
+  .logo-file-input{ position:absolute; inset:0; opacity:0; cursor:pointer; }
+  .logo-preview-img{ width:60px; height:60px; border-radius:14px; object-fit:cover; display:none; margin:0 auto 8px; }
+
+  /* WORKERS SPECIFIC */
+  .workers-code-box{ background:#222; border-radius:12px; padding:14px; margin-bottom:12px; }
+  .workers-code-label{ font-size:0.68rem; color:#555; font-weight:700; text-transform:uppercase; margin-bottom:6px; }
+  .workers-code-val{ font-size:1.1rem; font-weight:900; color:var(--verde); font-family:monospace; letter-spacing:2px; }
+  .workers-code-copy{ font-size:0.68rem; color:#555; margin-top:4px; }
+
+  /* ACCIONES */
+  .btn-abrir{ width:100%; padding:14px; background:var(--verde); color:var(--negro); border:none; border-radius:14px; font-family:'Inter',sans-serif; font-size:0.92rem; font-weight:800; cursor:pointer; margin-bottom:8px; }
+  .btn-guardar-cfg{ width:100%; padding:13px; background:#1e1e1e; color:white; border:none; border-radius:14px; font-family:'Inter',sans-serif; font-size:0.88rem; font-weight:700; cursor:pointer; margin-bottom:8px; }
+  .btn-desactivar{ width:100%; padding:12px; background:rgba(255,77,77,0.08); color:var(--rojo); border:none; border-radius:14px; font-family:'Inter',sans-serif; font-size:0.82rem; font-weight:700; cursor:pointer; }
+  .info-box{ background:rgba(168,230,61,0.06); border:1px solid rgba(168,230,61,0.15); border-radius:12px; padding:12px 14px; font-size:0.76rem; color:#666; margin-bottom:14px; line-height:1.5; }
+  .info-box strong{ color:var(--verde); display:block; margin-bottom:3px; }
+  .divider{ height:1px; background:#1e1e1e; margin:14px 0; }
+
+  /* RRHH SPECIFIC */
+  .permiso-grid{ display:grid; grid-template-columns:1fr 1fr; gap:8px; margin-bottom:12px; }
+  .permiso-item{ background:#222; border-radius:10px; padding:10px 12px; display:flex; align-items:center; justify-content:space-between; }
+  .permiso-lbl{ font-size:0.76rem; color:#aaa; font-weight:600; }
+  .toggle-mini{ width:36px; height:20px; background:#333; border-radius:10px; position:relative; cursor:pointer; border:none; transition:0.3s; }
+  .toggle-mini.on{ background:var(--verde); }
+  .toggle-mini::after{ content:''; position:absolute; top:2px; left:2px; width:16px; height:16px; border-radius:50%; background:white; transition:0.3s; }
+  .toggle-mini.on::after{ left:18px; }
 
   .toast{ position:fixed; bottom:20px; left:50%; transform:translateX(-50%) translateY(20px); background:var(--verde); color:var(--negro); padding:10px 20px; border-radius:24px; font-size:0.82rem; font-weight:700; opacity:0; transition:0.3s; pointer-events:none; z-index:1000; white-space:nowrap; }
   .toast.show{ opacity:1; transform:translateX(-50%) translateY(0); }
-
+  .upload-overlay{ position:fixed; inset:0; background:rgba(0,0,0,0.7); display:none; align-items:center; justify-content:center; z-index:1000; }
+  .upload-overlay.show{ display:flex; }
+  .upload-box{ background:#111; border-radius:20px; padding:24px; width:80%; max-width:280px; text-align:center; border:1px solid #222; }
+  .spinner{ width:36px; height:36px; border:3px solid #222; border-top-color:var(--verde); border-radius:50%; animation:spin 0.7s linear infinite; margin:0 auto 10px; }
+  .upload-box p{ font-size:0.82rem; color:#555; }
+  @keyframes spin{ to{ transform:rotate(360deg); } }
   .tab-bar{ position:fixed; bottom:0; width:100%; background:#111; display:flex; justify-content:space-around; align-items:center; padding:10px 0 22px; border-top:1px solid #1e1e1e; z-index:200; }
   .tab{ display:flex; flex-direction:column; align-items:center; gap:4px; cursor:pointer; flex:1; color:#444; text-decoration:none; }
   .tab.active{ color:var(--naranja); }
@@ -118,72 +146,190 @@
 <div class="filtros">
   <button class="filtro-btn active" onclick="filtrar('todos',this)">Todos</button>
   <button class="filtro-btn" onclick="filtrar('ventas',this)">Ventas</button>
-  <button class="filtro-btn" onclick="filtrar('marketing',this)">Marketing</button>
   <button class="filtro-btn" onclick="filtrar('gestion',this)">Gestión</button>
+  <button class="filtro-btn" onclick="filtrar('marketing',this)">Marketing</button>
   <button class="filtro-btn" onclick="filtrar('activos',this)">Activos</button>
 </div>
 
-<div class="plugins-lista" id="plugins-lista">
-  <div style="text-align:center;padding:40px;color:#444;">Cargando plugins...</div>
-</div>
+<div class="plugins-lista" id="plugins-lista"></div>
 
-<!-- MODAL TIENDA ONLINE -->
-<div class="modal-overlay" id="modal-tienda" onclick="cerrarModal(event)">
+<!-- ===== MODAL TIENDA ONLINE ===== -->
+<div class="modal-overlay" id="modal-tienda" onclick="cerrarModal('modal-tienda',event)">
   <div class="modal-sheet">
     <div class="drag"></div>
     <div class="modal-header">
       <span class="modal-title">🛍️ Tienda Online</span>
-      <button class="close-btn" onclick="document.getElementById('modal-tienda').classList.remove('show')">
-        <svg viewBox="0 0 24 24"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
-      </button>
+      <button class="close-btn" onclick="document.getElementById('modal-tienda').classList.remove('show')"><svg viewBox="0 0 24 24"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg></button>
     </div>
     <div class="modal-body">
-      <div class="tienda-preview" id="tienda-preview">
-        <div class="tienda-preview-header">
-          <div class="tienda-logo-prev" id="prev-logo">T</div>
+      <!-- PREVIEW -->
+      <div class="preview-card" id="tienda-preview-card">
+        <div class="preview-header">
+          <div class="preview-logo" id="tienda-prev-logo" style="background:rgba(255,140,0,0.15);color:var(--naranja);">T</div>
           <div>
-            <div class="tienda-nombre-prev" id="prev-nombre">Tu tienda</div>
-            <div class="tienda-url-prev" id="prev-url">Cargando URL...</div>
+            <div class="preview-empresa" id="tienda-prev-nombre">Tu tienda</div>
+            <div class="preview-url" id="tienda-prev-url">proveed-proveedor.vercel.app/tienda-online.html</div>
           </div>
         </div>
-        <div class="tienda-stats-prev">
-          <div class="tienda-stat-prev"><div class="tienda-stat-val" id="prev-prods">0</div><div class="tienda-stat-lbl">Productos</div></div>
-          <div class="tienda-stat-prev"><div class="tienda-stat-val" id="prev-pedidos">0</div><div class="tienda-stat-lbl">Pedidos</div></div>
-          <div class="tienda-stat-prev"><div class="tienda-stat-val" id="prev-ventas">$0</div><div class="tienda-stat-lbl">Ventas</div></div>
+        <div class="preview-stats">
+          <div class="preview-stat"><div class="preview-stat-val" id="t-prods">0</div><div class="preview-stat-lbl">Productos</div></div>
+          <div class="preview-stat"><div class="preview-stat-val" id="t-pedidos">0</div><div class="preview-stat-lbl">Pedidos</div></div>
+          <div class="preview-stat"><div class="preview-stat-val" id="t-ventas">$0</div><div class="preview-stat-lbl">Ventas</div></div>
         </div>
       </div>
 
       <div class="info-box">
-        <strong>✓ Sincronización automática</strong>
-        Tu nombre de empresa, logo y todos tus productos se sincronizan automáticamente. No necesitas configurar nada extra.
+        <strong>✓ Sincronización automática con PROVEED</strong>
+        Tu logo, nombre de empresa y todos tus productos activos se sincronizan automáticamente. Personaliza los colores de tu tienda aquí.
       </div>
 
-      <div class="field">
-        <label>Color principal de tu tienda</label>
-        <div class="color-row">
-          <div class="color-prev-dot" id="color-dot" style="background:#FF8C00;"></div>
-          <input type="color" id="color-picker" class="color-picker-input" value="#FF8C00" oninput="prevColor(this.value)">
+      <!-- MARCA TIENDA -->
+      <div class="marca-section">
+        <div class="marca-section-title">🎨 Identidad de marca — Tienda</div>
+        <div class="marca-section-sub">Personaliza cómo ven tu tienda los clientes</div>
+
+        <div style="font-size:0.7rem;color:#555;font-weight:700;text-transform:uppercase;margin-bottom:8px;">Logo de la tienda</div>
+        <div class="logo-upload-area" id="tienda-logo-area">
+          <img class="logo-preview-img" id="tienda-logo-prev-img" src="" alt="">
+          <svg viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg>
+          <p id="tienda-logo-txt">Se usa automáticamente tu logo de empresa</p>
+          <input type="file" accept="image/*" class="logo-file-input" onchange="selLogoTienda(this)">
         </div>
-        <input type="text" id="color-hex-input" placeholder="#FF8C00" value="#FF8C00" oninput="prevColorHex(this.value)">
+
+        <div style="font-size:0.7rem;color:#555;font-weight:700;text-transform:uppercase;margin-bottom:8px;">Color principal</div>
+        <div class="color-row">
+          <div class="color-dot" id="tienda-color-dot" style="background:#FF8C00;"></div>
+          <input type="color" id="tienda-color-picker" class="color-picker-inp" value="#FF8C00" oninput="prevColorTienda(this.value)">
+        </div>
+        <input type="text" class="adm-input" id="tienda-color-hex" placeholder="#FF8C00" value="#FF8C00" oninput="prevColorTiendaHex(this.value)">
+
+        <div style="font-size:0.7rem;color:#555;font-weight:700;text-transform:uppercase;margin-bottom:8px;">Nombre de la tienda</div>
+        <input type="text" class="adm-input" id="tienda-nombre-input" placeholder="Ej: Mi Tienda Online">
+
+        <div style="font-size:0.7rem;color:#555;font-weight:700;text-transform:uppercase;margin-bottom:8px;">Anuncio superior</div>
+        <input type="text" class="adm-input" id="tienda-ann-input" placeholder="🚚 Envíos seguros a nivel nacional">
+
+        <div style="font-size:0.7rem;color:#555;font-weight:700;text-transform:uppercase;margin-bottom:8px;">Título del banner principal</div>
+        <input type="text" class="adm-input" id="tienda-banner-input" placeholder="Bienvenido a mi tienda">
       </div>
 
-      <div class="field">
-        <label>Mensaje del banner superior</label>
-        <input type="text" id="tienda-ann" placeholder="🚚 Envíos a nivel nacional" value="🚚 Envíos a nivel nacional">
-      </div>
-
-      <div class="field">
-        <label>Título del banner principal</label>
-        <input type="text" id="tienda-banner-titulo" placeholder="Bienvenido a mi tienda">
-      </div>
-
-      <button class="btn-guardar-config" onclick="guardarConfigTienda()">💾 Guardar configuración</button>
-      <button class="btn-abrir-tienda" id="btn-abrir-tienda" onclick="abrirTienda()">🛍️ Abrir mi tienda online →</button>
-      <button class="btn-desactivar" id="btn-desactivar-tienda" onclick="desactivarTienda()" style="display:none;">Desactivar tienda</button>
+      <button class="btn-guardar-cfg" onclick="guardarConfigTienda()">💾 Guardar configuración de marca</button>
+      <button class="btn-abrir" onclick="abrirTienda()">🛍️ Abrir mi tienda online →</button>
+      <button class="btn-desactivar" id="btn-desactivar-tienda" onclick="desactivarPlugin('tienda-online','modal-tienda')" style="display:none;">Desactivar tienda</button>
     </div>
   </div>
 </div>
 
+<!-- ===== MODAL RR.HH. PRO ===== -->
+<div class="modal-overlay" id="modal-rrhh" onclick="cerrarModal('modal-rrhh',event)">
+  <div class="modal-sheet">
+    <div class="drag"></div>
+    <div class="modal-header">
+      <span class="modal-title">👥 RR.HH. PRO</span>
+      <button class="close-btn" onclick="document.getElementById('modal-rrhh').classList.remove('show')"><svg viewBox="0 0 24 24"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg></button>
+    </div>
+    <div class="modal-body">
+      <div class="preview-card">
+        <div class="preview-header">
+          <div class="preview-logo" style="background:rgba(50,205,50,0.1);color:#32CD32;">👥</div>
+          <div>
+            <div class="preview-empresa" id="rrhh-prev-empresa">Tu empresa</div>
+            <div class="preview-url">ERP de Recursos Humanos · Ecuador</div>
+          </div>
+        </div>
+        <div class="preview-stats">
+          <div class="preview-stat"><div class="preview-stat-val" id="r-empleados">0</div><div class="preview-stat-lbl">Empleados</div></div>
+          <div class="preview-stat"><div class="preview-stat-val" id="r-asist">0</div><div class="preview-stat-lbl">Asistencias</div></div>
+          <div class="preview-stat"><div class="preview-stat-val" id="r-nomina">$0</div><div class="preview-stat-lbl">Nómina</div></div>
+        </div>
+      </div>
+
+      <div class="info-box">
+        <strong>✓ Workers — App del empleado</strong>
+        Tus empleados usan la app Workers con el código de empresa. Personaliza los colores y el logo de su portal aquí.
+      </div>
+
+      <!-- CÓDIGO DE EMPRESA -->
+      <div class="workers-code-box">
+        <div class="workers-code-label">Código de empresa para Workers</div>
+        <div class="workers-code-val" id="workers-code-display">—</div>
+        <div class="workers-code-copy">Comparte este código con tus empleados para que accedan a la app Workers</div>
+      </div>
+
+      <!-- MARCA WORKERS -->
+      <div class="marca-section">
+        <div class="marca-section-title">🎨 Identidad de marca — Workers</div>
+        <div class="marca-section-sub">Así verán tus empleados la app Workers</div>
+
+        <div style="font-size:0.7rem;color:#555;font-weight:700;text-transform:uppercase;margin-bottom:8px;">Logo para Workers</div>
+        <div class="logo-upload-area" id="workers-logo-area">
+          <img class="logo-preview-img" id="workers-logo-prev-img" src="" alt="">
+          <svg viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg>
+          <p id="workers-logo-txt">Se usa automáticamente tu logo de empresa</p>
+          <input type="file" accept="image/*" class="logo-file-input" onchange="selLogoWorkers(this)">
+        </div>
+
+   <div style="font-size:0.7rem;color:#555;font-weight:700;text-transform:uppercase;margin-bottom:8px;">Color principal de Workers</div>
+        <div class="color-row">
+          <div class="color-dot" id="workers-color-dot" style="background:#32CD32;"></div>
+          <input type="color" id="workers-color-picker" class="color-picker-inp" value="#32CD32" oninput="prevColorWorkers(this.value)">
+        </div>
+        <input type="text" class="adm-input" id="workers-color-hex" placeholder="#32CD32" value="#32CD32" oninput="prevColorWorkersHex(this.value)">
+
+        <div style="font-size:0.7rem;color:#555;font-weight:700;text-transform:uppercase;margin-bottom:8px;">Nombre visible en Workers</div>
+        <input type="text" class="adm-input" id="workers-nombre-input" placeholder="Nombre de tu empresa">
+
+        <div style="font-size:0.7rem;color:#555;font-weight:700;text-transform:uppercase;margin-bottom:8px;">Mensaje de bienvenida</div>
+        <input type="text" class="adm-input" id="workers-bienvenida-input" placeholder="Bienvenido al portal de empleados">
+      </div>
+
+      <div class="divider"></div>
+
+      <!-- CONFIGURACIÓN HORARIO -->
+      <div class="marca-section">
+        <div class="marca-section-title">⏰ Horario de asistencia</div>
+        <div class="marca-section-sub">Define la ventana de tiempo válida para el registro</div>
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:12px;">
+          <div>
+            <div style="font-size:0.68rem;color:#555;font-weight:700;text-transform:uppercase;margin-bottom:5px;">Hora inicio</div>
+            <input type="time" class="adm-input" id="geo-hora-ini" value="08:00" style="margin-bottom:0;">
+          </div>
+          <div>
+            <div style="font-size:0.68rem;color:#555;font-weight:700;text-transform:uppercase;margin-bottom:5px;">Límite entrada</div>
+            <input type="time" class="adm-input" id="geo-hora-fin" value="08:40" style="margin-bottom:0;">
+          </div>
+        </div>
+        <div style="font-size:0.68rem;color:#555;font-weight:700;text-transform:uppercase;margin-bottom:5px;">Radio geofencing (metros)</div>
+        <input type="number" class="adm-input" id="geo-radio" value="200" placeholder="200">
+        <div style="font-size:0.68rem;color:#555;font-weight:700;text-transform:uppercase;margin-bottom:5px;">Minutos para alerta de atraso</div>
+        <input type="number" class="adm-input" id="geo-gracia" value="10" placeholder="10">
+        <div style="font-size:0.68rem;color:#555;font-weight:700;text-transform:uppercase;margin-bottom:5px;">Minutos para riesgo de despido</div>
+        <input type="number" class="adm-input" id="geo-despido" value="30" placeholder="30">
+      </div>
+
+      <button class="btn-guardar-cfg" onclick="guardarConfigRRHH()">💾 Guardar configuración de marca y horarios</button>
+      <button class="btn-abrir" onclick="abrirRRHH()">👥 Ir a RR.HH. PRO →</button>
+      <button class="btn-abrir" style="background:#1e1e1e;color:white;margin-bottom:8px;" onclick="copiarCodigoWorkers()">📋 Copiar código para empleados</button>
+      <button class="btn-desactivar" id="btn-desactivar-rrhh" onclick="desactivarPlugin('rrhh-pro','modal-rrhh')" style="display:none;">Desactivar RR.HH. PRO</button>
+    </div>
+  </div>
+</div>
+
+<!-- ===== MODAL GENÉRICO ===== -->
+<div class="modal-overlay" id="modal-generico" onclick="cerrarModal('modal-generico',event)">
+  <div class="modal-sheet">
+    <div class="drag"></div>
+    <div class="modal-header">
+      <span class="modal-title" id="modal-gen-title">Plugin</span>
+      <button class="close-btn" onclick="document.getElementById('modal-generico').classList.remove('show')"><svg viewBox="0 0 24 24"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg></button>
+    </div>
+    <div class="modal-body" id="modal-gen-body"></div>
+  </div>
+</div>
+
+<div class="upload-overlay" id="upload-overlay">
+  <div class="upload-box"><div class="spinner"></div><p>Guardando...</p></div>
+</div>
 <div class="toast" id="toast"></div>
 
 <nav class="tab-bar">
@@ -200,33 +346,38 @@ const { createClient } = supabase;
 const sb = createClient('https://hfmsyrmkewscnvwynzfq.supabase.co','sb_publishable_d1oLsq70a6ZV33vW3XkRgw_nYcN2Z9v');
 
 let userId='', userData={}, pluginsActivados=[], filtroActual='todos';
-let tiendaActivada=false;
+let logoTiendaFile=null, logoWorkersFile=null;
 
-const PLUGINS_DEFAULT = [
+const PLUGINS=[
   {
     id:'tienda-online', nombre:'Tienda Online', icono:'🛍️',
-    desc:'Tu catálogo de productos en una tienda pública profesional. Los clientes pueden comprar directamente.',
-    categoria:'ventas', precio:0,
-    features:['Catálogo sincronizado','Pagos integrados','Reseñas de clientes','Panel de pedidos','Color personalizable','URL pública'],
-    destacado:true
+    desc:'Tu catálogo de productos en una tienda pública profesional con pagos integrados PROVEED.',
+    categoria:'ventas', precio:0, destacado:true,
+    features:['Catálogo sincronizado','Pagos integrados','Reseñas de clientes','Panel de pedidos','Color personalizable','URL pública']
   },
   {
-    id:'whatsapp-catalogo', nombre:'Catálogo WhatsApp', icono:'💬',
-    desc:'Comparte tu catálogo directamente por WhatsApp con un link especial.',
-    categoria:'ventas', precio:0,
-    features:['Link de catálogo','Compartir productos','Vista optimizada']
+    id:'rrhh-pro', nombre:'RR.HH. PRO', icono:'👥',
+    desc:'ERP completo de recursos humanos con nómina legal Ecuador, biometría y control de asistencia.',
+    categoria:'gestion', precio:0, destacado:true,
+    features:['Nómina legal Ecuador','Control biométrico','Geofencing','App Workers para empleados','Contratos digitales','Servicios B2B']
   },
   {
-    id:'factura-auto', nombre:'Facturación Automática', icono:'🧾',
+    id:'workers-app', nombre:'Workers App', icono:'👷',
+    desc:'Portal de autogestión para empleados. Asistencia biométrica, sueldo y buzón de RR.HH.',
+    categoria:'gestion', precio:0,
+    features:['Registro biométrico','Ver sueldo y beneficios','Buzón RR.HH.','Agenda corporativa','Geofencing GPS']
+  },
+  {
+    id:'factura-auto', nombre:'Facturación Auto', icono:'🧾',
     desc:'Genera facturas PDF automáticamente con cada pedido confirmado.',
     categoria:'gestion', precio:0,
-    features:['PDF automático','Datos de empresa','Logo en factura','Numeración automática']
+    features:['PDF automático','Logo empresa','Numeración automática','Datos de facturación']
   },
   {
-    id:'estadisticas-pro', nombre:'Estadísticas Pro', icono:'📊',
-    desc:'Análisis avanzado de ventas, productos más vendidos y comportamiento de clientes.',
-    categoria:'gestion', precio:0,
-    features:['Gráficos avanzados','Top productos','Análisis de clientes','Exportar datos']
+    id:'catalogo-pdf', nombre:'Catálogo PDF', icono:'📄',
+    desc:'Genera un catálogo PDF profesional con todos tus productos para compartir.',
+    categoria:'marketing', precio:0,
+    features:['Diseño profesional','Con precios','Logo incluido','Descarga directa']
   },
   {
     id:'descuentos', nombre:'Cupones y Descuentos', icono:'🏷️',
@@ -235,10 +386,16 @@ const PLUGINS_DEFAULT = [
     features:['Códigos de descuento','% o monto fijo','Fecha de vencimiento','Límite de usos']
   },
   {
-    id:'catalogo-pdf', nombre:'Catálogo PDF', icono:'📄',
-    desc:'Genera un catálogo PDF profesional con todos tus productos para compartir.',
-    categoria:'marketing', precio:0,
-    features:['Diseño profesional','Con precios','Logo incluido','Descarga directa']
+    id:'estadisticas-pro', nombre:'Estadísticas PRO', icono:'📊',
+    desc:'Análisis avanzado de ventas, productos más vendidos y comportamiento.',
+    categoria:'gestion', precio:0,
+    features:['Gráficos avanzados','Top productos','Análisis clientes','Exportar datos']
+  },
+  {
+    id:'whatsapp-catalogo', nombre:'Catálogo WhatsApp', icono:'💬',
+    desc:'Comparte tu catálogo directamente por WhatsApp con un link especial.',
+    categoria:'ventas', precio:0,
+    features:['Link de catálogo','Vista optimizada','Compartir fácil']
   }
 ];
 
@@ -248,63 +405,107 @@ const PLUGINS_DEFAULT = [
   userId=session.user.id;
   const { data:u } = await sb.from('usuarios').select('*').eq('id',userId).single();
   if(u) userData=u;
-
-  // Cargar plugins activados
-  const { data:activados } = await sb.from('plugins_activados').select('*').eq('proveedor_id',userId);
-  pluginsActivados=activados||[];
-
-  // Verificar si tienda está activada
-  tiendaActivada=pluginsActivados.some(p=>p.plugin_id==='tienda-online'||p.nombre==='Tienda Online');
-
+  const { data:act } = await sb.from('plugins_activados').select('*').eq('proveedor_id',userId);
+  pluginsActivados=act||[];
   renderPlugins();
-  cargarStatsTienda();
+  cargarStats();
+  cargarConfigGuardada();
 })();
 
-async function cargarStatsTienda(){
-  const [{ count:numProds },{ data:pedidos }] = await Promise.all([
+async function cargarStats(){
+  const [{ count:prods },{ data:peds },{ count:emps }] = await Promise.all([
     sb.from('productos').select('*',{count:'exact',head:true}).eq('proveedor_id',userId).eq('activo',true),
-    sb.from('pedidos').select('total').eq('proveedor_id',userId)
+    sb.from('pedidos').select('total').eq('proveedor_id',userId),
+    sb.from('rrhh_empleados').select('*',{count:'exact',head:true}).eq('proveedor_id',userId).eq('activo',true)
   ]);
-  document.getElementById('prev-prods').textContent=numProds||0;
-  document.getElementById('prev-pedidos').textContent=(pedidos||[]).length;
-  const totalVentas=(pedidos||[]).reduce((s,p)=>s+(p.total||0),0);
-  document.getElementById('prev-ventas').textContent='$'+totalVentas.toFixed(0);
+  const totalVentas=(peds||[]).reduce((s,p)=>s+(p.total||0),0);
+  document.getElementById('t-prods').textContent=prods||0;
+  document.getElementById('t-pedidos').textContent=(peds||[]).length;
+  document.getElementById('t-ventas').textContent='$'+totalVentas.toFixed(0);
+  document.getElementById('r-empleados').textContent=emps||0;
+  document.getElementById('r-asist').textContent='—';
+  document.getElementById('r-nomina').textContent='—';
 
-  // URL de la tienda
-  const tiendaUrl=window.location.origin+'/tienda-online.html';
-  document.getElementById('prev-url').textContent=tiendaUrl;
-
-  // Logo y nombre
-  const logo=userData.logo_empresa||userData.foto_perfil||'';
+  // Preview tienda
   const nombre=userData.empresa||userData.nombre||'Tu tienda';
-  const logoEl=document.getElementById('prev-logo');
-  if(logo) logoEl.innerHTML=`<img src="${logo}" alt="">`;
-  else logoEl.textContent=nombre[0].toUpperCase();
-  document.getElementById('prev-nombre').textContent=nombre;
+  document.getElementById('tienda-prev-nombre').textContent=nombre;
+  document.getElementById('tienda-nombre-input').value=localStorage.getItem(`tienda_nombre_${userId}`)||nombre;
+  document.getElementById('workers-nombre-input').value=localStorage.getItem(`workers_nombre_${userId}`)||nombre;
 
-  // Cargar config guardada
-  const colorGuardado=localStorage.getItem(`tienda_color_${userId}`)||'#FF8C00';
-  document.getElementById('color-picker').value=colorGuardado;
-  document.getElementById('color-hex-input').value=colorGuardado;
-  document.getElementById('color-dot').style.background=colorGuardado;
-  document.getElementById('tienda-banner-titulo').value=localStorage.getItem(`tienda_banner_titulo_${userId}`)||`Bienvenido a ${nombre}`;
-  document.getElementById('tienda-ann').value=localStorage.getItem(`tienda_ann_${userId}`)||'🚚 Envíos a nivel nacional';
+  const logo=userData.logo_empresa||userData.foto_perfil||'';
+  if(logo){
+    document.getElementById('tienda-prev-logo').innerHTML=`<img src="${logo}" alt="" style="width:100%;height:100%;object-fit:cover;">`;
+  } else {
+    document.getElementById('tienda-prev-logo').textContent=nombre[0].toUpperCase();
+  }
+  document.getElementById('rrhh-prev-empresa').textContent=nombre;
+
+  // Código workers
+  const codigo=userData.workers_codigo||generarCodigoWorkers(nombre);
+  document.getElementById('workers-code-display').textContent=codigo;
+  document.getElementById('workers-bienvenida-input').value=localStorage.getItem(`workers_bienvenida_${userId}`)||`Bienvenido al portal de ${nombre}`;
 }
 
+function generarCodigoWorkers(empresa){
+  const limpio=(empresa||'EMP').replace(/\s+/g,'').toUpperCase().slice(0,8);
+  return `${limpio}-${userId.slice(-4).toUpperCase()}`;
+}
+
+function cargarConfigGuardada(){
+  // Tienda
+  const colorT=localStorage.getItem(`tienda_color_${userId}`)||'#FF8C00';
+  document.getElementById('tienda-color-picker').value=colorT;
+  document.getElementById('tienda-color-hex').value=colorT;
+  document.getElementById('tienda-color-dot').style.background=colorT;
+  document.getElementById('tienda-ann-input').value=localStorage.getItem(`tienda_ann_${userId}`)||'🚚 Envíos seguros a nivel nacional';
+  document.getElementById('tienda-banner-input').value=localStorage.getItem(`tienda_banner_titulo_${userId}`)||'';
+
+  // Workers
+  const colorW=userData.workers_color||localStorage.getItem(`workers_color_${userId}`)||'#32CD32';
+  document.getElementById('workers-color-picker').value=colorW;
+  document.getElementById('workers-color-hex').value=colorW;
+  document.getElementById('workers-color-dot').style.background=colorW;
+
+  // Geo
+  const geo=JSON.parse(localStorage.getItem(`geo_config_${userId}`)||'{}');
+  document.getElementById('geo-hora-ini').value=geo.horaIni||'08:00';
+  document.getElementById('geo-hora-fin').value=geo.horaFin||'08:40';
+  document.getElementById('geo-radio').value=geo.radio||200;
+  document.getElementById('geo-gracia').value=geo.gracia||10;
+  document.getElementById('geo-despido').value=geo.despido||30;
+
+  // Logo tienda si hay guardado
+  const logoT=localStorage.getItem(`tienda_logo_${userId}`);
+  if(logoT){
+    document.getElementById('tienda-logo-prev-img').src=logoT;
+    document.getElementById('tienda-logo-prev-img').style.display='block';
+    document.getElementById('tienda-logo-txt').textContent='Logo personalizado ✓';
+    document.getElementById('tienda-logo-area').classList.add('filled');
+  }
+
+  // Logo workers si hay guardado
+  const logoW=localStorage.getItem(`workers_logo_${userId}`);
+  if(logoW){
+    document.getElementById('workers-logo-prev-img').src=logoW;
+    document.getElementById('workers-logo-prev-img').style.display='block';
+    document.getElementById('workers-logo-txt').textContent='Logo personalizado ✓';
+    document.getElementById('workers-logo-area').classList.add('filled');
+  }
+}
 function renderPlugins(){
-  let lista=[...PLUGINS_DEFAULT];
-  if(filtroActual==='activos') lista=lista.filter(p=>pluginsActivados.some(a=>a.plugin_id===p.id||a.nombre===p.nombre));
+  let lista=[...PLUGINS];
+  if(filtroActual==='activos') lista=lista.filter(p=>pluginsActivados.some(a=>a.plugin_id===p.id));
   else if(filtroActual!=='todos') lista=lista.filter(p=>p.categoria===filtroActual);
 
   const cont=document.getElementById('plugins-lista');
   cont.innerHTML='';
   lista.forEach(p=>{
-    const activo=pluginsActivados.some(a=>a.plugin_id===p.id||a.nombre===p.nombre);
+    const activo=pluginsActivados.some(a=>a.plugin_id===p.id);
     const div=document.createElement('div');
     div.className=`plugin-card${activo?' activado':''}${p.destacado?' destacado':''}`;
     div.innerHTML=`
       <div class="plugin-header">
-        <div class="plugin-icono" style="background:${activo?'rgba(168,230,61,0.1)':'rgba(255,255,255,0.05)'}">${p.icono}</div>
+        <div class="plugin-icono" style="background:${activo?'rgba(168,230,61,0.1)':'rgba(255,255,255,0.04)'};">${p.icono}</div>
         <div class="plugin-info">
           <div class="plugin-nombre">${p.nombre}</div>
           <div class="plugin-desc">${p.desc}</div>
@@ -312,71 +513,96 @@ function renderPlugins(){
             <span class="plugin-badge badge-gratis">Gratis</span>
             ${activo?'<span class="plugin-badge badge-activo">✓ Activo</span>':''}
             ${p.destacado?'<span class="plugin-badge badge-nuevo">Destacado</span>':''}
-</div>
+          </div>
         </div>
       </div>
-      <div class="plugin-features">
-        ${p.features.map(f=>`<div class="feature-item">${f}</div>`).join('')}
-      </div>
+      <div class="plugin-features">${p.features.map(f=>`<div class="feature-item">${f}</div>`).join('')}</div>
       <div class="plugin-footer">
         <div class="plugin-precio gratis">Gratis</div>
-        <button class="btn-activar ${activo?'on':'off'}" onclick="accionPlugin('${p.id}','${p.nombre}',${activo})">
-          ${activo?(p.id==='tienda-online'?'⚙️ Configurar':'✓ Activado'):'Activar'}
+        <button class="btn-activar ${activo?'on':'off'}" onclick="accionPlugin('${p.id}',${activo},'${p.nombre}')">
+          ${activo?'⚙️ Configurar':'Activar'}
         </button>
       </div>`;
     cont.appendChild(div);
   });
 }
 
-window.accionPlugin=async function(pluginId, nombre, activo){
-  if(pluginId==='tienda-online'){
-    abrirModalTienda();
-    return;
-  }
-  if(activo){
-    await sb.from('plugins_activados').delete().eq('proveedor_id',userId).eq('plugin_id',pluginId);
-    pluginsActivados=pluginsActivados.filter(p=>p.plugin_id!==pluginId);
-    showToast(`${nombre} desactivado`);
-  } else {
-    await sb.from('plugins_activados').insert({proveedor_id:userId,plugin_id:pluginId,nombre,activo:true});
-    pluginsActivados.push({plugin_id:pluginId,nombre,activo:true});
+window.accionPlugin=async function(pluginId, activo, nombre){
+  if(pluginId==='tienda-online'){ abrirModalTienda(); return; }
+  if(pluginId==='rrhh-pro'||pluginId==='workers-app'){ abrirModalRRHH(); return; }
+  if(!activo){
+    document.getElementById('upload-overlay').classList.add('show');
+    await sb.from('plugins_activados').upsert({proveedor_id:userId,plugin_id:pluginId,nombre,activo:true},{onConflict:'proveedor_id,plugin_id'});
+    const { data:act } = await sb.from('plugins_activados').select('*').eq('proveedor_id',userId);
+    pluginsActivados=act||[];
+    document.getElementById('upload-overlay').classList.remove('show');
     showToast(`✓ ${nombre} activado`);
+    renderPlugins();
+  } else {
+    abrirModalGenerico(pluginId,nombre);
   }
+};
+
+function abrirModalGenerico(pluginId,nombre){
+  document.getElementById('modal-gen-title').textContent=nombre;
+  document.getElementById('modal-gen-body').innerHTML=`
+    <div style="text-align:center;padding:20px 0;">
+      <div style="font-size:3rem;margin-bottom:12px;">${PLUGINS.find(p=>p.id===pluginId)?.icono||'⚡'}</div>
+      <div style="font-size:1rem;font-weight:800;color:white;margin-bottom:6px;">${nombre}</div>
+      <div style="font-size:0.82rem;color:#555;margin-bottom:20px;">Este plugin está activo en tu cuenta.</div>
+      <button onclick="desactivarPlugin('${pluginId}','modal-generico')" style="width:100%;padding:12px;background:rgba(255,77,77,0.08);color:var(--rojo);border:none;border-radius:12px;font-family:'Inter',sans-serif;font-size:0.82rem;font-weight:700;cursor:pointer;">Desactivar ${nombre}</button>
+    </div>`;
+  document.getElementById('modal-generico').classList.add('show');
+}
+
+window.desactivarPlugin=async function(pluginId, modalId){
+  if(!confirm('¿Desactivar este plugin?')) return;
+  await sb.from('plugins_activados').delete().eq('proveedor_id',userId).eq('plugin_id',pluginId);
+  pluginsActivados=pluginsActivados.filter(p=>p.plugin_id!==pluginId);
+  document.getElementById(modalId).classList.remove('show');
+  showToast('Plugin desactivado');
   renderPlugins();
 };
 
-window.abrirModalTienda=function(){
-  cargarStatsTienda();
-  const activo=tiendaActivada;
+// TIENDA ONLINE
+function abrirModalTienda(){
+  const activo=pluginsActivados.some(p=>p.plugin_id==='tienda-online');
   document.getElementById('btn-desactivar-tienda').style.display=activo?'block':'none';
-  document.getElementById('btn-abrir-tienda').textContent=activo?'🛍️ Abrir mi tienda online →':'🚀 Activar y abrir tienda';
   document.getElementById('modal-tienda').classList.add('show');
-};
+}
 
 window.guardarConfigTienda=async function(){
-  const color=document.getElementById('color-hex-input').value||document.getElementById('color-picker').value;
-  const ann=document.getElementById('tienda-ann').value.trim();
-  const bannerTitulo=document.getElementById('tienda-banner-titulo').value.trim();
+  document.getElementById('upload-overlay').classList.add('show');
+  const color=document.getElementById('tienda-color-hex').value||'#FF8C00';
+  const nombre=document.getElementById('tienda-nombre-input').value.trim();
+  const ann=document.getElementById('tienda-ann-input').value.trim();
+  const bannerTitulo=document.getElementById('tienda-banner-input').value.trim();
 
   localStorage.setItem(`tienda_color_${userId}`,color);
+  localStorage.setItem(`tienda_nombre_${userId}`,nombre);
   localStorage.setItem(`tienda_ann_${userId}`,ann);
   localStorage.setItem(`tienda_banner_titulo_${userId}`,bannerTitulo);
 
-  // Guardar en Supabase en plugins_activados config
-  if(!tiendaActivada){
-    await sb.from('plugins_activados').insert({
-      proveedor_id:userId, plugin_id:'tienda-online',
-      nombre:'Tienda Online', activo:true,
-      config:{ color, ann, bannerTitulo, activada:true }
-    });
-    tiendaActivada=true;
-    pluginsActivados.push({plugin_id:'tienda-online',nombre:'Tienda Online',activo:true});
-  } else {
-    await sb.from('plugins_activados').update({
-      config:{ color, ann, bannerTitulo, activada:true }
-    }).eq('proveedor_id',userId).eq('plugin_id','tienda-online');
+  // Subir logo si hay nuevo
+  if(logoTiendaFile){
+    const path=`logos/${userId}/tienda_logo`;
+    const { error } = await sb.storage.from('proveed-media').upload(path,logoTiendaFile,{upsert:true});
+    if(!error){
+      const { data } = sb.storage.from('proveed-media').getPublicUrl(path);
+      localStorage.setItem(`tienda_logo_${userId}`,data.publicUrl);
+    }
   }
+
+  // Activar plugin si no está activo
+  await sb.from('plugins_activados').upsert({
+    proveedor_id:userId, plugin_id:'tienda-online', nombre:'Tienda Online', activo:true,
+    config:{ color, nombre, ann, bannerTitulo }
+  },{onConflict:'proveedor_id,plugin_id'});
+
+  const { data:act } = await sb.from('plugins_activados').select('*').eq('proveedor_id',userId);
+  pluginsActivados=act||[];
   renderPlugins();
+  document.getElementById('upload-overlay').classList.remove('show');
   showToast('✓ Configuración guardada');
 };
 
@@ -385,27 +611,117 @@ window.abrirTienda=async function(){
   window.open('tienda-online.html','_blank');
 };
 
-window.desactivarTienda=async function(){
-  if(!confirm('¿Desactivar la tienda online? Los clientes no podrán acceder a ella.')) return;
-  await sb.from('plugins_activados').delete().eq('proveedor_id',userId).eq('plugin_id','tienda-online');
-  tiendaActivada=false;
-  pluginsActivados=pluginsActivados.filter(p=>p.plugin_id!=='tienda-online');
-  document.getElementById('modal-tienda').classList.remove('show');
-  renderPlugins();
-  showToast('Tienda desactivada');
-};
+// RR.HH. PRO
+function abrirModalRRHH(){
+  const activo=pluginsActivados.some(p=>p.plugin_id==='rrhh-pro');
+  document.getElementById('btn-desactivar-rrhh').style.display=activo?'block':'none';
+  document.getElementById('modal-rrhh').classList.add('show');
+}
 
-window.prevColor=function(val){
-  document.getElementById('color-dot').style.background=val;
-  document.getElementById('color-hex-input').value=val;
-};
+window.guardarConfigRRHH=async function(){
+  document.getElementById('upload-overlay').classList.add('show');
+  const colorW=document.getElementById('workers-color-hex').value||'#32CD32';
+  const nombreW=document.getElementById('workers-nombre-input').value.trim();
+  const bienvenidaW=document.getElementById('workers-bienvenida-input').value.trim();
+  const geoConfig={
+    horaIni:document.getElementById('geo-hora-ini').value||'08:00',
+    horaFin:document.getElementById('geo-hora-fin').value||'08:40',
+    radio:parseInt(document.getElementById('geo-radio').value)||200,
+    gracia:parseInt(document.getElementById('geo-gracia').value)||10,
+    despido:parseInt(document.getElementById('geo-despido').value)||30
+  };
 
-window.prevColorHex=function(val){
-  if(/^#[0-9A-Fa-f]{6}$/.test(val)){
-    document.getElementById('color-dot').style.background=val;
-    document.getElementById('color-picker').value=val;
+  localStorage.setItem(`workers_color_${userId}`,colorW);
+  localStorage.setItem(`workers_nombre_${userId}`,nombreW);
+  localStorage.setItem(`workers_bienvenida_${userId}`,bienvenidaW);
+  localStorage.setItem(`geo_config_${userId}`,JSON.stringify(geoConfig));
+
+  // Generar y guardar código workers
+  const codigo=generarCodigoWorkers(nombreW);
+
+  // Subir logo workers si hay nuevo
+  let logoWorkersUrl='';
+  if(logoWorkersFile){
+    const path=`logos/${userId}/workers_logo`;
+    const { error } = await sb.storage.from('proveed-media').upload(path,logoWorkersFile,{upsert:true});
+    if(!error){
+      const { data } = sb.storage.from('proveed-media').getPublicUrl(path);
+      logoWorkersUrl=data.publicUrl;
+      localStorage.setItem(`workers_logo_${userId}`,logoWorkersUrl);
+    }
   }
+
+  // Guardar en usuarios
+  await sb.from('usuarios').update({
+    workers_color:colorW,
+    workers_codigo:codigo,
+    ...(logoWorkersUrl?{workers_logo:logoWorkersUrl}:{})
+  }).eq('id',userId);
+
+  // Activar RR.HH. PRO
+  await sb.from('plugins_activados').upsert({
+    proveedor_id:userId, plugin_id:'rrhh-pro', nombre:'RR.HH. PRO', activo:true,
+    config:{ colorW, nombreW, bienvenidaW, codigo, geoConfig }
+  },{onConflict:'proveedor_id,plugin_id'});
+
+  // Activar Workers App también
+  await sb.from('plugins_activados').upsert({
+    proveedor_id:userId, plugin_id:'workers-app', nombre:'Workers App', activo:true,
+    config:{ colorW, nombreW, codigo }
+  },{onConflict:'proveedor_id,plugin_id'});
+
+  const { data:act } = await sb.from('plugins_activados').select('*').eq('proveedor_id',userId);
+  pluginsActivados=act||[];
+  document.getElementById('workers-code-display').textContent=codigo;
+  renderPlugins();
+  document.getElementById('upload-overlay').classList.remove('show');
+  showToast('✓ Configuración de RR.HH. guardada');
 };
+
+window.abrirRRHH=async function(){
+  await guardarConfigRRHH();
+  window.location.href='rrhh.html';
+};
+
+window.copiarCodigoWorkers=function(){
+  const codigo=document.getElementById('workers-code-display').textContent;
+  navigator.clipboard?.writeText(codigo);
+  showToast('✓ Código copiado: '+codigo);
+};
+
+// LOGOS
+window.selLogoTienda=function(input){
+  const file=input.files[0]; if(!file) return;
+  logoTiendaFile=file;
+  const reader=new FileReader();
+  reader.onload=e=>{
+    document.getElementById('tienda-logo-prev-img').src=e.target.result;
+    document.getElementById('tienda-logo-prev-img').style.display='block';
+    document.getElementById('tienda-logo-txt').textContent='Logo listo para guardar ✓';
+    document.getElementById('tienda-logo-area').classList.add('filled');
+    document.getElementById('tienda-prev-logo').innerHTML=`<img src="${e.target.result}" alt="" style="width:100%;height:100%;object-fit:cover;">`;
+  };
+  reader.readAsDataURL(file);
+};
+
+window.selLogoWorkers=function(input){
+  const file=input.files[0]; if(!file) return;
+  logoWorkersFile=file;
+  const reader=new FileReader();
+  reader.onload=e=>{
+    document.getElementById('workers-logo-prev-img').src=e.target.result;
+    document.getElementById('workers-logo-prev-img').style.display='block';
+    document.getElementById('workers-logo-txt').textContent='Logo listo para guardar ✓';
+    document.getElementById('workers-logo-area').classList.add('filled');
+  };
+  reader.readAsDataURL(file);
+};
+
+// COLORES
+window.prevColorTienda=v=>{ document.getElementById('tienda-color-dot').style.background=v; document.getElementById('tienda-color-hex').value=v; };
+window.prevColorTiendaHex=v=>{ if(/^#[0-9A-Fa-f]{6}$/.test(v)){ document.getElementById('tienda-color-dot').style.background=v; document.getElementById('tienda-color-picker').value=v; } };
+window.prevColorWorkers=v=>{ document.getElementById('workers-color-dot').style.background=v; document.getElementById('workers-color-hex').value=v; };
+window.prevColorWorkersHex=v=>{ if(/^#[0-9A-Fa-f]{6}$/.test(v)){ document.getElementById('workers-color-dot').style.background=v; document.getElementById('workers-color-picker').value=v; } };
 
 window.filtrar=(f,el)=>{
   filtroActual=f;
@@ -414,7 +730,7 @@ window.filtrar=(f,el)=>{
   renderPlugins();
 };
 
-window.cerrarModal=e=>{ if(e.target===document.getElementById('modal-tienda')) document.getElementById('modal-tienda').classList.remove('show'); };
+window.cerrarModal=(id,e)=>{ if(e.target===document.getElementById(id)) document.getElementById(id).classList.remove('show'); };
 
 function showToast(msg){
   const t=document.getElementById('toast'); t.textContent=msg; t.classList.add('show');
