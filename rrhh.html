@@ -1014,5 +1014,113 @@ function verDetalleEmpleado(e){
     <div class="kpi-grid" style="margin-bottom:14px;">
       <div class="kpi"><div class="kpi-val verde">${score}%</div><div class="kpi-lbl">Score desempeño</div></div>
       <div class="kpi"><div class="kpi-val naranja">$${Number(e.salario||0).toFixed(0)}</div><div class="kpi-lbl">Salario</div></div>
-      <div class="kpi"><div class=
+      <div class="kpi"><div class="kpi-val rojo">${faltas}</div><div class="kpi-lbl">Faltas</div></div>
+      <div class="kpi"><div class="kpi-val azul">${tardanzas}</div><div class="kpi-lbl">Tardanzas</div></div>
+    </div>
+    <div class="card">
+      <div style="font-size:0.72rem;color:#aaa;font-weight:700;text-transform:uppercase;margin-bottom:8px;">Datos personales</div>
+      <div style="font-size:0.82rem;color:#555;display:grid;grid-template-columns:1fr 1fr;gap:6px;">
+        <div>CI: <strong>${e.cedula||'—'}</strong></div>
+        <div>Tel: <strong>${e.telefono||'—'}</strong></div>
+        <div>Inicio: <strong>${e.fecha_inicio||'—'}</strong></div>
+        <div>Cargas: <strong>${e.cargas_familiares||0}</strong></div>
+        <div>Banco: <strong>${e.banco||'—'}</strong></div>
+        <div>Cuenta: <strong>${e.cuenta||'—'}</strong></div>
+      </div>
+    </div>
+    <div class="card" style="background:${score<60?'rgba(255,77,77,0.04)':'rgba(50,205,50,0.04)'};border-color:${score<60?'rgba(255,77,77,0.2)':'rgba(50,205,50,0.2)'};">
+      <div style="font-size:0.82rem;font-weight:700;margin-bottom:6px;">Evaluación automática</div>
+      <div style="font-size:0.78rem;color:#666;">${score>=80?'✅ Empleado óptimo. Candidato para aumento salarial.':score>=60?'⚠️ En observación. Mejorar puntualidad para evitar acciones.':'🔴 En riesgo. Acumulación de faltas y tardanzas. Revisar protocolo de despido.'}</div>
+    </div>
+    <button style="width:100%;padding:12px;background:rgba(50,205,50,0.1);color:var(--verde);border:none;border-radius:12px;font-family:'Inter',sans-serif;font-size:0.88rem;font-weight:700;cursor:pointer;margin-top:6px;" onclick="editarEmpleado('${e.id}')">Editar empleado</button>
+    <button style="width:100%;padding:12px;background:rgba(255,77,77,0.08);color:var(--rojo);border:none;border-radius:12px;font-family:'Inter',sans-serif;font-size:0.82rem;font-weight:700;cursor:pointer;margin-top:8px;" onclick="toggleActivoEmpleado('${e.id}',${e.activo!==false})">${e.activo!==false?'Dar de baja':'Reactivar'}</button>`;
+  document.getElementById('modal-detalle-emp').classList.add('show');
+}
+window.editarEmpleado=function(id){
+  const e=empleados.find(emp=>emp.id===id); if(!e) return;
+  editandoEmpId=id;
+  document.getElementById('modal-emp-title').textContent='Editar empleado';
+  document.getElementById('emp-nombre').value=e.nombre||'';
+  document.getElementById('emp-cedula').value=e.cedula||'';
+  document.getElementById('emp-cargo').value=e.cargo||'';
+  document.getElementById('emp-tel').value=e.telefono||'';
+  document.getElementById('emp-salario').value=e.salario||'';
+  document.getElementById('emp-fecha').value=e.fecha_inicio||'';
+  document.getElementById('emp-banco').value=e.banco||'';
+  document.getElementById('emp-cuenta').value=e.cuenta||'';
+  document.getElementById('emp-cargas').value=e.cargas_familiares||0;
+  if(e.foto){ document.getElementById('emp-foto-prev').src=e.foto; document.getElementById('emp-foto-prev').style.display='block'; document.getElementById('emp-foto-placeholder').style.display='none'; }
+  document.getElementById('modal-detalle-emp').classList.remove('show');
+  document.getElementById('modal-empleado').classList.add('show');
+};
+
+window.toggleActivoEmpleado=async function(id,activo){
+  if(!confirm(`¿${activo?'Dar de baja':'Reactivar'} a este empleado?`)) return;
+  await sb.from('rrhh_empleados').update({activo:!activo}).eq('id',id);
+  document.getElementById('modal-detalle-emp').classList.remove('show');
+  await cargarTodo();
+  showToast(activo?'Empleado dado de baja':'Empleado reactivado');
+};
+
+// FOTOS
+window.prevFotoEmp=function(input){
+  const file=input.files[0]; if(!file) return;
+  empFotoFile=file;
+  const reader=new FileReader();
+  reader.onload=e=>{ document.getElementById('emp-foto-prev').src=e.target.result; document.getElementById('emp-foto-prev').style.display='block'; document.getElementById('emp-foto-placeholder').style.display='none'; };
+  reader.readAsDataURL(file);
+};
+
+window.selServFotos=function(input){
+  const files=[...input.files]; if(!files.length) return;
+  servFotosFiles=[...servFotosFiles,...files];
+  const preview=document.getElementById('serv-fotos-preview');
+  files.forEach(f=>{
+    const reader=new FileReader();
+    reader.onload=e=>{ const img=document.createElement('img'); img.src=e.target.result; img.className='foto-prev-item'; preview.appendChild(img); };
+    reader.readAsDataURL(f);
+  });
+  document.getElementById('serv-foto-area').classList.add('filled');
+  document.querySelector('#serv-foto-area p').textContent=`${servFotosFiles.length} foto(s) seleccionada(s)`;
+};
+
+window.selAsistFoto=function(input){
+  const file=input.files[0]; if(!file) return;
+  asistFotoFile=file;
+  document.getElementById('asist-foto-area').classList.add('filled');
+  document.querySelector('#asist-foto-area p').textContent='Foto lista ✓';
+};
+
+window.selContratoScan=function(input){
+  const file=input.files[0]; if(!file) return;
+  contratoScanFile=file;
+  document.getElementById('cont-scan-area').classList.add('filled');
+  document.querySelector('#cont-scan-area p').textContent=file.name;
+};
+
+window.verContrato=url=>window.open(url,'_blank');
+
+// TABS Y MODALES
+window.showTab=function(tab,btn){
+  document.querySelectorAll('.section').forEach(s=>s.classList.remove('active'));
+  document.querySelectorAll('.tab-btn').forEach(b=>b.classList.remove('active'));
+  document.getElementById('sec-'+tab).classList.add('active');
+  btn.classList.add('active');
+};
+
+window.abrirModalEmpleado=()=>{ editandoEmpId=null; document.getElementById('modal-emp-title').textContent='Nuevo Empleado'; document.getElementById('modal-empleado').classList.add('show'); poblarSelects(); };
+window.abrirModalNomina=()=>{ document.getElementById('modal-nomina').classList.add('show'); poblarSelects(); };
+window.abrirModalContrato=()=>{ generarCodigoContrato(); document.getElementById('modal-contrato').classList.add('show'); poblarSelects(); };
+window.abrirModalServicio=()=>{ servFotosFiles=[]; document.getElementById('serv-fotos-preview').innerHTML=''; document.getElementById('modal-servicio').classList.add('show'); };
+window.abrirRegistroManual=()=>{ document.getElementById('modal-asistencia').classList.add('show'); poblarSelects(); };
+window.cerrarModal=(id,e)=>{ if(e.target===document.getElementById(id)) document.getElementById(id).classList.remove('show'); };
+
+function showToast(msg){
+  const t=document.getElementById('toast'); t.textContent=msg; t.classList.add('show');
+  setTimeout(()=>t.classList.remove('show'),2500);
+}
+</script>
+</body>
+</html>
+
 
