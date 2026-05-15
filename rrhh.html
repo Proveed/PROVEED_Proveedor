@@ -286,3 +286,34 @@
     <div class="empty-state"><p>Cargando servicios...</p></div>
   </div>
 </div>
+<!-- GEOFENCING -->
+<div class="section" id="sec-geofence">
+  <div class="sec-title">Configuración de zona</div>
+  <div class="card">
+    <div style="font-size:0.82rem;font-weight:700;color:var(--negro);margin-bottom:8px;">Zona de asistencia válida</div>
+    <div style="font-size:0.76rem;color:#666;margin-bottom:12px;">El registro de asistencia solo es válido si el empleado está dentro del radio configurado y en la ventana de tiempo establecida.</div>
+    <div class="field"><label>Radio permitido (metros)</label><input type="number" id="geo-radio" value="200" placeholder="200"></div>
+    <div class="field-row">
+      <div class="field"><label>Hora inicio</label><input type="time" id="geo-hora-ini" value="08:00"></div>
+      <div class="field"><label>Hora límite entrada</label><input type="time" id="geo-hora-fin" value="08:40"></div>
+    </div>
+    <div class="field"><label>Minutos de gracia antes de alerta</label><input type="number" id="geo-gracia" value="10" placeholder="10"></div>
+    <div class="field"><label>Minutos para riesgo de despido</label><input type="number" id="geo-despido" value="30" placeholder="30"></div>
+    <button class="btn-submit btn-verde" onclick="guardarGeoConfig()">Guardar configuración</button>
+  </div>
+  <div class="card" style="margin-top:4px;">
+    <div style="font-size:0.82rem;font-weight:700;color:var(--negro);margin-bottom:10px;">Protocolo automático de desempeño</div>
+    <div class="desemp-bar-wrap">
+      <div class="desemp-bar-label"><span>Puntual (0-5 min)</span><span style="color:var(--verde)">Aumento potencial</span></div>
+      <div class="desemp-bar-track"><div class="desemp-bar-fill fill-verde" style="width:100%"></div></div>
+    </div>
+    <div class="desemp-bar-wrap">
+      <div class="desemp-bar-label"><span>Leve retraso (6-15 min)</span><span style="color:var(--naranja)">Observación</span></div>
+      <div class="desemp-bar-track"><div class="desemp-bar-fill fill-naranja" style="width:60%"></div></div>
+    </div>
+    <div class="desemp-bar-wrap">
+      <div class="desemp-bar-label"><span>Retraso grave (+15 min)</span><span style="color:var(--rojo)">Riesgo despido</span></div>
+      <div class="desemp-bar-track"><div class="desemp-bar-fill fill-rojo" style="width:30%"></div></div>
+    </div>
+  </div>
+</div>
