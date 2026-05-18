@@ -1,0 +1,1057 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>PROVEED — Sales Hub</title>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+<style>
+*{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent;}
+:root{
+  --azul:#2563EB; --azul2:#1D4ED8; --azul3:#3B82F6; --azulclaro:#EFF6FF;
+  --azulborde:#BFDBFE; --negro:#0F172A; --gris:#F8FAFC; --grisMed:#F1F5F9;
+  --txt:#1E293B; --txt2:#64748B; --txt3:#94A3B8;
+  --verde:#10B981; --rojo:#EF4444; --naranja:#F59E0B; --morado:#8B5CF6;
+  --blanco:#FFFFFF; --sombra:0 4px 24px rgba(37,99,235,0.10);
+}
+body{ background:var(--gris); font-family:'Plus Jakarta Sans',sans-serif; -webkit-font-smoothing:antialiased; color:var(--txt); }
+
+/* ===== LOGIN ===== */
+.login-screen{ position:fixed; inset:0; background:linear-gradient(135deg,#0F172A 0%,#1E3A8A 50%,#1E40AF 100%); display:flex; flex-direction:column; align-items:center; justify-content:center; z-index:3000; padding:32px; }
+.login-logo-wrap{ width:80px; height:80px; border-radius:24px; background:linear-gradient(135deg,var(--azul),var(--azul3)); display:flex; align-items:center; justify-content:center; margin-bottom:20px; box-shadow:0 12px 40px rgba(37,99,235,0.4); }
+.login-logo-wrap svg{ width:40px; height:40px; stroke:white; fill:none; stroke-width:2; }
+.login-title{ font-size:1.6rem; font-weight:900; color:white; letter-spacing:-0.5px; margin-bottom:4px; }
+.login-sub{ font-size:0.82rem; color:rgba(255,255,255,0.5); margin-bottom:32px; }
+.login-card{ background:rgba(255,255,255,0.06); border:1px solid rgba(255,255,255,0.1); border-radius:24px; padding:24px; width:100%; max-width:360px; backdrop-filter:blur(20px); }
+.login-field{ margin-bottom:14px; }
+.login-field label{ display:block; font-size:0.68rem; font-weight:700; color:rgba(255,255,255,0.5); text-transform:uppercase; margin-bottom:6px; }
+.login-field input{ width:100%; padding:13px 16px; background:rgba(255,255,255,0.08); border:1.5px solid rgba(255,255,255,0.12); border-radius:14px; font-family:'Plus Jakarta Sans',sans-serif; font-size:0.92rem; color:white; outline:none; }
+.login-field input::placeholder{ color:rgba(255,255,255,0.3); }
+.login-field input:focus{ border-color:var(--azul3); }
+.login-role-grid{ display:grid; grid-template-columns:1fr 1fr; gap:8px; margin-bottom:16px; }
+.login-role-chip{ padding:10px; border-radius:12px; border:1.5px solid rgba(255,255,255,0.1); background:transparent; font-family:'Plus Jakarta Sans',sans-serif; font-size:0.74rem; font-weight:700; cursor:pointer; color:rgba(255,255,255,0.5); text-align:center; transition:0.2s; }
+.login-role-chip.sel{ border-color:var(--azul3); color:white; background:rgba(59,130,246,0.2); }
+.login-role-emoji{ font-size:1.1rem; display:block; margin-bottom:3px; }
+.btn-login{ width:100%; padding:14px; background:linear-gradient(135deg,var(--azul),var(--azul3)); color:white; border:none; border-radius:14px; font-family:'Plus Jakarta Sans',sans-serif; font-size:0.95rem; font-weight:800; cursor:pointer; box-shadow:0 8px 24px rgba(37,99,235,0.35); }
+.login-error{ font-size:0.76rem; color:#FCA5A5; text-align:center; margin-top:10px; display:none; }
+
+/* ===== APP ===== */
+.app-wrap{ display:none; height:100vh; flex-direction:column; overflow:hidden; }
+
+/* TOPBAR */
+.topbar{ background:white; border-bottom:1px solid #E2E8F0; padding:12px 16px; display:flex; align-items:center; gap:10px; flex-shrink:0; box-shadow:0 1px 8px rgba(0,0,0,0.06); }
+.topbar-logo{ width:36px; height:36px; border-radius:11px; background:linear-gradient(135deg,var(--azul),var(--azul3)); display:flex; align-items:center; justify-content:center; flex-shrink:0; }
+.topbar-logo svg{ width:18px; height:18px; stroke:white; fill:none; stroke-width:2.5; }
+.topbar-info{ flex:1; }
+.topbar-title{ font-size:0.92rem; font-weight:800; color:var(--negro); }
+.topbar-sub{ font-size:0.64rem; color:var(--txt3); font-weight:600; }
+.topbar-right{ display:flex; gap:8px; align-items:center; }
+.topbar-badge{ font-size:0.62rem; font-weight:800; padding:4px 10px; border-radius:20px; }
+.badge-admin{ background:var(--azulclaro); color:var(--azul); }
+.badge-vendedor{ background:#F0FDF4; color:var(--verde); }
+.btn-topbar{ width:34px; height:34px; border-radius:10px; background:var(--grisMed); border:none; cursor:pointer; display:flex; align-items:center; justify-content:center; }
+.btn-topbar svg{ width:16px; height:16px; stroke:var(--txt2); fill:none; stroke-width:2; }
+.notif-dot{ width:8px; height:8px; background:var(--rojo); border-radius:50%; position:absolute; top:-2px; right:-2px; }
+
+/* TABS */
+.tabs-row{ background:white; border-bottom:1px solid #E2E8F0; display:flex; padding:0 16px; overflow-x:auto; scrollbar-width:none; flex-shrink:0; }
+.tabs-row::-webkit-scrollbar{ display:none; }
+.tab-pill{ padding:12px 14px; border:none; background:transparent; font-family:'Plus Jakarta Sans',sans-serif; font-size:0.74rem; font-weight:700; color:var(--txt3); cursor:pointer; white-space:nowrap; border-bottom:2px solid transparent; transition:0.2s; display:flex; align-items:center; gap:5px; }
+.tab-pill.active{ color:var(--azul); border-bottom-color:var(--azul); }
+.tab-count{ background:var(--azulclaro); color:var(--azul); font-size:0.6rem; font-weight:800; padding:1px 6px; border-radius:10px; }
+.tab-count.urgente{ background:#FEE2E2; color:var(--rojo); }
+
+/* SECCIONES */
+.section{ display:none; flex:1; overflow:hidden; flex-direction:column; }
+.section.active{ display:flex; }
+
+/* ===== BANDEJA CHATS ===== */
+.bandeja-wrap{ display:flex; flex:1; overflow:hidden; }
+.bandeja-left{ width:100%; display:flex; flex-direction:column; background:white; }
+.bandeja-left.hidden-mobile{ display:none; }
+.bandeja-search{ padding:12px 14px; border-bottom:1px solid #F1F5F9; }
+.search-input-wrap{ background:var(--grisMed); border-radius:12px; padding:10px 14px; display:flex; align-items:center; gap:8px; }
+.search-input-wrap svg{ width:15px; height:15px; stroke:var(--txt3); fill:none; stroke-width:2.5; flex-shrink:0; }
+.search-input-wrap input{ flex:1; background:transparent; border:none; outline:none; font-family:'Plus Jakarta Sans',sans-serif; font-size:0.88rem; color:var(--txt); }
+.search-input-wrap input::placeholder{ color:var(--txt3); }
+.filtros-chat{ display:flex; gap:6px; padding:10px 14px; overflow-x:auto; scrollbar-width:none; border-bottom:1px solid #F1F5F9; }
+.filtros-chat::-webkit-scrollbar{ display:none; }
+.filtro-chat-btn{ padding:5px 12px; border-radius:20px; border:1px solid #E2E8F0; background:transparent; font-family:'Plus Jakarta Sans',sans-serif; font-size:0.7rem; font-weight:700; cursor:pointer; color:var(--txt3); white-space:nowrap; transition:0.2s; }
+.filtro-chat-btn.active{ background:var(--azul); color:white; border-color:var(--azul); }
+.chats-lista{ flex:1; overflow-y:auto; }
+.chat-item{ display:flex; align-items:center; gap:12px; padding:13px 16px; cursor:pointer; border-bottom:1px solid #F8FAFC; transition:0.15s; position:relative; }
+.chat-item:active,.chat-item.selected{ background:var(--azulclaro); }
+.chat-item.asignado-otro{ opacity:0.5; pointer-events:none; }
+.chat-avatar{ width:46px; height:46px; border-radius:15px; display:flex; align-items:center; justify-content:center; font-size:0.9rem; font-weight:800; color:white; flex-shrink:0; overflow:hidden; position:relative; }
+.chat-avatar img{ width:100%; height:100%; object-fit:cover; }
+.chat-avatar-estado{ position:absolute; bottom:0; right:0; width:12px; height:12px; border-radius:50%; border:2px solid white; }
+.estado-online{ background:var(--verde); }
+.estado-offline{ background:var(--txt3); }
+.chat-info{ flex:1; min-width:0; }
+.chat-nombre{ font-size:0.88rem; font-weight:700; color:var(--negro); display:flex; align-items:center; gap:6px; }
+.chat-empresa{ font-size:0.68rem; color:var(--txt3); font-weight:600; margin-top:1px; }
+.chat-preview{ font-size:0.76rem; color:var(--txt3); white-space:nowrap; overflow:hidden; text-overflow:ellipsis; margin-top:3px; }
+.chat-meta{ display:flex; flex-direction:column; align-items:flex-end; gap:4px; flex-shrink:0; }
+.chat-time{ font-size:0.62rem; color:var(--txt3); font-weight:600; }
+.chat-badge{ background:var(--azul); color:white; font-size:0.6rem; font-weight:800; width:18px; height:18px; border-radius:50%; display:flex; align-items:center; justify-content:center; }
+.chat-badge.urgente{ background:var(--rojo); }
+.etiqueta-chip{ font-size:0.55rem; font-weight:800; padding:2px 6px; border-radius:6px; }
+.chat-tomado-badge{ position:absolute; top:8px; right:8px; font-size:0.56rem; font-weight:700; padding:2px 6px; border-radius:6px; background:rgba(16,185,129,0.1); color:var(--verde); }
+
+/* ===== CONVERSACIÓN ===== */
+.conv-panel{ display:none; flex-direction:column; height:100%; background:var(--gris); position:fixed; inset:0; z-index:200; }
+.conv-panel.show{ display:flex; }
+.conv-header{ background:white; border-bottom:1px solid #E2E8F0; padding:12px 14px; display:flex; align-items:center; gap:10px; flex-shrink:0; box-shadow:0 2px 8px rgba(0,0,0,0.06); }
+.conv-back{ width:36px; height:36px; border-radius:10px; background:var(--grisMed); border:none; cursor:pointer; display:flex; align-items:center; justify-content:center; flex-shrink:0; }
+.conv-back svg{ width:18px; height:18px; stroke:var(--txt2); fill:none; stroke-width:2.5; }
+.conv-avatar{ width:40px; height:40px; border-radius:12px; display:flex; align-items:center; justify-content:center; font-size:0.9rem; font-weight:800; color:white; flex-shrink:0; overflow:hidden; }
+.conv-avatar img{ width:100%; height:100%; object-fit:cover; }
+.conv-info{ flex:1; }
+.conv-nombre{ font-size:0.9rem; font-weight:800; color:var(--negro); }
+.conv-sub{ font-size:0.68rem; color:var(--txt3); }
+.conv-acciones{ display:flex; gap:6px; }
+.conv-btn{ padding:6px 12px; border-radius:10px; border:none; font-family:'Plus Jakarta Sans',sans-serif; font-size:0.7rem; font-weight:700; cursor:pointer; }
+.conv-btn.azul{ background:var(--azulclaro); color:var(--azul); }
+.conv-btn.verde{ background:#DCFCE7; color:var(--verde); }
+.conv-btn.rojo{ background:#FEE2E2; color:var(--rojo); }
+
+.mensajes-area{ flex:1; overflow-y:auto; padding:14px; display:flex; flex-direction:column; gap:8px; -webkit-overflow-scrolling:touch; }
+.msg-grupo{ display:flex; flex-direction:column; }
+.msg-grupo.agente{ align-items:flex-end; }
+.msg-grupo.cliente{ align-items:flex-start; }
+.msg-sender{ font-size:0.6rem; font-weight:700; color:var(--txt3); margin-bottom:2px; padding:0 4px; }
+.msg-burbuja{ max-width:82%; padding:10px 14px; border-radius:18px; font-size:0.86rem; line-height:1.5; word-break:break-word; }
+.msg-burbuja.agente{ background:linear-gradient(135deg,var(--azul),var(--azul2)); color:white; border-radius:18px 4px 18px 18px; }
+.msg-burbuja.cliente{ background:white; color:var(--negro); border-radius:4px 18px 18px 18px; border:1px solid #E2E8F0; box-shadow:0 2px 8px rgba(0,0,0,0.06); }
+.msg-burbuja.sistema{ background:var(--grisMed); color:var(--txt3); border-radius:12px; font-size:0.74rem; text-align:center; padding:6px 12px; max-width:100%; }
+.msg-hora{ font-size:0.58rem; margin-top:3px; padding:0 4px; color:var(--txt3); }
+.msg-hora.agente{ text-align:right; }
+
+/* PRODUCTO EN CHAT */
+.msg-producto{ background:white; border:1px solid #E2E8F0; border-radius:16px; overflow:hidden; max-width:240px; box-shadow:0 2px 12px rgba(0,0,0,0.08); }
+.msg-prod-img{ width:100%; height:130px; object-fit:cover; background:var(--grisMed); }
+.msg-prod-body{ padding:12px; }
+.msg-prod-nombre{ font-size:0.82rem; font-weight:700; color:var(--negro); margin-bottom:3px; }
+.msg-prod-precio{ font-size:1rem; font-weight:900; color:var(--azul); margin-bottom:8px; }
+.msg-prod-btn{ width:100%; padding:8px; background:linear-gradient(135deg,var(--azul),var(--azul3)); color:white; border:none; border-radius:10px; font-family:'Plus Jakarta Sans',sans-serif; font-size:0.76rem; font-weight:700; cursor:pointer; }
+
+/* PEDIDO EN CHAT */
+.msg-pedido{ background:white; border:1.5px solid var(--azulborde); border-radius:16px; padding:14px; max-width:260px; box-shadow:0 2px 12px rgba(37,99,235,0.08); }
+.msg-pedido-header{ display:flex; justify-content:space-between; align-items:center; margin-bottom:8px; }
+.msg-pedido-num{ font-size:0.7rem; font-weight:800; color:var(--azul); font-family:monospace; }
+.msg-pedido-total{ font-size:0.92rem; font-weight:900; color:var(--negro); }
+.msg-pedido-items{ font-size:0.75rem; color:var(--txt3); margin-bottom:8px; }
+.msg-pedido-btn{ width:100%; padding:8px; background:var(--azulclaro); color:var(--azul); border:none; border-radius:10px; font-family:'Plus Jakarta Sans',sans-serif; font-size:0.76rem; font-weight:700; cursor:pointer; }
+
+/* RESPUESTAS RÁPIDAS */
+.resp-rapidas{ padding:8px 12px 4px; overflow-x:auto; scrollbar-width:none; display:flex; gap:6px; flex-shrink:0; background:white; border-top:1px solid #F1F5F9; }
+.resp-rapidas::-webkit-scrollbar{ display:none; }
+.resp-chip{ background:var(--azulclaro); border:none; border-radius:16px; padding:6px 12px; font-size:0.72rem; color:var(--azul); cursor:pointer; white-space:nowrap; font-family:'Plus Jakarta Sans',sans-serif; font-weight:600; flex-shrink:0; }
+.resp-chip:hover{ background:var(--azul); color:white; }
+
+/* INPUT AREA */
+.input-area{ background:white; border-top:1px solid #E2E8F0; padding:10px 12px; padding-bottom:max(10px,env(safe-area-inset-bottom)); flex-shrink:0; }
+.input-toolbar{ display:flex; gap:6px; margin-bottom:8px; }
+.toolbar-btn{ width:30px; height:30px; border-radius:8px; background:var(--grisMed); border:none; cursor:pointer; display:flex; align-items:center; justify-content:center; }
+.toolbar-btn svg{ width:14px; height:14px; stroke:var(--txt3); fill:none; stroke-width:2; }
+.input-row{ display:flex; gap:8px; align-items:flex-end; }
+.msg-input{ flex:1; background:var(--grisMed); border:1.5px solid transparent; border-radius:20px; padding:10px 16px; font-family:'Plus Jakarta Sans',sans-serif; font-size:0.9rem; color:var(--negro); outline:none; resize:none; max-height:100px; line-height:1.4; -webkit-appearance:none; }
+.msg-input:focus{ border-color:var(--azulborde); background:white; }
+.msg-input::placeholder{ color:var(--txt3); }
+.send-btn{ width:42px; height:42px; border-radius:50%; background:linear-gradient(135deg,var(--azul),var(--azul3)); border:none; display:flex; align-items:center; justify-content:center; cursor:pointer; flex-shrink:0; box-shadow:0 4px 12px rgba(37,99,235,0.3); }
+.send-btn svg{ width:16px; height:16px; stroke:white; fill:none; stroke-width:2.5; margin-left:2px; }
+
+/* ===== CATÁLOGO ===== */
+.cat-grid{ display:grid; grid-template-columns:1fr 1fr; gap:12px; padding:14px; overflow-y:auto; }
+.cat-card{ background:white; border-radius:18px; overflow:hidden; border:1px solid #E2E8F0; box-shadow:0 2px 8px rgba(0,0,0,0.04); cursor:pointer; transition:0.2s; }
+.cat-card:active{ transform:scale(0.97); }
+.cat-img{ width:100%; height:110px; object-fit:cover; background:var(--grisMed); }
+.cat-body{ padding:10px; }
+.cat-nombre{ font-size:0.78rem; font-weight:700; color:var(--negro); display:-webkit-box; -webkit-line-clamp:2; -webkit-box-orient:vertical; overflow:hidden; margin-bottom:4px; }
+.cat-precio{ font-size:0.9rem; font-weight:900; color:var(--azul); }
+.cat-stock{ font-size:0.62rem; color:var(--txt3); margin-top:2px; }
+.btn-cat-enviar{ width:100%; padding:7px; background:linear-gradient(135deg,var(--azul),var(--azul3)); color:white; border:none; border-radius:10px; font-family:'Plus Jakarta Sans',sans-serif; font-size:0.72rem; font-weight:700; cursor:pointer; margin-top:6px; }
+
+/* ===== PEDIDOS ===== */
+.pedido-item{ background:white; border-radius:16px; padding:14px; margin:0 14px 10px; border:1px solid #E2E8F0; box-shadow:0 2px 8px rgba(0,0,0,0.04); }
+.ped-header{ display:flex; justify-content:space-between; align-items:center; margin-bottom:8px; }
+.ped-num{ font-size:0.72rem; font-weight:800; color:var(--azul); font-family:monospace; }
+.ped-estado{ font-size:0.62rem; font-weight:700; padding:3px 8px; border-radius:8px; }
+.est-pendiente{ background:#FEF3C7; color:var(--naranja); }
+.est-proceso{ background:var(--azulclaro); color:var(--azul); }
+.est-completado{ background:#DCFCE7; color:var(--verde); }
+.ped-cliente{ font-size:0.85rem; font-weight:700; color:var(--negro); margin-bottom:3px; }
+.ped-vendedor{ font-size:0.7rem; color:var(--txt3); margin-bottom:6px; }
+.ped-productos{ font-size:0.76rem; color:var(--txt2); margin-bottom:8px; }
+.ped-footer{ display:flex; justify-content:space-between; align-items:center; }
+.ped-total{ font-size:1rem; font-weight:900; color:var(--azul); }
+.ped-acciones{ display:flex; gap:6px; }
+.btn-ped{ padding:6px 10px; border-radius:8px; border:none; font-family:'Plus Jakarta Sans',sans-serif; font-size:0.68rem; font-weight:700; cursor:pointer; }
+
+/* ===== EQUIPO ===== */
+.vendedor-item{ background:white; border-radius:16px; padding:14px; margin:0 14px 10px; border:1px solid #E2E8F0; box-shadow:0 2px 8px rgba(0,0,0,0.04); display:flex; align-items:center; gap:12px; }
+.vend-avatar{ width:46px; height:46px; border-radius:14px; display:flex; align-items:center; justify-content:center; font-size:0.9rem; font-weight:800; color:white; flex-shrink:0; overflow:hidden; }
+.vend-avatar img{ width:100%; height:100%; object-fit:cover; }
+.vend-info{ flex:1; }
+.vend-nombre{ font-size:0.88rem; font-weight:700; color:var(--negro); }
+.vend-rol{ font-size:0.7rem; color:var(--txt3); margin-top:2px; }
+.vend-stats{ display:flex; gap:10px; margin-top:6px; }
+.vend-stat{ font-size:0.68rem; color:var(--txt3); }
+.vend-stat span{ color:var(--azul); font-weight:700; }
+.vend-online{ width:10px; height:10px; border-radius:50%; flex-shrink:0; }
+
+/* ===== ETIQUETAS ===== */
+.etiquetas-wrap{ padding:14px; overflow-y:auto; }
+.etiqueta-item{ background:white; border-radius:14px; padding:14px; margin-bottom:10px; border:1px solid #E2E8F0; display:flex; align-items:center; gap:12px; }
+.etiqueta-color{ width:16px; height:36px; border-radius:6px; flex-shrink:0; }
+.etiqueta-info{ flex:1; }
+.etiqueta-nombre{ font-size:0.88rem; font-weight:700; color:var(--negro); }
+.etiqueta-count{ font-size:0.7rem; color:var(--txt3); margin-top:2px; }
+
+/* ===== KPI DASH ===== */
+.kpi-scroll{ display:grid; grid-template-columns:repeat(2,1fr); gap:10px; padding:14px; }
+.kpi-card{ background:white; border-radius:16px; padding:16px; border:1px solid #E2E8F0; box-shadow:0 2px 8px rgba(0,0,0,0.04); }
+.kpi-val{ font-size:1.5rem; font-weight:900; color:var(--negro); }
+.kpi-val.azul{ color:var(--azul); }
+.kpi-val.verde{ color:var(--verde); }
+.kpi-val.naranja{ color:var(--naranja); }
+.kpi-val.rojo{ color:var(--rojo); }
+.kpi-lbl{ font-size:0.62rem; color:var(--txt3); font-weight:700; text-transform:uppercase; margin-top:3px; }
+.sec-title{ font-size:0.72rem; font-weight:800; color:var(--txt3); text-transform:uppercase; letter-spacing:0.8px; padding:0 14px; margin-bottom:10px; display:flex; justify-content:space-between; align-items:center; }
+.btn-nuevo-sm{ background:var(--azul); color:white; border:none; padding:6px 12px; border-radius:8px; font-family:'Plus Jakarta Sans',sans-serif; font-size:0.7rem; font-weight:700; cursor:pointer; }
+
+
+/* MODALES */
+.modal-overlay{ position:fixed; inset:0; background:rgba(15,23,42,0.6); display:none; align-items:flex-end; z-index:500; }
+.modal-overlay.show{ display:flex; }
+.modal-sheet{ background:white; width:100%; max-height:90vh; border-radius:24px 24px 0 0; transform:translateY(100%); transition:0.4s cubic-bezier(0.16,1,0.3,1); display:flex; flex-direction:column; overflow:hidden; }
+.modal-overlay.show .modal-sheet{ transform:translateY(0); }
+.drag{ width:36px; height:4px; background:#E2E8F0; border-radius:4px; margin:14px auto 0; flex-shrink:0; }
+.modal-header{ padding:12px 16px; display:flex; justify-content:space-between; align-items:center; border-bottom:1px solid #F1F5F9; flex-shrink:0; }
+.modal-title{ font-size:1rem; font-weight:800; color:var(--negro); }
+.close-btn{ width:30px; height:30px; background:var(--grisMed); border-radius:8px; display:flex; align-items:center; justify-content:center; cursor:pointer; border:none; }
+.close-btn svg{ width:14px; height:14px; stroke:var(--txt2); fill:none; stroke-width:2.5; }
+.modal-body{ overflow-y:auto; padding:16px 16px 32px; flex:1; }
+.field{ margin-bottom:12px; }
+.field label{ display:block; font-size:0.68rem; font-weight:700; color:var(--txt3); text-transform:uppercase; margin-bottom:5px; }
+.field input,.field select,.field textarea{ width:100%; padding:12px 14px; background:var(--grisMed); border:1.5px solid #E2E8F0; border-radius:12px; font-family:'Plus Jakarta Sans',sans-serif; font-size:0.9rem; color:var(--negro); outline:none; -webkit-appearance:none; }
+.field input:focus,.field select:focus{ border-color:var(--azul); }
+.field input::placeholder{ color:var(--txt3); }
+.field-row{ display:grid; grid-template-columns:1fr 1fr; gap:10px; }
+.btn-submit{ width:100%; padding:14px; background:linear-gradient(135deg,var(--azul),var(--azul3)); color:white; border:none; border-radius:14px; font-family:'Plus Jakarta Sans',sans-serif; font-size:0.92rem; font-weight:800; cursor:pointer; margin-top:6px; box-shadow:0 6px 20px rgba(37,99,235,0.25); }
+.msg-ok{ background:#DCFCE7; border:1px solid #A7F3D0; border-radius:12px; padding:10px 14px; font-size:0.8rem; color:var(--verde); margin-bottom:12px; display:none; font-weight:600; }
+.msg-ok.show{ display:block; }
+
+/* TOAST */
+.toast{ position:fixed; bottom:20px; left:50%; transform:translateX(-50%) translateY(20px); background:var(--negro); color:white; padding:10px 20px; border-radius:24px; font-size:0.82rem; font-weight:700; opacity:0; transition:0.3s; pointer-events:none; z-index:2000; white-space:nowrap; box-shadow:0 8px 24px rgba(0,0,0,0.2); }
+.toast.show{ opacity:1; transform:translateX(-50%) translateY(0); }
+.upload-overlay{ position:fixed; inset:0; background:rgba(15,23,42,0.5); display:none; align-items:center; justify-content:center; z-index:1000; }
+.upload-overlay.show{ display:flex; }
+.upload-box{ background:white; border-radius:20px; padding:24px; width:80%; max-width:280px; text-align:center; box-shadow:0 20px 60px rgba(0,0,0,0.2); }
+.spinner{ width:36px; height:36px; border:3px solid var(--azulclaro); border-top-color:var(--azul); border-radius:50%; animation:spin 0.7s linear infinite; margin:0 auto 10px; }
+.upload-box p{ font-size:0.82rem; color:var(--txt3); font-weight:600; }
+@keyframes spin{ to{ transform:rotate(360deg); } }
+.empty-state{ text-align:center; padding:40px 20px; color:var(--txt3); }
+.empty-state svg{ width:48px; height:48px; stroke:var(--azulborde); fill:none; stroke-width:1.2; margin:0 auto 12px; display:block; }
+.empty-state p{ font-size:0.82rem; font-weight:600; }
+</style>
+</head>
+<body>
+
+<!-- ===== LOGIN ===== -->
+<div class="login-screen" id="login-screen">
+  <div class="login-logo-wrap"><svg viewBox="0 0 24 24"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg></div>
+  <div class="login-title">Sales Hub</div>
+  <div class="login-sub">Centro de ventas PROVEED</div>
+  <div class="login-card">
+    <div style="font-size:0.7rem;font-weight:700;color:rgba(255,255,255,0.5);text-transform:uppercase;margin-bottom:8px;">Tu rol</div>
+    <div class="login-role-grid">
+      <button class="login-role-chip sel" onclick="selRoleLogin('admin',this)"><span class="login-role-emoji">👑</span>Administrador</button>
+      <button class="login-role-chip" onclick="selRoleLogin('vendedor',this)"><span class="login-role-emoji">💼</span>Vendedor</button>
+    </div>
+    <div class="login-field"><label>Correo electrónico</label><input type="email" id="l-email" placeholder="correo@empresa.com"></div>
+    <div class="login-field"><label>Contraseña</label><input type="password" id="l-pass" placeholder="••••••••"></div>
+    <button class="btn-login" onclick="doLogin()">Entrar al Sales Hub →</button>
+    <div class="login-error" id="l-error">Credenciales incorrectas</div>
+  </div>
+</div>
+
+<!-- ===== APP ===== -->
+<div class="app-wrap" id="app-wrap">
+  <div class="topbar">
+    <div class="topbar-logo"><svg viewBox="0 0 24 24"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg></div>
+    <div class="topbar-info">
+      <div class="topbar-title">Sales Hub <span id="empresa-nombre" style="color:var(--azul)"></span></div>
+      <div class="topbar-sub" id="vendedor-nombre-top">Cargando...</div>
+    </div>
+    <div class="topbar-right">
+      <div class="topbar-badge" id="rol-badge">—</div>
+      <button class="btn-topbar" onclick="doLogout()"><svg viewBox="0 0 24 24"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/></svg></button>
+    </div>
+  </div>
+
+  <div class="tabs-row">
+    <button class="tab-pill active" onclick="showTab('chats',this)">💬 Chats <span class="tab-count" id="tc-chats">0</span></button>
+    <button class="tab-pill" onclick="showTab('pedidos',this)">📦 Pedidos <span class="tab-count" id="tc-pedidos">0</span></button>
+    <button class="tab-pill" onclick="showTab('catalogo',this)">🛒 Catálogo</button>
+    <button class="tab-pill" onclick="showTab('equipo',this)" id="tab-equipo">👥 Equipo</button>
+    <button class="tab-pill" onclick="showTab('etiquetas',this)" id="tab-etiquetas">🏷️ Etiquetas</button>
+    <button class="tab-pill" onclick="showTab('dashboard',this)" id="tab-dash">📊 Dashboard</button>
+  </div>
+
+  <!-- CHATS -->
+  <div class="section active" id="sec-chats">
+    <div class="bandeja-wrap">
+      <div class="bandeja-left" id="bandeja-left">
+        <div class="bandeja-search">
+          <div class="search-input-wrap"><svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/></svg><input type="text" placeholder="Buscar chats, emprendedores..." oninput="buscarChats(this.value)" id="search-chats"></div>
+        </div>
+        <div class="filtros-chat">
+          <button class="filtro-chat-btn active" onclick="filtrarChats('todos',this)">Todos</button>
+          <button class="filtro-chat-btn" onclick="filtrarChats('nuevo',this)">Nuevos</button>
+          <button class="filtro-chat-btn" onclick="filtrarChats('asignado',this)">Mis chats</button>
+          <button class="filtro-chat-btn" onclick="filtrarChats('pendiente',this)">Pendientes</button>
+          <button class="filtro-chat-btn" onclick="filtrarChats('cerrado',this)">Cerrados</button>
+        </div>
+        <div class="chats-lista" id="chats-lista"><div class="empty-state"><p>Cargando chats...</p></div></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- PEDIDOS -->
+  <div class="section" id="sec-pedidos">
+    <div style="overflow-y:auto;flex:1;padding-top:14px;">
+      <div class="sec-title">Pedidos generados por Sales Hub <button class="btn-nuevo-sm" onclick="abrirModalPedidoManual()">+ Manual</button></div>
+      <div id="pedidos-lista"><div class="empty-state"><p>Sin pedidos aún</p></div></div>
+    </div>
+  </div>
+
+  <!-- CATÁLOGO -->
+  <div class="section" id="sec-catalogo">
+    <div style="padding:14px 14px 6px;">
+      <div class="search-input-wrap" style="background:white;border:1px solid #E2E8F0;"><svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/></svg><input type="text" placeholder="Buscar producto..." oninput="buscarCatalogo(this.value)"></div>
+    </div>
+    <div class="cat-grid" id="cat-grid"><div class="empty-state" style="grid-column:1/-1;"><p>Cargando catálogo...</p></div></div>
+  </div>
+
+  <!-- EQUIPO -->
+  <div class="section" id="sec-equipo">
+    <div style="overflow-y:auto;flex:1;padding-top:14px;">
+      <div class="sec-title">Equipo de vendedores <button class="btn-nuevo-sm" onclick="abrirModalVendedor()">+ Agregar</button></div>
+      <div id="equipo-lista"><div class="empty-state"><p>Sin vendedores</p></div></div>
+    </div>
+  </div>
+
+  <!-- ETIQUETAS -->
+  <div class="section" id="sec-etiquetas">
+    <div style="overflow-y:auto;flex:1;padding-top:14px;">
+      <div class="sec-title">Etiquetas <button class="btn-nuevo-sm" onclick="abrirModalEtiqueta()">+ Nueva</button></div>
+      <div class="etiquetas-wrap" id="etiquetas-wrap"></div>
+    </div>
+  </div>
+
+  <!-- DASHBOARD -->
+  <div class="section" id="sec-dashboard">
+    <div style="overflow-y:auto;flex:1;">
+      <div class="kpi-scroll" id="kpi-grid"></div>
+      <div class="sec-title" style="margin-top:4px;">Top vendedores hoy</div>
+      <div id="top-vendedores" style="padding:0 14px;"></div>
+    </div>
+  </div>
+</div>
+
+<!-- CONVERSACIÓN -->
+<div class="conv-panel" id="conv-panel">
+  <div class="conv-header">
+    <button class="conv-back" onclick="cerrarConv()"><svg viewBox="0 0 24 24"><path d="M19 12H5M12 19l-7-7 7-7"/></svg></button>
+    <div class="conv-avatar" id="cv-avatar" style="background:linear-gradient(135deg,var(--azul),var(--azul3));">E</div>
+    <div class="conv-info">
+      <div class="conv-nombre" id="cv-nombre">Emprendedor</div>
+      <div class="conv-sub" id="cv-sub">—</div>
+    </div>
+    <div class="conv-acciones">
+      <button class="conv-btn azul" onclick="abrirCatalogo()">🛒 Enviar producto</button>
+      <button class="conv-btn verde" id="cv-btn-tomar" onclick="tomarChat()">✓ Tomar</button>
+    </div>
+  </div>
+  <div class="mensajes-area" id="mensajes-area"></div>
+  <div class="resp-rapidas" id="resp-rapidas-wrap">
+    <button class="resp-chip" onclick="usarRespuesta('¡Hola! Bienvenido a {empresa}. ¿En qué te puedo ayudar hoy?')">👋 Saludo</button>
+    <button class="resp-chip" onclick="usarRespuesta('Tenemos disponibilidad de ese producto. ¿Te envío más información?')">📦 Disponibilidad</button>
+    <button class="resp-chip" onclick="usarRespuesta('El tiempo de entrega es de 2 a 5 días hábiles a nivel nacional.')">🚚 Entrega</button>
+    <button class="resp-chip" onclick="usarRespuesta('Los precios que ves en el catálogo son al por mayor. ¿Cuántas unidades necesitas?')">💰 Precios</button>
+    <button class="resp-chip" onclick="usarRespuesta('Voy a generarte el pedido ahora mismo. Dame un momento.')">📋 Generar pedido</button>
+    <button class="resp-chip" onclick="usarRespuesta('Tu pedido fue confirmado. Recibirás una notificación con el seguimiento.')">✅ Confirmación</button>
+    <button class="resp-chip" onclick="usarRespuesta('¿Tienes alguna consulta adicional sobre nuestros productos?')">❓ Consulta</button>
+  </div>
+  <div class="input-area">
+    <div class="input-toolbar">
+      <button class="toolbar-btn" onclick="abrirCatalogo()" title="Enviar producto"><svg viewBox="0 0 24 24"><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"/></svg></button>
+      <button class="toolbar-btn" onclick="abrirModalGenerarPedido()" title="Generar pedido"><svg viewBox="0 0 24 24"><path d="M9 5H7a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2h-2"/><rect x="9" y="3" width="6" height="4" rx="1"/></svg></button>
+      <button class="toolbar-btn" onclick="abrirModalEtiquetarChat()" title="Etiquetar"><svg viewBox="0 0 24 24"><path d="M20.59 13.41l-7.17 7.17a2 2 0 0 1-2.83 0L2 12V2h10l8.59 8.59a2 2 0 0 1 0 2.82z"/><line x1="7" y1="7" x2="7.01" y2="7"/></svg></button>
+    </div>
+    <div class="input-row">
+      <textarea class="msg-input" id="cv-input" placeholder="Escribe tu mensaje..." rows="1"></textarea>
+      <button class="send-btn" onclick="enviarMensaje()"><svg viewBox="0 0 24 24"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg></button>
+    </div>
+  </div>
+</div>
+
+<!-- MODAL CATÁLOGO (selector en conv) -->
+<div class="modal-overlay" id="modal-cat-sel" onclick="cerrarModal('modal-cat-sel',event)">
+  <div class="modal-sheet">
+    <div class="drag"></div>
+    <div class="modal-header"><span class="modal-title">Enviar producto al chat</span><button class="close-btn" onclick="document.getElementById('modal-cat-sel').classList.remove('show')"><svg viewBox="0 0 24 24"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg></button></div>
+    <div class="modal-body">
+      <div class="search-input-wrap" style="background:var(--grisMed);margin-bottom:12px;"><svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/></svg><input type="text" placeholder="Buscar..." oninput="buscarCatalogoModal(this.value)" id="cat-modal-search"></div>
+      <div id="cat-modal-grid" style="display:grid;grid-template-columns:1fr 1fr;gap:10px;"></div>
+    </div>
+  </div>
+</div>
+
+<!-- MODAL GENERAR PEDIDO -->
+<div class="modal-overlay" id="modal-pedido" onclick="cerrarModal('modal-pedido',event)">
+  <div class="modal-sheet">
+    <div class="drag"></div>
+    <div class="modal-header"><span class="modal-title">Generar pedido</span><button class="close-btn" onclick="document.getElementById('modal-pedido').classList.remove('show')"><svg viewBox="0 0 24 24"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg></button></div>
+    <div class="modal-body">
+      <div class="msg-ok" id="ped-ok">✓ Pedido generado y enviado al cliente</div>
+      <div style="background:var(--azulclaro);border-radius:12px;padding:12px;margin-bottom:14px;">
+        <div style="font-size:0.68rem;font-weight:700;color:var(--azul);text-transform:uppercase;">Cliente</div>
+        <div style="font-size:0.88rem;font-weight:700;color:var(--negro);margin-top:2px;" id="ped-cliente-nombre">—</div>
+      </div>
+      <div class="field"><label>Productos (uno por línea: Nombre x Cantidad)</label><textarea id="ped-items" rows="4" placeholder="Camiseta Azul x 10&#10;Pantalón Negro x 5"></textarea></div>
+      <div class="field-row">
+        <div class="field"><label>Total ($)</label><input type="number" id="ped-total" placeholder="0.00" step="0.01"></div>
+        <div class="field"><label>Método de pago</label>
+          <select id="ped-metodo">
+            <option value="transferencia">Transferencia</option>
+            <option value="efectivo">Efectivo</option>
+            <option value="tarjeta">Tarjeta</option>
+            <option value="deposito">Depósito</option>
+          </select>
+        </div>
+      </div>
+      <div class="field"><label>Dirección de entrega</label><input type="text" id="ped-dir" placeholder="Ciudad, dirección..."></div>
+      <div class="field"><label>Notas</label><input type="text" id="ped-notas" placeholder="Instrucciones especiales..."></div>
+      <button class="btn-submit" onclick="generarPedido()">Confirmar pedido →</button>
+    </div>
+  </div>
+</div>
+
+<!-- MODAL NUEVO VENDEDOR -->
+<div class="modal-overlay" id="modal-vendedor" onclick="cerrarModal('modal-vendedor',event)">
+  <div class="modal-sheet">
+    <div class="drag"></div>
+    <div class="modal-header"><span class="modal-title">Agregar vendedor</span><button class="close-btn" onclick="document.getElementById('modal-vendedor').classList.remove('show')"><svg viewBox="0 0 24 24"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg></button></div>
+    <div class="modal-body">
+      <div class="msg-ok" id="vend-ok">✓ Vendedor agregado al equipo</div>
+      <div style="background:var(--azulclaro);border-radius:12px;padding:12px;margin-bottom:14px;font-size:0.76rem;color:var(--azul);">El vendedor accede con el mismo email y contraseña que usa en PROVEED.</div>
+      <div class="field"><label>Nombre completo *</label><input type="text" id="vend-nombre" placeholder="Juan Torres"></div>
+      <div class="field"><label>Email PROVEED *</label><input type="email" id="vend-email" placeholder="vendedor@proveed.com"></div>
+      <div class="field"><label>Teléfono</label><input type="tel" id="vend-tel" placeholder="0991234567"></div>
+      <div class="field"><label>Meta de ventas mensual ($)</label><input type="number" id="vend-meta" placeholder="1000"></div>
+      <button class="btn-submit" onclick="guardarVendedor()">Agregar al equipo</button>
+    </div>
+  </div>
+</div>
+
+<!-- MODAL ETIQUETA -->
+<div class="modal-overlay" id="modal-etiqueta" onclick="cerrarModal('modal-etiqueta',event)">
+  <div class="modal-sheet">
+    <div class="drag"></div>
+    <div class="modal-header"><span class="modal-title">Nueva etiqueta</span><button class="close-btn" onclick="document.getElementById('modal-etiqueta').classList.remove('show')"><svg viewBox="0 0 24 24"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg></button></div>
+    <div class="modal-body">
+      <div class="field"><label>Nombre de la etiqueta *</label><input type="text" id="etiq-nombre" placeholder="Ej: Interesado, Seguimiento, VIP"></div>
+      <div class="field"><label>Color</label>
+        <div style="display:flex;gap:10px;flex-wrap:wrap;margin-top:6px;">
+          <div id="etiq-color-sel" style="width:100%;height:36px;border-radius:10px;background:#2563EB;cursor:pointer;"></div>
+          <input type="color" id="etiq-color" value="#2563EB" oninput="document.getElementById('etiq-color-sel').style.background=this.value" style="width:100%;height:36px;border-radius:10px;border:1px solid #E2E8F0;cursor:pointer;">
+        </div>
+      </div>
+      <button class="btn-submit" onclick="guardarEtiqueta()">Crear etiqueta</button>
+    </div>
+  </div>
+</div>
+
+<!-- MODAL ETIQUETAR CHAT -->
+<div class="modal-overlay" id="modal-etiquetar" onclick="cerrarModal('modal-etiquetar',event)">
+  <div class="modal-sheet">
+    <div class="drag"></div>
+    <div class="modal-header"><span class="modal-title">Etiquetar conversación</span><button class="close-btn" onclick="document.getElementById('modal-etiquetar').classList.remove('show')"><svg viewBox="0 0 24 24"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg></button></div>
+    <div class="modal-body" id="modal-etiquetar-body"></div>
+  </div>
+</div>
+
+<div class="upload-overlay" id="upload-overlay"><div class="upload-box"><div class="spinner"></div><p>Procesando...</p></div></div>
+<div class="toast" id="toast"></div>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script>
+const { createClient } = supabase;
+const sb = createClient('https://hfmsyrmkewscnvwynzfq.supabase.co','sb_publishable_d1oLsq70a6ZV33vW3XkRgw_nYcN2Z9v');
+
+let userId='', userData={}, proveedorId='', proveedorData={};
+let rolActual='admin', vendedorData=null;
+let chats=[], productos=[], vendedores=[], etiquetas=[], pedidosSales=[];
+let chatActivo=null, mensajesActivos=[], filtroChatActual='todos', busqChat='';
+let suscripcionMensajes=null, suscripcionChats=null;
+
+// LOGIN
+let rolLoginSel='admin';
+window.selRoleLogin=function(rol,el){
+  rolLoginSel=rol;
+  document.querySelectorAll('.login-role-chip').forEach(b=>b.classList.remove('sel'));
+  el.classList.add('sel');
+};
+
+window.doLogin=async function(){
+  const email=document.getElementById('l-email').value.trim();
+  const pass=document.getElementById('l-pass').value;
+  const errEl=document.getElementById('l-error');
+  errEl.style.display='none';
+  const { data,error } = await sb.auth.signInWithPassword({email,password:pass});
+  if(error){ errEl.style.display='block'; return; }
+  userId=data.user.id;
+  const { data:u } = await sb.from('usuarios').select('*').eq('id',userId).single();
+  if(!u){ errEl.style.display='block'; errEl.textContent='Usuario no encontrado'; return; }
+  userData=u;
+  if(u.rol==='proveedor'){
+    proveedorId=userId; proveedorData=u; rolActual='admin';
+    await sb.from('sales_vendedores').upsert({ proveedor_id:proveedorId, vendedor_id:userId, nombre:u.nombre||u.empresa||'Admin', email:u.email, rol:'admin', activo:true },{ onConflict:'proveedor_id,vendedor_id' });
+  } else {
+    const { data:vend } = await sb.from('sales_vendedores').select('*').eq('vendedor_id',userId).eq('activo',true).single();
+    if(!vend){ errEl.style.display='block'; errEl.textContent='No tienes acceso a Sales Hub. Contacta a tu administrador.'; return; }
+    vendedorData=vend; proveedorId=vend.proveedor_id; rolActual='vendedor';
+    const { data:prov } = await sb.from('usuarios').select('*').eq('id',proveedorId).single();
+    if(prov) proveedorData=prov;
+  }
+  localStorage.setItem('sales_session',JSON.stringify({ userId,proveedorId,rol:rolActual }));
+  iniciarApp();
+};
+
+window.doLogout=async function(){
+  if(suscripcionMensajes) suscripcionMensajes.unsubscribe();
+  if(suscripcionChats) suscripcionChats.unsubscribe();
+  await sb.auth.signOut();
+  localStorage.removeItem('sales_session');
+  window.location.reload();
+};
+
+window.onload=async function(){
+  const sess=JSON.parse(localStorage.getItem('sales_session')||'null');
+  if(!sess) return;
+  const { data:{session} } = await sb.auth.getSession();
+  if(!session){ localStorage.removeItem('sales_session'); return; }
+  userId=session.user.id;
+  const { data:u } = await sb.from('usuarios').select('*').eq('id',userId).single();
+  if(!u) return;
+  userData=u; proveedorId=sess.proveedorId; rolActual=sess.rol;
+  const { data:prov } = await sb.from('usuarios').select('*').eq('id',proveedorId).single();
+  if(prov) proveedorData=prov;
+  if(rolActual==='vendedor'){
+    const { data:vend } = await sb.from('sales_vendedores').select('*').eq('vendedor_id',userId).single();
+    if(vend) vendedorData=vend;
+  }
+  iniciarApp();
+};
+
+function iniciarApp(){
+  document.getElementById('login-screen').style.display='none';
+  document.getElementById('app-wrap').style.display='flex';
+  const nombre=userData.nombre||userData.empresa||'Usuario';
+  document.getElementById('empresa-nombre').textContent=proveedorData.empresa||proveedorData.nombre||'';
+  document.getElementById('vendedor-nombre-top').textContent=nombre+' · '+( rolActual==='admin'?'Administrador':'Vendedor');
+  document.getElementById('rol-badge').textContent=rolActual==='admin'?'Admin':'Vendedor';
+  document.getElementById('rol-badge').className='topbar-badge '+(rolActual==='admin'?'badge-admin':'badge-vendedor');
+  if(rolActual!=='admin'){
+    document.getElementById('tab-equipo').style.display='none';
+    document.getElementById('tab-etiquetas').style.display='none';
+    document.getElementById('tab-dash').style.display='none';
+  }
+  cargarTodo();
+  suscribirRealtime();
+  respuerasRapidas();
+}
+
+async function cargarTodo(){
+  const [chatsR,prodsR,vendsR,etiqsR,pedsR] = await Promise.all([
+    sb.from('sales_chats').select('*').eq('proveedor_id',proveedorId).order('ultimo_mensaje_at',{ascending:false}),
+    sb.from('productos').select('*').eq('proveedor_id',proveedorId).eq('activo',true),
+    sb.from('sales_vendedores').select('*').eq('proveedor_id',proveedorId).eq('activo',true),
+    sb.from('sales_etiquetas').select('*').eq('proveedor_id',proveedorId),
+    sb.from('sales_pedidos').select('*').eq('proveedor_id',proveedorId).order('created_at',{ascending:false})
+  ]);
+  chats=chatsR.data||[];
+  productos=prodsR.data||[];
+  vendedores=vendsR.data||[];
+  etiquetas=etiqsR.data||[];
+  pedidosSales=pedsR.data||[];
+  renderTodo();
+}
+
+function renderTodo(){
+  renderChats();
+  renderCatalogo();
+  renderEquipo();
+  renderEtiquetas();
+  renderPedidos();
+  renderDashboard();
+  actualizarContadores();
+}
+
+function actualizarContadores(){
+  const sinLeer=chats.filter(c=>( c.no_leido||0)>0).length;
+  document.getElementById('tc-chats').textContent=sinLeer||chats.length;
+  document.getElementById('tc-pedidos').textContent=pedidosSales.filter(p=>p.estado==='pendiente').length;
+}
+
+function suscribirRealtime(){
+  suscripcionChats=sb.channel('sales-chats-'+proveedorId)
+    .on('postgres_changes',{ event:'*', schema:'public', table:'sales_chats', filter:`proveedor_id=eq.${proveedorId}` },()=>cargarTodo())
+    .subscribe();
+  if(chatActivo){
+    suscribirMensajes(chatActivo.id);
+  }
+}
+
+function suscribirMensajes(chatId){
+  if(suscripcionMensajes) suscripcionMensajes.unsubscribe();
+  suscripcionMensajes=sb.channel('sales-msgs-'+chatId)
+    .on('postgres_changes',{ event:'INSERT', schema:'public', table:'sales_mensajes', filter:`chat_id=eq.${chatId}` }, payload=>{
+      mensajesActivos.push(payload.new);
+      renderMensajes();
+    }).subscribe();
+}
+
+// CHATS
+function renderChats(){
+  let lista=[...chats];
+  if(busqChat) lista=lista.filter(c=>(c.emprendedor_nombre||'').toLowerCase().includes(busqChat)||(c.emprendedor_email||'').toLowerCase().includes(busqChat));
+  if(filtroChatActual==='asignado') lista=lista.filter(c=>c.vendedor_asignado_id===userId);
+  else if(filtroChatActual==='nuevo') lista=lista.filter(c=>!c.vendedor_asignado_id&&c.estado!=='cerrado');
+  else if(filtroChatActual==='pendiente') lista=lista.filter(c=>c.estado==='pendiente');
+  else if(filtroChatActual==='cerrado') lista=lista.filter(c=>c.estado==='cerrado');
+  const cont=document.getElementById('chats-lista');
+  if(!lista.length){ cont.innerHTML='<div class="empty-state"><svg viewBox="0 0 24 24"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg><p>Sin conversaciones</p></div>'; return; }
+  cont.innerHTML='';
+  lista.forEach(c=>{
+    const div=document.createElement('div');
+    const esMio=c.vendedor_asignado_id===userId;
+    const esDeOtro=c.vendedor_asignado_id&&c.vendedor_asignado_id!==userId;
+    div.className=`chat-item${esDeOtro?' asignado-otro':''}${chatActivo?.id===c.id?' selected':''}`;
+    div.onclick=()=>abrirChat(c);
+    const bg=colorAleatorio(c.emprendedor_id||c.id);
+    const ini=(c.emprendedor_nombre||'E')[0].toUpperCase();
+    const etiq=etiquetas.find(e=>e.id===c.etiqueta_id);
+    const hora=c.ultimo_mensaje_at?new Date(c.ultimo_mensaje_at).toLocaleTimeString('es-EC',{hour:'2-digit',minute:'2-digit'}):'';
+    div.innerHTML=`
+      <div class="chat-avatar" style="background:linear-gradient(135deg,${bg[0]},${bg[1]});">
+        ${c.emprendedor_foto?`<img src="${c.emprendedor_foto}" alt="">`:`<span>${ini}</span>`}
+        <div class="chat-avatar-estado ${c.online?'estado-online':'estado-offline'}"></div>
+      </div>
+      <div class="chat-info">
+        <div class="chat-nombre">${c.emprendedor_nombre||'Emprendedor'}
+          ${etiq?`<span class="etiqueta-chip" style="background:${etiq.color}22;color:${etiq.color};">${etiq.nombre}</span>`:''}
+        </div>
+        <div class="chat-empresa">${c.emprendedor_empresa||c.emprendedor_email||'—'}</div>
+        <div class="chat-preview">${c.ultimo_mensaje||'Nueva conversación'}</div>
+      </div>
+      <div class="chat-meta">
+        <div class="chat-time">${hora}</div>
+        ${(c.no_leido||0)>0?`<div class="chat-badge">${c.no_leido}</div>`:''}
+      </div>
+      ${esMio?'<div class="chat-tomado-badge">✓ Asignado a ti</div>':''}`;
+    cont.appendChild(div);
+  });
+}
+
+function colorAleatorio(id){
+  const paleta=[['#2563EB','#1D4ED8'],['#7C3AED','#6D28D9'],['#059669','#047857'],['#DC2626','#B91C1C'],['#D97706','#B45309'],['#0891B2','#0E7490']];
+  const idx=parseInt(id?.slice(-2)||'0',16)%paleta.length;
+  return paleta[idx];
+}
+async function abrirChat(chat){
+  chatActivo=chat;
+  document.getElementById('cv-nombre').textContent=chat.emprendedor_nombre||'Emprendedor';
+  document.getElementById('cv-sub').textContent=(chat.emprendedor_empresa||chat.emprendedor_email||'—')+' · '+( chat.vendedor_asignado_nombre?`Atendido por ${chat.vendedor_asignado_nombre}`:'Sin asignar');
+  const bg=colorAleatorio(chat.emprendedor_id||chat.id);
+  const av=document.getElementById('cv-avatar');
+  if(chat.emprendedor_foto){ av.innerHTML=`<img src="${chat.emprendedor_foto}" style="width:100%;height:100%;object-fit:cover;">`; }
+  else { av.textContent=(chat.emprendedor_nombre||'E')[0].toUpperCase(); av.style.background=`linear-gradient(135deg,${bg[0]},${bg[1]})`; }
+  const btnTomar=document.getElementById('cv-btn-tomar');
+  if(chat.vendedor_asignado_id===userId){ btnTomar.textContent='✓ Tuyo'; btnTomar.style.background='#DCFCE7'; btnTomar.style.color='var(--verde)'; }
+  else if(chat.vendedor_asignado_id){ btnTomar.style.display='none'; }
+  else { btnTomar.textContent='✓ Tomar chat'; btnTomar.style.display='block'; }
+  // Respuestas rápidas personalizadas
+  respuerasRapidas(chat.emprendedor_nombre);
+  // Cargar mensajes
+  const { data } = await sb.from('sales_mensajes').select('*').eq('chat_id',chat.id).order('created_at',{ascending:true});
+  mensajesActivos=data||[];
+  renderMensajes();
+  // Marcar como leído
+  await sb.from('sales_chats').update({no_leido:0}).eq('id',chat.id);
+  suscribirMensajes(chat.id);
+  document.getElementById('conv-panel').classList.add('show');
+  renderChats();
+}
+
+function renderMensajes(){
+  const area=document.getElementById('mensajes-area');
+  area.innerHTML='';
+  mensajesActivos.forEach(m=>{
+    const esAgente=m.tipo_remitente==='agente'||m.tipo_remitente==='sistema';
+    if(m.tipo_remitente==='sistema'){
+      const div=document.createElement('div'); div.className='msg-grupo';
+      div.innerHTML=`<div class="msg-burbuja sistema">${m.texto}</div>`;
+      area.appendChild(div); return;
+    }
+    const grupo=document.createElement('div');
+    grupo.className=`msg-grupo ${esAgente?'agente':'cliente'}`;
+    const hora=new Date(m.created_at).toLocaleTimeString('es-EC',{hour:'2-digit',minute:'2-digit'});
+    let contenido='';
+    if(m.tipo==='producto'&&m.datos_extra){
+      const p=m.datos_extra;
+      const img=p.imagenes?.[0]||p.imagen||'';
+      contenido=`<div class="msg-producto">${img?`<img src="${img}" class="msg-prod-img" alt="">`:''}<div class="msg-prod-body"><div class="msg-prod-nombre">${p.nombre}</div><div class="msg-prod-precio">$${Number(p.precio||0).toFixed(2)}</div><button class="msg-prod-btn" onclick="abrirModalGenerarPedidoConProducto(${JSON.stringify(p).replace(/"/g,'&quot;')})">Agregar al pedido</button></div></div>`;
+    } else if(m.tipo==='pedido'&&m.datos_extra){
+      const ped=m.datos_extra;
+      contenido=`<div class="msg-pedido"><div class="msg-pedido-header"><span class="msg-pedido-num">#${ped.id?.slice(-6)?.toUpperCase()||'PED'}</span><span class="msg-pedido-total">$${Number(ped.total||0).toFixed(2)}</span></div><div class="msg-pedido-items">${ped.items_texto||'—'}</div><button class="msg-pedido-btn" onclick="window.location.href='pedidos.html'">Ver pedido →</button></div>`;
+    } else {
+      contenido=`<div class="msg-burbuja ${esAgente?'agente':'cliente'}">${m.texto||''}<div class="msg-hora ${esAgente?'agente':''}">${hora}</div></div>`;
+    }
+    grupo.innerHTML=`<div class="msg-sender">${esAgente?(m.nombre_agente||'Vendedor'):(chatActivo?.emprendedor_nombre||'Cliente')}</div>${contenido}`;
+    area.appendChild(grupo);
+  });
+  area.scrollTop=area.scrollHeight;
+}
+
+window.enviarMensaje=async function(){
+  const input=document.getElementById('cv-input');
+  const texto=input.value.trim();
+  if(!texto||!chatActivo) return;
+  input.value=''; input.style.height='auto';
+  const nombre=userData.nombre||userData.empresa||'Agente';
+  await sb.from('sales_mensajes').insert({ chat_id:chatActivo.id, proveedor_id:proveedorId, texto, tipo:'texto', tipo_remitente:'agente', nombre_agente:nombre, vendedor_id:userId });
+  await sb.from('sales_chats').update({ ultimo_mensaje:texto, ultimo_mensaje_at:new Date().toISOString() }).eq('id',chatActivo.id);
+};
+
+window.tomarChat=async function(){
+  if(!chatActivo) return;
+  const nombre=userData.nombre||userData.empresa||'Agente';
+  await sb.from('sales_chats').update({ vendedor_asignado_id:userId, vendedor_asignado_nombre:nombre, estado:'proceso' }).eq('id',chatActivo.id);
+  await sb.from('sales_mensajes').insert({ chat_id:chatActivo.id, proveedor_id:proveedorId, texto:`${nombre} se unió a la conversación`, tipo:'texto', tipo_remitente:'sistema', nombre_agente:'Sistema', vendedor_id:userId });
+  chatActivo.vendedor_asignado_id=userId;
+  chatActivo.vendedor_asignado_nombre=nombre;
+  document.getElementById('cv-btn-tomar').textContent='✓ Tuyo';
+  document.getElementById('cv-btn-tomar').style.background='#DCFCE7';
+  document.getElementById('cv-btn-tomar').style.color='var(--verde)';
+  showToast('✓ Chat tomado — Ya solo tú puedes responder');
+  cargarTodo();
+};
+
+window.cerrarConv=function(){
+  document.getElementById('conv-panel').classList.remove('show');
+  if(suscripcionMensajes){ suscripcionMensajes.unsubscribe(); suscripcionMensajes=null; }
+  chatActivo=null;
+};
+
+function respuerasRapidas(nombreEmp=''){
+  const wrap=document.getElementById('resp-rapidas-wrap');
+  const empresa=proveedorData.empresa||proveedorData.nombre||'PROVEED';
+  const plantillas=[
+    `¡Hola${nombreEmp?' '+nombreEmp.split(' ')[0]:''}! 👋 Bienvenido a ${empresa}. ¿En qué te puedo ayudar hoy?`,
+    'Tenemos disponibilidad de ese producto. ¿Te envío más información? 📦',
+    'El tiempo de entrega es de 2 a 5 días hábiles a nivel nacional. 🚚',
+    'Los precios que ves en el catálogo son al por mayor. ¿Cuántas unidades necesitas? 💰',
+    'Voy a generarte el pedido ahora mismo. Dame un momento. 📋',
+    'Tu pedido fue confirmado. Recibirás una notificación con el seguimiento. ✅',
+    '¿Tienes alguna consulta adicional sobre nuestros productos? ❓',
+    'Puedo enviarte nuestro catálogo completo con precios actualizados. 📄'
+  ];
+  wrap.innerHTML=plantillas.map(p=>`<button class="resp-chip" onclick="usarRespuesta('${p.replace(/'/g,"\'")}')">${p.slice(0,30)}...</button>`).join('');
+}
+
+window.usarRespuesta=function(txt){ document.getElementById('cv-input').value=txt; document.getElementById('cv-input').focus(); };
+
+// CATÁLOGO
+function renderCatalogo(q=''){
+  const lista=q?productos.filter(p=>(p.nombre||'').toLowerCase().includes(q)):productos;
+  const grid=document.getElementById('cat-grid');
+  if(!lista.length){ grid.innerHTML='<div class="empty-state" style="grid-column:1/-1;"><p>Sin productos</p></div>'; return; }
+  grid.innerHTML='';
+  lista.forEach(p=>{
+    const img=p.imagenes?.[0]||p.imagen||'';
+    const div=document.createElement('div'); div.className='cat-card';
+    div.innerHTML=`${img?`<img src="${img}" class="cat-img" alt="" loading="lazy">`:'<div class="cat-img" style="display:flex;align-items:center;justify-content:center;font-size:2rem;">📦</div>'}<div class="cat-body"><div class="cat-nombre">${p.nombre||'Producto'}</div><div class="cat-precio">$${Number(p.precio||0).toFixed(2)}</div><div class="cat-stock">Stock: ${p.stock||0} und · ${p.categoria||'—'}</div><button class="btn-cat-enviar" onclick="enviarProductoAlChat(${JSON.stringify(p).replace(/"/g,'&quot;')})">Enviar al chat →</button></div>`;
+    grid.appendChild(div);
+  });
+}
+
+function renderCatalogoModal(q=''){
+  const lista=q?productos.filter(p=>(p.nombre||'').toLowerCase().includes(q)):productos;
+  const grid=document.getElementById('cat-modal-grid');
+  grid.innerHTML='';
+  lista.forEach(p=>{
+    const img=p.imagenes?.[0]||p.imagen||'';
+    const div=document.createElement('div'); div.className='cat-card';
+    div.innerHTML=`${img?`<img src="${img}" class="cat-img" alt="" loading="lazy">`:'<div class="cat-img" style="display:flex;align-items:center;justify-content:center;font-size:2rem;">📦</div>'}<div class="cat-body"><div class="cat-nombre">${p.nombre||'Producto'}</div><div class="cat-precio">$${Number(p.precio||0).toFixed(2)}</div><button class="btn-cat-enviar" onclick="enviarProductoAlChat(${JSON.stringify(p).replace(/"/g,'&quot;')});document.getElementById('modal-cat-sel').classList.remove('show')">Enviar →</button></div>`;
+    grid.appendChild(div);
+  });
+}
+
+async function enviarProductoAlChat(prod){
+  if(!chatActivo){ showToast('Abre un chat primero'); return; }
+  const nombre=userData.nombre||'Agente';
+  await sb.from('sales_mensajes').insert({ chat_id:chatActivo.id, proveedor_id:proveedorId, texto:`Te comparto este producto: ${prod.nombre}`, tipo:'producto', tipo_remitente:'agente', nombre_agente:nombre, vendedor_id:userId, datos_extra:prod });
+  await sb.from('sales_chats').update({ ultimo_mensaje:`📦 ${prod.nombre}`, ultimo_mensaje_at:new Date().toISOString() }).eq('id',chatActivo.id);
+  const msgs=await sb.from('sales_mensajes').select('*').eq('chat_id',chatActivo.id).order('created_at',{ascending:true});
+  mensajesActivos=msgs.data||[];
+  renderMensajes();
+  document.getElementById('modal-cat-sel').classList.remove('show');
+}
+window.enviarProductoAlChat=enviarProductoAlChat;
+
+// GENERAR PEDIDO
+window.abrirModalGenerarPedido=function(){
+  if(!chatActivo){ showToast('Abre un chat primero'); return; }
+  document.getElementById('ped-cliente-nombre').textContent=chatActivo.emprendedor_nombre||'Emprendedor';
+  document.getElementById('ped-ok').classList.remove('show');
+  document.getElementById('modal-pedido').classList.add('show');
+};
+
+window.abrirModalGenerarPedidoConProducto=function(prod){
+  document.getElementById('ped-items').value=`${prod.nombre} x 1`;
+  document.getElementById('ped-total').value=prod.precio||0;
+  abrirModalGenerarPedido();
+};
+
+window.generarPedido=async function(){
+  const itemsTxt=document.getElementById('ped-items').value.trim();
+  const total=parseFloat(document.getElementById('ped-total').value)||0;
+  const metodo=document.getElementById('ped-metodo').value;
+  const dir=document.getElementById('ped-dir').value.trim();
+  if(!itemsTxt||total<=0){ showToast('Completa los campos del pedido'); return; }
+  document.getElementById('upload-overlay').classList.add('show');
+  try{
+    const nombre=userData.nombre||userData.empresa||'Agente';
+    const { data:ped } = await sb.from('sales_pedidos').insert({
+      proveedor_id:proveedorId,
+      emprendedor_id:chatActivo.emprendedor_id||null,
+      emprendedor_nombre:chatActivo.emprendedor_nombre||'Emprendedor',
+      emprendedor_email:chatActivo.emprendedor_email||'—',
+      items_texto:itemsTxt, total, metodo_pago:metodo,
+      direccion:dir||null,
+      notas:document.getElementById('ped-notas').value.trim(),
+      vendedor_id:userId, vendedor_nombre:nombre,
+      chat_id:chatActivo.id, estado:'pendiente'
+    }).select().single();
+    // También crear en tabla pedidos principal
+    await sb.from('pedidos').insert({
+      proveedor_id:proveedorId,
+      emprendedor_id:chatActivo.emprendedor_id||null,
+      nombre_proveedor:proveedorData.empresa||proveedorData.nombre||'Proveedor',
+      items:[{nombre:itemsTxt,cantidad:1}],
+      total, metodo_pago:metodo,
+      estado:'pendiente',
+      origen:'sales_hub',
+      vendedor_id:userId,
+      vendedor_nombre:nombre,
+      entrega:{ nombre:chatActivo.emprendedor_nombre, direccion:dir }
+    });
+    // Enviar mensaje tipo pedido al chat
+    await sb.from('sales_mensajes').insert({
+      chat_id:chatActivo.id, proveedor_id:proveedorId,
+      texto:`📋 Pedido generado por ${nombre}`,
+      tipo:'pedido', tipo_remitente:'agente', nombre_agente:nombre, vendedor_id:userId,
+      datos_extra:{ id:ped.id, total, items_texto:itemsTxt }
+    });
+    await sb.from('sales_chats').update({ ultimo_mensaje:`📋 Pedido $${total.toFixed(2)}`, ultimo_mensaje_at:new Date().toISOString() }).eq('id',chatActivo.id);
+    document.getElementById('ped-ok').classList.add('show');
+    const msgs=await sb.from('sales_mensajes').select('*').eq('chat_id',chatActivo.id).order('created_at',{ascending:true});
+    mensajesActivos=msgs.data||[]; renderMensajes();
+    cargarTodo();
+    setTimeout(()=>document.getElementById('modal-pedido').classList.remove('show'),2000);
+  } catch(e){ showToast('Error: '+e.message); }
+  document.getElementById('upload-overlay').classList.remove('show');
+};
+
+window.abrirModalPedidoManual=function(){ document.getElementById('ped-cliente-nombre').textContent='Cliente manual'; document.getElementById('modal-pedido').classList.add('show'); };
+
+// PEDIDOS
+function renderPedidos(){
+  const cont=document.getElementById('pedidos-lista');
+  if(!pedidosSales.length){ cont.innerHTML='<div class="empty-state"><p>Sin pedidos generados aún</p></div>'; return; }
+  cont.innerHTML='';
+  pedidosSales.forEach(p=>{
+    const fecha=new Date(p.created_at).toLocaleDateString('es-EC',{day:'2-digit',month:'short',hour:'2-digit',minute:'2-digit'});
+    const div=document.createElement('div'); div.className='pedido-item';
+    div.innerHTML=`
+      <div class="ped-header">
+        <div class="ped-num">#${p.id.slice(-8).toUpperCase()}</div>
+        <span class="ped-estado est-${p.estado||'pendiente'}">${p.estado||'pendiente'}</span>
+      </div>
+      <div class="ped-cliente">${p.emprendedor_nombre||'—'}</div>
+      <div class="ped-vendedor">Vendedor: ${p.vendedor_nombre||'—'} · ${fecha}</div>
+      <div class="ped-productos">${p.items_texto||'—'}</div>
+      <div class="ped-footer">
+        <div class="ped-total">$${Number(p.total||0).toFixed(2)}</div>
+        <div class="ped-acciones">
+          ${p.estado==='pendiente'?`<button class="btn-ped" style="background:var(--azulclaro);color:var(--azul);" onclick="cambiarEstadoPed('${p.id}','proceso')">En proceso</button>`:''}
+          ${p.estado!=='completado'?`<button class="btn-ped" style="background:#DCFCE7;color:var(--verde);" onclick="cambiarEstadoPed('${p.id}','completado')">✓ Completado</button>`:''}
+        </div>
+      </div>`;
+    cont.appendChild(div);
+  });
+}
+
+window.cambiarEstadoPed=async function(id,estado){
+  await sb.from('sales_pedidos').update({estado}).eq('id',id);
+  await sb.from('pedidos').update({estado}).eq('origen','sales_hub').eq('emprendedor_id',(pedidosSales.find(p=>p.id===id)?.emprendedor_id)||'null');
+  await cargarTodo();
+  showToast('Estado actualizado');
+};
+
+// EQUIPO
+function renderEquipo(){
+  const cont=document.getElementById('equipo-lista');
+  if(!vendedores.length){ cont.innerHTML='<div class="empty-state"><p>Agrega al menos un vendedor para comenzar</p></div>'; return; }
+  cont.innerHTML='';
+  vendedores.forEach(v=>{
+    const pedidos=pedidosSales.filter(p=>p.vendedor_id===v.vendedor_id).length;
+    const total=pedidosSales.filter(p=>p.vendedor_id===v.vendedor_id).reduce((s,p)=>s+(p.total||0),0);
+    const bg=colorAleatorio(v.vendedor_id);
+    const div=document.createElement('div'); div.className='vendedor-item';
+    div.innerHTML=`
+      <div class="vend-avatar" style="background:linear-gradient(135deg,${bg[0]},${bg[1]});">${(v.nombre||'V')[0].toUpperCase()}</div>
+      <div class="vend-info">
+        <div class="vend-nombre">${v.nombre||'Vendedor'} ${v.rol==='admin'?'👑':''}</div>
+        <div class="vend-rol">${v.email||'—'}</div>
+        <div class="vend-stats">
+          <div class="vend-stat">Pedidos: <span>${pedidos}</span></div>
+          <div class="vend-stat">Ventas: <span>$${total.toFixed(0)}</span></div>
+          ${v.meta?`<div class="vend-stat">Meta: <span>$${v.meta}</span></div>`:''}
+        </div>
+      </div>
+      <div class="vend-online" style="background:${v.rol==='admin'?'var(--azul)':'var(--verde)'};"></div>`;
+    cont.appendChild(div);
+  });
+}
+window.abrirModalVendedor=()=>{ document.getElementById('vend-ok').classList.remove('show'); document.getElementById('modal-vendedor').classList.add('show'); };
+
+window.guardarVendedor=async function(){
+  const nombre=document.getElementById('vend-nombre').value.trim();
+  const email=document.getElementById('vend-email').value.trim();
+  if(!nombre||!email){ showToast('Completa nombre y email'); return; }
+  const meta=parseFloat(document.getElementById('vend-meta').value)||0;
+  const tel=document.getElementById('vend-tel').value.trim();
+  const { data:u } = await sb.from('usuarios').select('id').eq('email',email).single();
+  await sb.from('sales_vendedores').upsert({ proveedor_id:proveedorId, vendedor_id:u?.id||email, nombre, email, telefono:tel, meta, rol:'vendedor', activo:true },{ onConflict:'proveedor_id,vendedor_id' });
+  document.getElementById('vend-ok').classList.add('show');
+  setTimeout(()=>{ document.getElementById('modal-vendedor').classList.remove('show'); document.getElementById('vend-ok').classList.remove('show'); },1500);
+  await cargarTodo();
+};
+
+// ETIQUETAS
+function renderEtiquetas(){
+  const wrap=document.getElementById('etiquetas-wrap');
+  if(!etiquetas.length){ wrap.innerHTML='<div class="empty-state"><p>Sin etiquetas creadas</p></div>'; return; }
+  wrap.innerHTML='';
+  etiquetas.forEach(e=>{
+    const count=chats.filter(c=>c.etiqueta_id===e.id).length;
+    const div=document.createElement('div'); div.className='etiqueta-item';
+    div.innerHTML=`
+      <div class="etiqueta-color" style="background:${e.color||'#2563EB'};"></div>
+      <div class="etiqueta-info">
+        <div class="etiqueta-nombre">${e.nombre}</div>
+        <div class="etiqueta-count">${count} conversación${count!==1?'es':''}</div>
+      </div>
+      <button onclick="eliminarEtiqueta('${e.id}')" style="background:#FEE2E2;color:var(--rojo);border:none;padding:6px 10px;border-radius:8px;font-size:0.7rem;font-weight:700;cursor:pointer;">Eliminar</button>`;
+    wrap.appendChild(div);
+  });
+}
+
+window.abrirModalEtiqueta=()=>document.getElementById('modal-etiqueta').classList.add('show');
+
+window.guardarEtiqueta=async function(){
+  const nombre=document.getElementById('etiq-nombre').value.trim();
+  const color=document.getElementById('etiq-color').value;
+  if(!nombre){ showToast('Escribe un nombre'); return; }
+  await sb.from('sales_etiquetas').insert({ proveedor_id:proveedorId, nombre, color });
+  document.getElementById('modal-etiqueta').classList.remove('show');
+  document.getElementById('etiq-nombre').value='';
+  await cargarTodo();
+  showToast('✓ Etiqueta creada');
+};
+
+window.eliminarEtiqueta=async function(id){
+  if(!confirm('¿Eliminar esta etiqueta?')) return;
+  await sb.from('sales_etiquetas').delete().eq('id',id);
+  await cargarTodo();
+};
+
+window.abrirModalEtiquetarChat=function(){
+  if(!chatActivo){ showToast('Abre un chat primero'); return; }
+  const body=document.getElementById('modal-etiquetar-body');
+  body.innerHTML='';
+  etiquetas.forEach(e=>{
+    const btn=document.createElement('button');
+    btn.style.cssText=`width:100%;padding:12px;background:${e.color}15;border:1.5px solid ${e.color}40;border-radius:12px;font-family:'Plus Jakarta Sans',sans-serif;font-size:0.88rem;font-weight:700;color:${e.color};cursor:pointer;text-align:left;margin-bottom:8px;display:flex;align-items:center;gap:10px;`;
+    btn.innerHTML=`<div style="width:14px;height:14px;border-radius:50%;background:${e.color};"></div>${e.nombre}`;
+    btn.onclick=async()=>{ await sb.from('sales_chats').update({etiqueta_id:e.id}).eq('id',chatActivo.id); document.getElementById('modal-etiquetar').classList.remove('show'); await cargarTodo(); showToast('✓ Etiqueta aplicada'); };
+    body.appendChild(btn);
+  });
+  if(!etiquetas.length) body.innerHTML='<div class="empty-state"><p>Crea etiquetas primero en la pestaña Etiquetas</p></div>';
+  document.getElementById('modal-etiquetar').classList.add('show');
+};
+
+// DASHBOARD
+function renderDashboard(){
+  const totalVentas=pedidosSales.reduce((s,p)=>s+(p.total||0),0);
+  const pendientes=pedidosSales.filter(p=>p.estado==='pendiente').length;
+  const completados=pedidosSales.filter(p=>p.estado==='completado').length;
+  const kpi=document.getElementById('kpi-grid');
+  kpi.innerHTML=`
+    <div class="kpi-card"><div class="kpi-val azul">$${totalVentas.toFixed(0)}</div><div class="kpi-lbl">Ventas totales</div></div>
+    <div class="kpi-card"><div class="kpi-val">${pedidosSales.length}</div><div class="kpi-lbl">Pedidos</div></div>
+    <div class="kpi-card"><div class="kpi-val naranja">${pendientes}</div><div class="kpi-lbl">Pendientes</div></div>
+    <div class="kpi-card"><div class="kpi-val verde">${completados}</div><div class="kpi-lbl">Completados</div></div>
+    <div class="kpi-card"><div class="kpi-val">${chats.length}</div><div class="kpi-lbl">Conversaciones</div></div>
+    <div class="kpi-card"><div class="kpi-val azul">${vendedores.length}</div><div class="kpi-lbl">Vendedores</div></div>`;
+  const top=document.getElementById('top-vendedores');
+  const rank=[...vendedores].map(v=>({ ...v, total:pedidosSales.filter(p=>p.vendedor_id===v.vendedor_id).reduce((s,p)=>s+(p.total||0),0), pedidos:pedidosSales.filter(p=>p.vendedor_id===v.vendedor_id).length })).sort((a,b)=>b.total-a.total);
+  top.innerHTML='';
+  rank.forEach((v,i)=>{
+    const bg=colorAleatorio(v.vendedor_id);
+    const div=document.createElement('div');
+    div.style.cssText='background:white;border-radius:14px;padding:12px;margin-bottom:8px;border:1px solid #E2E8F0;display:flex;align-items:center;gap:10px;';
+    div.innerHTML=`<div style="font-size:1rem;font-weight:900;color:var(--azul);width:24px;">${i+1}.</div><div style="width:36px;height:36px;border-radius:10px;background:linear-gradient(135deg,${bg[0]},${bg[1]});display:flex;align-items:center;justify-content:center;font-size:0.85rem;font-weight:800;color:white;">${(v.nombre||'V')[0]}</div><div style="flex:1;"><div style="font-size:0.85rem;font-weight:700;">${v.nombre}</div><div style="font-size:0.7rem;color:var(--txt3);">${v.pedidos} pedidos</div></div><div style="font-size:0.92rem;font-weight:900;color:var(--azul);">$${v.total.toFixed(0)}</div>`;
+    top.appendChild(div);
+  });
+}
+
+// UTILS
+window.abrirCatalogo=function(){ renderCatalogoModal(); document.getElementById('modal-cat-sel').classList.add('show'); };
+window.buscarCatalogo=(q)=>renderCatalogo(q.toLowerCase());
+window.buscarCatalogoModal=(q)=>renderCatalogoModal(q.toLowerCase());
+window.buscarChats=(q)=>{ busqChat=q.toLowerCase(); renderChats(); };
+window.filtrarChats=(f,el)=>{ filtroChatActual=f; document.querySelectorAll('.filtro-chat-btn').forEach(b=>b.classList.remove('active')); el.classList.add('active'); renderChats(); };
+window.showTab=function(tab,btn){
+  document.querySelectorAll('.section').forEach(s=>s.classList.remove('active'));
+  document.querySelectorAll('.tab-pill').forEach(b=>b.classList.remove('active'));
+  document.getElementById('sec-'+tab).classList.add('active');
+  btn.classList.add('active');
+};
+window.cerrarModal=(id,e)=>{ if(e.target===document.getElementById(id)) document.getElementById(id).classList.remove('show'); };
+
+const cvInput=document.getElementById('cv-input');
+cvInput.oninput=()=>{ cvInput.style.height='auto'; cvInput.style.height=Math.min(cvInput.scrollHeight,100)+'px'; };
+cvInput.onkeydown=e=>{ if(e.key==='Enter'&&!e.shiftKey){ e.preventDefault(); enviarMensaje(); } };
+
+function showToast(msg){
+  const t=document.getElementById('toast'); t.textContent=msg; t.classList.add('show');
+  setTimeout(()=>t.classList.remove('show'),2500);
+}
+</script>
+</body>
+</html>
