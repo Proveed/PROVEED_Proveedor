@@ -9,47 +9,45 @@
   *{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent;}
   :root{ --naranja:#FF8C00; --verde:#A8E63D; --negro:#0A0A0A; --gris:#F5F6F2; --rojo:#FF4D4D; --azul:#007AFF; --morado:#AF52DE; }
   body{ background:var(--negro); font-family:'Inter',sans-serif; padding-bottom:90px; -webkit-font-smoothing:antialiased; }
-
-  /* HEADER */
   .header{ background:var(--negro); padding:44px 16px 16px; display:flex; align-items:center; gap:12px; position:sticky; top:0; z-index:100; border-bottom:1px solid #1e1e1e; }
   .back-btn{ width:36px; height:36px; background:rgba(255,255,255,0.08); border-radius:10px; display:flex; align-items:center; justify-content:center; cursor:pointer; border:none; }
   .back-btn svg{ width:18px; height:18px; stroke:white; fill:none; stroke-width:2.5; }
   .page-title{ font-size:1.1rem; font-weight:700; color:white; }
-
-  /* HERO */
-  .hero-banner{ margin:14px 16px; background:linear-gradient(135deg,#0f2a0f,#1a4a1a); border-radius:20px; padding:20px; position:relative; overflow:hidden; border:1px solid rgba(168,230,61,0.15); }
+  .hero-banner{ margin:14px 16px; background:linear-gradient(135deg,#0f2a0f,#1a4a1a); border-radius:20px; padding:20px; border:1px solid rgba(168,230,61,0.15); }
   .hero-tag{ background:var(--verde); color:var(--negro); font-size:0.6rem; font-weight:800; padding:3px 10px; border-radius:20px; display:inline-block; margin-bottom:8px; text-transform:uppercase; }
   .hero-title{ font-size:1.1rem; font-weight:800; color:white; line-height:1.3; margin-bottom:4px; }
   .hero-sub{ font-size:0.75rem; color:#888; }
 
   /* MARCA GLOBAL */
-  .marca-global-card{ margin:0 16px 16px; background:#111; border-radius:20px; padding:18px; border:1px solid rgba(168,230,61,0.2); }
-  .marca-global-header{ display:flex; align-items:center; gap:10px; margin-bottom:14px; }
-  .marca-global-icon{ width:38px; height:38px; border-radius:12px; background:rgba(168,230,61,0.1); display:flex; align-items:center; justify-content:center; font-size:1rem; flex-shrink:0; }
-  .marca-global-title{ font-size:0.92rem; font-weight:800; color:white; }
-  .marca-global-sub{ font-size:0.72rem; color:#555; margin-top:2px; }
+  .marca-card{ margin:0 16px 16px; background:#111; border-radius:20px; padding:18px; border:1px solid rgba(168,230,61,0.2); }
+  .marca-hd{ display:flex; align-items:center; gap:10px; margin-bottom:14px; }
+  .marca-hd-icon{ width:38px; height:38px; border-radius:12px; background:rgba(168,230,61,0.1); display:flex; align-items:center; justify-content:center; font-size:1rem; }
+  .marca-hd-title{ font-size:0.92rem; font-weight:800; color:white; }
+  .marca-hd-sub{ font-size:0.7rem; color:#555; }
   .marca-preview{ display:flex; align-items:center; gap:12px; background:#1a1a1a; border-radius:14px; padding:12px; margin-bottom:14px; }
-  .marca-logo-prev{ width:50px; height:50px; border-radius:14px; overflow:hidden; display:flex; align-items:center; justify-content:center; font-size:1.2rem; font-weight:800; color:white; flex-shrink:0; }
-  .marca-logo-prev img{ width:100%; height:100%; object-fit:cover; }
-  .marca-preview-info{ flex:1; }
-  .marca-empresa-name{ font-size:0.92rem; font-weight:800; color:white; }
-  .marca-color-prev{ width:20px; height:20px; border-radius:6px; margin-top:6px; }
-  .marca-fields{ display:flex; flex-direction:column; gap:10px; }
-  .mf-row{ display:flex; gap:10px; align-items:center; }
-  .mf-color-dot{ width:40px; height:40px; border-radius:11px; flex-shrink:0; border:2px solid #2a2a2a; }
-  .mf-color-picker{ flex:1; height:40px; border-radius:11px; border:1.5px solid #2a2a2a; cursor:pointer; padding:3px; background:#1a1a1a; }
-  .mf-input{ width:100%; padding:11px 14px; background:#1a1a1a; border:1.5px solid #2a2a2a; border-radius:11px; font-family:'Inter',sans-serif; font-size:0.88rem; color:white; outline:none; }
-  .mf-input:focus{ border-color:var(--verde); }
-  .mf-input::placeholder{ color:#444; }
-  .logo-upload-wrap{ border:2px dashed #2a2a2a; border-radius:12px; padding:14px; text-align:center; position:relative; cursor:pointer; background:#1a1a1a; transition:0.2s; }
-  .logo-upload-wrap.filled{ border-color:var(--verde); background:rgba(168,230,61,0.04); }
-  .logo-upload-wrap svg{ width:22px; height:22px; stroke:#444; fill:none; stroke-width:1.5; display:block; margin:0 auto 5px; }
-  .logo-upload-wrap.filled svg{ stroke:var(--verde); }
-  .logo-upload-wrap p{ font-size:0.72rem; color:#555; }
-  .logo-upload-wrap.filled p{ color:var(--verde); }
+  .marca-logo-circle{ width:50px; height:50px; border-radius:14px; overflow:hidden; display:flex; align-items:center; justify-content:center; font-size:1.2rem; font-weight:800; color:white; flex-shrink:0; }
+  .marca-logo-circle img{ width:100%; height:100%; object-fit:cover; }
+  .marca-empresa-txt{ font-size:0.92rem; font-weight:800; color:white; }
+  .marca-color-pill{ display:inline-flex; align-items:center; gap:6px; margin-top:4px; }
+  .marca-color-dot-sm{ width:14px; height:14px; border-radius:4px; }
+  .marca-color-val{ font-size:0.68rem; color:#555; font-family:monospace; }
+  .marca-fields{ display:flex; flex-direction:column; gap:10px; margin-bottom:12px; }
+  .color-row{ display:flex; gap:10px; align-items:center; }
+  .color-dot{ width:42px; height:42px; border-radius:12px; border:2px solid #2a2a2a; flex-shrink:0; }
+  .color-picker{ flex:1; height:42px; border-radius:12px; border:1.5px solid #2a2a2a; cursor:pointer; padding:3px; background:#1a1a1a; }
+  .adm-input{ width:100%; padding:11px 14px; background:#1a1a1a; border:1.5px solid #2a2a2a; border-radius:12px; font-family:'Inter',sans-serif; font-size:0.88rem; color:white; outline:none; margin-bottom:10px; }
+  .adm-input:focus{ border-color:var(--verde); }
+  .adm-input::placeholder{ color:#444; }
+  .adm-select{ width:100%; padding:11px 14px; background:#1a1a1a; border:1.5px solid #2a2a2a; border-radius:12px; font-family:'Inter',sans-serif; font-size:0.88rem; color:white; outline:none; margin-bottom:10px; -webkit-appearance:none; }
+  .logo-area{ border:2px dashed #2a2a2a; border-radius:12px; padding:14px; text-align:center; position:relative; cursor:pointer; background:#1a1a1a; margin-bottom:10px; }
+  .logo-area.filled{ border-color:var(--verde); }
+  .logo-area svg{ width:22px; height:22px; stroke:#444; fill:none; stroke-width:1.5; display:block; margin:0 auto 5px; }
+  .logo-area.filled svg{ stroke:var(--verde); }
+  .logo-area p{ font-size:0.72rem; color:#555; }
+  .logo-area.filled p{ color:var(--verde); }
   .logo-file-input{ position:absolute; inset:0; opacity:0; cursor:pointer; }
   .logo-prev-img{ width:50px; height:50px; border-radius:12px; object-fit:cover; display:none; margin:0 auto 6px; }
-  .btn-guardar-marca{ width:100%; padding:13px; background:var(--verde); color:var(--negro); border:none; border-radius:13px; font-family:'Inter',sans-serif; font-size:0.92rem; font-weight:800; cursor:pointer; margin-top:10px; }
+  .btn-guardar-marca{ width:100%; padding:13px; background:var(--verde); color:var(--negro); border:none; border-radius:13px; font-family:'Inter',sans-serif; font-size:0.92rem; font-weight:800; cursor:pointer; }
 
   /* FILTROS */
   .filtros{ display:flex; gap:8px; padding:0 16px 12px; overflow-x:auto; scrollbar-width:none; }
@@ -57,27 +55,25 @@
   .filtro-btn{ padding:7px 14px; border-radius:20px; border:1px solid #222; background:transparent; font-size:0.72rem; font-weight:600; color:#555; cursor:pointer; white-space:nowrap; font-family:'Inter',sans-serif; }
   .filtro-btn.active{ background:#1e1e1e; color:white; border-color:#333; }
 
-  /* PLUGINS */
+  /* PLUGIN CARDS */
   .plugins-lista{ padding:0 16px; }
-  .plugin-card{ background:#111; border:1px solid #1e1e1e; border-radius:20px; padding:18px; margin-bottom:12px; }
+  .plugin-card{ background:#111; border:1px solid #1e1e1e; border-radius:20px; padding:16px; margin-bottom:12px; display:flex; align-items:center; gap:14px; cursor:pointer; transition:0.2s; }
+  .plugin-card:active{ transform:scale(0.98); }
   .plugin-card.activado{ border-color:rgba(168,230,61,0.3); background:rgba(168,230,61,0.03); }
-  .plugin-header{ display:flex; align-items:flex-start; gap:14px; margin-bottom:12px; }
-  .plugin-icono{ width:52px; height:52px; border-radius:16px; display:flex; align-items:center; justify-content:center; font-size:1.5rem; flex-shrink:0; }
+  .plugin-logo{ width:64px; height:64px; border-radius:18px; overflow:hidden; flex-shrink:0; display:flex; align-items:center; justify-content:center; font-size:1.8rem; }
+  .plugin-logo img{ width:100%; height:100%; object-fit:cover; }
+  .plugin-body{ flex:1; min-width:0; }
   .plugin-nombre{ font-size:0.95rem; font-weight:800; color:white; margin-bottom:3px; }
-  .plugin-desc{ font-size:0.76rem; color:#555; line-height:1.5; }
-  .plugin-badges{ display:flex; gap:6px; flex-wrap:wrap; margin-top:6px; }
-  .plugin-badge{ font-size:0.6rem; font-weight:700; padding:2px 8px; border-radius:6px; }
+  .plugin-desc{ font-size:0.74rem; color:#555; line-height:1.45; display:-webkit-box; -webkit-line-clamp:2; -webkit-box-orient:vertical; overflow:hidden; }
+  .plugin-meta{ display:flex; align-items:center; gap:6px; margin-top:6px; }
+  .badge{ font-size:0.6rem; font-weight:700; padding:2px 8px; border-radius:6px; }
   .badge-gratis{ background:rgba(168,230,61,0.12); color:var(--verde); }
   .badge-activo{ background:rgba(168,230,61,0.2); color:var(--verde); }
   .badge-nuevo{ background:rgba(0,122,255,0.12); color:var(--azul); }
-  .plugin-features{ display:grid; grid-template-columns:1fr 1fr; gap:6px; margin-bottom:14px; }
-  .feature-item{ font-size:0.72rem; color:#666; display:flex; align-items:center; gap:5px; }
-  .feature-item::before{ content:'✓'; color:var(--verde); font-weight:800; }
-  .plugin-footer{ display:flex; align-items:center; justify-content:space-between; }
-  .plugin-precio{ font-size:0.88rem; font-weight:700; color:var(--verde); }
-  .btn-activar{ padding:10px 18px; border-radius:12px; border:none; font-family:'Inter',sans-serif; font-size:0.8rem; font-weight:800; cursor:pointer; }
-  .btn-activar.off{ background:#1e1e1e; color:#aaa; }
-  .btn-activar.on{ background:rgba(168,230,61,0.15); color:var(--verde); border:1px solid rgba(168,230,61,0.3); }
+  .plugin-arrow{ width:28px; height:28px; background:#1a1a1a; border-radius:8px; display:flex; align-items:center; justify-content:center; flex-shrink:0; }
+  .plugin-arrow svg{ width:14px; height:14px; stroke:#555; fill:none; stroke-width:2.5; }
+  .plugin-card.activado .plugin-arrow{ background:rgba(168,230,61,0.1); }
+  .plugin-card.activado .plugin-arrow svg{ stroke:var(--verde); }
 
   /* MODALES */
   .modal-overlay{ position:fixed; inset:0; background:rgba(0,0,0,0.85); display:none; z-index:500; align-items:flex-end; }
@@ -85,46 +81,44 @@
   .modal-sheet{ background:#111; width:100%; max-height:93vh; border-radius:24px 24px 0 0; transform:translateY(100%); transition:0.4s cubic-bezier(0.16,1,0.3,1); display:flex; flex-direction:column; overflow:hidden; border:1px solid #1e1e1e; border-bottom:none; }
   .modal-overlay.show .modal-sheet{ transform:translateY(0); }
   .drag{ width:36px; height:4px; background:#333; border-radius:4px; margin:14px auto 0; flex-shrink:0; }
-  .modal-header{ padding:12px 16px; display:flex; justify-content:space-between; align-items:center; border-bottom:1px solid #1e1e1e; flex-shrink:0; }
-  .modal-title{ font-size:1rem; font-weight:700; color:white; }
+  .modal-header-wrap{ padding:12px 16px; display:flex; align-items:center; gap:12px; border-bottom:1px solid #1e1e1e; flex-shrink:0; }
+  .modal-plugin-logo{ width:40px; height:40px; border-radius:12px; overflow:hidden; flex-shrink:0; display:flex; align-items:center; justify-content:center; font-size:1.2rem; }
+  .modal-plugin-logo img{ width:100%; height:100%; object-fit:cover; }
+  .modal-title{ font-size:1rem; font-weight:700; color:white; flex:1; }
   .close-btn{ width:30px; height:30px; background:#1e1e1e; border-radius:8px; display:flex; align-items:center; justify-content:center; cursor:pointer; border:none; }
   .close-btn svg{ width:14px; height:14px; stroke:#666; fill:none; stroke-width:2.5; }
   .modal-body{ overflow-y:auto; padding:16px 16px 32px; flex:1; }
+  .modal-tabs{ display:flex; border-bottom:1px solid #1e1e1e; padding:0 16px; flex-shrink:0; }
+  .modal-tab{ padding:11px 14px; border:none; background:transparent; font-family:'Inter',sans-serif; font-size:0.74rem; font-weight:700; color:#555; cursor:pointer; border-bottom:2px solid transparent; }
+  .modal-tab.active{ color:var(--verde); border-bottom-color:var(--verde); }
+  .modal-section{ display:none; }
+  .modal-section.active{ display:block; }
 
   /* ACCESOS */
-  .acceso-section{ background:#1a1a1a; border-radius:14px; padding:14px; margin-bottom:12px; }
-  .acceso-title{ font-size:0.8rem; font-weight:800; color:white; margin-bottom:4px; display:flex; align-items:center; gap:8px; }
-  .acceso-sub{ font-size:0.72rem; color:#555; margin-bottom:12px; }
-  .acceso-item{ display:flex; align-items:center; gap:10px; background:#222; border-radius:12px; padding:11px 13px; margin-bottom:8px; }
-  .acceso-avatar{ width:34px; height:34px; border-radius:10px; display:flex; align-items:center; justify-content:center; font-size:0.8rem; font-weight:800; color:white; flex-shrink:0; }
-  .acceso-info{ flex:1; }
-  .acceso-nombre{ font-size:0.82rem; font-weight:700; color:white; }
-  .acceso-email{ font-size:0.68rem; color:#555; }
-  .acceso-rol-badge{ font-size:0.6rem; font-weight:700; padding:2px 8px; border-radius:6px; background:rgba(0,122,255,0.12); color:var(--azul); }
+  .acceso-item{ display:flex; align-items:center; gap:10px; background:#1a1a1a; border-radius:12px; padding:12px; margin-bottom:8px; }
+  .acc-avatar{ width:34px; height:34px; border-radius:10px; display:flex; align-items:center; justify-content:center; font-size:0.8rem; font-weight:800; color:white; flex-shrink:0; }
+  .acc-info{ flex:1; }
+  .acc-nombre{ font-size:0.82rem; font-weight:700; color:white; }
+  .acc-email{ font-size:0.68rem; color:#555; }
+  .acc-rol-badge{ font-size:0.6rem; font-weight:700; padding:2px 8px; border-radius:6px; background:rgba(0,122,255,0.12); color:var(--azul); }
   .btn-revocar{ padding:5px 10px; border-radius:8px; border:none; background:rgba(255,77,77,0.1); color:var(--rojo); font-family:'Inter',sans-serif; font-size:0.68rem; font-weight:700; cursor:pointer; }
 
-  .adm-input{ width:100%; padding:11px 14px; background:#1a1a1a; border:1.5px solid #2a2a2a; border-radius:12px; font-family:'Inter',sans-serif; font-size:0.88rem; color:white; outline:none; margin-bottom:10px; -webkit-appearance:none; }
-  .adm-input:focus{ border-color:var(--verde); }
-  .adm-input::placeholder{ color:#444; }
-  .adm-select{ width:100%; padding:11px 14px; background:#1a1a1a; border:1.5px solid #2a2a2a; border-radius:12px; font-family:'Inter',sans-serif; font-size:0.88rem; color:white; outline:none; margin-bottom:10px; -webkit-appearance:none; }
-  .field-lbl{ font-size:0.68rem; font-weight:700; color:#555; text-transform:uppercase; margin-bottom:5px; display:block; }
-
-  /* INFO */
+  .field-lbl{ font-size:0.68rem; font-weight:700; color:#555; text-transform:uppercase; margin-bottom:5px; display:block; margin-top:10px; }
   .info-box{ background:rgba(168,230,61,0.06); border:1px solid rgba(168,230,61,0.12); border-radius:12px; padding:12px; font-size:0.75rem; color:#666; margin-bottom:12px; line-height:1.5; }
   .info-box strong{ color:var(--verde); display:block; margin-bottom:2px; }
+  .warn-box{ background:rgba(255,140,0,0.06); border:1px solid rgba(255,140,0,0.15); border-radius:12px; padding:12px; font-size:0.75rem; color:#FF8C00; margin-bottom:12px; }
   .divider{ height:1px; background:#1e1e1e; margin:14px 0; }
   .btn-submit{ width:100%; padding:13px; background:var(--verde); color:var(--negro); border:none; border-radius:13px; font-family:'Inter',sans-serif; font-size:0.92rem; font-weight:800; cursor:pointer; margin-top:6px; }
-  .btn-abrir{ width:100%; padding:13px; background:#1e1e1e; color:white; border:none; border-radius:13px; font-family:'Inter',sans-serif; font-size:0.88rem; font-weight:700; cursor:pointer; margin-bottom:8px; border:1px solid #2a2a2a; }
+  .btn-abrir{ width:100%; padding:13px; background:#1e1e1e; color:white; border:1px solid #2a2a2a; border-radius:13px; font-family:'Inter',sans-serif; font-size:0.88rem; font-weight:700; cursor:pointer; margin-bottom:8px; }
   .btn-desact{ width:100%; padding:12px; background:rgba(255,77,77,0.06); color:var(--rojo); border:none; border-radius:13px; font-family:'Inter',sans-serif; font-size:0.82rem; font-weight:700; cursor:pointer; }
   .workers-code-box{ background:#222; border-radius:12px; padding:14px; margin-bottom:12px; }
   .workers-code-lbl{ font-size:0.65rem; color:#555; font-weight:700; text-transform:uppercase; margin-bottom:5px; }
   .workers-code-val{ font-size:1rem; font-weight:900; color:var(--verde); font-family:monospace; letter-spacing:2px; }
   .btn-copiar{ width:100%; padding:11px; background:rgba(0,122,255,0.1); color:var(--azul); border:none; border-radius:12px; font-family:'Inter',sans-serif; font-size:0.82rem; font-weight:700; cursor:pointer; margin-bottom:8px; }
-
-  /* GEO */
   .geo-grid{ display:grid; grid-template-columns:1fr 1fr; gap:10px; margin-bottom:10px; }
+  .msg-ok{ display:none; background:rgba(168,230,61,0.08); border:1px solid rgba(168,230,61,0.2); border-radius:12px; padding:10px 14px; font-size:0.8rem; color:var(--verde); margin-bottom:12px; font-weight:600; }
+  .msg-ok.show{ display:block; }
 
-  /* TOAST */
   .toast{ position:fixed; bottom:20px; left:50%; transform:translateX(-50%) translateY(20px); background:var(--verde); color:var(--negro); padding:10px 20px; border-radius:24px; font-size:0.82rem; font-weight:700; opacity:0; transition:0.3s; pointer-events:none; z-index:2000; white-space:nowrap; }
   .toast.show{ opacity:1; transform:translateX(-50%) translateY(0); }
   .upload-overlay{ position:fixed; inset:0; background:rgba(0,0,0,0.7); display:none; align-items:center; justify-content:center; z-index:1000; }
@@ -133,283 +127,282 @@
   .spinner{ width:36px; height:36px; border:3px solid #222; border-top-color:var(--verde); border-radius:50%; animation:spin 0.7s linear infinite; margin:0 auto 10px; }
   .upload-box p{ font-size:0.82rem; color:#555; }
   @keyframes spin{ to{ transform:rotate(360deg); } }
-
-  /* TAB BAR */
   .tab-bar{ position:fixed; bottom:0; width:100%; background:#111; display:flex; justify-content:space-around; align-items:center; padding:10px 0 22px; border-top:1px solid #1e1e1e; z-index:200; }
   .tab{ display:flex; flex-direction:column; align-items:center; gap:4px; cursor:pointer; flex:1; color:#444; text-decoration:none; }
   .tab.active{ color:var(--naranja); }
   .tab svg{ width:22px; height:22px; stroke:currentColor; fill:none; stroke-width:2; stroke-linecap:round; stroke-linejoin:round; }
   .tab span{ font-size:0.56rem; font-weight:600; text-transform:uppercase; }
-  .msg-ok{ display:none; background:rgba(168,230,61,0.08); border:1px solid rgba(168,230,61,0.2); border-radius:12px; padding:10px 14px; font-size:0.8rem; color:var(--verde); margin-bottom:12px; font-weight:600; }
-  .msg-ok.show{ display:block; }
 </style>
 </head>
 <body>
 
 <div class="header">
-  <button class="back-btn" onclick="window.location.href='dashboard.html'">
-    <svg viewBox="0 0 24 24"><path d="M19 12H5M12 19l-7-7 7-7"/></svg>
-  </button>
+  <button class="back-btn" onclick="window.location.href='dashboard.html'"><svg viewBox="0 0 24 24"><path d="M19 12H5M12 19l-7-7 7-7"/></svg></button>
   <div class="page-title">Plugins & Herramientas</div>
 </div>
 
 <div class="hero-banner">
   <div class="hero-tag">⚡ Marketplace de plugins</div>
-  <div class="hero-title">Potencia tu negocio con herramientas profesionales</div>
-  <div class="hero-sub">Una sola configuración de marca aplica a todos tus plugins activos</div>
+  <div class="hero-title">Potencia tu negocio</div>
+  <div class="hero-sub">Una sola configuración de marca aplica a todos los plugins activos automáticamente</div>
 </div>
 
-<!-- CONFIGURACIÓN DE MARCA GLOBAL -->
-<div class="marca-global-card">
-  <div class="marca-global-header">
-    <div class="marca-global-icon">🎨</div>
-    <div>
-      <div class="marca-global-title">Configuración de marca global</div>
-      <div class="marca-global-sub">Se aplica automáticamente a todos tus plugins activos</div>
-    </div>
+<!-- MARCA GLOBAL -->
+<div class="marca-card">
+  <div class="marca-hd">
+    <div class="marca-hd-icon">🎨</div>
+    <div><div class="marca-hd-title">Marca global</div><div class="marca-hd-sub">Aplica automáticamente a todos los plugins</div></div>
   </div>
-
   <div class="marca-preview">
-    <div class="marca-logo-prev" id="marca-logo-preview" style="background:rgba(255,140,0,0.15);color:var(--naranja);">M</div>
-    <div class="marca-preview-info">
-      <div class="marca-empresa-name" id="marca-empresa-preview">Tu empresa</div>
-      <div style="font-size:0.7rem;color:#555;margin-top:2px;">Vista previa de marca</div>
-      <div class="marca-color-prev" id="marca-color-preview" style="background:#FF8C00;"></div>
+    <div class="marca-logo-circle" id="m-logo-circle" style="background:rgba(255,140,0,0.15);color:var(--naranja);">M</div>
+    <div>
+      <div class="marca-empresa-txt" id="m-empresa-txt">Tu empresa</div>
+      <div class="marca-color-pill"><div class="marca-color-dot-sm" id="m-color-sm" style="background:#FF8C00;"></div><div class="marca-color-val" id="m-color-val">#FF8C00</div></div>
     </div>
   </div>
-
   <div class="marca-fields">
     <div>
-      <span class="field-lbl">Logo de empresa</span>
-      <div class="logo-upload-wrap" id="logo-wrap">
+      <span class="field-lbl" style="margin-top:0;">Logo de empresa</span>
+      <div class="logo-area" id="logo-area">
         <img class="logo-prev-img" id="logo-prev-img" src="" alt="">
         <svg viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg>
-        <p id="logo-txt">Sube tu logo — se aplica a todos los plugins</p>
+        <p id="logo-txt">Sube tu logo — aplica a todos los plugins</p>
         <input type="file" accept="image/*" class="logo-file-input" onchange="selLogo(this)">
       </div>
     </div>
     <div>
-      <span class="field-lbl">Color principal de marca</span>
-      <div class="mf-row">
-        <div class="mf-color-dot" id="color-dot" style="background:#FF8C00;"></div>
-        <input type="color" class="mf-color-picker" id="color-picker" value="#FF8C00" oninput="prevColor(this.value)">
-        <input type="text" class="mf-input" id="color-hex" placeholder="#FF8C00" value="#FF8C00" style="margin-bottom:0;" oninput="prevColorHex(this.value)">
+      <span class="field-lbl" style="margin-top:0;">Color principal</span>
+      <div class="color-row">
+        <div class="color-dot" id="color-dot" style="background:#FF8C00;"></div>
+        <input type="color" class="color-picker" id="color-picker" value="#FF8C00" oninput="prevColor(this.value)">
+        <input type="text" class="adm-input" id="color-hex" placeholder="#FF8C00" value="#FF8C00" style="margin-bottom:0;" oninput="prevColorHex(this.value)">
       </div>
     </div>
     <div>
-      <span class="field-lbl">Nombre de empresa</span>
-      <input type="text" class="mf-input" id="marca-nombre" placeholder="Mi Empresa S.A." oninput="document.getElementById('marca-empresa-preview').textContent=this.value||'Tu empresa'">
+      <span class="field-lbl" style="margin-top:0;">Nombre de empresa</span>
+      <input type="text" class="adm-input" id="marca-nombre" placeholder="Mi Empresa S.A." style="margin-bottom:0;" oninput="document.getElementById('m-empresa-txt').textContent=this.value||'Tu empresa'">
     </div>
   </div>
-  <button class="btn-guardar-marca" onclick="guardarMarcaGlobal()">✓ Guardar configuración de marca</button>
+  <button class="btn-guardar-marca" onclick="guardarMarcaGlobal()">✓ Guardar marca global</button>
 </div>
 
 <div class="filtros">
   <button class="filtro-btn active" onclick="filtrar('todos',this)">Todos</button>
   <button class="filtro-btn" onclick="filtrar('ventas',this)">Ventas</button>
   <button class="filtro-btn" onclick="filtrar('gestion',this)">Gestión</button>
-  <button class="filtro-btn" onclick="filtrar('marketing',this)">Marketing</button>
   <button class="filtro-btn" onclick="filtrar('activos',this)">Activos</button>
 </div>
 
 <div class="plugins-lista" id="plugins-lista"></div>
 
-<!-- ===== MODAL TIENDA ONLINE ===== -->
+<!-- MODAL TIENDA -->
 <div class="modal-overlay" id="modal-tienda" onclick="cerrarModal('modal-tienda',event)">
   <div class="modal-sheet">
     <div class="drag"></div>
-    <div class="modal-header">
-      <span class="modal-title">🛍️ Tienda Online</span>
+    <div class="modal-header-wrap">
+      <div class="modal-plugin-logo" style="background:#FF8C0015;">🛍️</div>
+      <div class="modal-title">Tienda Online</div>
       <button class="close-btn" onclick="cerrarM('modal-tienda')"><svg viewBox="0 0 24 24"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg></button>
     </div>
+    <div class="modal-tabs">
+      <button class="modal-tab active" onclick="showModalTab('tienda','config',this)">Configuración</button>
+      <button class="modal-tab" onclick="showModalTab('tienda','accesos',this)">Accesos</button>
+    </div>
     <div class="modal-body">
-      <div class="info-box"><strong>✓ Usa la marca global configurada arriba</strong>Logo, color y nombre de empresa se sincronizan automáticamente con tu tienda online.</div>
-      <div class="acceso-section">
-        <div class="acceso-title">⚙️ Configuración adicional</div>
-        <span class="field-lbl" style="margin-top:8px;display:block;">Anuncio superior</span>
+      <div class="modal-section active" id="tienda-config">
+        <div class="info-box"><strong>✓ Marca global aplicada</strong>Logo, color y nombre se sincronizan automáticamente. Solo configura el contenido.</div>
+        <span class="field-lbl" style="margin-top:0;">Anuncio superior</span>
         <input type="text" class="adm-input" id="t-ann" placeholder="🚚 Envíos seguros a nivel nacional">
-        <span class="field-lbl">Título del banner principal</span>
+        <span class="field-lbl">Título del banner</span>
         <input type="text" class="adm-input" id="t-banner" placeholder="Bienvenido a mi tienda">
+        <button class="btn-submit" onclick="guardarYAbrir('tienda')">✓ Guardar y abrir tienda →</button>
+        <div style="height:8px;"></div>
+        <button class="btn-desact" id="t-desact" onclick="desactivar('tienda-online','modal-tienda')" style="display:none;">Desactivar</button>
       </div>
-      <div class="divider"></div>
-      <div class="acceso-section">
-        <div class="acceso-title">🔑 Accesos a la tienda</div>
-        <div class="acceso-sub">Gestiona quién puede administrar tu tienda</div>
-        <div id="tienda-accesos-lista"></div>
-        <span class="field-lbl" style="margin-top:10px;display:block;">Agregar administrador de tienda</span>
-        <input type="email" class="adm-input" id="tienda-nuevo-email" placeholder="correo del usuario PROVEED">
-        <button class="btn-submit" onclick="agregarAcceso('tienda','Administrador Tienda')">+ Dar acceso</button>
-      </div>
-      <div class="divider"></div>
-      <div style="display:flex;flex-direction:column;gap:8px;margin-top:6px;">
-        <button class="btn-submit" onclick="guardarYAbrirPlugin('tienda')">✓ Guardar y abrir tienda →</button>
-        <button class="btn-desact" id="t-desact" onclick="desactivarPlugin('tienda-online','modal-tienda')" style="display:none;">Desactivar tienda</button>
+      <div class="modal-section" id="tienda-accesos">
+        <div class="info-box"><strong>Accesos a la tienda</strong>Quién puede administrar el panel de tu tienda online.</div>
+        <div id="tienda-acc-lista"></div>
+        <span class="field-lbl" style="margin-top:0;">Email del administrador</span>
+        <input type="email" class="adm-input" id="tienda-email" placeholder="admin@empresa.com">
+        <button class="btn-submit" onclick="agregarAcceso('tienda','Administrador Tienda','tienda-email')">+ Dar acceso</button>
       </div>
     </div>
   </div>
 </div>
 
-
-<!-- ===== MODAL RR.HH. PRO ===== -->
+<!-- MODAL RR.HH. -->
 <div class="modal-overlay" id="modal-rrhh" onclick="cerrarModal('modal-rrhh',event)">
   <div class="modal-sheet">
     <div class="drag"></div>
-    <div class="modal-header">
-      <span class="modal-title">👥 RR.HH. PRO</span>
+    <div class="modal-header-wrap">
+      <div class="modal-plugin-logo" style="background:#0D9488;border-radius:12px;overflow:hidden;"><svg width="40" height="40" viewBox="0 0 40 40" fill="none"><rect width="40" height="40" fill="#0D9488"/><polygon points="20,8 32,28 8,28" fill="black"/><rect x="16" y="28" width="8" height="4" fill="black"/><rect x="8" y="31" width="24" height="3" rx="1.5" fill="black"/><circle cx="28" cy="32" r="3" fill="#0D9488"/><path d="M28 30.5 L28 33.5 M26.5 32 L29.5 32" stroke="#0D9488" stroke-width="1.5"/></svg></div>
+      <div class="modal-title">RR.HH. PRO</div>
       <button class="close-btn" onclick="cerrarM('modal-rrhh')"><svg viewBox="0 0 24 24"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg></button>
     </div>
+    <div class="modal-tabs">
+      <button class="modal-tab active" onclick="showModalTab('rrhh','config',this)">Configuración</button>
+      <button class="modal-tab" onclick="showModalTab('rrhh','accesos',this)">Accesos</button>
+      <button class="modal-tab" onclick="showModalTab('rrhh','empleados',this)">Empleados</button>
+    </div>
     <div class="modal-body">
-      <div class="info-box"><strong>✓ Marca global aplicada automáticamente</strong>El ERP de RR.HH. y la app Workers usan tu logo y color configurado arriba.</div>
-
-      <div class="workers-code-box">
-        <div class="workers-code-lbl">Código de empresa para Workers App</div>
-        <div class="workers-code-val" id="workers-code">—</div>
-        <div style="font-size:0.68rem;color:#444;margin-top:4px;">Comparte este código con tus empleados para que accedan a Workers</div>
-      </div>
-
-      <div class="acceso-section">
-        <div class="acceso-title">⏰ Horario y Geofencing</div>
-        <div class="acceso-sub">Se sincroniza con Workers App automáticamente</div>
-        <div class="geo-grid">
-          <div>
-            <span class="field-lbl">Hora inicio</span>
-            <input type="time" class="adm-input" id="geo-ini" value="08:00" style="margin-bottom:0;">
-          </div>
-          <div>
-            <span class="field-lbl">Límite entrada</span>
-            <input type="time" class="adm-input" id="geo-fin" value="08:40" style="margin-bottom:0;">
-          </div>
+      <div class="modal-section active" id="rrhh-config">
+        <div class="workers-code-box">
+          <div class="workers-code-lbl">Código Workers para empleados</div>
+          <div class="workers-code-val" id="workers-code">—</div>
+          <div style="font-size:0.68rem;color:#444;margin-top:4px;">Los empleados usan este código + cédula + PIN para entrar a Workers</div>
         </div>
-        <span class="field-lbl" style="margin-top:10px;display:block;">Radio geofencing (metros)</span>
+        <div class="info-box"><strong>✓ Marca global aplicada a Workers</strong>Los empleados verán tu logo y color en la app Workers.</div>
+        <span class="field-lbl" style="margin-top:0;">Horario de entrada</span>
+        <div class="geo-grid">
+          <div><input type="time" class="adm-input" id="geo-ini" value="08:00" style="margin-bottom:0;"></div>
+          <div><input type="time" class="adm-input" id="geo-fin" value="08:40" style="margin-bottom:0;"></div>
+        </div>
+        <span class="field-lbl">Radio geofencing (metros)</span>
         <input type="number" class="adm-input" id="geo-radio" value="200">
-        <span class="field-lbl">Min. para alerta</span>
-        <input type="number" class="adm-input" id="geo-gracia" value="10">
-        <span class="field-lbl">Min. para riesgo despido</span>
-        <input type="number" class="adm-input" id="geo-despido" value="30">
+        <button class="btn-submit" onclick="guardarYAbrir('rrhh')">✓ Guardar y abrir RR.HH. →</button>
+        <div style="height:8px;"></div>
+        <button class="btn-copiar" onclick="copiarCodigo()">📋 Copiar código Workers</button>
+        <button class="btn-desact" id="r-desact" onclick="desactivar('rrhh-pro','modal-rrhh')" style="display:none;">Desactivar</button>
       </div>
-
-      <div class="divider"></div>
-
-      <div class="acceso-section">
-        <div class="acceso-title">🔑 Accesos — RR.HH. PRO</div>
-        <div class="acceso-sub">Agrega quién puede gestionar recursos humanos</div>
-        <div id="rrhh-accesos-lista"></div>
-        <span class="field-lbl" style="margin-top:10px;display:block;">Email del encargado de RR.HH.</span>
-        <input type="email" class="adm-input" id="rrhh-nuevo-email" placeholder="rrhh@empresa.com">
-        <select class="adm-select" id="rrhh-nuevo-rol">
-          <option value="Gerente RR.HH.">Gerente RR.HH.</option>
-          <option value="Asistente RR.HH.">Asistente RR.HH.</option>
-          <option value="Solo lectura">Solo lectura</option>
-        </select>
-        <button class="btn-submit" onclick="agregarAcceso('rrhh', document.getElementById('rrhh-nuevo-rol').value)">+ Dar acceso RR.HH.</button>
+      <div class="modal-section" id="rrhh-accesos">
+        <div id="rrhh-acc-lista"></div>
+        <span class="field-lbl" style="margin-top:0;">Email del encargado RR.HH.</span>
+        <input type="email" class="adm-input" id="rrhh-email" placeholder="rrhh@empresa.com">
+        <span class="field-lbl">Rol</span>
+        <select class="adm-select" id="rrhh-rol"><option value="Gerente RR.HH.">Gerente RR.HH.</option><option value="Asistente RR.HH.">Asistente RR.HH.</option></select>
+        <button class="btn-submit" onclick="agregarAcceso('rrhh',document.getElementById('rrhh-rol').value,'rrhh-email')">+ Dar acceso RR.HH.</button>
       </div>
-
-      <div class="acceso-section" style="margin-top:10px;">
-        <div class="acceso-title">👷 Accesos — Workers App</div>
-        <div class="acceso-sub">Registra empleados que usarán la app Workers</div>
-        <div id="workers-accesos-lista"></div>
-        <span class="field-lbl" style="margin-top:10px;display:block;">Nombre del empleado</span>
-        <input type="text" class="adm-input" id="worker-nombre" placeholder="Juan Torres">
-        <span class="field-lbl">Cédula del empleado</span>
-        <input type="text" class="adm-input" id="worker-cedula" placeholder="1712345678" maxlength="10">
-        <span class="field-lbl">PIN de acceso (4-6 dígitos)</span>
-        <input type="password" class="adm-input" id="worker-pin" placeholder="••••" maxlength="6" inputmode="numeric">
+      <div class="modal-section" id="rrhh-empleados">
+        <div class="warn-box">⚠ El empleado accede a Workers App con: Código empresa + Cédula + PIN</div>
+        <div id="rrhh-emps-lista" style="margin-bottom:12px;"></div>
+        <span class="field-lbl" style="margin-top:0;">Nombre completo</span>
+        <input type="text" class="adm-input" id="emp-nombre" placeholder="Juan Torres">
+        <span class="field-lbl">Cédula *</span>
+        <input type="text" class="adm-input" id="emp-cedula" placeholder="1712345678" maxlength="10">
+        <span class="field-lbl">PIN de acceso (lo usará en Workers)</span>
+        <input type="password" class="adm-input" id="emp-pin" placeholder="••••" maxlength="6" inputmode="numeric">
         <span class="field-lbl">Cargo</span>
-        <input type="text" class="adm-input" id="worker-cargo" placeholder="Vendedor, Bodeguero...">
-        <button class="btn-submit" onclick="registrarWorker()">+ Registrar empleado en Workers</button>
-        <div class="msg-ok" id="worker-ok">✓ Empleado registrado — Ya puede acceder a Workers</div>
+        <input type="text" class="adm-input" id="emp-cargo" placeholder="Vendedor, Bodeguero...">
+        <span class="field-lbl">Salario base ($)</span>
+        <input type="number" class="adm-input" id="emp-salario" placeholder="450.00" step="0.01">
+        <button class="btn-submit" onclick="registrarEmpleado()">+ Registrar empleado</button>
+        <div class="msg-ok" id="emp-ok">✓ Empleado registrado — Ya puede acceder a Workers App</div>
       </div>
-
-      <div class="divider"></div>
-      <button class="btn-submit" onclick="guardarYAbrirPlugin('rrhh')">✓ Guardar y abrir RR.HH. →</button>
-      <div style="height:8px;"></div>
-      <button class="btn-copiar" onclick="copiarCodigo()">📋 Copiar código Workers</button>
-      <button class="btn-desact" id="r-desact" onclick="desactivarPlugin('rrhh-pro','modal-rrhh')" style="display:none;">Desactivar RR.HH. PRO</button>
     </div>
   </div>
 </div>
 
-<!-- ===== MODAL SUCURSALES PRO ===== -->
+<!-- MODAL SUCURSALES -->
 <div class="modal-overlay" id="modal-sucursales" onclick="cerrarModal('modal-sucursales',event)">
   <div class="modal-sheet">
     <div class="drag"></div>
-    <div class="modal-header">
-      <span class="modal-title">🏢 Sucursales PRO</span>
+    <div class="modal-header-wrap">
+      <div class="modal-plugin-logo" style="background:#EF000015;border-radius:12px;overflow:hidden;"><svg width="40" height="40" viewBox="0 0 40 40" fill="none"><rect width="40" height="40" fill="#EF0000"/><rect x="11" y="22" width="6" height="12" rx="1" fill="black"/><rect x="17" y="16" width="6" height="18" rx="1" fill="black"/><rect x="23" y="10" width="6" height="24" rx="1" fill="black"/></svg></div>
+      <div class="modal-title">Sucursales PRO</div>
       <button class="close-btn" onclick="cerrarM('modal-sucursales')"><svg viewBox="0 0 24 24"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg></button>
     </div>
+    <div class="modal-tabs">
+      <button class="modal-tab active" onclick="showModalTab('sucursales','config',this)">Config</button>
+      <button class="modal-tab" onclick="showModalTab('sucursales','accesos',this)">Accesos</button>
+    </div>
     <div class="modal-body">
-      <div class="info-box"><strong>✓ Marca global aplicada automáticamente</strong>Color corporativo, logo y nombre de empresa se usan en el sistema multi-sucursal.</div>
-
-      <div class="acceso-section">
-        <div class="acceso-title">🔑 Accesos por rol — Sucursales</div>
-        <div class="acceso-sub">Agrega usuarios con su rol específico en el sistema</div>
-        <div id="suc-accesos-lista"></div>
-        <span class="field-lbl" style="margin-top:10px;display:block;">Email del usuario PROVEED</span>
-        <input type="email" class="adm-input" id="suc-nuevo-email" placeholder="usuario@empresa.com">
+      <div class="modal-section active" id="sucursales-config">
+        <div class="info-box"><strong>✓ Marca global aplicada</strong>El sistema multi-sucursal usa tu identidad corporativa configurada arriba.</div>
+        <button class="btn-submit" onclick="guardarYAbrir('suc')">✓ Abrir Sucursales PRO →</button>
+        <div style="height:8px;"></div>
+        <button class="btn-desact" id="s-desact" onclick="desactivar('sucursales-pro','modal-sucursales')" style="display:none;">Desactivar</button>
+      </div>
+      <div class="modal-section" id="sucursales-accesos">
+        <div id="suc-acc-lista"></div>
+        <span class="field-lbl" style="margin-top:0;">Email del usuario</span>
+        <input type="email" class="adm-input" id="suc-email" placeholder="gerente@empresa.com">
         <span class="field-lbl">Rol en Sucursales</span>
-        <select class="adm-select" id="suc-nuevo-rol">
-          <option value="ceo">👑 CEO / Matriz (control total)</option>
+        <select class="adm-select" id="suc-rol">
+          <option value="ceo">👑 CEO / Matriz</option>
           <option value="regional">🗺️ Gerente Regional</option>
-          <option value="gerente">🏢 Gerente de Sucursal</option>
+          <option value="gerente">🏢 Gerente Sucursal</option>
           <option value="operador">🛒 Operador / Cajero</option>
         </select>
-        <button class="btn-submit" onclick="agregarAcceso('sucursales', document.getElementById('suc-nuevo-rol').value)">+ Dar acceso a Sucursales</button>
+        <span class="field-lbl">Contraseña (se usará para ingresar)</span>
+        <input type="password" class="adm-input" id="suc-pass" placeholder="Mínimo 6 caracteres">
+        <button class="btn-submit" onclick="agregarAccesoConPass('sucursales')">+ Dar acceso</button>
+        <div class="msg-ok" id="suc-ok">✓ Acceso creado correctamente</div>
       </div>
-
-      <div class="divider"></div>
-      <button class="btn-submit" onclick="guardarYAbrirPlugin('suc')">✓ Abrir Sucursales PRO →</button>
-      <div style="height:8px;"></div>
-      <button class="btn-desact" id="s-desact" onclick="desactivarPlugin('sucursales-pro','modal-sucursales')" style="display:none;">Desactivar Sucursales PRO</button>
     </div>
   </div>
 </div>
 
-<!-- ===== MODAL SALES HUB ===== -->
+<!-- MODAL SALES HUB -->
 <div class="modal-overlay" id="modal-sales" onclick="cerrarModal('modal-sales',event)">
   <div class="modal-sheet">
     <div class="drag"></div>
-    <div class="modal-header">
-      <span class="modal-title">💬 Sales Hub</span>
+    <div class="modal-header-wrap">
+      <div class="modal-plugin-logo" style="background:#2563EB;border-radius:12px;overflow:hidden;"><svg width="40" height="40" viewBox="0 0 40 40" fill="none"><rect width="40" height="40" fill="#2563EB"/><rect x="8" y="12" width="4" height="20" rx="2" fill="white"/><rect x="28" y="12" width="4" height="20" rx="2" fill="white"/><path d="M12 22 Q20 15 28 22" stroke="white" stroke-width="3" fill="none"/><circle cx="20" cy="22" r="4" fill="white"/><rect x="18" y="30" width="4" height="4" rx="1" fill="black"/></svg></div>
+      <div class="modal-title">Sales Hub</div>
       <button class="close-btn" onclick="cerrarM('modal-sales')"><svg viewBox="0 0 24 24"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg></button>
     </div>
+    <div class="modal-tabs">
+      <button class="modal-tab active" onclick="showModalTab('sales','config',this)">Config</button>
+      <button class="modal-tab" onclick="showModalTab('sales','accesos',this)">Vendedores</button>
+    </div>
     <div class="modal-body">
-      <div class="info-box"><strong>✓ Marca global aplicada</strong>El Sales Hub usa tu logo y colores de empresa configurados arriba.</div>
-
-
-      <div class="acceso-section">
-        <div class="acceso-title">🔑 Equipo de vendedores</div>
-        <div class="acceso-sub">Agrega vendedores que usarán el Sales Hub</div>
-        <div id="sales-accesos-lista"></div>
-        <span class="field-lbl" style="margin-top:10px;display:block;">Email del vendedor (debe tener cuenta PROVEED)</span>
-        <input type="email" class="adm-input" id="sales-nuevo-email" placeholder="vendedor@empresa.com">
-        <span class="field-lbl">Nombre del vendedor</span>
-        <input type="text" class="adm-input" id="sales-nuevo-nombre" placeholder="Juan Torres">
-        <span class="field-lbl">Meta de ventas mensual ($)</span>
-        <input type="number" class="adm-input" id="sales-meta" placeholder="1000">
-        <button class="btn-submit" onclick="agregarAcceso('sales','Vendedor')">+ Agregar vendedor</button>
+      <div class="modal-section active" id="sales-config">
+        <div class="info-box"><strong>✓ Marca global aplicada</strong>El Sales Hub usa tu logo y colores de empresa.</div>
+        <button class="btn-submit" onclick="guardarYAbrir('sales')">💬 Abrir Sales Hub →</button>
+        <div style="height:8px;"></div>
+        <button class="btn-desact" id="sh-desact" onclick="desactivar('sales-hub','modal-sales')" style="display:none;">Desactivar</button>
       </div>
-
-      <div class="divider"></div>
-      <button class="btn-submit" onclick="guardarYAbrirPlugin('sales')">💬 Abrir Sales Hub →</button>
-      <div style="height:8px;"></div>
-      <button class="btn-desact" id="sh-desact" onclick="desactivarPlugin('sales-hub','modal-sales')" style="display:none;">Desactivar Sales Hub</button>
+      <div class="modal-section" id="sales-accesos">
+        <div id="sales-acc-lista"></div>
+        <span class="field-lbl" style="margin-top:0;">Email del vendedor (cuenta PROVEED)</span>
+        <input type="email" class="adm-input" id="sales-email" placeholder="vendedor@empresa.com">
+        <span class="field-lbl">Nombre</span>
+        <input type="text" class="adm-input" id="sales-nombre" placeholder="Juan Torres">
+        <span class="field-lbl">Meta mensual ($)</span>
+        <input type="number" class="adm-input" id="sales-meta" placeholder="1000">
+        <button class="btn-submit" onclick="agregarVendedor()">+ Agregar vendedor</button>
+        <div class="msg-ok" id="sales-ok">✓ Vendedor agregado al equipo</div>
+      </div>
     </div>
   </div>
 </div>
 
-<!-- ===== MODAL GENÉRICO ===== -->
+<!-- MODAL WORKERS -->
+<div class="modal-overlay" id="modal-workers" onclick="cerrarModal('modal-workers',event)">
+  <div class="modal-sheet">
+    <div class="drag"></div>
+    <div class="modal-header-wrap">
+      <div class="modal-plugin-logo" style="background:#FF8C00;border-radius:12px;overflow:hidden;"><img src="/mnt/user-data/uploads/1000412297.png" alt="Workers" onerror="this.parentElement.innerHTML='👷';"></div>
+      <div class="modal-title">Workers App</div>
+      <button class="close-btn" onclick="cerrarM('modal-workers')"><svg viewBox="0 0 24 24"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg></button>
+    </div>
+    <div class="modal-body">
+      <div class="info-box"><strong>✓ Conectado con RR.HH. PRO</strong>Los empleados registrados en RR.HH. acceden a Workers con el código de empresa + cédula + PIN.</div>
+      <div class="workers-code-box">
+        <div class="workers-code-lbl">Código para empleados</div>
+        <div class="workers-code-val" id="workers-code2">—</div>
+      </div>
+      <button class="btn-copiar" onclick="copiarCodigo()">📋 Copiar código</button>
+      <button class="btn-submit" onclick="window.location.href='workers.html'">👷 Abrir Workers App →</button>
+      <div style="height:8px;"></div>
+      <button class="btn-submit" style="background:#1e1e1e;color:white;border:1px solid #2a2a2a;" onclick="cerrarM('modal-workers');document.getElementById('modal-rrhh').classList.add('show');showModalTab('rrhh','empleados',document.querySelectorAll('.modal-tab')[2])">+ Registrar empleados en RR.HH.</button>
+    </div>
+  </div>
+</div>
+
+<!-- MODAL GENÉRICO -->
 <div class="modal-overlay" id="modal-gen" onclick="cerrarModal('modal-gen',event)">
   <div class="modal-sheet">
     <div class="drag"></div>
-    <div class="modal-header">
-      <span class="modal-title" id="gen-title">Plugin</span>
+    <div class="modal-header-wrap">
+      <div class="modal-title" id="gen-title">Plugin</div>
       <button class="close-btn" onclick="cerrarM('modal-gen')"><svg viewBox="0 0 24 24"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg></button>
     </div>
     <div class="modal-body" id="gen-body"></div>
   </div>
 </div>
 
-<div class="upload-overlay" id="upload-overlay"><div class="upload-box"><div class="spinner"></div><p>Guardando...</p></div></div>
+<div class="upload-overlay" id="upload-overlay"><div class="upload-box"><div class="spinner"></div><p>Procesando...</p></div></div>
 <div class="toast" id="toast"></div>
 
 <nav class="tab-bar">
@@ -426,18 +419,30 @@ const { createClient } = supabase;
 const sb = createClient('https://hfmsyrmkewscnvwynzfq.supabase.co','sb_publishable_d1oLsq70a6ZV33vW3XkRgw_nYcN2Z9v');
 
 let userId='', userData={}, pluginsActivados=[], filtroActual='todos', logoFile=null;
-let accesosData={ tienda:[], rrhh:[], workers:[], sucursales:[], sales:[] };
+
+// LOGOS SVG inline basados en las imágenes subidas
+const PLUGIN_LOGOS = {
+  'tienda-online': `<div style="width:100%;height:100%;background:#FF8C00;display:flex;align-items:center;justify-content:center;font-size:1.8rem;">🛍️</div>`,
+  'rrhh-pro': `<svg width="64" height="64" viewBox="0 0 64 64" fill="none"><rect width="64" height="64" rx="16" fill="#0D9488"/><polygon points="32,12 50,44 14,44" fill="black"/><rect x="26" y="44" width="12" height="6" rx="2" fill="black"/><rect x="14" y="49" width="36" height="5" rx="2.5" fill="black"/><circle cx="46" cy="51" r="4" fill="#0D9488"/><path d="M46 49 L46 53 M44 51 L48 51" stroke="#0D9488" stroke-width="2"/></svg>`,
+  'workers-app': `<svg width="64" height="64" viewBox="0 0 64 64" fill="none"><rect width="64" height="64" rx="16" fill="#FF8C00"/><polygon points="22,52 32,52 42,52 50,36 14,36" fill="#3d1f00"/><circle cx="28" cy="22" r="6" fill="#3d1f00"/><circle cx="36" cy="24" r="5" fill="#3d1f00"/><circle cx="44" cy="23" r="4.5" fill="#3d1f00"/><rect x="18" y="36" width="28" height="4" rx="2" fill="#3d1f00"/></svg>`,
+  'sucursales-pro': `<svg width="64" height="64" viewBox="0 0 64 64" fill="none"><rect width="64" height="64" rx="16" fill="#EF0000"/><rect x="14" y="32" width="10" height="20" rx="1.5" fill="black"/><rect x="27" y="22" width="10" height="30" rx="1.5" fill="black"/><rect x="40" y="14" width="10" height="38" rx="1.5" fill="black"/></svg>`,
+  'sales-hub': `<svg width="64" height="64" viewBox="0 0 64 64" fill="none"><rect width="64" height="64" rx="16" fill="#2563EB"/><rect x="12" y="18" width="6" height="30" rx="3" fill="white"/><rect x="46" y="18" width="6" height="30" rx="3" fill="white"/><path d="M18 34 Q32 20 46 34" stroke="white" stroke-width="4" fill="none"/><circle cx="32" cy="34" r="6" fill="white"/><rect x="29" y="46" width="6" height="6" rx="2" fill="black" opacity="0.5"/></svg>`,
+  'factura-auto': `<div style="width:100%;height:100%;background:#111;display:flex;align-items:center;justify-content:center;font-size:1.8rem;border-radius:16px;border:1px solid #222;">🧾</div>`,
+  'catalogo-pdf': `<div style="width:100%;height:100%;background:#111;display:flex;align-items:center;justify-content:center;font-size:1.8rem;border-radius:16px;border:1px solid #222;">📄</div>`,
+  'descuentos': `<div style="width:100%;height:100%;background:#111;display:flex;align-items:center;justify-content:center;font-size:1.8rem;border-radius:16px;border:1px solid #222;">🏷️</div>`,
+  'estadisticas-pro': `<div style="width:100%;height:100%;background:#111;display:flex;align-items:center;justify-content:center;font-size:1.8rem;border-radius:16px;border:1px solid #222;">📊</div>`,
+};
 
 const PLUGINS=[
-  { id:'tienda-online', nombre:'Tienda Online', icono:'🛍️', desc:'Catálogo público con pagos integrados PROVEED y reseñas de clientes.', categoria:'ventas', destacado:true, modal:'tienda', archivo:'tienda-online.html', features:['Catálogo sincronizado','Pagos integrados','Reseñas con fotos','Panel de pedidos','Color de marca global','URL pública'] },
-  { id:'rrhh-pro', nombre:'RR.HH. PRO', icono:'👥', desc:'ERP completo con nómina legal Ecuador, biometría, contratos y Workers App.', categoria:'gestion', destacado:true, modal:'rrhh', archivo:'rrhh.html', features:['Nómina legal Ecuador','Control biométrico','Geofencing GPS','Contratos digitales','Workers App empleados','Décimos automáticos'] },
-  { id:'workers-app', nombre:'Workers App', icono:'👷', desc:'Portal empleados: asistencia biométrica, sueldo en tiempo real y buzón RR.HH.', categoria:'gestion', modal:'rrhh', archivo:'workers.html', features:['Registro biométrico','Ver sueldo y beneficios','Buzón RR.HH.','Agenda corporativa','Geofencing GPS'] },
-  { id:'sucursales-pro', nombre:'Sucursales PRO', icono:'🏢', desc:'Sistema multi-sucursal con POS, inventario, logística y caja por nodo.', categoria:'gestion', destacado:true, modal:'sucursales', archivo:'sucursales-pro.html', features:['POS con escáner QR','Stock en tránsito','24 provincias Ecuador','Caja y arqueo','RBAC 4 roles','Logística inter-nodos'] },
-  { id:'sales-hub', nombre:'Sales Hub', icono:'💬', desc:'Centro de ventas tipo call center con chats, equipo de vendedores y pedidos.', categoria:'ventas', destacado:true, modal:'sales', archivo:'sales-hub.html', features:['Chats en tiempo real','Equipo de vendedores','Catálogo en chat','Generación de pedidos','Etiquetas y filtros','Dashboard de ventas'] },
-  { id:'factura-auto', nombre:'Facturación Auto', icono:'🧾', desc:'Genera facturas PDF automáticamente con cada pedido confirmado.', categoria:'gestion', features:['PDF automático','Logo empresa','Numeración automática','Datos de facturación'] },
-  { id:'catalogo-pdf', nombre:'Catálogo PDF', icono:'📄', desc:'Genera un catálogo PDF profesional con todos tus productos.', categoria:'marketing', features:['Diseño profesional','Con precios','Logo incluido','Descarga directa'] },
-  { id:'descuentos', nombre:'Cupones y Descuentos', icono:'🏷️', desc:'Crea códigos de descuento y promociones para tus clientes.', categoria:'marketing', features:['Códigos de descuento','% o monto fijo','Fecha vencimiento','Límite de usos'] },
-  { id:'estadisticas-pro', nombre:'Estadísticas PRO', icono:'📊', desc:'Análisis avanzado de ventas, productos más vendidos y comportamiento.', categoria:'gestion', features:['Gráficos avanzados','Top productos','Análisis clientes','Exportar datos'] }
+  { id:'tienda-online', nombre:'Tienda Online', desc:'Catálogo público con pagos integrados y reseñas de clientes.', categoria:'ventas', destacado:true, modal:'tienda', archivo:'tienda-online.html' },
+  { id:'rrhh-pro', nombre:'RR.HH. PRO', desc:'ERP completo con nómina legal Ecuador, biometría y contratos.', categoria:'gestion', destacado:true, modal:'rrhh', archivo:'rrhh.html' },
+  { id:'workers-app', nombre:'Workers App', desc:'Portal del empleado: asistencia biométrica, sueldo y buzón RR.HH.', categoria:'gestion', modal:'workers', archivo:'workers.html' },
+  { id:'sucursales-pro', nombre:'Sucursales PRO', desc:'Sistema multi-sucursal con POS, inventario y logística entre nodos.', categoria:'gestion', destacado:true, modal:'sucursales', archivo:'sucursales-pro.html' },
+  { id:'sales-hub', nombre:'Sales Hub', desc:'Centro de ventas con chats, equipo de vendedores y gestión de pedidos.', categoria:'ventas', destacado:true, modal:'sales', archivo:'sales-hub.html' },
+  { id:'factura-auto', nombre:'Facturación Auto', desc:'Genera facturas PDF automáticamente con cada pedido.', categoria:'gestion' },
+  { id:'catalogo-pdf', nombre:'Catálogo PDF', desc:'Catálogo PDF profesional con todos tus productos.', categoria:'marketing' },
+  { id:'descuentos', nombre:'Cupones y Descuentos', desc:'Crea códigos de descuento y promociones.', categoria:'marketing' },
+  { id:'estadisticas-pro', nombre:'Estadísticas PRO', desc:'Análisis avanzado de ventas y comportamiento.', categoria:'gestion' },
 ];
 
 (async()=>{
@@ -455,38 +460,26 @@ const PLUGINS=[
 
 function cargarMarcaGuardada(){
   const nombre=userData.empresa||userData.nombre||'';
-  const logo=userData.logo_empresa||userData.foto_perfil||'';
   const color=localStorage.getItem(`marca_color_${userId}`)||userData.workers_color||'#FF8C00';
-
+  const logo=userData.logo_empresa||userData.foto_perfil||'';
   document.getElementById('marca-nombre').value=nombre;
-  document.getElementById('marca-empresa-preview').textContent=nombre||'Tu empresa';
+  document.getElementById('m-empresa-txt').textContent=nombre||'Tu empresa';
   prevColor(color);
-
   if(logo){
     document.getElementById('logo-prev-img').src=logo;
     document.getElementById('logo-prev-img').style.display='block';
     document.getElementById('logo-txt').textContent='Logo actual ✓';
-    document.getElementById('logo-wrap').classList.add('filled');
-    const logoCircle=document.getElementById('marca-logo-preview');
-    logoCircle.innerHTML=`<img src="${logo}" style="width:100%;height:100%;object-fit:cover;">`;
-  } else {
-    document.getElementById('marca-logo-preview').textContent=(nombre||'M')[0].toUpperCase();
-  }
-
-  // Código workers
+    document.getElementById('logo-area').classList.add('filled');
+    document.getElementById('m-logo-circle').innerHTML=`<img src="${logo}" style="width:100%;height:100%;object-fit:cover;">`;
+  } else { document.getElementById('m-logo-circle').textContent=(nombre||'M')[0].toUpperCase(); }
   const codigo=userData.workers_codigo||generarCodigo(nombre);
-  const el=document.getElementById('workers-code');
-  if(el) el.textContent=codigo;
-
-  // Configs adicionales
+  ['workers-code','workers-code2'].forEach(id=>{ const el=document.getElementById(id); if(el) el.textContent=codigo; });
   document.getElementById('t-ann').value=localStorage.getItem(`tienda_ann_${userId}`)||'🚚 Envíos seguros a nivel nacional';
   document.getElementById('t-banner').value=localStorage.getItem(`tienda_banner_titulo_${userId}`)||`Bienvenido a ${nombre}`;
   const geo=JSON.parse(localStorage.getItem(`geo_config_${userId}`)||'{}');
   document.getElementById('geo-ini').value=geo.horaIni||'08:00';
   document.getElementById('geo-fin').value=geo.horaFin||'08:40';
   document.getElementById('geo-radio').value=geo.radio||200;
-  document.getElementById('geo-gracia').value=geo.gracia||10;
-  document.getElementById('geo-despido').value=geo.despido||30;
 }
 
 function generarCodigo(empresa){
@@ -496,217 +489,66 @@ function generarCodigo(empresa){
 
 async function cargarAccesos(){
   const { data } = await sb.from('plugin_accesos').select('*').eq('proveedor_id',userId);
-  const lista=data||[];
-  accesosData.tienda=lista.filter(a=>a.plugin==='tienda');
-  accesosData.rrhh=lista.filter(a=>a.plugin==='rrhh');
-  accesosData.workers=lista.filter(a=>a.plugin==='workers');
-  accesosData.sucursales=lista.filter(a=>a.plugin==='sucursales');
-  accesosData.sales=lista.filter(a=>a.plugin==='sales');
-  renderAccesos();
+  ['tienda','rrhh','sucursales','sales'].forEach(p=>{
+    const lista=(data||[]).filter(a=>a.plugin===p);
+    renderListaAccesos(p+'-acc-lista',lista);
+  });
+  const { data:emps } = await sb.from('rrhh_empleados').select('*').eq('proveedor_id',userId).eq('activo',true).order('created_at',{ascending:false});
+  renderEmpleados(emps||[]);
 }
 
-function renderAccesos(){
-  renderListaAccesos('tienda-accesos-lista','tienda');
-  renderListaAccesos('rrhh-accesos-lista','rrhh');
-  renderListaAccesos('workers-accesos-lista','workers');
-  renderListaAccesos('suc-accesos-lista','sucursales');
-  renderListaAccesos('sales-accesos-lista','sales');
-}
-
-function renderListaAccesos(contId,plugin){
-  const cont=document.getElementById(contId);
-  if(!cont) return;
-  const lista=accesosData[plugin]||[];
-  if(!lista.length){ cont.innerHTML=`<div style="font-size:0.76rem;color:#444;padding:8px 0;margin-bottom:8px;">Sin accesos configurados aún</div>`; return; }
+function renderListaAccesos(contId,lista){
+  const cont=document.getElementById(contId); if(!cont) return;
+  if(!lista.length){ cont.innerHTML=`<div style="font-size:0.76rem;color:#444;margin-bottom:10px;">Sin accesos aún</div>`; return; }
   cont.innerHTML='';
   lista.forEach(a=>{
-    const bg=colores[Math.abs(hashStr(a.email))%colores.length];
     const div=document.createElement('div'); div.className='acceso-item';
-    div.innerHTML=`
-      <div class="acceso-avatar" style="background:${bg};">${(a.nombre||a.email||'?')[0].toUpperCase()}</div>
-      <div class="acceso-info">
-        <div class="acceso-nombre">${a.nombre||a.email}</div>
-        <div class="acceso-email">${a.email||'—'}</div>
-      </div>
-      <span class="acceso-rol-badge">${a.rol||'Acceso'}</span>
-      <button class="btn-revocar" onclick="revocarAcceso('${a.id}','${plugin}')">Revocar</button>`;
+    const bg=['#2563EB','#7C3AED','#059669','#DC2626'][Math.abs(a.email?.charCodeAt(0)||0)%4];
+    div.innerHTML=`<div class="acc-avatar" style="background:${bg};">${(a.nombre||a.email||'?')[0].toUpperCase()}</div><div class="acc-info"><div class="acc-nombre">${a.nombre||a.email}</div><div class="acc-email">${a.email||'—'}</div></div><span class="acc-rol-badge">${a.rol||'Acceso'}</span><button class="btn-revocar" onclick="revocarAcceso('${a.id}')">✕</button>`;
     cont.appendChild(div);
   });
 }
 
-const colores=['#2563EB','#7C3AED','#059669','#DC2626','#D97706','#0891B2'];
-function hashStr(s){ let h=0; for(let i=0;i<s.length;i++) h=Math.imul(31,h)+s.charCodeAt(i)|0; return Math.abs(h); }
-
-window.agregarAcceso=async function(plugin, rol){
-  const emailEl=document.getElementById(`${plugin==='rrhh'?'rrhh':plugin==='sucursales'?'suc':plugin==='sales'?'sales':'tienda'}-nuevo-email`);
-  const nombreEl=plugin==='sales'?document.getElementById('sales-nuevo-nombre'):null;
-  const email=emailEl?.value?.trim();
-  if(!email){ showToast('Ingresa un email'); return; }
-  const nombre=nombreEl?.value?.trim()||email.split('@')[0];
-
-  document.getElementById('upload-overlay').classList.add('show');
-  try{
-    // Buscar usuario en PROVEED
-    const { data:u } = await sb.from('usuarios').select('id,nombre,empresa,foto_perfil').eq('email',email).single().catch(()=>({data:null}));
-    await sb.from('plugin_accesos').upsert({
-      proveedor_id:userId, plugin, email,
-      nombre:u?.nombre||u?.empresa||nombre,
-      rol, usuario_id:u?.id||null,
-      foto:u?.foto_perfil||null
-    },{ onConflict:'proveedor_id,plugin,email' });
-
-    // Si es vendedor del Sales Hub, también lo agrega en sales_vendedores
-    if(plugin==='sales'&&u?.id){
-      const meta=parseFloat(document.getElementById('sales-meta')?.value)||0;
-      await sb.from('sales_vendedores').upsert({ proveedor_id:userId, vendedor_id:u.id, nombre:u.nombre||nombre, email, meta, rol:'vendedor', activo:true },{ onConflict:'proveedor_id,vendedor_id' });
-    }
-    if(emailEl) emailEl.value='';
-    if(nombreEl) nombreEl.value='';
-    await cargarAccesos();
-    showToast('✓ Acceso otorgado a '+email);
-  } catch(e){ showToast('Error: '+e.message); }
-  document.getElementById('upload-overlay').classList.remove('show');
-};
-
-window.revocarAcceso=async function(id,plugin){
-  if(!confirm('¿Revocar acceso?')) return;
-  await sb.from('plugin_accesos').delete().eq('id',id);
-  await cargarAccesos();
-  showToast('Acceso revocado');
-};
-
-window.registrarWorker=async function(){
-  const nombre=document.getElementById('worker-nombre').value.trim();
-  const cedula=document.getElementById('worker-cedula').value.trim();
-  const pin=document.getElementById('worker-pin').value.trim();
-  const cargo=document.getElementById('worker-cargo').value.trim();
-  if(!nombre||!cedula||!pin){ showToast('Completa nombre, cédula y PIN'); return; }
-  document.getElementById('upload-overlay').classList.add('show');
-  try{
-    await sb.from('rrhh_empleados').upsert({
-      proveedor_id:userId, nombre, cedula, cargo:cargo||'Empleado',
-      pin, activo:true, score_desempeno:100
-    },{ onConflict:'proveedor_id,cedula' });
-    document.getElementById('worker-nombre').value='';
-    document.getElementById('worker-cedula').value='';
-    document.getElementById('worker-pin').value='';
-    document.getElementById('worker-cargo').value='';
-    document.getElementById('worker-ok').classList.add('show');
-    setTimeout(()=>document.getElementById('worker-ok').classList.remove('show'),2500);
-    showToast('✓ Empleado registrado en Workers');
-  } catch(e){ showToast('Error: '+e.message); }
-  document.getElementById('upload-overlay').classList.remove('show');
-};
-
-window.guardarMarcaGlobal=async function(){
-  document.getElementById('upload-overlay').classList.add('show');
-  const color=document.getElementById('color-hex').value||'#FF8C00';
-  const nombre=document.getElementById('marca-nombre').value.trim();
-  localStorage.setItem(`marca_color_${userId}`,color);
-  localStorage.setItem(`tienda_color_${userId}`,color);
-  localStorage.setItem(`workers_color_${userId}`,color);
-  localStorage.setItem(`suc_color_${userId}`,color);
-  localStorage.setItem(`tienda_nombre_${userId}`,nombre);
-  localStorage.setItem(`workers_nombre_${userId}`,nombre);
-  localStorage.setItem(`suc_nombre_${userId}`,nombre);
-  const codigo=generarCodigo(nombre);
-  let logoUrl='';
-  if(logoFile){
-    const path=`logos/${userId}/marca_logo`;
-    const { error } = await sb.storage.from('proveed-media').upload(path,logoFile,{upsert:true});
-    if(!error){ const { data } = sb.storage.from('proveed-media').getPublicUrl(path); logoUrl=data.publicUrl; localStorage.setItem(`tienda_logo_${userId}`,logoUrl); localStorage.setItem(`workers_logo_${userId}`,logoUrl); localStorage.setItem(`suc_logo_${userId}`,logoUrl); }
-  }
-  await sb.from('usuarios').update({
-    ...(nombre?{empresa:nombre}:{}),
-    workers_color:color,
-    workers_codigo:codigo,
-    ...(logoUrl?{logo_empresa:logoUrl,workers_logo:logoUrl}:{})
-  }).eq('id',userId);
-  // Actualizar config en todos los plugins activados
-  await sb.from('plugins_activados').update({ config:{ color, nombre, logo:logoUrl||userData.logo_empresa||'' } }).eq('proveedor_id',userId);
-  const el=document.getElementById('workers-code'); if(el) el.textContent=codigo;
-  document.getElementById('upload-overlay').classList.remove('show');
-  showToast('✓ Marca global guardada en todos los plugins');
-};
-
-window.guardarYAbrirPlugin=async function(tipo){
-  document.getElementById('upload-overlay').classList.add('show');
-  const color=localStorage.getItem(`marca_color_${userId}`)||'#FF8C00';
-  const nombre=localStorage.getItem(`tienda_nombre_${userId}`)||userData.empresa||'';
-  const pluginMap={ tienda:'tienda-online', rrhh:'rrhh-pro', suc:'sucursales-pro', sales:'sales-hub' };
-  const archivoMap={ tienda:'tienda-online.html', rrhh:'rrhh.html', suc:'sucursales-pro.html', sales:'sales-hub.html' };
-  const nombreMap={ tienda:'Tienda Online', rrhh:'RR.HH. PRO', suc:'Sucursales PRO', sales:'Sales Hub' };
-
-  // Guardar configs específicas
-  if(tipo==='tienda'){
-    localStorage.setItem(`tienda_ann_${userId}`,document.getElementById('t-ann').value.trim());
-    localStorage.setItem(`tienda_banner_titulo_${userId}`,document.getElementById('t-banner').value.trim());
-  }
-  if(tipo==='rrhh'){
-    const geo={ horaIni:document.getElementById('geo-ini').value, horaFin:document.getElementById('geo-fin').value, radio:parseInt(document.getElementById('geo-radio').value)||200, gracia:parseInt(document.getElementById('geo-gracia').value)||10, despido:parseInt(document.getElementById('geo-despido').value)||30 };
-    localStorage.setItem(`geo_config_${userId}`,JSON.stringify(geo));
-    await sb.from('plugins_activados').upsert({ proveedor_id:userId, plugin_id:'workers-app', nombre:'Workers App', activo:true, config:{color,nombre} },{ onConflict:'proveedor_id,plugin_id' });
-  }
-
-  const pluginId=pluginMap[tipo];
-  await sb.from('plugins_activados').upsert({ proveedor_id:userId, plugin_id:pluginId, nombre:nombreMap[tipo], activo:true, config:{color,nombre} },{ onConflict:'proveedor_id,plugin_id' });
-
-  const { data:act } = await sb.from('plugins_activados').select('*').eq('proveedor_id',userId);
-  pluginsActivados=act||[];
-  document.getElementById('upload-overlay').classList.remove('show');
-  renderPlugins();
-
-  const archivo=archivoMap[tipo];
-  cerrarM(`modal-${tipo==='suc'?'sucursales':tipo}`);
-  setTimeout(()=>window.location.href=archivo, 300);
-};
-
-window.desactivarPlugin=async function(pluginId,modalId){
-  if(!confirm('¿Desactivar este plugin?')) return;
-  await sb.from('plugins_activados').delete().eq('proveedor_id',userId).eq('plugin_id',pluginId);
-  pluginsActivados=pluginsActivados.filter(p=>p.plugin_id!==pluginId);
-  cerrarM(modalId);
-  showToast('Plugin desactivado');
-  renderPlugins();
-};
+function renderEmpleados(emps){
+  const cont=document.getElementById('rrhh-emps-lista'); if(!cont) return;
+  if(!emps.length){ cont.innerHTML='<div style="font-size:0.76rem;color:#444;margin-bottom:8px;">Sin empleados registrados</div>'; return; }
+  cont.innerHTML='';
+  emps.slice(0,5).forEach(e=>{
+    const div=document.createElement('div'); div.className='acceso-item';
+    div.innerHTML=`<div class="acc-avatar" style="background:#FF8C00;">${(e.nombre||'E')[0].toUpperCase()}</div><div class="acc-info"><div class="acc-nombre">${e.nombre}</div><div class="acc-email">CI: ${e.cedula||'—'} · ${e.cargo||'—'}</div></div><span class="acc-rol-badge">PIN: ${e.pin?'••••':'No asignado'}</span>`;
+    cont.appendChild(div);
+  });
+  if(emps.length>5) cont.innerHTML+=`<div style="font-size:0.72rem;color:#555;padding:4px;text-align:center;">+${emps.length-5} más en RR.HH. PRO</div>`;
+}
 
 function renderPlugins(){
   let lista=[...PLUGINS];
   if(filtroActual==='activos') lista=lista.filter(p=>pluginsActivados.some(a=>a.plugin_id===p.id));
   else if(filtroActual!=='todos') lista=lista.filter(p=>p.categoria===filtroActual);
-  const cont=document.getElementById('plugins-lista');
-  cont.innerHTML='';
+  const cont=document.getElementById('plugins-lista'); cont.innerHTML='';
   lista.forEach(p=>{
     const activo=pluginsActivados.some(a=>a.plugin_id===p.id);
     const div=document.createElement('div');
     div.className=`plugin-card${activo?' activado':''}`;
+    div.onclick=()=>accionPlugin(p.id,activo,p.nombre,p.modal||'',p.archivo||'');
     div.innerHTML=`
-      <div class="plugin-header">
-        <div class="plugin-icono" style="background:${activo?'rgba(168,230,61,0.1)':'rgba(255,255,255,0.04)'};">${p.icono}</div>
-        <div style="flex:1;">
-          <div class="plugin-nombre">${p.nombre}</div>
-          <div class="plugin-desc">${p.desc}</div>
-          <div class="plugin-badges">
-            <span class="plugin-badge badge-gratis">Gratis</span>
-            ${activo?'<span class="plugin-badge badge-activo">✓ Activo</span>':''}
-            ${p.destacado?'<span class="plugin-badge badge-nuevo">Destacado</span>':''}
-          </div>
+      <div class="plugin-logo">${PLUGIN_LOGOS[p.id]||'<span style="font-size:1.8rem;">⚡</span>'}</div>
+      <div class="plugin-body">
+        <div class="plugin-nombre">${p.nombre}</div>
+        <div class="plugin-desc">${p.desc}</div>
+        <div class="plugin-meta">
+          <span class="badge badge-gratis">Gratis</span>
+          ${activo?'<span class="badge badge-activo">✓ Activo</span>':''}
+          ${p.destacado?'<span class="badge badge-nuevo">Destacado</span>':''}
         </div>
       </div>
-      <div class="plugin-features">${(p.features||[]).map(f=>`<div class="feature-item">${f}</div>`).join('')}</div>
-      <div class="plugin-footer">
-        <div class="plugin-precio">Gratis</div>
-        <button class="btn-activar ${activo?'on':'off'}" onclick="accionPlugin('${p.id}',${activo},'${p.nombre}','${p.modal||''}','${p.archivo||''}')">
-          ${activo?'⚙️ Configurar':'Activar'}
-        </button>
-      </div>`;
+      <div class="plugin-arrow"><svg viewBox="0 0 24 24"><polyline points="9 18 15 12 9 6"/></svg></div>`;
     cont.appendChild(div);
   });
 }
 
 window.accionPlugin=async function(pluginId,activo,nombre,modal,archivo){
   if(modal){
-    // Actualizar visibilidad botones desactivar
     const desactMap={ tienda:'t-desact', rrhh:'r-desact', sucursales:'s-desact', sales:'sh-desact' };
     const btn=document.getElementById(desactMap[modal]);
     if(btn) btn.style.display=activo?'block':'none';
@@ -716,54 +558,180 @@ window.accionPlugin=async function(pluginId,activo,nombre,modal,archivo){
   if(!activo){
     document.getElementById('upload-overlay').classList.add('show');
     const color=localStorage.getItem(`marca_color_${userId}`)||'#FF8C00';
-    const nom=localStorage.getItem(`tienda_nombre_${userId}`)||userData.empresa||'';
+    const nom=userData.empresa||userData.nombre||'';
     await sb.from('plugins_activados').upsert({ proveedor_id:userId, plugin_id:pluginId, nombre, activo:true, config:{color,nombre:nom} },{ onConflict:'proveedor_id,plugin_id' });
     const { data:act } = await sb.from('plugins_activados').select('*').eq('proveedor_id',userId);
     pluginsActivados=act||[];
     document.getElementById('upload-overlay').classList.remove('show');
     showToast('✓ '+nombre+' activado');
     renderPlugins();
-  } else {
-    document.getElementById('gen-title').textContent=nombre;
-    document.getElementById('gen-body').innerHTML=`
-      <div style="text-align:center;padding:24px 0;">
-        <div style="font-size:3rem;margin-bottom:12px;">${PLUGINS.find(p=>p.id===pluginId)?.icono||'⚡'}</div>
-        <div style="font-size:1rem;font-weight:800;color:white;margin-bottom:6px;">${nombre} activo</div>
-        <div style="font-size:0.82rem;color:#555;margin-bottom:20px;">Este plugin está funcionando correctamente.</div>
-        ${archivo?`<button onclick="window.location.href='${archivo}'" style="width:100%;padding:13px;background:var(--verde);color:var(--negro);border:none;border-radius:13px;font-family:'Inter',sans-serif;font-size:0.9rem;font-weight:800;cursor:pointer;margin-bottom:10px;">Ir al plugin →</button>`:''}
-        <button onclick="desactivarPlugin('${pluginId}','modal-gen')" style="width:100%;padding:12px;background:rgba(255,77,77,0.08);color:var(--rojo);border:none;border-radius:13px;font-family:'Inter',sans-serif;font-size:0.82rem;font-weight:700;cursor:pointer;">Desactivar ${nombre}</button>
-      </div>`;
-    document.getElementById('modal-gen').classList.add('show');
+  } else if(archivo){ window.location.href=archivo; }
+};
+
+window.guardarMarcaGlobal=async function(){
+  document.getElementById('upload-overlay').classList.add('show');
+  const color=document.getElementById('color-hex').value||'#FF8C00';
+  const nombre=document.getElementById('marca-nombre').value.trim();
+  localStorage.setItem(`marca_color_${userId}`,color);
+  ['tienda_color_','workers_color_','suc_color_'].forEach(k=>localStorage.setItem(k+userId,color));
+  ['tienda_nombre_','workers_nombre_','suc_nombre_'].forEach(k=>localStorage.setItem(k+userId,nombre));
+  const codigo=generarCodigo(nombre);
+  let logoUrl='';
+  if(logoFile){
+    const path=`logos/${userId}/marca_logo`;
+    const { error } = await sb.storage.from('proveed-media').upload(path,logoFile,{upsert:true});
+    if(!error){ const { data } = sb.storage.from('proveed-media').getPublicUrl(path); logoUrl=data.publicUrl; ['tienda_logo_','workers_logo_','suc_logo_'].forEach(k=>localStorage.setItem(k+userId,logoUrl)); }
   }
+  await sb.from('usuarios').update({ ...(nombre?{empresa:nombre}:{}), workers_color:color, workers_codigo:codigo, ...(logoUrl?{logo_empresa:logoUrl}:{}) }).eq('id',userId);
+  await sb.from('plugins_activados').update({ config:{ color, nombre, logo:logoUrl||userData.logo_empresa||'' } }).eq('proveedor_id',userId);
+  ['workers-code','workers-code2'].forEach(id=>{ const el=document.getElementById(id); if(el) el.textContent=codigo; });
+  document.getElementById('upload-overlay').classList.remove('show');
+  showToast('✓ Marca global guardada en todos los plugins');
+};
+
+window.guardarYAbrir=async function(tipo){
+  document.getElementById('upload-overlay').classList.add('show');
+  const color=localStorage.getItem(`marca_color_${userId}`)||'#FF8C00';
+  const nombre=localStorage.getItem(`tienda_nombre_${userId}`)||userData.empresa||'';
+  const pluginMap={ tienda:'tienda-online', rrhh:'rrhh-pro', suc:'sucursales-pro', sales:'sales-hub' };
+  const archivoMap={ tienda:'tienda-online.html', rrhh:'rrhh.html', suc:'sucursales-pro.html', sales:'sales-hub.html' };
+  const nomMap={ tienda:'Tienda Online', rrhh:'RR.HH. PRO', suc:'Sucursales PRO', sales:'Sales Hub' };
+  if(tipo==='tienda'){
+    localStorage.setItem(`tienda_ann_${userId}`,document.getElementById('t-ann').value);
+    localStorage.setItem(`tienda_banner_titulo_${userId}`,document.getElementById('t-banner').value);
+  }
+  if(tipo==='rrhh'){
+    const geo={ horaIni:document.getElementById('geo-ini').value, horaFin:document.getElementById('geo-fin').value, radio:parseInt(document.getElementById('geo-radio').value)||200 };
+    localStorage.setItem(`geo_config_${userId}`,JSON.stringify(geo));
+    await sb.from('plugins_activados').upsert({ proveedor_id:userId, plugin_id:'workers-app', nombre:'Workers App', activo:true, config:{color,nombre} },{ onConflict:'proveedor_id,plugin_id' });
+  }
+  await sb.from('plugins_activados').upsert({ proveedor_id:userId, plugin_id:pluginMap[tipo], nombre:nomMap[tipo], activo:true, config:{color,nombre} },{ onConflict:'proveedor_id,plugin_id' });
+  const { data:act } = await sb.from('plugins_activados').select('*').eq('proveedor_id',userId);
+  pluginsActivados=act||[];
+  renderPlugins();
+  document.getElementById('upload-overlay').classList.remove('show');
+  cerrarM(`modal-${tipo==='suc'?'sucursales':tipo}`);
+  setTimeout(()=>window.location.href=archivoMap[tipo],300);
+};
+window.desactivar=async function(pluginId,modalId){
+  if(!confirm('¿Desactivar este plugin?')) return;
+  await sb.from('plugins_activados').delete().eq('proveedor_id',userId).eq('plugin_id',pluginId);
+  pluginsActivados=pluginsActivados.filter(p=>p.plugin_id!==pluginId);
+  cerrarM(modalId); showToast('Plugin desactivado'); renderPlugins();
+};
+
+window.agregarAcceso=async function(plugin,rol,emailInputId){
+  const email=document.getElementById(emailInputId)?.value?.trim();
+  if(!email){ showToast('Ingresa un email'); return; }
+  document.getElementById('upload-overlay').classList.add('show');
+  const { data:u } = await sb.from('usuarios').select('id,nombre,empresa').eq('email',email).single().catch(()=>({data:null}));
+  await sb.from('plugin_accesos').upsert({ proveedor_id:userId, plugin, email, nombre:u?.nombre||u?.empresa||email.split('@')[0], rol, usuario_id:u?.id||null },{ onConflict:'proveedor_id,plugin,email' });
+  document.getElementById(emailInputId).value='';
+  await cargarAccesos();
+  document.getElementById('upload-overlay').classList.remove('show');
+  showToast('✓ Acceso otorgado');
+};
+
+window.agregarAccesoConPass=async function(plugin){
+  const emailEl=plugin==='sucursales'?'suc-email':plugin+'-email';
+  const passEl=plugin==='sucursales'?'suc-pass':null;
+  const rolEl=plugin==='sucursales'?'suc-rol':null;
+  const email=document.getElementById(emailEl)?.value?.trim();
+  const pass=passEl?document.getElementById(passEl)?.value?.trim():'';
+  const rol=rolEl?document.getElementById(rolEl)?.value:'Acceso';
+  if(!email||!pass){ showToast('Completa email y contraseña'); return; }
+  document.getElementById('upload-overlay').classList.add('show');
+  try{
+    // Crear cuenta en Supabase Auth o actualizar contraseña
+    const { data:u } = await sb.from('usuarios').select('id').eq('email',email).single().catch(()=>({data:null}));
+    if(!u){
+      const { data:newUser, error } = await sb.auth.signUp({ email, password:pass });
+      if(!error&&newUser.user){ await sb.from('usuarios').insert({ id:newUser.user.id, email, nombre:email.split('@')[0], rol:'empleado', activo:true }); }
+    }
+    await sb.from('plugin_accesos').upsert({ proveedor_id:userId, plugin, email, nombre:email.split('@')[0], rol, pass_hash:pass },{ onConflict:'proveedor_id,plugin,email' });
+    document.getElementById(emailEl).value='';
+    if(passEl) document.getElementById(passEl).value='';
+    const okEl=document.getElementById(plugin+'-ok'); if(okEl){ okEl.classList.add('show'); setTimeout(()=>okEl.classList.remove('show'),2500); }
+    await cargarAccesos();
+    showToast('✓ Acceso creado para '+email);
+  } catch(e){ showToast('Error: '+e.message); }
+  document.getElementById('upload-overlay').classList.remove('show');
+};
+
+window.revocarAcceso=async function(id){
+  if(!confirm('¿Revocar acceso?')) return;
+  await sb.from('plugin_accesos').delete().eq('id',id);
+  await cargarAccesos(); showToast('Acceso revocado');
+};
+
+window.registrarEmpleado=async function(){
+  const nombre=document.getElementById('emp-nombre').value.trim();
+  const cedula=document.getElementById('emp-cedula').value.trim();
+  const pin=document.getElementById('emp-pin').value.trim();
+  const cargo=document.getElementById('emp-cargo').value.trim();
+  const salario=parseFloat(document.getElementById('emp-salario').value)||0;
+  if(!nombre||!cedula||!pin){ showToast('Completa nombre, cédula y PIN'); return; }
+  document.getElementById('upload-overlay').classList.add('show');
+  try{
+    await sb.from('rrhh_empleados').upsert({ proveedor_id:userId, nombre, cedula, cargo:cargo||'Empleado', pin, salario, activo:true, score_desempeno:100 },{ onConflict:'proveedor_id,cedula' });
+    ['emp-nombre','emp-cedula','emp-pin','emp-cargo','emp-salario'].forEach(id=>{ const el=document.getElementById(id); if(el) el.value=''; });
+    document.getElementById('emp-ok').classList.add('show');
+    setTimeout(()=>document.getElementById('emp-ok').classList.remove('show'),2500);
+    await cargarAccesos();
+    showToast('✓ Empleado registrado en Workers');
+  } catch(e){ showToast('Error: '+e.message); }
+  document.getElementById('upload-overlay').classList.remove('show');
+};
+
+window.agregarVendedor=async function(){
+  const email=document.getElementById('sales-email').value.trim();
+  const nombre=document.getElementById('sales-nombre').value.trim();
+  const meta=parseFloat(document.getElementById('sales-meta').value)||0;
+  if(!email){ showToast('Ingresa el email'); return; }
+  document.getElementById('upload-overlay').classList.add('show');
+  const { data:u } = await sb.from('usuarios').select('id').eq('email',email).single().catch(()=>({data:null}));
+  await sb.from('sales_vendedores').upsert({ proveedor_id:userId, vendedor_id:u?.id||email, nombre:nombre||email.split('@')[0], email, meta, rol:'vendedor', activo:true },{ onConflict:'proveedor_id,vendedor_id' });
+  await agregarAcceso('sales','Vendedor','sales-email');
+  document.getElementById('sales-ok').classList.add('show');
+  setTimeout(()=>document.getElementById('sales-ok').classList.remove('show'),2500);
+  document.getElementById('upload-overlay').classList.remove('show');
+};
+
+window.copiarCodigo=function(){
+  const c=document.getElementById('workers-code')?.textContent; if(c) navigator.clipboard?.writeText(c).catch(()=>{});
+  showToast('✓ Código copiado: '+c);
 };
 
 window.selLogo=function(input){
-  const file=input.files[0]; if(!file) return;
-  logoFile=file;
-  const reader=new FileReader();
-  reader.onload=e=>{
+  const f=input.files[0]; if(!f) return; logoFile=f;
+  const r=new FileReader();
+  r.onload=e=>{
     document.getElementById('logo-prev-img').src=e.target.result;
     document.getElementById('logo-prev-img').style.display='block';
     document.getElementById('logo-txt').textContent='Logo listo — guarda para aplicar ✓';
-    document.getElementById('logo-wrap').classList.add('filled');
-    const circle=document.getElementById('marca-logo-preview');
-    circle.innerHTML=`<img src="${e.target.result}" style="width:100%;height:100%;object-fit:cover;">`;
+    document.getElementById('logo-area').classList.add('filled');
+    document.getElementById('m-logo-circle').innerHTML=`<img src="${e.target.result}" style="width:100%;height:100%;object-fit:cover;">`;
   };
-  reader.readAsDataURL(file);
+  r.readAsDataURL(f);
 };
 
 window.prevColor=function(val){
   document.getElementById('color-dot').style.background=val;
   document.getElementById('color-picker').value=val;
   document.getElementById('color-hex').value=val;
-  document.getElementById('marca-color-preview').style.background=val;
+  document.getElementById('m-color-sm').style.background=val;
+  document.getElementById('m-color-val').textContent=val;
 };
-window.prevColorHex=function(val){ if(/^#[0-9A-Fa-f]{6}$/.test(val)){ document.getElementById('color-dot').style.background=val; document.getElementById('color-picker').value=val; document.getElementById('marca-color-preview').style.background=val; } };
-window.copiarCodigo=function(){ const c=document.getElementById('workers-code')?.textContent; if(c) navigator.clipboard?.writeText(c).catch(()=>{}); showToast('✓ Código copiado: '+c); };
+window.prevColorHex=function(val){ if(/^#[0-9A-Fa-f]{6}$/.test(val)){ document.getElementById('color-dot').style.background=val; document.getElementById('color-picker').value=val; document.getElementById('m-color-sm').style.background=val; document.getElementById('m-color-val').textContent=val; } };
 window.filtrar=(f,el)=>{ filtroActual=f; document.querySelectorAll('.filtro-btn').forEach(b=>b.classList.remove('active')); el.classList.add('active'); renderPlugins(); };
 window.cerrarModal=(id,e)=>{ if(e.target===document.getElementById(id)) document.getElementById(id).classList.remove('show'); };
 window.cerrarM=(id)=>document.getElementById(id).classList.remove('show');
-
+window.showModalTab=function(modal,tab,btn){
+  document.querySelectorAll(`#modal-${modal} .modal-section`).forEach(s=>s.classList.remove('active'));
+  document.querySelectorAll(`#modal-${modal} .modal-tab`).forEach(b=>b.classList.remove('active'));
+  document.getElementById(`${modal}-${tab}`)?.classList.add('active');
+  if(btn) btn.classList.add('active');
+};
 function showToast(msg){ const t=document.getElementById('toast'); t.textContent=msg; t.classList.add('show'); setTimeout(()=>t.classList.remove('show'),2500); }
 </script>
 </body>
