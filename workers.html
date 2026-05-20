@@ -3,260 +3,224 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-<title>Workers — Portal del Empleado</title>
+<title>Workers — PROVEED</title>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
 <style>
   *{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent;}
-  :root{ --acc:#32CD32; --acc2:#28a428; --bg:#FFFFFF; --txt:#1a1a1a; --gris:#F8F9FA; --rojo:#FF4D4D; --naranja:#FF8C00; --azul:#007AFF; --card:#FFFFFF; }
+  :root{ --acc:#FF8C00; --negro:#0F172A; --gris:#F8FAFC; --rojo:#EF4444; --verde:#10B981; --azul:#3B82F6; --txt:#1E293B; }
   body{ background:var(--gris); font-family:'Inter',sans-serif; -webkit-font-smoothing:antialiased; color:var(--txt); }
 
   /* LOGIN */
-  .login-screen{ position:fixed; inset:0; background:var(--bg); display:flex; flex-direction:column; z-index:2000; }
-  .login-hero{ background:var(--txt); padding:60px 24px 40px; text-align:center; flex-shrink:0; }
-  .login-logo{ width:72px; height:72px; border-radius:22px; margin:0 auto 16px; overflow:hidden; background:rgba(255,255,255,0.1); display:flex; align-items:center; justify-content:center; }
-  .login-logo img{ width:100%; height:100%; object-fit:cover; }
-  .login-logo-placeholder{ font-size:2rem; font-weight:900; color:var(--acc); }
-  .login-empresa{ font-size:1.4rem; font-weight:900; color:white; letter-spacing:-0.5px; }
-  .login-sub{ font-size:0.78rem; color:rgba(255,255,255,0.5); margin-top:4px; }
-  .login-workers-badge{ display:inline-flex; align-items:center; gap:6px; background:rgba(50,205,50,0.15); border:1px solid rgba(50,205,50,0.3); border-radius:20px; padding:5px 14px; margin-top:12px; }
-  .login-workers-badge span{ font-size:0.7rem; font-weight:800; color:var(--acc); }
-  .login-body{ flex:1; padding:28px 24px; overflow-y:auto; }
-  .login-title{ font-size:1.1rem; font-weight:800; color:var(--txt); margin-bottom:6px; }
-  .login-desc{ font-size:0.8rem; color:#aaa; margin-bottom:24px; }
+  .login-wrap{ position:fixed; inset:0; display:flex; flex-direction:column; z-index:3000; }
+  .login-top{ background:var(--negro); padding:60px 24px 40px; text-align:center; flex-shrink:0; position:relative; overflow:hidden; }
+  .login-top::before{ content:''; position:absolute; inset:0; background:radial-gradient(circle at 50% 0%,rgba(255,140,0,0.15) 0%,transparent 70%); }
+  .login-logo-box{ width:90px; height:90px; border-radius:24px; margin:0 auto 16px; overflow:hidden; background:#1e293b; display:flex; align-items:center; justify-content:center; position:relative; }
+  .login-logo-box img{ width:100%; height:100%; object-fit:cover; }
+  .login-empresa-name{ font-size:1.4rem; font-weight:900; color:white; letter-spacing:-0.5px; }
+  .login-badge{ display:inline-flex; align-items:center; gap:6px; background:rgba(255,140,0,0.15); border:1px solid rgba(255,140,0,0.3); border-radius:20px; padding:5px 14px; margin-top:10px; }
+  .login-badge-txt{ font-size:0.72rem; font-weight:800; color:var(--acc); }
+  .login-body{ flex:1; background:white; padding:28px 24px; overflow-y:auto; }
+  .login-title{ font-size:1.1rem; font-weight:800; color:var(--negro); margin-bottom:4px; }
+  .login-desc{ font-size:0.8rem; color:#94A3B8; margin-bottom:22px; line-height:1.5; }
   .field{ margin-bottom:14px; }
-  .field label{ display:block; font-size:0.68rem; font-weight:700; color:#aaa; text-transform:uppercase; margin-bottom:6px; }
-  .field input{ width:100%; padding:14px 16px; background:var(--gris); border:1.5px solid #eee; border-radius:14px; font-family:'Inter',sans-serif; font-size:0.92rem; color:var(--txt); outline:none; -webkit-appearance:none; }
+  .field label{ display:block; font-size:0.68rem; font-weight:700; color:#94A3B8; text-transform:uppercase; margin-bottom:5px; }
+  .field input{ width:100%; padding:14px 16px; background:#F8FAFC; border:1.5px solid #E2E8F0; border-radius:13px; font-family:'Inter',sans-serif; font-size:0.92rem; color:var(--txt); outline:none; -webkit-appearance:none; }
   .field input:focus{ border-color:var(--acc); }
-  .field input::placeholder{ color:#bbb; }
-  .btn-main{ width:100%; padding:15px; background:var(--txt); color:white; border:none; border-radius:14px; font-family:'Inter',sans-serif; font-size:0.95rem; font-weight:800; cursor:pointer; margin-top:4px; }
-  .btn-acc{ background:var(--acc); color:white; }
-  .login-error{ font-size:0.78rem; color:var(--rojo); text-align:center; margin-top:10px; display:none; }
-  .poweredby{ text-align:center; margin-top:20px; font-size:0.68rem; color:#ccc; }
-  .poweredby strong{ color:var(--acc); }
+  .field input::placeholder{ color:#CBD5E1; }
+  .btn-login{ width:100%; padding:15px; background:var(--negro); color:white; border:none; border-radius:13px; font-family:'Inter',sans-serif; font-size:0.95rem; font-weight:800; cursor:pointer; margin-top:4px; }
+  .login-error{ font-size:0.76rem; color:var(--rojo); text-align:center; margin-top:10px; display:none; }
+  .powered{ text-align:center; margin-top:20px; font-size:0.68rem; color:#CBD5E1; }
+  .powered strong{ color:var(--acc); }
+
+  /* APP */
+  .app-wrap{ display:none; }
 
   /* NOTIF BAR */
-  .notif-bar{ background:var(--acc); padding:10px 16px; display:flex; align-items:center; gap:8px; }
-  .notif-bar svg{ width:14px; height:14px; stroke:white; fill:none; stroke-width:2.5; flex-shrink:0; }
+  .notif-bar{ padding:10px 16px; display:flex; align-items:center; gap:8px; }
+  .notif-bar svg{ width:14px; height:14px; fill:none; stroke:white; stroke-width:2.5; flex-shrink:0; }
   .notif-bar-txt{ font-size:0.72rem; font-weight:700; color:white; flex:1; }
-  .notif-bar-close{ font-size:1rem; color:white; cursor:pointer; opacity:0.7; background:none; border:none; }
+  .notif-close{ font-size:1rem; color:white; opacity:0.6; background:none; border:none; cursor:pointer; }
 
   /* HEADER */
-  .app-header{ background:var(--txt); padding:16px 16px 16px; display:flex; align-items:center; gap:12px; }
-  .emp-avatar-hdr{ width:42px; height:42px; border-radius:14px; background:rgba(255,255,255,0.1); display:flex; align-items:center; justify-content:center; font-size:0.9rem; font-weight:800; color:var(--acc); flex-shrink:0; overflow:hidden; }
-  .emp-avatar-hdr img{ width:100%; height:100%; object-fit:cover; }
-  .emp-info-hdr{ flex:1; }
-  .emp-nombre-hdr{ font-size:0.92rem; font-weight:800; color:white; }
-  .emp-cargo-hdr{ font-size:0.7rem; color:rgba(255,255,255,0.5); margin-top:1px; }
-  .btn-logout{ background:rgba(255,255,255,0.08); border:none; width:34px; height:34px; border-radius:10px; display:flex; align-items:center; justify-content:center; cursor:pointer; }
-  .btn-logout svg{ width:16px; height:16px; stroke:rgba(255,255,255,0.6); fill:none; stroke-width:2; }
+  .app-header{ padding:16px; display:flex; align-items:center; gap:12px; }
+  .emp-ava{ width:44px; height:44px; border-radius:14px; display:flex; align-items:center; justify-content:center; font-size:0.9rem; font-weight:800; color:white; flex-shrink:0; overflow:hidden; }
+  .emp-ava img{ width:100%; height:100%; object-fit:cover; }
+  .emp-info{ flex:1; }
+  .emp-name{ font-size:0.92rem; font-weight:800; color:white; }
+  .emp-cargo{ font-size:0.7rem; color:rgba(255,255,255,0.5); margin-top:1px; }
+  .btn-logout{ width:32px; height:32px; background:rgba(255,255,255,0.08); border:none; border-radius:9px; display:flex; align-items:center; justify-content:center; cursor:pointer; }
+  .btn-logout svg{ width:15px; height:15px; stroke:rgba(255,255,255,0.6); fill:none; stroke-width:2; }
 
-  /* TAB BAR */
-  .tab-bar{ position:fixed; bottom:0; width:100%; background:white; display:flex; border-top:1px solid #eee; z-index:100; box-shadow:0 -4px 16px rgba(0,0,0,0.06); }
-  .tab{ flex:1; display:flex; flex-direction:column; align-items:center; gap:3px; padding:10px 0 18px; cursor:pointer; border:none; background:transparent; font-family:'Inter',sans-serif; color:#ccc; }
+  /* TABS */
+  .tab-bar{ position:fixed; bottom:0; width:100%; display:flex; border-top:1px solid rgba(255,255,255,0.08); z-index:100; }
+  .tab{ flex:1; display:flex; flex-direction:column; align-items:center; gap:3px; padding:10px 4px 20px; cursor:pointer; border:none; background:transparent; font-family:'Inter',sans-serif; color:rgba(255,255,255,0.35); }
   .tab.active{ color:var(--acc); }
   .tab svg{ width:22px; height:22px; stroke:currentColor; fill:none; stroke-width:2; stroke-linecap:round; stroke-linejoin:round; }
-  .tab span{ font-size:0.56rem; font-weight:700; text-transform:uppercase; }
+  .tab span{ font-size:0.54rem; font-weight:700; text-transform:uppercase; }
   .tab-dot{ width:4px; height:4px; border-radius:50%; background:var(--acc); display:none; }
   .tab.active .tab-dot{ display:block; }
 
   /* SECCIONES */
-  .section{ display:none; padding:14px 16px; padding-bottom:100px; }
+  .section{ display:none; padding:0 16px 100px; }
   .section.active{ display:block; }
 
-  /* HOME */
-  .asist-card{ background:var(--txt); border-radius:22px; padding:20px; margin-bottom:14px; position:relative; overflow:hidden; }
-  .asist-card::before{ content:''; position:absolute; right:-20px; top:-20px; width:120px; height:120px; background:radial-gradient(circle,rgba(50,205,50,0.2) 0%,transparent 70%); }
-  .asist-card-title{ font-size:0.68rem; font-weight:700; color:rgba(255,255,255,0.5); text-transform:uppercase; margin-bottom:4px; }
-  .asist-hora{ font-size:2rem; font-weight:900; color:white; letter-spacing:-1px; }
-  .asist-fecha{ font-size:0.78rem; color:rgba(255,255,255,0.5); margin-bottom:16px; }
-  .btn-registrar{ width:100%; padding:14px; background:var(--acc); color:white; border:none; border-radius:14px; font-family:'Inter',sans-serif; font-size:0.95rem; font-weight:800; cursor:pointer; display:flex; align-items:center; justify-content:center; gap:8px; }
-  .btn-registrar svg{ width:18px; height:18px; stroke:white; fill:none; stroke-width:2.5; }
+  /* HOME — REGISTRO ASISTENCIA */
+  .asist-card{ border-radius:22px; padding:22px; margin-bottom:14px; position:relative; overflow:hidden; }
+  .asist-card::before{ content:''; position:absolute; right:-20px; top:-20px; width:120px; height:120px; background:radial-gradient(circle,rgba(255,255,255,0.12) 0%,transparent 70%); }
+  .asist-reloj{ font-size:2.4rem; font-weight:900; color:white; letter-spacing:-1px; }
+  .asist-fecha{ font-size:0.8rem; color:rgba(255,255,255,0.55); margin-bottom:16px; }
+  .btn-registrar{ width:100%; padding:15px; border:none; border-radius:14px; font-family:'Inter',sans-serif; font-size:0.95rem; font-weight:800; cursor:pointer; display:flex; align-items:center; justify-content:center; gap:8px; }
+  .btn-registrar svg{ width:18px; height:18px; stroke:currentColor; fill:none; stroke-width:2.5; }
   .btn-registrar:disabled{ opacity:0.4; cursor:not-allowed; }
   .geo-status{ display:flex; align-items:center; gap:6px; margin-top:10px; }
   .geo-dot{ width:8px; height:8px; border-radius:50%; flex-shrink:0; }
-  .geo-dot.ok{ background:var(--acc); animation:pulse 1.5s infinite; }
-  .geo-dot.err{ background:var(--rojo); }
-  .geo-dot.check{ background:var(--naranja); }
   @keyframes pulse{ 0%,100%{opacity:1}50%{opacity:0.4} }
-  .geo-txt{ font-size:0.7rem; color:rgba(255,255,255,0.6); }
-  .asist-registrada{ background:rgba(50,205,50,0.15); border:1px solid rgba(50,205,50,0.3); border-radius:12px; padding:12px 14px; display:flex; align-items:center; gap:10px; margin-top:10px; }
-  .asist-registrada svg{ width:18px; height:18px; stroke:var(--acc); fill:none; stroke-width:2.5; flex-shrink:0; }
-  .asist-registrada span{ font-size:0.8rem; font-weight:700; color:var(--acc); }
+  .geo-dot.ok{ background:var(--verde); animation:pulse 1.5s infinite; }
+  .geo-dot.err{ background:var(--rojo); }
+  .geo-dot.check{ background:var(--acc); }
+  .geo-txt{ font-size:0.7rem; color:rgba(255,255,255,0.55); }
+  .asist-ok-bar{ background:rgba(16,185,129,0.15); border:1px solid rgba(16,185,129,0.3); border-radius:12px; padding:12px 14px; display:flex; align-items:center; gap:10px; margin-top:10px; }
+  .asist-ok-bar svg{ width:18px; height:18px; stroke:var(--verde); fill:none; stroke-width:2.5; flex-shrink:0; }
+  .asist-ok-bar span{ font-size:0.8rem; font-weight:700; color:var(--verde); }
 
   /* KPI */
-  .kpi-row{ display:grid; grid-template-columns:1fr 1fr; gap:10px; margin-bottom:14px; }
-  .kpi{ background:white; border-radius:18px; padding:16px; border:1px solid #eee; box-shadow:0 2px 6px rgba(0,0,0,0.04); }
-  .kpi-val{ font-size:1.4rem; font-weight:900; color:var(--txt); }
-  .kpi-val.acc{ color:var(--acc); }
-  .kpi-val.naranja{ color:var(--naranja); }
-  .kpi-val.rojo{ color:var(--rojo); }
-  .kpi-val.azul{ color:var(--azul); }
-  .kpi-lbl{ font-size:0.6rem; color:#aaa; font-weight:700; text-transform:uppercase; margin-top:3px; }
+  .kpi-grid{ display:grid; grid-template-columns:repeat(2,1fr); gap:10px; margin-bottom:14px; }
+  .kpi{ border-radius:16px; padding:16px; }
+  .kpi-val{ font-size:1.4rem; font-weight:900; }
+  .kpi-lbl{ font-size:0.6rem; font-weight:700; text-transform:uppercase; margin-top:3px; opacity:0.55; }
 
   /* SUELDO */
-  .sueldo-card{ background:linear-gradient(135deg,var(--txt),#2a2a2a); border-radius:22px; padding:20px; margin-bottom:14px; }
-  .sueldo-label{ font-size:0.68rem; font-weight:700; color:rgba(255,255,255,0.5); text-transform:uppercase; margin-bottom:6px; }
+  .sueldo-card{ border-radius:22px; padding:20px; margin-bottom:14px; }
+  .sueldo-lbl{ font-size:0.68rem; font-weight:700; text-transform:uppercase; opacity:0.5; margin-bottom:6px; }
   .sueldo-monto{ font-size:2.2rem; font-weight:900; color:white; letter-spacing:-1px; }
-  .sueldo-neto-label{ font-size:0.72rem; color:rgba(255,255,255,0.5); margin-top:2px; }
-  .sueldo-estado{ display:inline-flex; align-items:center; gap:5px; background:rgba(50,205,50,0.15); border-radius:20px; padding:4px 12px; margin-top:10px; }
-  .sueldo-estado svg{ width:12px; height:12px; stroke:var(--acc); fill:none; stroke-width:2.5; }
-  .sueldo-estado span{ font-size:0.68rem; font-weight:800; color:var(--acc); }
+  .sueldo-sub{ font-size:0.72rem; opacity:0.45; margin-top:2px; margin-bottom:14px; }
+  .sueldo-estado{ display:inline-flex; align-items:center; gap:5px; background:rgba(255,255,255,0.1); border-radius:20px; padding:5px 12px; }
+  .sueldo-estado-dot{ width:7px; height:7px; border-radius:50%; }
+  .sueldo-estado-txt{ font-size:0.7rem; font-weight:700; color:white; }
   .sueldo-detalles{ display:grid; grid-template-columns:1fr 1fr; gap:8px; margin-top:14px; }
-  .sueldo-det{ background:rgba(255,255,255,0.06); border-radius:12px; padding:12px; }
-  .sueldo-det-lbl{ font-size:0.62rem; color:rgba(255,255,255,0.4); font-weight:600; text-transform:uppercase; margin-bottom:4px; }
+  .sueldo-det{ background:rgba(255,255,255,0.07); border-radius:12px; padding:12px; }
+  .sueldo-det-lbl{ font-size:0.58rem; color:rgba(255,255,255,0.35); font-weight:600; text-transform:uppercase; margin-bottom:3px; }
   .sueldo-det-val{ font-size:0.9rem; font-weight:800; color:white; }
 
   /* BENEFICIOS */
-  .beneficio-card{ background:white; border-radius:18px; padding:16px; margin-bottom:10px; border:1px solid #eee; box-shadow:0 2px 6px rgba(0,0,0,0.04); }
-  .ben-header{ display:flex; align-items:center; gap:10px; margin-bottom:12px; }
-  .ben-icon{ width:40px; height:40px; border-radius:12px; display:flex; align-items:center; justify-content:center; font-size:1.1rem; flex-shrink:0; }
-  .ben-titulo{ font-size:0.88rem; font-weight:700; color:var(--txt); }
-  .ben-sub{ font-size:0.72rem; color:#aaa; margin-top:2px; }
-  .ben-barra{ height:6px; background:#eee; border-radius:6px; overflow:hidden; margin-bottom:6px; }
-  .ben-fill{ height:100%; background:var(--acc); border-radius:6px; }
-  .ben-monto{ font-size:1.1rem; font-weight:900; color:var(--acc); }
-  .ben-acumulado{ font-size:0.7rem; color:#aaa; }
+  .ben-card{ border-radius:18px; padding:16px; margin-bottom:10px; }
+  .ben-hd{ display:flex; align-items:center; gap:10px; margin-bottom:12px; }
+  .ben-ico{ width:40px; height:40px; border-radius:12px; display:flex; align-items:center; justify-content:center; font-size:1.1rem; flex-shrink:0; }
+  .ben-title{ font-size:0.88rem; font-weight:700; color:white; }
+  .ben-sub{ font-size:0.7rem; opacity:0.45; margin-top:2px; }
+  .ben-barra{ height:6px; border-radius:6px; overflow:hidden; margin-bottom:6px; }
+  .ben-fill{ height:100%; border-radius:6px; }
+  .ben-monto{ font-size:1.1rem; font-weight:900; }
 
   /* AGENDA */
-  .evento-item{ display:flex; gap:12px; padding:12px; background:white; border-radius:14px; margin-bottom:8px; border:1px solid #eee; box-shadow:0 2px 6px rgba(0,0,0,0.04); }
-  .evento-fecha-box{ width:44px; height:44px; border-radius:12px; display:flex; flex-direction:column; align-items:center; justify-content:center; flex-shrink:0; }
-  .evento-dia{ font-size:1.1rem; font-weight:900; color:white; line-height:1; }
-  .evento-mes{ font-size:0.58rem; font-weight:700; color:rgba(255,255,255,0.7); text-transform:uppercase; }
-  .evento-info{ flex:1; }
-  .evento-titulo{ font-size:0.85rem; font-weight:700; color:var(--txt); }
-  .evento-desc{ font-size:0.72rem; color:#aaa; margin-top:2px; }
-  .evento-tipo{ font-size:0.6rem; font-weight:700; padding:2px 8px; border-radius:6px; display:inline-block; margin-top:4px; }
+  .evento-item{ display:flex; gap:12px; padding:12px; border-radius:14px; margin-bottom:8px; }
+  .ev-fecha{ width:44px; height:44px; border-radius:12px; display:flex; flex-direction:column; align-items:center; justify-content:center; flex-shrink:0; }
+  .ev-dia{ font-size:1.1rem; font-weight:900; color:white; line-height:1; }
+  .ev-mes{ font-size:0.58rem; font-weight:700; color:rgba(255,255,255,0.6); text-transform:uppercase; }
+  .ev-info{ flex:1; }
+  .ev-title{ font-size:0.85rem; font-weight:700; color:white; }
+  .ev-desc{ font-size:0.7rem; opacity:0.45; margin-top:2px; }
 
   /* BUZÓN */
-  .mensaje-item{ background:white; border-radius:14px; padding:14px; margin-bottom:8px; border:1px solid #eee; }
-  .msg-header{ display:flex; align-items:center; gap:8px; margin-bottom:6px; }
-  .msg-de{ font-size:0.78rem; font-weight:700; color:var(--txt); }
-  .msg-hora{ font-size:0.68rem; color:#aaa; margin-left:auto; }
-  .msg-txt{ font-size:0.8rem; color:#555; line-height:1.5; }
-  .msg-no-leido{ width:8px; height:8px; border-radius:50%; background:var(--acc); flex-shrink:0; }
-  .buzon-form{ background:white; border-radius:18px; padding:16px; margin-bottom:12px; border:1px solid #eee; }
-  .buzon-form-title{ font-size:0.82rem; font-weight:700; color:var(--txt); margin-bottom:12px; }
-  .buzon-textarea{ width:100%; padding:12px 14px; background:var(--gris); border:1.5px solid #eee; border-radius:12px; font-family:'Inter',sans-serif; font-size:0.88rem; color:var(--txt); outline:none; resize:none; height:80px; }
-  .buzon-textarea:focus{ border-color:var(--acc); }
-  .buzon-tipo-row{ display:flex; gap:8px; margin-bottom:10px; flex-wrap:wrap; }
-  .tipo-chip{ padding:6px 12px; border-radius:20px; border:1.5px solid #eee; font-size:0.72rem; font-weight:700; cursor:pointer; color:#aaa; background:transparent; font-family:'Inter',sans-serif; }
-  .tipo-chip.sel{ border-color:var(--acc); color:var(--acc); background:rgba(50,205,50,0.06); }
-  .btn-enviar-msg{ width:100%; padding:12px; background:var(--txt); color:white; border:none; border-radius:12px; font-family:'Inter',sans-serif; font-size:0.88rem; font-weight:700; cursor:pointer; }
-
-  /* ASISTENCIA HISTORIAL */
-  .asist-hist-item{ display:flex; align-items:center; gap:10px; padding:12px; background:white; border-radius:14px; margin-bottom:8px; border:1px solid #eee; }
-  .asist-hist-fecha{ font-size:0.72rem; font-weight:700; color:#aaa; width:70px; flex-shrink:0; }
-  .asist-hist-info{ flex:1; }
-  .asist-hist-hora{ font-size:0.82rem; font-weight:700; color:var(--txt); }
-  .asist-hist-estado{ font-size:0.65rem; font-weight:700; padding:3px 8px; border-radius:6px; flex-shrink:0; }
-  .est-puntual{ background:rgba(50,205,50,0.1); color:var(--acc); }
-  .est-tarde{ background:rgba(255,140,0,0.1); color:var(--naranja); }
-  .est-falta{ background:rgba(255,77,77,0.1); color:var(--rojo); }
-  .asist-hist-atraso{ font-size:0.68rem; color:#aaa; margin-top:2px; }
-
-  /* MODALES */
-  .modal-overlay{ position:fixed; inset:0; background:rgba(0,0,0,0.5); display:none; align-items:flex-end; z-index:500; }
-  .modal-overlay.show{ display:flex; }
-  .modal-sheet{ background:white; width:100%; max-height:90vh; border-radius:24px 24px 0 0; transform:translateY(100%); transition:0.4s cubic-bezier(0.16,1,0.3,1); display:flex; flex-direction:column; overflow:hidden; }
-  .modal-overlay.show .modal-sheet{ transform:translateY(0); }
-  .drag{ width:36px; height:4px; background:#e0e0e0; border-radius:4px; margin:14px auto 0; flex-shrink:0; }
-  .modal-header{ padding:12px 16px; display:flex; justify-content:space-between; align-items:center; border-bottom:1px solid #f5f5f5; flex-shrink:0; }
-  .modal-title{ font-size:1rem; font-weight:800; color:var(--txt); }
-  .close-btn{ width:30px; height:30px; background:var(--gris); border-radius:8px; display:flex; align-items:center; justify-content:center; cursor:pointer; border:none; }
-  .close-btn svg{ width:14px; height:14px; stroke:#666; fill:none; stroke-width:2.5; }
-  .modal-body{ overflow-y:auto; padding:16px 16px 32px; flex:1; }
+  .buzon-form{ border-radius:18px; padding:16px; margin-bottom:12px; }
+  .buzon-title{ font-size:0.82rem; font-weight:700; color:white; margin-bottom:12px; }
+  .tipo-row{ display:flex; gap:6px; margin-bottom:10px; flex-wrap:wrap; }
+  .tipo-chip{ padding:6px 12px; border-radius:20px; border:1.5px solid rgba(255,255,255,0.1); background:transparent; font-family:'Inter',sans-serif; font-size:0.7rem; font-weight:700; cursor:pointer; color:rgba(255,255,255,0.5); }
+  .tipo-chip.sel{ color:var(--acc); border-color:var(--acc); background:rgba(255,140,0,0.1); }
+  .buzon-textarea{ width:100%; padding:12px 14px; border-radius:12px; font-family:'Inter',sans-serif; font-size:0.88rem; outline:none; resize:none; height:80px; }
+  .btn-enviar-msg{ width:100%; padding:13px; border:none; border-radius:12px; font-family:'Inter',sans-serif; font-size:0.88rem; font-weight:700; cursor:pointer; }
+  .msg-item{ border-radius:14px; padding:14px; margin-bottom:8px; }
+  .msg-de{ font-size:0.78rem; font-weight:700; color:white; }
+  .msg-hora{ font-size:0.68rem; opacity:0.4; }
+  .msg-txt{ font-size:0.8rem; opacity:0.7; margin-top:6px; line-height:1.5; }
 
   /* BIOMÉTRICO */
-  .bio-screen{ text-align:center; padding:20px 0; }
-  .bio-icon{ width:100px; height:100px; border-radius:50%; background:var(--gris); margin:0 auto 16px; display:flex; align-items:center; justify-content:center; transition:0.3s; }
-  .bio-icon svg{ width:44px; height:44px; stroke:var(--txt); fill:none; stroke-width:1.5; }
-  .bio-icon.scanning{ background:rgba(50,205,50,0.1); animation:bioPulse 1s infinite; }
-  .bio-icon.scanning svg{ stroke:var(--acc); }
-  .bio-icon.ok{ background:rgba(50,205,50,0.15); }
-  .bio-icon.ok svg{ stroke:var(--acc); }
-  .bio-icon.error{ background:rgba(255,77,77,0.1); }
-  .bio-icon.error svg{ stroke:var(--rojo); }
-  @keyframes bioPulse{ 0%,100%{transform:scale(1)}50%{transform:scale(1.05)} }
-  .bio-title{ font-size:1rem; font-weight:800; color:var(--txt); margin-bottom:6px; }
-  .bio-sub{ font-size:0.8rem; color:#aaa; line-height:1.5; margin-bottom:20px; }
-  .btn-bio{ width:100%; padding:14px; background:var(--txt); color:white; border:none; border-radius:14px; font-family:'Inter',sans-serif; font-size:0.92rem; font-weight:700; cursor:pointer; }
-  .btn-bio.acc{ background:var(--acc); }
-  .foto-captura-wrap{ position:relative; width:120px; height:120px; border-radius:50%; overflow:hidden; margin:0 auto 14px; border:3px solid var(--acc); }
-  .foto-captura-wrap img{ width:100%; height:100%; object-fit:cover; }
-  .foto-cap-placeholder{ width:100%; height:100%; background:var(--gris); display:flex; align-items:center; justify-content:center; }
-  .foto-cap-placeholder svg{ width:36px; height:36px; stroke:#ccc; fill:none; stroke-width:1.5; }
-  .foto-cap-input{ position:absolute; inset:0; opacity:0; cursor:pointer; }
+  .bio-overlay{ position:fixed; inset:0; display:none; flex-direction:column; align-items:center; justify-content:center; z-index:200; padding:32px; }
+  .bio-overlay.show{ display:flex; }
+  .bio-icon-wrap{ width:100px; height:100px; border-radius:50%; display:flex; align-items:center; justify-content:center; margin-bottom:16px; transition:0.3s; }
+  .bio-icon-wrap svg{ width:44px; height:44px; fill:none; stroke-width:1.5; }
+  .bio-icon-wrap.scanning{ animation:bioPulse 1s infinite; }
+  @keyframes bioPulse{ 0%,100%{transform:scale(1)}50%{transform:scale(1.06)} }
+  .bio-title{ font-size:1rem; font-weight:800; color:white; margin-bottom:6px; text-align:center; }
+  .bio-sub{ font-size:0.8rem; opacity:0.5; margin-bottom:20px; text-align:center; line-height:1.5; }
+  .foto-circle{ width:100px; height:100px; border-radius:50%; overflow:hidden; margin:0 auto 14px; position:relative; cursor:pointer; }
+  .foto-circle-inner{ width:100%; height:100%; display:flex; align-items:center; justify-content:center; }
+  .foto-circle-inner svg{ width:32px; height:32px; fill:none; stroke-width:1.5; }
+  .foto-circle img{ width:100%; height:100%; object-fit:cover; display:none; }
+  .foto-input{ position:absolute; inset:0; opacity:0; cursor:pointer; }
+  .foto-hint{ font-size:0.68rem; opacity:0.4; text-align:center; margin-bottom:14px; }
+  .btn-bio{ width:100%; padding:14px; border:none; border-radius:14px; font-family:'Inter',sans-serif; font-size:0.92rem; font-weight:700; cursor:pointer; margin-bottom:10px; }
+  .btn-bio-cancel{ width:100%; padding:12px; border:none; border-radius:14px; font-family:'Inter',sans-serif; font-size:0.82rem; font-weight:600; cursor:pointer; background:rgba(255,255,255,0.06); color:rgba(255,255,255,0.5); }
 
-  .upload-overlay{ position:fixed; inset:0; background:rgba(0,0,0,0.5); display:none; align-items:center; justify-content:center; z-index:1000; }
+  .upload-overlay{ position:fixed; inset:0; background:rgba(0,0,0,0.6); display:none; align-items:center; justify-content:center; z-index:1000; }
   .upload-overlay.show{ display:flex; }
-  .upload-box{ background:white; border-radius:20px; padding:24px; width:80%; max-width:280px; text-align:center; }
-  .spinner{ width:36px; height:36px; border:3px solid #eee; border-top-color:var(--acc); border-radius:50%; animation:spin 0.7s linear infinite; margin:0 auto 10px; }
-  .upload-box p{ font-size:0.82rem; color:#666; }
+  .upload-box{ border-radius:20px; padding:24px; width:80%; max-width:280px; text-align:center; }
+  .spinner{ width:36px; height:36px; border:3px solid rgba(255,255,255,0.1); border-radius:50%; animation:spin 0.7s linear infinite; margin:0 auto 10px; }
+  .upload-box p{ font-size:0.82rem; opacity:0.6; }
   @keyframes spin{ to{ transform:rotate(360deg); } }
-  .toast{ position:fixed; bottom:80px; left:50%; transform:translateX(-50%) translateY(20px); background:var(--txt); color:white; padding:10px 20px; border-radius:24px; font-size:0.82rem; font-weight:700; opacity:0; transition:0.3s; pointer-events:none; z-index:2000; white-space:nowrap; }
+  .toast{ position:fixed; bottom:80px; left:50%; transform:translateX(-50%) translateY(20px); padding:10px 20px; border-radius:24px; font-size:0.82rem; font-weight:700; opacity:0; transition:0.3s; pointer-events:none; z-index:2000; white-space:nowrap; }
   .toast.show{ opacity:1; transform:translateX(-50%) translateY(0); }
-  .sec-title{ font-size:0.7rem; font-weight:800; color:#aaa; text-transform:uppercase; letter-spacing:1px; margin-bottom:10px; }
-  .empty-state{ text-align:center; padding:30px 20px; color:#bbb; font-size:0.82rem; }
+  .sec-title{ font-size:0.7rem; font-weight:800; text-transform:uppercase; letter-spacing:0.8px; margin-bottom:10px; opacity:0.4; }
+  .empty-state{ text-align:center; padding:30px; opacity:0.4; font-size:0.82rem; }
 </style>
 </head>
 <body>
 
-<!-- LOGIN -->
-<div class="login-screen" id="login-screen">
-  <div class="login-hero" id="login-hero">
-    <div class="login-logo" id="login-logo">
-      <div class="login-logo-placeholder" id="login-logo-placeholder">W</div>
+<!-- ===== LOGIN ===== -->
+<div id="login-wrap" class="login-wrap" style="background:#0F172A;">
+  <div class="login-top">
+    <div class="login-logo-box" id="ll-logo">
+      <svg width="44" height="44" viewBox="0 0 24 24" fill="none" stroke="rgba(255,140,0,0.6)" stroke-width="1.5"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
     </div>
-    <div class="login-empresa" id="login-empresa">Workers</div>
-    <div class="login-sub" id="login-sub">Portal del Empleado</div>
-    <div class="login-workers-badge">
-      <span>⚡ WORKERS by PROVEED</span>
-    </div>
+    <div class="login-empresa-name" id="ll-empresa">Workers</div>
+    <div class="login-badge"><span class="login-badge-txt">⚡ PROVEED Ecosystem</span></div>
   </div>
   <div class="login-body">
     <div class="login-title">Accede a tu portal</div>
-    <div class="login-desc">Ingresa tu número de cédula y la contraseña que te proporcionó tu empresa.</div>
-    <div class="field"><label>Número de cédula</label><input type="number" id="login-cedula" placeholder="1712345678" maxlength="10" inputmode="numeric"></div>
-    <div class="field"><label>Contraseña / PIN</label><input type="password" id="login-pin" placeholder="••••••"></div>
-    <div class="field"><label>Código de empresa</label><input type="text" id="login-empresa-code" placeholder="Ej: GODRESS-001" style="text-transform:uppercase;"></div>
-    <button class="btn-main" onclick="doLogin()">Entrar →</button>
-    <div class="login-error" id="login-error">Credenciales incorrectas. Verifica tu cédula y PIN.</div>
-    <div class="poweredby">Powered by <strong>PROVEED</strong> Ecosystem</div>
+    <div class="login-desc">Ingresa tu cédula y el PIN que te asignó tu empresa para acceder a tu información laboral.</div>
+    <div class="field"><label>Código de empresa</label><input type="text" id="l-codigo" placeholder="EMPRESA-XXXX" style="text-transform:uppercase;" oninput="this.value=this.value.toUpperCase()"></div>
+    <div class="field"><label>Número de cédula</label><input type="number" id="l-cedula" placeholder="1712345678" maxlength="10" inputmode="numeric"></div>
+    <div class="field"><label>PIN asignado por tu empresa</label><input type="password" id="l-pin" placeholder="••••" maxlength="6" inputmode="numeric"></div>
+    <button class="btn-login" onclick="doLogin()">Entrar →</button>
+    <div class="login-error" id="l-error">Cédula, PIN o código de empresa incorrectos</div>
+    <div class="powered">Portal del empleado por <strong>PROVEED Workers</strong></div>
   </div>
 </div>
 
-<!-- APP -->
-<div id="app-wrap" style="display:none;">
+<!-- ===== APP ===== -->
+<div id="app-wrap" class="app-wrap" style="min-height:100vh;">
 
   <!-- NOTIF BAR -->
-  <div class="notif-bar" id="notif-bar" style="display:none;">
-    <svg viewBox="0 0 24 24"><path d="M22 17H2a3 3 0 0 0 3-3V9a7 7 0 0 1 14 0v5a3 3 0 0 0 3 3zm-8.27 4a2 2 0 0 1-3.46 0"/></svg>
-    <div class="notif-bar-txt" id="notif-txt">Mensaje de RR.HH.</div>
-    <button class="notif-bar-close" onclick="document.getElementById('notif-bar').style.display='none'">×</button>
+  <div id="notif-bar" style="display:none;">
+    <div class="notif-bar" style="background:var(--acc);">
+      <svg viewBox="0 0 24 24"><path d="M22 17H2a3 3 0 0 0 3-3V9a7 7 0 0 1 14 0v5a3 3 0 0 0 3 3zm-8.27 4a2 2 0 0 1-3.46 0"/></svg>
+      <div class="notif-bar-txt" id="notif-txt">Mensaje de RR.HH.</div>
+      <button class="notif-close" onclick="document.getElementById('notif-bar').style.display='none'">×</button>
+    </div>
   </div>
 
   <!-- HEADER -->
   <div class="app-header" id="app-header">
-    <div class="emp-avatar-hdr" id="emp-avatar-hdr">
-      <span id="emp-inicial-hdr">U</span>
+    <div class="emp-ava" id="emp-avatar" style="background:rgba(255,140,0,0.2);">
+      <span id="emp-inicial" style="color:var(--acc);">U</span>
     </div>
-    <div class="emp-info-hdr">
-      <div class="emp-nombre-hdr" id="emp-nombre-hdr">Empleado</div>
-      <div class="emp-cargo-hdr" id="emp-cargo-hdr">—</div>
+    <div class="emp-info">
+      <div class="emp-name" id="emp-nombre">Empleado</div>
+      <div class="emp-cargo" id="emp-cargo">—</div>
     </div>
     <button class="btn-logout" onclick="doLogout()">
       <svg viewBox="0 0 24 24"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/></svg>
     </button>
   </div>
 
- 
-   <!-- HOME -->
+  <!-- HOME -->
   <div class="section active" id="sec-home">
+    <!-- RELOJ Y REGISTRO -->
     <div class="asist-card" id="asist-card">
-      <div class="asist-card-title">Registro de asistencia</div>
-      <div class="asist-hora" id="reloj-hora">00:00</div>
+      <div style="font-size:0.7rem;font-weight:700;text-transform:uppercase;opacity:0.5;margin-bottom:4px;color:white;">Registro de asistencia</div>
+      <div class="asist-reloj" id="reloj-hora">00:00</div>
       <div class="asist-fecha" id="reloj-fecha">—</div>
-      <button class="btn-registrar" id="btn-registrar" onclick="abrirRegistroBio()">
+      <button class="btn-registrar" id="btn-registrar" onclick="abrirBio()">
         <svg viewBox="0 0 24 24"><path d="M12 22C6.5 22 2 17.5 2 12S6.5 2 12 2s10 4.5 10 10-4.5 10-10 10z"/><circle cx="12" cy="12" r="3"/></svg>
         Registrar asistencia
       </button>
@@ -264,32 +228,34 @@
         <div class="geo-dot check" id="geo-dot"></div>
         <div class="geo-txt" id="geo-txt">Verificando ubicación...</div>
       </div>
-      <div class="asist-registrada" id="asist-ok-msg" style="display:none;">
+      <div class="asist-ok-bar" id="asist-ok-bar" style="display:none;">
         <svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg>
         <span id="asist-ok-txt">Asistencia registrada</span>
       </div>
     </div>
 
-    <div class="kpi-row">
-      <div class="kpi"><div class="kpi-val acc" id="k-puntualidad">—%</div><div class="kpi-lbl">Puntualidad</div></div>
-      <div class="kpi"><div class="kpi-val azul" id="k-dias">—</div><div class="kpi-lbl">Días trabajados</div></div>
-      <div class="kpi"><div class="kpi-val naranja" id="k-atrasos">—</div><div class="kpi-lbl">Atrasos mes</div></div>
-      <div class="kpi"><div class="kpi-val" id="k-score">—</div><div class="kpi-lbl">Score desempeño</div></div>
+    <!-- KPI -->
+    <div class="kpi-grid">
+      <div class="kpi" id="kpi-puntualidad"><div class="kpi-val" id="k-punt">—%</div><div class="kpi-lbl">Puntualidad</div></div>
+      <div class="kpi" id="kpi-dias"><div class="kpi-val" id="k-dias">—</div><div class="kpi-lbl">Días trabajados</div></div>
+      <div class="kpi" id="kpi-score"><div class="kpi-val" id="k-score">—</div><div class="kpi-lbl">Score</div></div>
+      <div class="kpi" id="kpi-atrasos"><div class="kpi-val" id="k-atrasos">—</div><div class="kpi-lbl">Tardanzas</div></div>
     </div>
 
-    <div class="sec-title">Historial esta semana</div>
-    <div id="asist-semana"></div>
+  <!-- HISTORIAL SEMANA -->
+    <div class="sec-title" style="color:white;">Esta semana</div>
+    <div id="hist-semana"><div class="empty-state" style="color:rgba(255,255,255,0.4);">Sin registros esta semana</div></div>
   </div>
 
   <!-- SUELDO -->
   <div class="section" id="sec-sueldo">
-    <div class="sueldo-card">
-      <div class="sueldo-label">Sueldo neto este mes</div>
+    <div class="sueldo-card" id="sueldo-card">
+      <div class="sueldo-lbl" style="color:white;">Sueldo neto este mes</div>
       <div class="sueldo-monto" id="sueldo-monto">$0.00</div>
-      <div class="sueldo-neto-label">Después de descuentos IESS</div>
+      <div class="sueldo-sub" style="color:white;">Después de descuentos IESS (9.45%)</div>
       <div class="sueldo-estado">
-        <svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg>
-        <span id="sueldo-estado-txt">Pendiente de depósito</span>
+        <div class="sueldo-estado-dot" id="sueldo-dot" style="background:var(--acc);"></div>
+        <span class="sueldo-estado-txt" id="sueldo-estado-txt">Pendiente de depósito</span>
       </div>
       <div class="sueldo-detalles">
         <div class="sueldo-det"><div class="sueldo-det-lbl">Salario bruto</div><div class="sueldo-det-val" id="sal-bruto">$0.00</div></div>
@@ -298,70 +264,57 @@
         <div class="sueldo-det"><div class="sueldo-det-lbl">Cuenta</div><div class="sueldo-det-val" id="sal-cuenta">—</div></div>
       </div>
     </div>
-
-    <div class="sec-title">Proyección de beneficios</div>
-    <div class="beneficio-card">
-      <div class="ben-header">
-        <div class="ben-icon" style="background:rgba(50,205,50,0.1);">🎁</div>
-        <div><div class="ben-titulo">Décimo Tercer Sueldo</div><div class="ben-sub">Se paga en diciembre</div></div>
+    <div class="sec-title" style="color:white;">Beneficios legales (Ecuador)</div>
+    <div class="ben-card" id="ben-d13">
+      <div class="ben-hd">
+        <div class="ben-ico" id="ben-d13-ico">🎁</div>
+        <div><div class="ben-title">Décimo Tercer Sueldo</div><div class="ben-sub" style="color:rgba(255,255,255,0.45);">Se paga en diciembre</div></div>
       </div>
-      <div class="ben-barra"><div class="ben-fill" id="d13-fill" style="width:0%"></div></div>
+      <div class="ben-barra" style="background:rgba(255,255,255,0.1);"><div class="ben-fill" id="d13-fill" style="width:0%;"></div></div>
       <div class="ben-monto" id="d13-monto">$0.00</div>
-      <div class="ben-acumulado" id="d13-sub">Acumulado hasta ahora</div>
     </div>
-    <div class="beneficio-card">
-      <div class="ben-header">
-        <div class="ben-icon" style="background:rgba(0,122,255,0.1);">📋</div>
-        <div><div class="ben-titulo">Décimo Cuarto Sueldo</div><div class="ben-sub">Se paga en agosto</div></div>
+    <div class="ben-card" id="ben-d14">
+      <div class="ben-hd">
+        <div class="ben-ico" id="ben-d14-ico">📋</div>
+        <div><div class="ben-title">Décimo Cuarto Sueldo</div><div class="ben-sub" style="color:rgba(255,255,255,0.45);">Se paga en agosto</div></div>
       </div>
-      <div class="ben-barra"><div class="ben-fill" style="background:var(--azul);" id="d14-fill"></div></div>
+      <div class="ben-barra" style="background:rgba(255,255,255,0.1);"><div class="ben-fill" id="d14-fill" style="width:0%;background:var(--azul);"></div></div>
       <div class="ben-monto" id="d14-monto">$0.00</div>
-      <div class="ben-acumulado" id="d14-sub">Acumulado hasta ahora</div>
-    </div>
-    <div class="beneficio-card">
-      <div class="ben-header">
-        <div class="ben-icon" style="background:rgba(255,140,0,0.1);">💰</div>
-        <div><div class="ben-titulo">Utilidades proyectadas</div><div class="ben-sub">15% de utilidades empresa</div></div>
-      </div>
-      <div class="ben-monto" id="util-monto">Por calcular</div>
-      <div class="ben-acumulado" id="util-sub">Basado en cargas familiares: <span id="util-cargas">0</span></div>
     </div>
   </div>
 
   <!-- AGENDA -->
   <div class="section" id="sec-agenda">
-    <div class="sec-title">Próximos eventos</div>
-    <div id="agenda-lista"></div>
+    <div class="sec-title" style="color:white;">Próximos eventos</div>
+    <div id="agenda-lista"><div class="empty-state" style="color:rgba(255,255,255,0.4);">Sin eventos próximos</div></div>
   </div>
 
   <!-- BUZÓN -->
   <div class="section" id="sec-buzon">
-    <div class="buzon-form">
-      <div class="buzon-form-title">Enviar mensaje a RR.HH.</div>
-      <div class="buzon-tipo-row">
+    <div class="buzon-form" id="buzon-form-wrap">
+      <div class="buzon-title">Enviar mensaje a RR.HH.</div>
+      <div class="tipo-row">
         <button class="tipo-chip sel" onclick="selTipo(this,'general')">General</button>
         <button class="tipo-chip" onclick="selTipo(this,'justificacion')">Justificación médica</button>
         <button class="tipo-chip" onclick="selTipo(this,'permiso')">Permiso</button>
         <button class="tipo-chip" onclick="selTipo(this,'queja')">Reporte</button>
       </div>
-      <textarea class="buzon-textarea" id="buzon-msg" placeholder="Escribe tu mensaje aquí..."></textarea>
+      <textarea class="buzon-textarea" id="buzon-msg" placeholder="Escribe tu mensaje..."></textarea>
       <div style="margin-bottom:10px;">
-        <div style="font-size:0.7rem;color:#aaa;font-weight:700;text-transform:uppercase;margin-bottom:6px;">Adjuntar archivo (opcional)</div>
-        <div style="border:1.5px dashed #eee;border-radius:12px;padding:12px;text-align:center;position:relative;cursor:pointer;" id="buzon-file-area">
-          <div style="font-size:0.76rem;color:#bbb;" id="buzon-file-lbl">Toca para adjuntar imagen o documento</div>
-          <input type="file" accept="image/*,application/pdf" style="position:absolute;inset:0;opacity:0;cursor:pointer;" onchange="selBuzonFile(this)">
+        <div style="font-size:0.7rem;font-weight:700;text-transform:uppercase;margin-bottom:5px;opacity:0.45;color:white;">Adjunto (opcional)</div>
+        <div style="border:1.5px dashed rgba(255,255,255,0.1);border-radius:11px;padding:12px;text-align:center;position:relative;cursor:pointer;" id="adj-area">
+          <div style="font-size:0.74rem;opacity:0.35;color:white;" id="adj-lbl">Toca para adjuntar imagen</div>
+          <input type="file" accept="image/*,application/pdf" style="position:absolute;inset:0;opacity:0;cursor:pointer;" onchange="selAdjunto(this)">
         </div>
       </div>
-      <button class="btn-enviar-msg" onclick="enviarMensaje()">Enviar mensaje →</button>
+      <button class="btn-enviar-msg" id="btn-enviar-msg" onclick="enviarMensaje()">Enviar mensaje →</button>
     </div>
-    <div class="sec-title">Mensajes recibidos</div>
-    <div id="mensajes-lista">
-      <div class="empty-state">Sin mensajes aún</div>
-    </div>
+    <div class="sec-title" style="color:white;">Mensajes recibidos</div>
+    <div id="mensajes-lista"><div class="empty-state" style="color:rgba(255,255,255,0.4);">Sin mensajes aún</div></div>
   </div>
 
   <!-- TAB BAR -->
-  <div class="tab-bar">
+  <div class="tab-bar" id="tab-bar">
     <button class="tab active" onclick="showTab('home',this)">
       <svg viewBox="0 0 24 24"><path d="m3 9 9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
       <span>Inicio</span><div class="tab-dot"></div>
@@ -381,38 +334,30 @@
   </div>
 </div>
 
-<!-- MODAL REGISTRO BIOMÉTRICO -->
-<div class="modal-overlay" id="modal-bio" onclick="cerrarModal('modal-bio',event)">
-  <div class="modal-sheet">
-    <div class="drag"></div>
-    <div class="modal-header">
-      <span class="modal-title">Registro de asistencia</span>
-      <button class="close-btn" onclick="document.getElementById('modal-bio').classList.remove('show')"><svg viewBox="0 0 24 24"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg></button>
+<!-- BIO OVERLAY -->
+<div class="bio-overlay" id="bio-overlay">
+  <div class="foto-circle" id="foto-circle">
+    <div class="foto-circle-inner" id="foto-placeholder">
+      <svg viewBox="0 0 24 24" stroke="rgba(255,255,255,0.4)"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
     </div>
-    <div class="modal-body">
-      <div class="bio-screen">
-        <div class="foto-captura-wrap" id="foto-captura-wrap">
-          <div class="foto-cap-placeholder" id="foto-placeholder">
-            <svg viewBox="0 0 24 24"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
-          </div>
-          <img id="foto-capturada" src="" alt="" style="display:none;width:100%;height:100%;object-fit:cover;">
-          <input type="file" accept="image/*" capture="user" class="foto-cap-input" id="foto-input" onchange="capturarFoto(this)">
-        </div>
-        <div style="font-size:0.72rem;color:#aaa;margin-bottom:16px;">Toca el círculo para tomar tu foto</div>
-        <div class="bio-icon" id="bio-icon">
-          <svg viewBox="0 0 24 24"><path d="M12 22C6.5 22 2 17.5 2 12S6.5 2 12 2s10 4.5 10 10-4.5 10-10 10z"/><path d="M12 8c-2.2 0-4 1.8-4 4s1.8 4 4 4 4-1.8 4-4"/><circle cx="12" cy="12" r="1"/></svg>
-        </div>
-        <div class="bio-title" id="bio-title">Verificación biométrica</div>
-        <div class="bio-sub" id="bio-sub">Toca el botón para verificar tu identidad con huella dactilar o Face ID</div>
-        <button class="btn-bio" id="btn-bio-action" onclick="iniciarBiometria()">🔒 Verificar huella / Face ID</button>
-        <div id="bio-geo-info" style="margin-top:12px;font-size:0.72rem;color:#aaa;text-align:center;"></div>
-      </div>
-    </div>
+    <img id="foto-preview" src="" alt="">
+    <input type="file" accept="image/*" capture="user" class="foto-input" onchange="capturarFoto(this)">
   </div>
+  <div class="foto-hint" style="color:rgba(255,255,255,0.4);">Toca el círculo para tomar tu foto</div>
+  <div class="bio-icon-wrap" id="bio-icon-wrap">
+    <svg viewBox="0 0 24 24" id="bio-icon-svg" stroke="rgba(255,255,255,0.4)"><path d="M12 22C6.5 22 2 17.5 2 12S6.5 2 12 2s10 4.5 10 10-4.5 10-10 10z"/><path d="M12 8c-2.2 0-4 1.8-4 4s1.8 4 4 4 4-1.8 4-4"/><circle cx="12" cy="12" r="1"/></svg>
+  </div>
+  <div class="bio-title" id="bio-title" style="color:white;">Verificar identidad</div>
+  <div class="bio-sub" id="bio-sub" style="color:rgba(255,255,255,0.45);">Primero toma tu foto y luego verifica con huella dactilar o Face ID</div>
+  <button class="btn-bio" id="btn-bio" onclick="iniciarBio()">🔒 Verificar huella / Face ID</button>
+  <button class="btn-bio-cancel" onclick="document.getElementById('bio-overlay').classList.remove('show')">Cancelar</button>
 </div>
 
 <div class="upload-overlay" id="upload-overlay">
-  <div class="upload-box"><div class="spinner"></div><p>Registrando asistencia...</p></div>
+  <div class="upload-box" style="background:#1e293b;">
+    <div class="spinner" style="border-top-color:var(--acc);"></div>
+    <p style="color:rgba(255,255,255,0.5);">Registrando asistencia...</p>
+  </div>
 </div>
 <div class="toast" id="toast"></div>
 
@@ -421,439 +366,370 @@
 const { createClient } = supabase;
 const sb = createClient('https://hfmsyrmkewscnvwynzfq.supabase.co','sb_publishable_d1oLsq70a6ZV33vW3XkRgw_nYcN2Z9v');
 
-let empleadoData={}, proveedorData={}, geoConfig={}, fotoCapturadaFile=null, buzonFileAdjunto=null, tipoMensaje='general';
-let posicionActual=null, yaRegistroHoy=false;
+let empData={}, provData={}, proveedorId='', fotoFile=null, adjFile=null, tipoMsg='general', yaRegistro=false, posicion=null;
+const SBU=450;
 
-// RELOJ
-function actualizarReloj(){
-  const now=new Date();
-  document.getElementById('reloj-hora').textContent=now.toLocaleTimeString('es-EC',{hour:'2-digit',minute:'2-digit'});
-  document.getElementById('reloj-fecha').textContent=now.toLocaleDateString('es-EC',{weekday:'long',day:'numeric',month:'long',year:'numeric'});
+// ===== APLICAR MARCA DEL PROVEEDOR =====
+function aplicarMarca(prov){
+  const color=prov.workers_color||'#FF8C00';
+  document.documentElement.style.setProperty('--acc',color);
+  const nombre=prov.empresa||prov.nombre||'Workers';
+  document.getElementById('ll-empresa').textContent=nombre;
+  const logo=prov.logo_empresa||prov.foto_perfil||'';
+  const logoBox=document.getElementById('ll-logo');
+  if(logo) logoBox.innerHTML=`<img src="${logo}" alt="">`;
+  // Fondo basado en color
+  const r=parseInt(color.slice(1,3),16),g=parseInt(color.slice(3,5),16),b=parseInt(color.slice(5,7),16);
+  const lum=(0.299*r+0.587*g+0.114*b)/255;
+  const textColor=lum>0.5?'#000':'#fff';
+  // App header y fondo
+  const appHeader=document.getElementById('app-header');
+  appHeader.style.background=`linear-gradient(135deg,#0F172A,${color}22)`;
+  // Tab bar
+  document.getElementById('tab-bar').style.background='#0F172A';
+  document.getElementById('tab-bar').style.borderTop=`1px solid ${color}22`;
+  // Secciones fondo
+  document.body.style.background='#0F172A';
+  document.getElementById('app-wrap').style.background='#0F172A';
+  // Asist card
+  document.getElementById('asist-card').style.background=`linear-gradient(135deg,${color},${color}bb)`;
+  // Sueldo card
+  document.getElementById('sueldo-card').style.background=`linear-gradient(135deg,#1e293b,#0f172a)`;
+  document.getElementById('sueldo-card').style.border=`1px solid ${color}33`;
+  // Ben cards
+  document.getElementById('ben-d13').style.background='#1e293b';
+  document.getElementById('ben-d14').style.background='#1e293b';
+  document.getElementById('ben-d13-ico').style.background=`${color}22`;
+  document.getElementById('ben-d14-ico').style.background='rgba(59,130,246,0.15)';
+  document.getElementById('d13-fill').style.background=color;
+  // KPI styles
+  document.getElementById('kpi-puntualidad').style.background=`${color}15`;
+  document.getElementById('kpi-puntualidad').style.color=color;
+  document.getElementById('kpi-puntualidad').querySelector('.kpi-val').style.color=color;
+  ['kpi-dias','kpi-score','kpi-atrasos'].forEach(id=>{ const el=document.getElementById(id); if(el){ el.style.background='#1e293b'; el.querySelector('.kpi-val').style.color='white'; el.querySelector('.kpi-lbl').style.color='rgba(255,255,255,0.4)'; } });
+  // Buttons
+  document.getElementById('btn-bio').style.background=color;
+  document.getElementById('btn-bio').style.color=textColor;
+  document.getElementById('btn-login').style.background=color;
+  document.getElementById('btn-login').style.color=textColor;
+  document.getElementById('btn-registrar').style.background='rgba(255,255,255,0.15)';
+  document.getElementById('btn-registrar').style.color='white';
+  // Buzon
+  document.getElementById('buzon-form-wrap').style.background='#1e293b';
+  document.getElementById('btn-enviar-msg').style.background=color;
+  document.getElementById('btn-enviar-msg').style.color=textColor;
+  document.getElementById('buzon-textarea').style.background='#0f172a';
+  document.getElementById('buzon-textarea').style.border='1.5px solid rgba(255,255,255,0.08)';
+  document.getElementById('buzon-textarea').style.color='white';
+  // Bio overlay
+  document.getElementById('bio-overlay').style.background=`linear-gradient(180deg,#0F172A,${color}33)`;
+  document.getElementById('foto-circle').style.border=`3px solid ${color}`;
+  document.getElementById('foto-circle').style.background=`${color}22`;
+  // Toast
+  document.getElementById('toast').style.background=color;
+  document.getElementById('toast').style.color=textColor;
 }
-setInterval(actualizarReloj,1000); actualizarReloj();
 
-// LOGIN
+
+// ===== LOGIN =====
+window.onload=async function(){
+  const sess=JSON.parse(localStorage.getItem('workers_sess')||'null');
+  if(sess){
+    const { data:emp } = await sb.from('rrhh_empleados').select('*').eq('id',sess.empId).single().catch(()=>({data:null}));
+    const { data:prov } = await sb.from('usuarios').select('*').eq('id',sess.provId).single().catch(()=>({data:null}));
+    if(emp&&prov){ empData=emp; provData=prov; proveedorId=prov.id; aplicarMarca(prov); iniciarApp(); return; }
+    localStorage.removeItem('workers_sess');
+  }
+  // Mostrar login
+  document.getElementById('login-wrap').style.display='flex';
+};
+
 window.doLogin=async function(){
-  const cedula=document.getElementById('login-cedula').value.trim();
-  const pin=document.getElementById('login-pin').value.trim();
-  const codigoEmpresa=document.getElementById('login-empresa-code').value.trim().toUpperCase();
-  const errEl=document.getElementById('login-error');
+  const codigo=document.getElementById('l-codigo').value.trim().toUpperCase();
+  const cedula=document.getElementById('l-cedula').value.trim();
+  const pin=document.getElementById('l-pin').value.trim();
+  const errEl=document.getElementById('l-error');
   errEl.style.display='none';
-  if(!cedula||!pin||!codigoEmpresa){ errEl.style.display='block'; errEl.textContent='Completa todos los campos'; return; }
+  if(!codigo||!cedula||!pin){ errEl.textContent='Completa todos los campos'; errEl.style.display='block'; return; }
 
-  // Buscar el proveedor por código de empresa
-  const { data:prov } = await sb.from('usuarios').select('*').ilike('empresa',`%${codigoEmpresa}%`).eq('rol','proveedor').single().catch(()=>({data:null}));
-  // También buscar directamente por el campo código si existe
-  const { data:provByCode } = await sb.from('usuarios').select('*').eq('workers_codigo',codigoEmpresa).single().catch(()=>({data:null}));
-  const provFound=provByCode||prov;
+  // Buscar proveedor por código workers
+  const { data:prov } = await sb.from('usuarios').select('*').eq('workers_codigo',codigo).eq('rol','proveedor').single().catch(()=>({data:null}));
+  if(!prov){
+    // Intentar buscar por empresa parcial
+    const { data:provEmp } = await sb.from('usuarios').select('*').ilike('workers_codigo',`%${codigo.split('-')[0]}%`).eq('rol','proveedor').limit(1);
+    if(!provEmp?.length){ errEl.textContent='Código de empresa no encontrado'; errEl.style.display='block'; return; }
+    provData=provEmp[0];
+  } else { provData=prov; }
+  proveedorId=provData.id;
 
-  if(!provFound){ errEl.style.display='block'; errEl.textContent='Empresa no encontrada'; return; }
-
-  // Buscar empleado por cédula en esa empresa
-  const { data:emp } = await sb.from('rrhh_empleados').select('*').eq('cedula',cedula).eq('proveedor_id',provFound.id).single();
-  if(!emp){ errEl.style.display='block'; errEl.textContent='Cédula no encontrada en esta empresa'; return; }
+  // Buscar empleado por cédula
+  const { data:emp } = await sb.from('rrhh_empleados').select('*').eq('cedula',cedula).eq('proveedor_id',proveedorId).single().catch(()=>({data:null}));
+  if(!emp){ errEl.textContent='Cédula no encontrada en esta empresa'; errEl.style.display='block'; return; }
 
   // Verificar PIN
-  if(emp.pin!==pin&&pin!==emp.cedula.slice(-4)){ errEl.style.display='block'; errEl.textContent='PIN incorrecto'; return; }
+  if(emp.pin!==pin){ errEl.textContent='PIN incorrecto'; errEl.style.display='block'; return; }
 
-  empleadoData=emp;
-  proveedorData=provFound;
-  localStorage.setItem(`workers_session`,JSON.stringify({empId:emp.id,provId:provFound.id}));
+  empData=emp;
+  localStorage.setItem('workers_sess',JSON.stringify({ empId:emp.id, provId:proveedorId }));
+  aplicarMarca(provData);
   iniciarApp();
 };
 
-async function verificarSesion(){
-  const sess=JSON.parse(localStorage.getItem('workers_session')||'null');
-  if(!sess) return false;
-  const [{ data:emp },{ data:prov }] = await Promise.all([
-    sb.from('rrhh_empleados').select('*').eq('id',sess.empId).single(),
-    sb.from('usuarios').select('*').eq('id',sess.provId).single()
-  ]);
-  if(!emp||!prov) return false;
-  empleadoData=emp; proveedorData=prov;
-  return true;
-}
-
-window.onload=async function(){
-  const ok=await verificarSesion();
-  if(ok){ iniciarApp(); }
-  // Cargar marca del proveedor si hay código en URL
-  const params=new URLSearchParams(window.location.search);
-  const provCode=params.get('empresa');
-  if(provCode) cargarMarcaPreview(provCode);
-};
-
-async function cargarMarcaPreview(code){
-  const { data:prov } = await sb.from('usuarios').select('empresa,logo_empresa,workers_color').ilike('empresa',`%${code}%`).eq('rol','proveedor').single().catch(()=>({data:null}));
-  if(prov) aplicarMarca(prov);
-}
-
-function aplicarMarca(prov){
-  const color=prov.workers_color||'#32CD32';
-  document.documentElement.style.setProperty('--acc',color);
-  document.documentElement.style.setProperty('--acc2',color);
-  const nombre=prov.empresa||prov.nombre||'Workers';
-  document.getElementById('login-empresa').textContent=nombre;
-  document.getElementById('login-sub').textContent='Portal del empleado';
-  if(prov.logo_empresa){
-    const logoEl=document.getElementById('login-logo');
-    logoEl.innerHTML=`<img src="${prov.logo_empresa}" alt="" style="width:100%;height:100%;object-fit:cover;">`;
-  } else {
-    document.getElementById('login-logo-placeholder').textContent=nombre[0].toUpperCase();
-  }
-  // Color del header de login
-  document.getElementById('login-hero').style.background=color==='#32CD32'?'#111111':color;
-}
-
 async function iniciarApp(){
-  aplicarMarca(proveedorData);
-  document.getElementById('login-screen').style.display='none';
+  document.getElementById('login-wrap').style.display='none';
   document.getElementById('app-wrap').style.display='block';
-
-  // Header
-  const nombre=empleadoData.nombre||'Empleado';
-  document.getElementById('emp-nombre-hdr').textContent=nombre;
-  document.getElementById('emp-cargo-hdr').textContent=empleadoData.cargo||'—';
-  document.getElementById('emp-inicial-hdr').textContent=nombre[0].toUpperCase();
-  if(empleadoData.foto){
-    document.getElementById('emp-avatar-hdr').innerHTML=`<img src="${empleadoData.foto}" style="width:100%;height:100%;object-fit:cover;border-radius:14px;" alt="">`;
-  }
-
-  // Cargar geo config
-  geoConfig=JSON.parse(localStorage.getItem(`geo_config_${proveedorData.id}`)||'{}');
-
-  // Verificar si ya registró hoy
-  const hoy=new Date().toISOString().split('T')[0];
-  const { data:asistHoy } = await sb.from('rrhh_asistencia').select('*').eq('empleado_id',empleadoData.id).eq('fecha',hoy).single().catch(()=>({data:null}));
-  if(asistHoy){
-    yaRegistroHoy=true;
-    document.getElementById('asist-ok-msg').style.display='flex';
-    document.getElementById('asist-ok-txt').textContent=`✓ Registrado hoy a las ${asistHoy.hora_entrada}`;
-    document.getElementById('btn-registrar').disabled=true;
-    document.getElementById('btn-registrar').textContent='Ya registrado hoy ✓';
-  }
-
-  // Verificar ventana horaria
-  verificarVentanaHoraria();
-  verificarGeolocalizacion();
-  cargarDatosEmpleado();
-  cargarMensajes();
-  cargarAgenda();
+  const nombre=empData.nombre||'Empleado';
+  document.getElementById('emp-nombre').textContent=nombre;
+  document.getElementById('emp-cargo').textContent=(empData.cargo||'—')+' · '+(provData.empresa||'');
+  document.getElementById('emp-inicial').textContent=nombre[0].toUpperCase();
+  if(empData.foto){ document.getElementById('emp-avatar').innerHTML=`<img src="${empData.foto}" style="width:100%;height:100%;object-fit:cover;border-radius:14px;">`; }
+  verificarVentana();
+  verificarGPS();
+  verificarRegistroHoy();
+  cargarDatos();
+  iniciarReloj();
 }
 
-function verificarVentanaHoraria(){
-  const ahora=new Date();
-  const horaActual=ahora.getHours()*60+ahora.getMinutes();
-  const horaIni=geoConfig.horaIni||'08:00';
-  const horaFin=geoConfig.horaFin||'08:40';
-  const [h1,m1]=horaIni.split(':').map(Number);
-  const [h2,m2]=horaFin.split(':').map(Number);
-  const minIni=h1*60+m1, minFin=h2*60+m2;
-  if(!yaRegistroHoy&&(horaActual<minIni||horaActual>minFin)){
-    document.getElementById('btn-registrar').disabled=true;
-    document.getElementById('btn-registrar').textContent=`Registro disponible ${horaIni} - ${horaFin}`;
+function iniciarReloj(){
+  function tick(){
+    const n=new Date();
+    document.getElementById('reloj-hora').textContent=n.toLocaleTimeString('es-EC',{hour:'2-digit',minute:'2-digit'});
+    document.getElementById('reloj-fecha').textContent=n.toLocaleDateString('es-EC',{weekday:'long',day:'numeric',month:'long'});
+  }
+  tick(); setInterval(tick,1000);
+}
+
+function verificarVentana(){
+  const geo=JSON.parse(localStorage.getItem(`geo_config_${proveedorId}`)||'{}');
+  const ini=geo.horaIni||'08:00'; const fin=geo.horaFin||'08:40';
+  const n=new Date(); const cur=n.getHours()*60+n.getMinutes();
+  const [hi,mi]=ini.split(':').map(Number); const [hf,mf]=fin.split(':').map(Number);
+  if(cur<hi*60+mi||cur>hf*60+mf){
+    const btn=document.getElementById('btn-registrar');
+    btn.disabled=true; btn.textContent=`Registro disponible ${ini} - ${fin}`;
   }
 }
 
-function verificarGeolocalizacion(){
+function verificarGPS(){
   if(!navigator.geolocation){ document.getElementById('geo-txt').textContent='GPS no disponible'; return; }
-  navigator.geolocation.getCurrentPosition(pos=>{
-    posicionActual={lat:pos.coords.latitude,lng:pos.coords.longitude};
+  navigator.geolocation.getCurrentPosition(p=>{
+    posicion={lat:p.coords.latitude,lng:p.coords.longitude};
     document.getElementById('geo-dot').className='geo-dot ok';
-    document.getElementById('geo-txt').textContent=`Ubicación verificada ✓`;
-  },err=>{
-    document.getElementById('geo-dot').className='geo-dot err';
-    document.getElementById('geo-txt').textContent='No se pudo obtener ubicación';
-    posicionActual=null;
-  });
+    document.getElementById('geo-txt').textContent='Ubicación verificada ✓';
+  },()=>{ document.getElementById('geo-dot').className='geo-dot err'; document.getElementById('geo-txt').textContent='No se pudo obtener ubicación'; });
 }
 
-async function cargarDatosEmpleado(){
-  // Nómina
-  const mes=new Date().toISOString().slice(0,7);
-  const { data:nom } = await sb.from('rrhh_nomina').select('*').eq('empleado_id',empleadoData.id).eq('periodo',mes).single().catch(()=>({data:null}));
-  if(nom){
-    document.getElementById('sueldo-monto').textContent='$'+Number(nom.salario_neto||0).toFixed(2);
-    document.getElementById('sal-bruto').textContent='$'+Number(nom.salario_base||0).toFixed(2);
-    const iess=Number(nom.salario_base||0)*(nom.porcentaje_iess||9.45)/100;
-    document.getElementById('sal-iess').textContent='-$'+iess.toFixed(2);
-    document.getElementById('sal-banco').textContent=nom.banco||empleadoData.banco||'—';
-    document.getElementById('sal-cuenta').textContent=nom.cuenta||empleadoData.cuenta||'—';
-    // Décimos
-    const d13=Number(nom.decimo_tercero||0);
-    const d14=Number(nom.decimo_cuarto||0);
-    const mesActual=new Date().getMonth()+1;
-    document.getElementById('d13-monto').textContent='$'+(d13*mesActual).toFixed(2);
-    document.getElementById('d13-sub').textContent=`${mesActual} meses acumulados`;
-    document.getElementById('d13-fill').style.width=Math.round(mesActual/12*100)+'%';
-    document.getElementById('d14-monto').textContent='$'+(d14*mesActual).toFixed(2);
-    document.getElementById('d14-fill').style.width=Math.round(mesActual/12*100)+'%';
-    document.getElementById('util-cargas').textContent=empleadoData.cargas_familiares||0;
+async function verificarRegistroHoy(){
+  const hoy=new Date().toISOString().split('T')[0];
+  const { data } = await sb.from('rrhh_asistencia').select('*').eq('empleado_id',empData.id).eq('fecha',hoy).single().catch(()=>({data:null}));
+  if(data){
+    yaRegistro=true;
+    document.getElementById('asist-ok-bar').style.display='flex';
+    document.getElementById('asist-ok-txt').textContent=`✓ Registrado hoy a las ${data.hora_entrada}`;
+    document.getElementById('btn-registrar').disabled=true;
+    document.getElementById('btn-registrar').textContent='✓ Asistencia registrada';
   }
- // Asistencia stats
-  const { data:asistencias } = await sb.from('rrhh_asistencia').select('*').eq('empleado_id',empleadoData.id).order('fecha',{ascending:false}).limit(30);
-  const lista=asistencias||[];
-  const puntuales=lista.filter(a=>a.estado==='puntual').length;
-  const tardanzas=lista.filter(a=>a.estado==='tarde').length;
-  const faltas=lista.filter(a=>a.estado==='falta').length;
-  const puntualidad=lista.length>0?Math.round(puntuales/lista.length*100):100;
-  document.getElementById('k-puntualidad').textContent=puntualidad+'%';
-  document.getElementById('k-dias').textContent=lista.length-faltas;
-  document.getElementById('k-atrasos').textContent=tardanzas;
-  document.getElementById('k-score').textContent=(empleadoData.score_desempeno||100)+'%';
+}
 
-  // Semana actual
+async function cargarDatos(){
+  const mes=new Date().toISOString().slice(0,7);
+  const [{ data:nom },{ data:asist },{ data:msgs },{ data:agenda }] = await Promise.all([
+    sb.from('rrhh_nomina').select('*').eq('empleado_id',empData.id).eq('periodo',mes).single().catch(()=>({data:null})),
+    sb.from('rrhh_asistencia').select('*').eq('empleado_id',empData.id).order('fecha',{ascending:false}).limit(30),
+    sb.from('rrhh_mensajes').select('*').eq('empleado_id',empData.id).order('created_at',{ascending:false}).limit(10),
+    sb.from('rrhh_agenda').select('*').eq('proveedor_id',proveedorId).gte('fecha',new Date().toISOString().split('T')[0]).order('fecha',{ascending:true}).limit(8)
+  ]);
+
+  // NÓMINA
+  if(nom){
+    const bruto=nom.salario_base||empData.salario||0;
+    const iess=bruto*(nom.porcentaje_iess||9.45)/100;
+    const neto=bruto-iess-(nom.otros_descuentos||0);
+    document.getElementById('sueldo-monto').textContent='$'+neto.toFixed(2);
+    document.getElementById('sal-bruto').textContent='$'+bruto.toFixed(2);
+    document.getElementById('sal-iess').textContent='-$'+iess.toFixed(2);
+    document.getElementById('sal-banco').textContent=nom.banco||empData.banco||'—';
+    document.getElementById('sal-cuenta').textContent=nom.cuenta||empData.cuenta||'—';
+    const mes_num=new Date().getMonth()+1;
+    const d13=bruto/12*mes_num;
+    const d14=SBU/12*mes_num;
+    document.getElementById('d13-monto').textContent='$'+d13.toFixed(2);
+    document.getElementById('d14-monto').textContent='$'+d14.toFixed(2);
+    document.getElementById('d13-fill').style.width=Math.round(mes_num/12*100)+'%';
+    document.getElementById('d14-fill').style.width=Math.round(mes_num/12*100)+'%';
+    document.getElementById('d13-monto').style.color='var(--acc)';
+    document.getElementById('d14-monto').style.color='var(--azul)';
+  }
+
+  // KPIs
+  const lista=asist||[];
+  const punt=lista.filter(a=>a.estado==='puntual').length;
+  const tard=lista.filter(a=>a.estado==='tarde').length;
+  const pct=lista.length?Math.round(punt/lista.length*100):100;
+  document.getElementById('k-punt').textContent=pct+'%';
+  document.getElementById('k-dias').textContent=lista.filter(a=>a.estado!=='falta').length;
+  document.getElementById('k-score').textContent=(empData.score_desempeno||100)+'%';
+  document.getElementById('k-atrasos').textContent=tard;
+
+  // Historial semana
   const semana=lista.slice(0,7);
-  const semEl=document.getElementById('asist-semana');
-  semEl.innerHTML='';
-  if(!semana.length){ semEl.innerHTML='<div class="empty-state">Sin registros esta semana</div>'; return; }
-  semana.forEach(a=>{
-    const div=document.createElement('div'); div.className='asist-hist-item';
-    const fechaFmt=new Date(a.fecha+'T12:00:00').toLocaleDateString('es-EC',{weekday:'short',day:'numeric',month:'short'});
-    const estClass=a.estado==='puntual'?'est-puntual':a.estado==='tarde'?'est-tarde':'est-falta';
-    const atrasoTxt=a.minutos_atraso>0?`+${a.minutos_atraso} min tarde`:'Puntual';
-    div.innerHTML=`
-      <div class="asist-hist-fecha">${fechaFmt}</div>
-      <div class="asist-hist-info">
-        <div class="asist-hist-hora">${a.hora_entrada||'—'}</div>
-        <div class="asist-hist-atraso">${atrasoTxt}</div>
-      </div>
-      <div class="asist-hist-estado ${estClass}">${a.estado||'—'}</div>`;
-    semEl.appendChild(div);
+  const histEl=document.getElementById('hist-semana');
+  if(!semana.length){ histEl.innerHTML='<div class="empty-state" style="color:rgba(255,255,255,0.4);">Sin registros esta semana</div>'; }
+  else {
+    histEl.innerHTML='';
+    semana.forEach(a=>{
+      const fecha=new Date(a.fecha+'T12:00').toLocaleDateString('es-EC',{weekday:'short',day:'numeric',month:'short'});
+      const color=a.estado==='puntual'?'var(--verde)':a.estado==='tarde'?'var(--acc)':'var(--rojo)';
+      const div=document.createElement('div');
+      div.style.cssText='display:flex;align-items:center;gap:10px;padding:10px 12px;background:#1e293b;border-radius:12px;margin-bottom:6px;';
+      div.innerHTML=`<div style="font-size:0.72rem;font-weight:700;color:rgba(255,255,255,0.5);width:80px;">${fecha}</div><div style="flex:1;font-size:0.8rem;font-weight:700;color:white;">${a.hora_entrada||'—'}</div><div style="font-size:0.68rem;font-weight:700;padding:3px 8px;border-radius:6px;background:${color}22;color:${color};">${a.estado||'—'}</div>`;
+      histEl.appendChild(div);
+    });
+  }
+
+  // Mensajes
+  const msgsEl=document.getElementById('mensajes-lista');
+  if(!msgs?.length){ msgsEl.innerHTML='<div class="empty-state" style="color:rgba(255,255,255,0.4);">Sin mensajes aún</div>'; }
+  else {
+    msgsEl.innerHTML='';
+    msgs.forEach(m=>{
+      const div=document.createElement('div');
+      div.className='msg-item'; div.style.background='#1e293b';
+      const hora=new Date(m.created_at).toLocaleDateString('es-EC',{day:'2-digit',month:'short',hour:'2-digit',minute:'2-digit'});
+      div.innerHTML=`<div style="display:flex;justify-content:space-between;"><span class="msg-de">${m.de_rrhh?'📋 RR.HH.':'Tú'}</span><span class="msg-hora">${hora}</span></div><div class="msg-txt">${m.texto}</div>`;
+      msgsEl.appendChild(div);
+      if(!m.leido&&m.de_rrhh){
+        document.getElementById('notif-bar').style.display='block';
+        document.getElementById('notif-txt').textContent=m.texto.slice(0,60);
+        sb.from('rrhh_mensajes').update({leido:true}).eq('id',m.id);
+      }
+    });
+  }
+
+  // Agenda
+  const agEl=document.getElementById('agenda-lista');
+  const eventosFijos=[ { fecha:`${new Date().getFullYear()}-${String(new Date().getMonth()+1).padStart(2,'0')}-28`, titulo:'Pago de sueldo', desc:'Depósito mensual en cuenta', color:'var(--verde)' }, { fecha:`${new Date().getFullYear()}-12-24`, titulo:'Décimo Tercer Sueldo', desc:'Depósito legal anual', color:'var(--azul)' }, { fecha:`${new Date().getFullYear()}-08-15`, titulo:'Décimo Cuarto Sueldo', desc:'SBU proporcional', color:'var(--morado,#8B5CF6)' } ];
+  const todos=[...eventosFijos,...(agenda||[])].sort((a,b)=>new Date(a.fecha)-new Date(b.fecha));
+  agEl.innerHTML='';
+  todos.forEach(ev=>{
+    const f=new Date(ev.fecha+'T12:00');
+    const div=document.createElement('div'); div.className='evento-item'; div.style.background='#1e293b';
+    div.innerHTML=`<div class="ev-fecha" style="background:${ev.color||'var(--acc)'}22;"><div class="ev-dia" style="color:${ev.color||'var(--acc)'};">${f.getDate()}</div><div class="ev-mes" style="color:rgba(255,255,255,0.4);">${f.toLocaleDateString('es-EC',{month:'short'})}</div></div><div class="ev-info"><div class="ev-title">${ev.titulo||ev.nombre||'Evento'}</div><div class="ev-desc">${ev.desc||ev.descripcion||''}</div></div>`;
+    agEl.appendChild(div);
   });
 }
 
-// BIOMETRÍA Y REGISTRO
-window.abrirRegistroBio=function(){
-  fotoCapturadaFile=null;
-  document.getElementById('foto-capturada').style.display='none';
+// ===== BIOMETRÍA =====
+window.abrirBio=function(){
+  if(yaRegistro){ showToast('Ya registraste asistencia hoy'); return; }
+  fotoFile=null;
+  document.getElementById('foto-preview').style.display='none';
   document.getElementById('foto-placeholder').style.display='flex';
-  document.getElementById('bio-icon').className='bio-icon';
-  document.getElementById('bio-title').textContent='Verificación biométrica';
-  document.getElementById('bio-sub').textContent='1. Toma tu foto\n2. Verifica tu huella o Face ID';
-  document.getElementById('btn-bio-action').textContent='🔒 Verificar huella / Face ID';
-  document.getElementById('btn-bio-action').disabled=false;
-  document.getElementById('btn-bio-action').onclick=iniciarBiometria;
-  // Geo info
-  const geoEl=document.getElementById('bio-geo-info');
-  if(posicionActual) geoEl.textContent='📍 Ubicación verificada';
-  else geoEl.textContent='⚠️ No se detectó ubicación GPS';
-  document.getElementById('modal-bio').classList.add('show');
+  document.getElementById('bio-icon-wrap').className='bio-icon-wrap';
+  document.getElementById('bio-icon-svg').style.stroke='rgba(255,255,255,0.4)';
+  document.getElementById('bio-title').textContent='Verificar identidad';
+  document.getElementById('bio-sub').textContent='Toma tu foto y luego verifica con huella o Face ID';
+  document.getElementById('btn-bio').textContent='🔒 Verificar huella / Face ID';
+  document.getElementById('btn-bio').disabled=false;
+  document.getElementById('bio-overlay').classList.add('show');
 };
 
 window.capturarFoto=function(input){
-  const file=input.files[0]; if(!file) return;
-  fotoCapturadaFile=file;
-  const reader=new FileReader();
-  reader.onload=e=>{
-    document.getElementById('foto-capturada').src=e.target.result;
-    document.getElementById('foto-capturada').style.display='block';
-    document.getElementById('foto-placeholder').style.display='none';
-  };
-  reader.readAsDataURL(file);
+  const f=input.files[0]; if(!f) return;
+  fotoFile=f;
+  const r=new FileReader();
+  r.onload=e=>{ document.getElementById('foto-preview').src=e.target.result; document.getElementById('foto-preview').style.display='block'; document.getElementById('foto-placeholder').style.display='none'; };
+  r.readAsDataURL(f);
 };
 
-window.iniciarBiometria=async function(){
-  if(!fotoCapturadaFile){ showToast('Primero toma tu foto'); return; }
-  if(!window.PublicKeyCredential){ await registrarSinBiometria(); return; }
-  try{
-    const available=await PublicKeyCredential.isUserVerifyingPlatformAuthenticatorAvailable();
-    if(!available){ await registrarSinBiometria(); return; }
-    const btn=document.getElementById('btn-bio-action');
-    btn.disabled=true; btn.textContent='Verificando...';
-    document.getElementById('bio-icon').className='bio-icon scanning';
-    document.getElementById('bio-title').textContent='Verificando identidad...';
-    document.getElementById('bio-sub').textContent='Coloca tu dedo en el sensor o mira la cámara';
-    const credential=await navigator.credentials.get({publicKey:{
-      challenge:new Uint8Array(32),
-      timeout:60000,
-      userVerification:'required'
-    }});
-    if(credential){ document.getElementById('bio-icon').className='bio-icon ok'; await completarRegistro(); }
-  } catch(e){
-    if(e.name==='NotAllowedError') showToast('Verificación cancelada');
-    else await registrarSinBiometria();
-    document.getElementById('bio-icon').className='bio-icon';
-    document.getElementById('btn-bio-action').disabled=false;
-    document.getElementById('btn-bio-action').textContent='🔒 Verificar huella / Face ID';
+window.iniciarBio=async function(){
+  if(!fotoFile){ showToast('Primero toma tu foto'); return; }
+  const btn=document.getElementById('btn-bio');
+  btn.disabled=true; btn.textContent='Verificando...';
+  document.getElementById('bio-icon-wrap').className='bio-icon-wrap scanning';
+  document.getElementById('bio-title').textContent='Verificando identidad...';
+
+  if(window.PublicKeyCredential){
+    try{
+      const available=await PublicKeyCredential.isUserVerifyingPlatformAuthenticatorAvailable();
+      if(available){
+        await navigator.credentials.get({ publicKey:{ challenge:new Uint8Array(32), timeout:60000, userVerification:'required' } });
+      }
+    } catch(e){ if(e.name==='NotAllowedError'){ resetBio(); return; } }
   }
+  document.getElementById('bio-icon-svg').style.stroke='var(--acc)';
+  await completarRegistro();
 };
 
-async function registrarSinBiometria(){
-  document.getElementById('bio-icon').className='bio-icon ok';
-  document.getElementById('bio-title').textContent='Registrando...';
-  await completarRegistro();
+function resetBio(){
+  document.getElementById('bio-icon-wrap').className='bio-icon-wrap';
+  document.getElementById('btn-bio').disabled=false;
+  document.getElementById('btn-bio').textContent='🔒 Verificar huella / Face ID';
+  document.getElementById('bio-title').textContent='Verificar identidad';
 }
 
 async function completarRegistro(){
-  document.getElementById('modal-bio').classList.remove('show');
+  document.getElementById('bio-overlay').classList.remove('show');
   document.getElementById('upload-overlay').classList.add('show');
   try{
     const ahora=new Date();
     const fecha=ahora.toISOString().split('T')[0];
     const hora=ahora.toTimeString().slice(0,5);
-    const geoFin=geoConfig.horaFin||'08:40';
-    const [h,m]=geoFin.split(':').map(Number);
-    const minLimite=h*60+m;
-    const minActual=ahora.getHours()*60+ahora.getMinutes();
-    const minAtraso=Math.max(0,minActual-minLimite);
-    const estado=minAtraso===0?'puntual':minAtraso<=15?'tarde':'tarde';
+    const geo=JSON.parse(localStorage.getItem(`geo_config_${proveedorId}`)||'{}');
+    const finStr=geo.horaFin||'08:40';
+    const [hf,mf]=finStr.split(':').map(Number);
+    const minAtraso=Math.max(0,ahora.getHours()*60+ahora.getMinutes()-(hf*60+mf));
+    const estado=minAtraso===0?'puntual':'tarde';
     let fotoUrl='';
-    if(fotoCapturadaFile){
-      const path=`rrhh/${proveedorData.id}/asistencia/${empleadoData.id}_${Date.now()}`;
-      const { error } = await sb.storage.from('proveed-media').upload(path,fotoCapturadaFile,{upsert:true});
+    if(fotoFile){
+      const path=`rrhh/${proveedorId}/asistencia/${empData.id}_${Date.now()}`;
+      const { error } = await sb.storage.from('proveed-media').upload(path,fotoFile,{upsert:true});
       if(!error){ const { data } = sb.storage.from('proveed-media').getPublicUrl(path); fotoUrl=data.publicUrl; }
     }
-    await sb.from('rrhh_asistencia').insert({
-      proveedor_id:proveedorData.id, empleado_id:empleadoData.id,
-      empleado_nombre:empleadoData.nombre,
-      fecha, hora_entrada:hora,
-      estado, minutos_atraso:minAtraso,
-      foto_url:fotoUrl,
-      lat:posicionActual?.lat||null,
-      lng:posicionActual?.lng||null,
-      validado_geo:posicionActual!==null,
-      validado_bio:true
-    });
-    // Actualizar score
+    await sb.from('rrhh_asistencia').insert({ proveedor_id:proveedorId, empleado_id:empData.id, empleado_nombre:empData.nombre, fecha, hora_entrada:hora, estado, minutos_atraso:minAtraso, foto_url:fotoUrl, lat:posicion?.lat||null, lng:posicion?.lng||null, validado_geo:posicion!==null, validado_bio:true });
     const puntos=minAtraso===0?0:minAtraso<=15?5:20;
-    const nuevoScore=Math.max(0,(empleadoData.score_desempeno||100)-puntos);
-    await sb.from('rrhh_empleados').update({score_desempeno:nuevoScore}).eq('id',empleadoData.id);
-    empleadoData.score_desempeno=nuevoScore;
-    yaRegistroHoy=true;
-    document.getElementById('asist-ok-msg').style.display='flex';
-    document.getElementById('asist-ok-txt').textContent=`✓ Registrado a las ${hora}${minAtraso>0?' (+'+minAtraso+' min)':''}`;
+    const nuevoScore=Math.max(0,(empData.score_desempeno||100)-puntos);
+    await sb.from('rrhh_empleados').update({score_desempeno:nuevoScore}).eq('id',empData.id);
+    empData.score_desempeno=nuevoScore;
+    yaRegistro=true;
+    document.getElementById('asist-ok-bar').style.display='flex';
+    document.getElementById('asist-ok-txt').textContent=`✓ Registrado a las ${hora}${minAtraso>0?` (+${minAtraso} min)`:' — Puntual'}`;
     document.getElementById('btn-registrar').disabled=true;
-    document.getElementById('btn-registrar').textContent='Ya registrado hoy ✓';
-    cargarDatosEmpleado();
+    document.getElementById('btn-registrar').textContent='✓ Asistencia registrada';
     showToast('✓ Asistencia registrada correctamente');
+    cargarDatos();
   } catch(e){ showToast('Error: '+e.message); }
   document.getElementById('upload-overlay').classList.remove('show');
 }
 
-// MENSAJES BUZÓN
-async function cargarMensajes(){
-  const { data } = await sb.from('rrhh_mensajes').select('*').eq('empleado_id',empleadoData.id).order('created_at',{ascending:false}).limit(10);
-  const lista=data||[];
-  const cont=document.getElementById('mensajes-lista');
-  if(!lista.length){ cont.innerHTML='<div class="empty-state">Sin mensajes aún</div>'; return; }
-  cont.innerHTML='';
-  lista.forEach(m=>{
-    const div=document.createElement('div'); div.className='mensaje-item';
-    const hora=new Date(m.created_at).toLocaleDateString('es-EC',{day:'2-digit',month:'short',hour:'2-digit',minute:'2-digit'});
-    const esDeRRHH=m.de_rrhh;
-    div.innerHTML=`
-      <div class="msg-header">
-        ${!m.leido&&esDeRRHH?'<div class="msg-no-leido"></div>':''}
-        <div class="msg-de">${esDeRRHH?'📋 RR.HH.':'Tú'}</div>
-        <div class="msg-hora">${hora}</div>
-      </div>
-      <div class="msg-txt">${m.texto}</div>`;
-    cont.appendChild(div);
-    // Marcar como leído
-    if(!m.leido&&esDeRRHH) sb.from('rrhh_mensajes').update({leido:true}).eq('id',m.id);
-  });
-
-  // Mostrar notif si hay no leídos
-  const noLeidos=lista.filter(m=>!m.leido&&m.de_rrhh);
-  if(noLeidos.length){
-    document.getElementById('notif-bar').style.display='flex';
-    document.getElementById('notif-txt').textContent=noLeidos[0].texto.slice(0,60)+(noLeidos[0].texto.length>60?'...':'');
-  }
-}
+// ===== BUZÓN =====
+window.selTipo=function(el,tipo){ tipoMsg=tipo; document.querySelectorAll('.tipo-chip').forEach(b=>b.classList.remove('sel')); el.classList.add('sel'); };
+window.selAdjunto=function(input){ const f=input.files[0]; if(!f) return; adjFile=f; document.getElementById('adj-lbl').textContent='📎 '+f.name; };
 
 window.enviarMensaje=async function(){
   const texto=document.getElementById('buzon-msg').value.trim();
   if(!texto){ showToast('Escribe un mensaje'); return; }
   document.getElementById('upload-overlay').classList.add('show');
   try{
-    let adjuntoUrl='';
-    if(buzonFileAdjunto){
-      const path=`rrhh/${proveedorData.id}/mensajes/${Date.now()}`;
-      const { error } = await sb.storage.from('proveed-media').upload(path,buzonFileAdjunto,{upsert:true});
-      if(!error){ const { data } = sb.storage.from('proveed-media').getPublicUrl(path); adjuntoUrl=data.publicUrl; }
+    let adjUrl='';
+    if(adjFile){
+      const path=`rrhh/${proveedorId}/mensajes/${Date.now()}`;
+      const { error } = await sb.storage.from('proveed-media').upload(path,adjFile,{upsert:true});
+      if(!error){ const { data } = sb.storage.from('proveed-media').getPublicUrl(path); adjUrl=data.publicUrl; }
     }
-    await sb.from('rrhh_mensajes').insert({
-      proveedor_id:proveedorData.id, empleado_id:empleadoData.id,
-      empleado_nombre:empleadoData.nombre,
-      texto, tipo:tipoMensaje,
-      adjunto:adjuntoUrl||null,
-      de_rrhh:false, leido:true
-    });
+    await sb.from('rrhh_mensajes').insert({ proveedor_id:proveedorId, empleado_id:empData.id, empleado_nombre:empData.nombre, texto, tipo:tipoMsg, adjunto:adjUrl||null, de_rrhh:false, leido:true });
     document.getElementById('buzon-msg').value='';
-    buzonFileAdjunto=null;
-    document.getElementById('buzon-file-lbl').textContent='Toca para adjuntar imagen o documento';
+    adjFile=null; document.getElementById('adj-lbl').textContent='Toca para adjuntar imagen';
     showToast('✓ Mensaje enviado a RR.HH.');
-    cargarMensajes();
+    cargarDatos();
   } catch(e){ showToast('Error: '+e.message); }
   document.getElementById('upload-overlay').classList.remove('show');
 };
 
-window.selBuzonFile=function(input){
-  const file=input.files[0]; if(!file) return;
-  buzonFileAdjunto=file;
-  document.getElementById('buzon-file-lbl').textContent='📎 '+file.name;
-};
-
-window.selTipo=function(el,tipo){
-  tipoMensaje=tipo;
-  document.querySelectorAll('.tipo-chip').forEach(b=>b.classList.remove('sel'));
-  el.classList.add('sel');
-};
-
-// AGENDA
-async function cargarAgenda(){
-  const { data } = await sb.from('rrhh_agenda').select('*').eq('proveedor_id',proveedorData.id).gte('fecha',new Date().toISOString().split('T')[0]).order('fecha',{ascending:true}).limit(10);
-  const eventos=data||[];
-  const cont=document.getElementById('agenda-lista');
-
-  // Eventos fijos del sistema
-  const ahora=new Date();
-  const mesActual=ahora.getMonth()+1;
-  const eventosFijos=[
-    {fecha:`${ahora.getFullYear()}-${String(mesActual).padStart(2,'0')}-28`,titulo:'Pago de sueldo',desc:'Depósito mensual en cuenta bancaria',tipo:'pago',color:'#32CD32'},
-    {fecha:`${ahora.getFullYear()}-12-24`,titulo:'Décimo Tercer Sueldo',desc:'Depósito décimo tercero',tipo:'beneficio',color:'#007AFF'},
-    {fecha:`${ahora.getFullYear()}-08-15`,titulo:'Décimo Cuarto Sueldo',desc:'Depósito décimo cuarto (SBU)',tipo:'beneficio',color:'#AF52DE'}
-  ];
-  const todos=[...eventosFijos,...eventos].sort((a,b)=>new Date(a.fecha)-new Date(b.fecha));
-
-  if(!todos.length){ cont.innerHTML='<div class="empty-state">Sin eventos próximos</div>'; return; }
-  cont.innerHTML='';
-  todos.forEach(ev=>{
-    const fecha=new Date(ev.fecha+'T12:00:00');
-    const div=document.createElement('div'); div.className='evento-item';
-    div.innerHTML=`
-      <div class="evento-fecha-box" style="background:${ev.color||'var(--acc)'};">
-        <div class="evento-dia">${fecha.getDate()}</div>
-        <div class="evento-mes">${fecha.toLocaleDateString('es-EC',{month:'short'})}</div>
-      </div>
-      <div class="evento-info">
-        <div class="evento-titulo">${ev.titulo}</div>
-        <div class="evento-desc">${ev.desc||ev.descripcion||''}</div>
-        <span class="evento-tipo" style="background:rgba(50,205,50,0.1);color:var(--acc);">${ev.tipo||'evento'}</span>
-      </div>`;
-    cont.appendChild(div);
-  });
-}
-
-window.doLogout=function(){
-  localStorage.removeItem('workers_session');
-  window.location.reload();
-};
-
-window.showTab=function(tab,btn){
-  document.querySelectorAll('.section').forEach(s=>s.classList.remove('active'));
-  document.querySelectorAll('.tab').forEach(b=>b.classList.remove('active'));
-  document.getElementById('sec-'+tab).classList.add('active');
-  btn.classList.add('active');
-};
-
-window.cerrarModal=(id,e)=>{ if(e.target===document.getElementById(id)) document.getElementById(id).classList.remove('show'); };
-
-function showToast(msg){
-  const t=document.getElementById('toast'); t.textContent=msg; t.classList.add('show');
-  setTimeout(()=>t.classList.remove('show'),2500);
-}
+// ===== UTILS =====
+window.doLogout=function(){ localStorage.removeItem('workers_sess'); window.location.reload(); };
+window.showTab=function(tab,btn){ document.querySelectorAll('.section').forEach(s=>s.classList.remove('active')); document.querySelectorAll('.tab').forEach(b=>b.classList.remove('active')); document.getElementById('sec-'+tab).classList.add('active'); btn.classList.add('active'); };
+function showToast(msg){ const t=document.getElementById('toast'); t.textContent=msg; t.classList.add('show'); setTimeout(()=>t.classList.remove('show'),2500); }
 </script>
 </body>
 </html>
