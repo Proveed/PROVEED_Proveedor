@@ -3,490 +3,468 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-<title>PROVEED Enterprise — Centro de Mando</title>
-<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:wght@300;400;500;600&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+<title>PROVEED — Panel Proveedor</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
 <style>
-*{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent;}
-:root{
-  --bg:#08090D; --bg1:#0E0F14; --bg2:#13141A; --bg3:#1A1B23;
-  --border:rgba(255,255,255,0.06); --border-acc:rgba(255,140,0,0.25);
-  --txt:#F2F3F7; --txt2:#8B8D9A; --txt3:#4A4C59;
-  --acc:#FF8C00; --acc-dim:rgba(255,140,0,0.12);
-  --verde:#22C55E; --verde-dim:rgba(34,197,94,0.12);
-  --rojo:#EF4444; --rojo-dim:rgba(239,68,68,0.1);
-  --azul:#3B82F6; --azul-dim:rgba(59,130,246,0.12);
-  --morado:#A855F7;
-}
-body{background:var(--bg);font-family:'DM Sans',sans-serif;color:var(--txt);min-height:100vh;-webkit-font-smoothing:antialiased;}
+  *{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent;}
+  :root{ --naranja:#FF8C00; --verde:#A8E63D; --negro:#0A0A0A; --gris:#F5F6F2; --rojo:#FF4D4D; --azul:#007AFF; }
+  body{ background:var(--negro); font-family:'Inter',sans-serif; padding-bottom:90px; -webkit-font-smoothing:antialiased; }
 
-/* MODE PILL */
-.mode-pill{display:inline-flex;align-items:center;gap:6px;padding:4px 12px;border-radius:20px;font-size:0.65rem;font-weight:600;font-family:'DM Mono',monospace;letter-spacing:1px;text-transform:uppercase;cursor:pointer;border:1px solid;}
-.mode-pill.esencial{background:var(--verde-dim);color:var(--verde);border-color:rgba(34,197,94,0.3);}
-.mode-pill.corporativo{background:var(--acc-dim);color:var(--acc);border-color:var(--border-acc);box-shadow:0 0 20px rgba(255,140,0,0.1);}
-.mode-dot{width:6px;height:6px;border-radius:50%;animation:pulse 2s infinite;}
-@keyframes pulse{0%,100%{opacity:1}50%{opacity:0.4}}
+  /* HEADER */
+  .header{ background:#111; padding:44px 16px 16px; display:flex; align-items:center; justify-content:space-between; border-bottom:1px solid #1e1e1e; position:sticky; top:0; z-index:100; }
+  .brand{ display:flex; align-items:center; gap:10px; }
+  .brand-logo{ width:38px; height:38px; border-radius:12px; background:var(--naranja); display:flex; align-items:center; justify-content:center; font-size:0.9rem; font-weight:800; color:white; overflow:hidden; flex-shrink:0; }
+  .brand-logo img{ width:100%; height:100%; object-fit:cover; }
+  .brand-info{ }
+  .brand-nombre{ font-size:0.92rem; font-weight:800; color:white; }
+  .brand-sub{ font-size:0.62rem; color:#444; margin-top:1px; }
+  .header-right{ display:flex; gap:8px; align-items:center; }
+  .notif-btn{ width:34px; height:34px; border-radius:10px; background:rgba(255,255,255,0.06); border:none; cursor:pointer; display:flex; align-items:center; justify-content:center; position:relative; }
+  .notif-btn svg{ width:16px; height:16px; stroke:#666; fill:none; stroke-width:2; }
+  .notif-dot{ position:absolute; top:6px; right:6px; width:7px; height:7px; border-radius:50%; background:var(--rojo); border:1.5px solid #111; }
+  .live-badge{ display:flex; align-items:center; gap:4px; background:rgba(168,230,61,0.1); border:1px solid rgba(168,230,61,0.2); border-radius:20px; padding:4px 10px; }
+  .live-dot{ width:5px; height:5px; border-radius:50%; background:var(--verde); animation:livePulse 1.5s infinite; }
+  @keyframes livePulse{ 0%,100%{opacity:1}50%{opacity:0.3} }
+  .live-txt{ font-size:0.58rem; font-weight:700; color:var(--verde); font-family:monospace; letter-spacing:1px; }
 
-/* TOPNAV */
-.topnav{background:var(--bg1);border-bottom:1px solid var(--border);padding:14px 16px;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;z-index:200;}
-.brand{display:flex;align-items:center;gap:10px;}
-.brand-logo{width:34px;height:34px;border-radius:9px;background:linear-gradient(135deg,#FF8C00,#FF5500);display:flex;align-items:center;justify-content:center;font-family:'Syne',sans-serif;font-weight:800;font-size:0.75rem;color:white;overflow:hidden;}
-.brand-logo img{width:100%;height:100%;object-fit:cover;}
-.brand-name{font-family:'Syne',sans-serif;font-weight:800;font-size:0.92rem;color:var(--txt);}
-.nav-right{display:flex;gap:8px;align-items:center;}
-.nav-btn{width:32px;height:32px;border-radius:8px;background:var(--bg2);border:1px solid var(--border);cursor:pointer;display:flex;align-items:center;justify-content:center;}
-.nav-btn svg{width:15px;height:15px;stroke:var(--txt3);fill:none;stroke-width:2;}
+  /* MODO EMPRESARIAL BANNER */
+  .empresa-banner{ margin:12px 16px; border-radius:16px; padding:14px 16px; display:flex; align-items:center; gap:12px; border:1px solid; cursor:pointer; transition:0.2s; position:relative; overflow:hidden; }
+  .empresa-banner.esencial{ background:rgba(168,230,61,0.05); border-color:rgba(168,230,61,0.15); }
+  .empresa-banner.corporativo{ background:rgba(255,140,0,0.06); border-color:rgba(255,140,0,0.2); }
+  .empresa-banner::before{ content:''; position:absolute; right:-10px; top:-10px; width:80px; height:80px; border-radius:50%; opacity:0.08; }
+  .empresa-banner.esencial::before{ background:var(--verde); }
+  .empresa-banner.corporativo::before{ background:var(--naranja); }
+  .eb-icon{ width:36px; height:36px; border-radius:11px; display:flex; align-items:center; justify-content:center; font-size:1rem; flex-shrink:0; }
+  .eb-icon.esencial{ background:rgba(168,230,61,0.1); }
+  .eb-icon.corporativo{ background:rgba(255,140,0,0.1); }
+  .eb-info{ flex:1; }
+  .eb-title{ font-size:0.82rem; font-weight:700; color:white; }
+  .eb-sub{ font-size:0.68rem; color:#555; margin-top:2px; }
+  .eb-badge{ font-size:0.6rem; font-weight:800; padding:3px 9px; border-radius:20px; font-family:monospace; flex-shrink:0; }
+  .eb-badge.esencial{ background:rgba(168,230,61,0.12); color:var(--verde); }
+  .eb-badge.corporativo{ background:rgba(255,140,0,0.12); color:var(--naranja); }
 
-/* SUBNAV */
-.subnav{background:var(--bg1);border-bottom:1px solid var(--border);display:flex;overflow-x:auto;scrollbar-width:none;padding:0 16px;}
-.subnav::-webkit-scrollbar{display:none;}
-.snav-btn{padding:13px 16px;border:none;background:transparent;font-family:'DM Sans',sans-serif;font-size:0.74rem;font-weight:500;color:var(--txt3);cursor:pointer;white-space:nowrap;border-bottom:2px solid transparent;transition:all 0.2s;}
-.snav-btn.active{color:var(--acc);border-bottom-color:var(--acc);}
-.snav-count{font-size:0.6rem;font-weight:700;padding:1px 6px;border-radius:8px;background:var(--acc-dim);color:var(--acc);font-family:'DM Mono',monospace;}
+  /* KPI */
+  .kpi-scroll{ display:grid; grid-template-columns:repeat(2,1fr); gap:10px; padding:0 16px 12px; }
+  .kpi-card{ background:#111; border:1px solid #1e1e1e; border-radius:16px; padding:14px; }
+  .kpi-val{ font-size:1.5rem; font-weight:900; color:white; }
+  .kpi-val.naranja{ color:var(--naranja); }
+  .kpi-val.verde{ color:var(--verde); }
+  .kpi-val.azul{ color:var(--azul); }
+  .kpi-val.rojo{ color:var(--rojo); }
+  .kpi-lbl{ font-size:0.6rem; color:#444; font-weight:700; text-transform:uppercase; margin-top:3px; }
+  .kpi-delta{ font-size:0.65rem; margin-top:5px; color:#444; }
 
-/* SECTIONS */
-.section{display:none;padding:14px 16px 100px;}
-.section.active{display:block;}
+  /* SECCIONES TITULO */
+  .sec-title{ font-size:0.7rem; font-weight:800; color:#333; text-transform:uppercase; letter-spacing:0.8px; padding:0 16px; margin-bottom:10px; display:flex; align-items:center; justify-content:space-between; }
+  .sec-btn{ font-size:0.7rem; font-weight:700; color:var(--naranja); background:none; border:none; cursor:pointer; font-family:'Inter',sans-serif; }
 
-/* EMPRESA HERO */
-.empresa-hero{background:var(--bg2);border:1px solid var(--border);border-radius:20px;padding:20px;margin-bottom:14px;display:flex;align-items:center;gap:14px;position:relative;overflow:hidden;}
-.empresa-hero::before{content:'';position:absolute;right:-30px;top:-30px;width:150px;height:150px;background:radial-gradient(circle,rgba(255,140,0,0.08) 0%,transparent 70%);}
-.empresa-logo{width:58px;height:58px;border-radius:16px;background:var(--bg3);display:flex;align-items:center;justify-content:center;font-family:'Syne',sans-serif;font-weight:800;font-size:1.2rem;color:var(--acc);flex-shrink:0;overflow:hidden;border:1px solid var(--border);}
-.empresa-logo img{width:100%;height:100%;object-fit:cover;}
-.empresa-nombre{font-family:'Syne',sans-serif;font-size:1.1rem;font-weight:800;color:var(--txt);margin-bottom:4px;}
-.empresa-meta{font-size:0.72rem;color:var(--txt3);margin-bottom:8px;}
-.empresa-pills{display:flex;gap:6px;flex-wrap:wrap;}
-.e-pill{font-size:0.62rem;font-weight:600;padding:3px 8px;border-radius:8px;background:var(--bg3);color:var(--txt2);border:1px solid var(--border);font-family:'DM Mono',monospace;}
-.e-pill.acc{background:var(--acc-dim);color:var(--acc);border-color:var(--border-acc);}
+  /* PEDIDOS RECIENTES */
+  .pedido-mini{ background:#111; border:1px solid #1e1e1e; border-radius:14px; padding:13px 14px; margin:0 16px 8px; display:flex; align-items:center; gap:12px; cursor:pointer; transition:0.15s; }
+  .pedido-mini:active{ transform:scale(0.98); }
+  .pedido-mini.nuevo{ border-color:rgba(255,140,0,0.3); }
+  .pm-avatar{ width:38px; height:38px; border-radius:11px; display:flex; align-items:center; justify-content:center; font-size:0.85rem; font-weight:800; color:white; flex-shrink:0; }
+  .pm-info{ flex:1; }
+  .pm-nombre{ font-size:0.85rem; font-weight:700; color:white; }
+  .pm-det{ font-size:0.68rem; color:#444; margin-top:2px; }
+  .pm-right{ text-align:right; }
+  .pm-total{ font-size:0.88rem; font-weight:800; color:white; }
+  .pm-estado{ font-size:0.6rem; font-weight:700; padding:2px 7px; border-radius:6px; margin-top:3px; display:inline-block; }
+  .est-pendiente{ background:rgba(255,140,0,0.12); color:var(--naranja); }
+  .est-proceso{ background:rgba(0,122,255,0.12); color:var(--azul); }
+  .est-entregado{ background:rgba(168,230,61,0.12); color:var(--verde); }
 
-/* KPI */
-.kpi-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:14px;}
-.kpi-card{background:var(--bg2);border:1px solid var(--border);border-radius:16px;padding:16px 14px;position:relative;overflow:hidden;transition:border-color 0.3s;}
-.kpi-card:hover{border-color:rgba(255,140,0,0.2);}
-.kpi-icon{width:30px;height:30px;border-radius:9px;display:flex;align-items:center;justify-content:center;margin-bottom:12px;font-size:0.9rem;}
-.kpi-val{font-family:'Syne',sans-serif;font-size:1.6rem;font-weight:800;line-height:1;margin-bottom:4px;}
-.kpi-lbl{font-size:0.62rem;color:var(--txt3);font-weight:600;text-transform:uppercase;letter-spacing:0.8px;}
-.kpi-delta{font-size:0.65rem;font-weight:600;margin-top:6px;}
-.kpi-delta.up{color:var(--verde);}
+  /* PRODUCTOS */
+  .prod-mini{ background:#111; border:1px solid #1e1e1e; border-radius:14px; padding:12px 14px; margin:0 16px 8px; display:flex; align-items:center; gap:12px; }
+  .prod-mini-img{ width:44px; height:44px; border-radius:11px; object-fit:cover; background:#1a1a1a; flex-shrink:0; overflow:hidden; }
+  .prod-mini-img img{ width:100%; height:100%; object-fit:cover; }
+  .prod-mini-info{ flex:1; }
+  .prod-mini-nombre{ font-size:0.85rem; font-weight:700; color:white; }
+  .prod-mini-sub{ font-size:0.68rem; color:#444; margin-top:2px; }
+  .prod-mini-precio{ font-size:0.88rem; font-weight:800; color:var(--naranja); }
+  .prod-mini-stock{ font-size:0.62rem; font-weight:700; padding:2px 7px; border-radius:6px; }
+  .stock-ok{ background:rgba(168,230,61,0.1); color:var(--verde); }
+  .stock-bajo{ background:rgba(255,77,77,0.1); color:var(--rojo); }
 
-/* MODO TOGGLE */
-.modo-card{background:var(--bg2);border:1px solid var(--border);border-radius:18px;padding:16px;margin-bottom:14px;display:flex;align-items:center;gap:14px;}
-.modo-info{flex:1;}
-.modo-titulo{font-family:'Syne',sans-serif;font-size:0.88rem;font-weight:700;color:var(--txt);margin-bottom:3px;}
-.modo-desc{font-size:0.72rem;color:var(--txt3);}
-.toggle-switch{position:relative;width:52px;height:28px;flex-shrink:0;cursor:pointer;}
-.toggle-track{width:100%;height:100%;border-radius:14px;background:var(--bg3);border:1px solid var(--border);transition:all 0.3s;}
-.toggle-track.on{background:rgba(255,140,0,0.2);border-color:rgba(255,140,0,0.4);}
-.toggle-thumb{position:absolute;top:3px;left:3px;width:22px;height:22px;border-radius:50%;background:var(--txt3);transition:all 0.3s cubic-bezier(0.34,1.56,0.64,1);}
+  /* ACCESOS RÁPIDOS */
+  .accesos-grid{ display:grid; grid-template-columns:repeat(4,1fr); gap:10px; padding:0 16px; margin-bottom:14px; }
+  .acceso-item{ display:flex; flex-direction:column; align-items:center; gap:6px; cursor:pointer; }
+  .acceso-icon{ width:52px; height:52px; border-radius:16px; display:flex; align-items:center; justify-content:center; font-size:1.3rem; border:1px solid #1e1e1e; transition:0.15s; }
+  .acceso-icon:active{ transform:scale(0.92); }
+  .acceso-lbl{ font-size:0.58rem; font-weight:700; color:#444; text-transform:uppercase; text-align:center; }
 
-/* BRANCH CARD */
-.branch-card{background:var(--bg2);border:1px solid var(--border);border-radius:18px;padding:14px;margin-bottom:10px;cursor:pointer;transition:all 0.2s;}
-.branch-card.activa{border-left:3px solid var(--verde);}
-.branch-card.alerta{border-color:rgba(239,68,68,0.3);}
-.bc-header{display:flex;align-items:center;gap:12px;margin-bottom:10px;}
-.bc-icon{width:40px;height:40px;border-radius:12px;display:flex;align-items:center;justify-content:center;font-size:1.1rem;flex-shrink:0;}
-.bc-nombre{font-family:'Syne',sans-serif;font-size:0.88rem;font-weight:700;color:var(--txt);}
-.bc-ubicacion{font-size:0.68rem;color:var(--txt3);margin-top:2px;}
-.bc-estado{font-size:0.6rem;font-weight:700;padding:3px 8px;border-radius:20px;font-family:'DM Mono',monospace;}
-.est-activa{background:var(--verde-dim);color:var(--verde);}
-.est-alerta{background:var(--rojo-dim);color:var(--rojo);}
-.bc-stats{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;}
-.bc-stat{background:var(--bg3);border-radius:10px;padding:8px 10px;text-align:center;}
-.bc-stat-val{font-family:'DM Mono',monospace;font-size:0.85rem;font-weight:500;color:var(--txt);}
-.bc-stat-lbl{font-size:0.58rem;color:var(--txt3);margin-top:2px;}
+  /* SUCURSALES CORP */
+  .suc-mini{ background:#111; border:1px solid #1e1e1e; border-radius:14px; padding:13px 14px; margin:0 16px 8px; display:flex; align-items:center; gap:12px; }
+  .suc-icon{ width:38px; height:38px; border-radius:11px; display:flex; align-items:center; justify-content:center; font-size:1rem; flex-shrink:0; }
+  .suc-info{ flex:1; }
+  .suc-nombre{ font-size:0.85rem; font-weight:700; color:white; }
+  .suc-loc{ font-size:0.68rem; color:#444; margin-top:2px; }
+  .suc-kpi{ text-align:right; }
+  .suc-venta{ font-size:0.82rem; font-weight:800; color:var(--naranja); }
+  .suc-stock{ font-size:0.62rem; color:#444; margin-top:2px; }
+  .suc-alert{ width:8px; height:8px; border-radius:50%; flex-shrink:0; }
+  .alert-ok{ background:var(--verde); }
+  .alert-warn{ background:var(--rojo); animation:livePulse 1.5s infinite; }
 
-/* INVENTARIO */
-.inv-item{background:var(--bg2);border:1px solid var(--border);border-radius:14px;padding:13px;margin-bottom:8px;display:flex;align-items:center;gap:12px;}
-.inv-img{width:44px;height:44px;border-radius:10px;background:var(--bg3);flex-shrink:0;overflow:hidden;display:flex;align-items:center;justify-content:center;font-size:1.2rem;}
-.inv-img img{width:100%;height:100%;object-fit:cover;}
-.inv-nombre{font-size:0.85rem;font-weight:600;color:var(--txt);}
-.inv-branch{font-size:0.65rem;color:var(--txt3);margin-top:2px;}
-.inv-stocks{display:flex;gap:6px;margin-top:6px;flex-wrap:wrap;}
-.inv-chip{font-size:0.6rem;font-weight:700;padding:2px 7px;border-radius:6px;font-family:'DM Mono',monospace;}
-.chip-disp{background:var(--verde-dim);color:var(--verde);}
-.chip-transit{background:rgba(255,140,0,0.1);color:var(--acc);}
-.chip-bajo{background:var(--rojo-dim);color:var(--rojo);}
-.inv-precio{font-family:'DM Mono',monospace;font-size:0.9rem;font-weight:500;color:var(--acc);flex-shrink:0;}
+  /* CHAT PREVIEW */
+  .chat-mini{ background:#111; border:1px solid #1e1e1e; border-radius:14px; padding:13px 14px; margin:0 16px 8px; display:flex; align-items:center; gap:12px; cursor:pointer; }
+  .chat-avatar{ width:38px; height:38px; border-radius:11px; display:flex; align-items:center; justify-content:center; font-size:0.85rem; font-weight:800; color:white; flex-shrink:0; }
+  .chat-info{ flex:1; }
+  .chat-nombre{ font-size:0.85rem; font-weight:700; color:white; }
+  .chat-preview{ font-size:0.7rem; color:#444; margin-top:2px; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; max-width:200px; }
+  .chat-right{ text-align:right; flex-shrink:0; }
+  .chat-hora{ font-size:0.62rem; color:#333; }
+  .chat-badge{ width:18px; height:18px; border-radius:50%; background:var(--naranja); display:flex; align-items:center; justify-content:center; font-size:0.58rem; font-weight:800; color:white; margin-top:4px; margin-left:auto; }
 
-/* TRANSFERENCIA */
-.transfer-card{background:var(--bg2);border:1px solid rgba(255,140,0,0.15);border-radius:16px;padding:14px;margin-bottom:10px;}
-.tr-guia{font-family:'DM Mono',monospace;font-size:0.72rem;color:var(--acc);}
-.tr-estado{font-size:0.62rem;font-weight:700;padding:3px 8px;border-radius:6px;background:rgba(255,140,0,0.1);color:var(--acc);font-family:'DM Mono',monospace;}
-.tr-ruta{display:flex;align-items:center;gap:8px;margin:8px 0;}
-.tr-node{font-size:0.78rem;font-weight:600;color:var(--txt);}
-.tr-arrow{color:var(--acc);}
-.tr-det{font-size:0.7rem;color:var(--txt3);}
-.tr-acc{display:flex;gap:6px;margin-top:10px;}
-.btn-tr{padding:7px 14px;border-radius:9px;border:none;font-family:'DM Sans',sans-serif;font-size:0.72rem;font-weight:600;cursor:pointer;}
-.btn-tr.ok{background:var(--verde-dim);color:var(--verde);}
-.btn-tr.cancel{background:var(--rojo-dim);color:var(--rojo);}
+  /* GRAFICO BAR */
+  .mini-chart{ display:flex; align-items:flex-end; gap:4px; height:40px; padding:0 16px; margin-bottom:14px; }
+  .mini-bar{ flex:1; border-radius:4px 4px 0 0; background:#1a1a1a; transition:height 0.5s; min-height:4px; }
+  .mini-bar.hoy{ background:var(--naranja); }
 
-/* HEATMAP */
-.heatmap-wrap{background:var(--bg2);border:1px solid var(--border);border-radius:18px;padding:16px;margin-bottom:14px;}
-.heatmap-title{font-family:'Syne',sans-serif;font-size:0.82rem;font-weight:700;color:var(--txt);margin-bottom:12px;}
-.ecuador-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:5px;}
-.prov-cell{border-radius:8px;padding:8px 4px;text-align:center;cursor:pointer;transition:all 0.3s;}
-.prov-cell:hover{transform:scale(1.05);}
-.prov-nombre{font-size:0.55rem;color:rgba(255,255,255,0.7);font-weight:600;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
-.prov-val{font-family:'DM Mono',monospace;font-size:0.65rem;color:white;}
+  /* MODO CORP EXTRA */
+  .corp-section{ display:none; }
+  body.modo-corp .corp-section{ display:block; }
+  body.modo-corp .esencial-only{ display:none; }
 
-/* CAJA */
-.caja-item{background:var(--bg2);border:1px solid var(--border);border-radius:14px;padding:13px;margin-bottom:8px;display:flex;align-items:center;gap:12px;}
-.caja-nombre{font-size:0.82rem;font-weight:600;color:var(--txt);}
-.caja-ciudad{font-size:0.65rem;color:var(--txt3);}
-.caja-total{font-family:'DM Mono',monospace;font-size:1rem;font-weight:500;color:var(--acc);}
-.caja-dot{width:8px;height:8px;border-radius:50%;background:var(--verde);animation:pulse 2s infinite;flex-shrink:0;}
+  /* TAB BAR */
+  .tab-bar{ position:fixed; bottom:0; width:100%; background:#111; display:flex; justify-content:space-around; align-items:center; padding:10px 0 22px; border-top:1px solid #1e1e1e; z-index:200; }
+  .tab{ display:flex; flex-direction:column; align-items:center; gap:4px; cursor:pointer; flex:1; color:#333; text-decoration:none; border:none; background:transparent; font-family:'Inter',sans-serif; }
+  .tab.active{ color:var(--naranja); }
+  .tab svg{ width:22px; height:22px; stroke:currentColor; fill:none; stroke-width:2; stroke-linecap:round; stroke-linejoin:round; }
+  .tab span{ font-size:0.54rem; font-weight:600; text-transform:uppercase; }
 
-/* WORKERS */
-.worker-row{display:flex;align-items:center;gap:10px;padding:10px;background:var(--bg2);border-radius:12px;margin-bottom:7px;border:1px solid var(--border);}
-.wr-avatar{width:36px;height:36px;border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:0.82rem;font-weight:700;color:white;flex-shrink:0;overflow:hidden;}
-.wr-avatar img{width:100%;height:100%;object-fit:cover;}
-.wr-nombre{font-size:0.82rem;font-weight:600;color:var(--txt);}
-.wr-branch{font-size:0.65rem;color:var(--txt3);}
-.wr-asist{font-size:0.65rem;font-weight:700;padding:2px 8px;border-radius:6px;}
-.asist-puntual{background:var(--verde-dim);color:var(--verde);}
-.asist-tarde{background:rgba(255,140,0,0.1);color:var(--acc);}
-.asist-pendiente{background:var(--bg3);color:var(--txt3);}
+  /* MODAL MODO */
+  .modal-overlay{ position:fixed; inset:0; background:rgba(0,0,0,0.8); display:none; z-index:500; align-items:flex-end; }
+  .modal-overlay.show{ display:flex; }
+  .modal-sheet{ background:#111; width:100%; border-radius:24px 24px 0 0; transform:translateY(100%); transition:0.4s cubic-bezier(0.16,1,0.3,1); border:1px solid #1e1e1e; border-bottom:none; }
+  .modal-overlay.show .modal-sheet{ transform:translateY(0); }
+  .drag{ width:36px; height:4px; background:#222; border-radius:4px; margin:14px auto 0; }
+  .modal-body{ padding:16px 16px 36px; }
+  .modal-title{ font-size:1rem; font-weight:800; color:white; margin-bottom:6px; }
+  .modal-sub{ font-size:0.78rem; color:#444; line-height:1.5; margin-bottom:18px; }
+  .modo-opciones{ display:grid; gap:10px; }
+  .modo-opt{ background:#1a1a1a; border-radius:16px; padding:16px; border:1.5px solid #222; cursor:pointer; transition:0.2s; }
+  .modo-opt.selected{ border-color:rgba(255,140,0,0.4); background:rgba(255,140,0,0.05); }
+  .mo-header{ display:flex; align-items:center; gap:12px; margin-bottom:8px; }
+  .mo-icon{ width:40px; height:40px; border-radius:12px; display:flex; align-items:center; justify-content:center; font-size:1.1rem; flex-shrink:0; }
+  .mo-title{ font-size:0.9rem; font-weight:800; color:white; }
+  .mo-badge{ font-size:0.6rem; font-weight:700; padding:2px 8px; border-radius:6px; margin-left:auto; }
+  .mo-desc{ font-size:0.74rem; color:#555; line-height:1.5; }
+  .mo-features{ display:flex; gap:6px; flex-wrap:wrap; margin-top:8px; }
+  .mo-feat{ font-size:0.62rem; font-weight:600; padding:2px 8px; border-radius:6px; background:#222; color:#555; }
+  .mo-feat.on{ background:rgba(168,230,61,0.08); color:var(--verde); }
+  .btn-activar-modo{ width:100%; padding:14px; background:var(--naranja); color:white; border:none; border-radius:14px; font-family:'Inter',sans-serif; font-size:0.95rem; font-weight:800; cursor:pointer; margin-top:14px; }
 
-/* SEC TITLE */
-.sec-title{display:flex;align-items:center;justify-content:space-between;margin-bottom:12px;}
-.sec-title-txt{font-family:'Syne',sans-serif;font-size:0.78rem;font-weight:700;color:var(--txt2);text-transform:uppercase;letter-spacing:0.8px;}
-.sec-btn{font-size:0.68rem;font-weight:600;color:var(--acc);background:none;border:none;cursor:pointer;font-family:'DM Sans',sans-serif;}
-
-/* CORP-ONLY */
-.corp-only{display:none;}
-body.modo-corp .corp-only{display:block;}
-
-/* MODALES */
-.modal-overlay{position:fixed;inset:0;background:rgba(0,0,0,0.8);display:none;z-index:500;align-items:flex-end;backdrop-filter:blur(4px);}
-.modal-overlay.show{display:flex;}
-.modal-sheet{background:var(--bg1);width:100%;max-height:92vh;border-radius:24px 24px 0 0;transform:translateY(100%);transition:0.4s cubic-bezier(0.16,1,0.3,1);display:flex;flex-direction:column;overflow:hidden;border:1px solid var(--border);border-bottom:none;}
-.modal-overlay.show .modal-sheet{transform:translateY(0);}
-.drag{width:36px;height:4px;background:var(--bg3);border-radius:4px;margin:14px auto 0;flex-shrink:0;}
-.modal-header{padding:12px 16px;display:flex;justify-content:space-between;align-items:center;border-bottom:1px solid var(--border);flex-shrink:0;}
-.modal-title{font-family:'Syne',sans-serif;font-size:0.95rem;font-weight:700;color:var(--txt);}
-.close-btn{width:28px;height:28px;background:var(--bg2);border:1px solid var(--border);border-radius:8px;display:flex;align-items:center;justify-content:center;cursor:pointer;}
-.close-btn svg{width:13px;height:13px;stroke:var(--txt3);fill:none;stroke-width:2.5;}
-.modal-body{overflow-y:auto;padding:16px 16px 32px;flex:1;}
-
-/* FORMS */
-.field{margin-bottom:12px;}
-.field label{display:block;font-size:0.65rem;font-weight:700;color:var(--txt3);text-transform:uppercase;letter-spacing:0.8px;margin-bottom:5px;font-family:'DM Mono',monospace;}
-.field input,.field select{width:100%;padding:12px 14px;background:var(--bg2);border:1px solid var(--border);border-radius:12px;font-family:'DM Sans',sans-serif;font-size:0.88rem;color:var(--txt);outline:none;-webkit-appearance:none;}
-.field input:focus,.field select:focus{border-color:rgba(255,140,0,0.4);}
-.field input::placeholder{color:var(--txt3);}
-.field select option{background:var(--bg1);}
-.field-row{display:grid;grid-template-columns:1fr 1fr;gap:10px;}
-.btn-primary{width:100%;padding:14px;background:linear-gradient(135deg,#FF8C00,#FF5500);color:white;border:none;border-radius:13px;font-family:'Syne',sans-serif;font-size:0.88rem;font-weight:700;cursor:pointer;margin-top:6px;}
-.info-box{background:rgba(255,140,0,0.06);border:1px solid rgba(255,140,0,0.12);border-radius:12px;padding:12px;font-size:0.74rem;color:var(--txt3);margin-bottom:12px;line-height:1.5;}
-.info-box strong{color:var(--acc);display:block;margin-bottom:2px;}
-.msg-ok{background:var(--verde-dim);border:1px solid rgba(34,197,94,0.2);border-radius:12px;padding:10px 14px;font-size:0.78rem;color:var(--verde);margin-bottom:10px;display:none;font-weight:600;}
-.msg-ok.show{display:block;}
-
-/* TAB BAR */
-.tab-bar{position:fixed;bottom:0;width:100%;background:var(--bg1);display:flex;border-top:1px solid var(--border);z-index:200;}
-.tab{flex:1;display:flex;flex-direction:column;align-items:center;gap:3px;padding:10px 4px 14px;cursor:pointer;border:none;background:transparent;font-family:'DM Sans',sans-serif;color:var(--txt3);text-decoration:none;}
-.tab.active{color:var(--acc);}
-.tab svg{width:21px;height:21px;stroke:currentColor;fill:none;stroke-width:2;stroke-linecap:round;stroke-linejoin:round;}
-.tab span{font-size:0.53rem;font-weight:600;text-transform:uppercase;letter-spacing:0.5px;}
-.tab-dot{width:4px;height:4px;border-radius:50%;background:var(--acc);display:none;}
-.tab.active .tab-dot{display:block;}
-
-/* UTILS */
-.realtime-badge{display:inline-flex;align-items:center;gap:5px;font-size:0.6rem;font-weight:600;color:var(--verde);font-family:'DM Mono',monospace;}
-.realtime-dot{width:5px;height:5px;border-radius:50%;background:var(--verde);animation:pulse 1.5s infinite;}
-.empty-state{text-align:center;padding:40px 20px;color:var(--txt3);}
-.empty-state p{font-size:0.8rem;font-weight:500;}
-.toast{position:fixed;bottom:80px;left:50%;transform:translateX(-50%) translateY(20px);background:var(--bg2);color:var(--txt);padding:10px 20px;border-radius:24px;font-size:0.8rem;font-weight:600;opacity:0;transition:0.3s;pointer-events:none;z-index:2000;white-space:nowrap;border:1px solid var(--border);}
-.toast.show{opacity:1;transform:translateX(-50%) translateY(0);}
-.upload-overlay{position:fixed;inset:0;background:rgba(0,0,0,0.6);display:none;align-items:center;justify-content:center;z-index:1000;}
-.upload-overlay.show{display:flex;}
-.upload-box{background:var(--bg1);border-radius:20px;padding:28px;width:80%;max-width:280px;text-align:center;border:1px solid var(--border);}
-.spinner{width:36px;height:36px;border:2px solid var(--border);border-top-color:var(--acc);border-radius:50%;animation:spin 0.7s linear infinite;margin:0 auto 12px;}
-.upload-box p{font-size:0.78rem;color:var(--txt3);font-weight:500;}
-@keyframes spin{to{transform:rotate(360deg);}}
+  .toast{ position:fixed; bottom:80px; left:50%; transform:translateX(-50%) translateY(20px); background:#1e1e1e; color:white; padding:10px 20px; border-radius:24px; font-size:0.8rem; font-weight:600; opacity:0; transition:0.3s; pointer-events:none; z-index:2000; white-space:nowrap; border:1px solid #333; }
+  .toast.show{ opacity:1; transform:translateX(-50%) translateY(0); }
+  .empty-mini{ text-align:center; padding:20px; color:#333; font-size:0.78rem; }
 </style>
 </head>
 <body>
 
-<div class="topnav">
+<!-- HEADER -->
+<div class="header">
   <div class="brand">
-    <div class="brand-logo" id="brand-logo">PV</div>
-    <div>
-      <div class="brand-name">PROVEED <span style="color:var(--acc);">Enterprise</span></div>
+    <div class="brand-logo" id="brand-logo">P</div>
+    <div class="brand-info">
+      <div class="brand-nombre" id="brand-nombre">Mi empresa</div>
+      <div class="brand-sub" id="brand-sub">Panel del proveedor</div>
     </div>
   </div>
-  <div class="nav-right">
-    <div class="realtime-badge"><div class="realtime-dot"></div>LIVE</div>
-    <div id="mode-badge" class="mode-pill esencial" onclick="toggleModo()">
-      <div class="mode-dot" style="background:var(--verde);"></div>
-      <span id="mode-label">ESENCIAL</span>
-    </div>
-    <button class="nav-btn" onclick="doLogout()"><svg viewBox="0 0 24 24"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/></svg></button>
+  <div class="header-right">
+    <div class="live-badge"><div class="live-dot"></div><div class="live-txt">LIVE</div></div>
+    <button class="notif-btn" onclick="window.location.href='chat.html'">
+      <svg viewBox="0 0 24 24"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
+      <div class="notif-dot" id="chat-dot" style="display:none;"></div>
+    </button>
   </div>
 </div>
 
-<div class="subnav">
-  <button class="snav-btn active" onclick="showTab('home',this)">Resumen</button>
-  <button class="snav-btn" onclick="showTab('sucursales',this)">Sucursales <span class="snav-count" id="cnt-suc">0</span></button>
-  <button class="snav-btn" onclick="showTab('inventario',this)">Inventario</button>
-  <button class="snav-btn" onclick="showTab('logistica',this)">Logística <span class="snav-count" id="cnt-log">0</span></button>
-  <button class="snav-btn corp-only" onclick="showTab('cajas',this)">Cajas</button>
-  <button class="snav-btn corp-only" onclick="showTab('workers',this)">Workers</button>
-  <button class="snav-btn corp-only" onclick="showTab('mapa',this)">Mapa calor</button>
-  <button class="snav-btn" onclick="showTab('config',this)">Config</button>
+<!-- MODO EMPRESARIAL -->
+<div class="empresa-banner esencial" id="empresa-banner" onclick="abrirModalModo()">
+  <div class="eb-icon esencial" id="eb-icon">🚀</div>
+  <div class="eb-info">
+    <div class="eb-title" id="eb-title">Modo Esencial</div>
+    <div class="eb-sub" id="eb-sub">Toca para activar modo Corporativo con sucursales y más</div>
+  </div>
+  <div class="eb-badge esencial" id="eb-badge">ESENCIAL</div>
 </div>
 
-<!-- HOME -->
-<div class="section active" id="sec-home">
-  <div class="empresa-hero">
-    <div class="empresa-logo" id="empresa-logo">PV</div>
-    <div class="empresa-info" style="flex:1;">
-      <div class="empresa-nombre" id="empresa-nombre">Tu empresa</div>
-      <div class="empresa-meta" id="empresa-meta">—</div>
-      <div class="empresa-pills">
-        <span class="e-pill acc" id="pill-plan">ESENCIAL</span>
-        <span class="e-pill" id="pill-suc">0 sucursales</span>
-        <span class="e-pill" id="pill-emps">0 empleados</span>
-      </div>
-    </div>
-  </div>
+<!-- KPI HOY -->
+<div class="kpi-scroll" id="kpi-grid">
+  <div class="kpi-card"><div class="kpi-val naranja" id="k-ventas">$0</div><div class="kpi-lbl">Ventas hoy</div></div>
+  <div class="kpi-card"><div class="kpi-val azul" id="k-pedidos">0</div><div class="kpi-lbl">Pedidos hoy</div></div>
+  <div class="kpi-card"><div class="kpi-val verde" id="k-productos">0</div><div class="kpi-lbl">Productos activos</div></div>
+  <div class="kpi-card"><div class="kpi-val rojo" id="k-pendientes">0</div><div class="kpi-lbl">Pendientes</div></div>
+</div>
 
-  <div class="modo-card">
-    <div class="modo-info">
-      <div class="modo-titulo" id="modo-titulo">Modo Esencial</div>
-      <div class="modo-desc" id="modo-desc">Un local, un inventario, una caja.</div>
-    </div>
-    <div class="toggle-switch" onclick="toggleModo()">
-      <div class="toggle-track" id="toggle-track"></div>
-      <div class="toggle-thumb" id="toggle-thumb"></div>
-    </div>
+<!-- ACCESOS RÁPIDOS -->
+<div class="accesos-grid">
+  <div class="acceso-item" onclick="window.location.href='productos.html'">
+    <div class="acceso-icon" style="background:rgba(255,140,0,0.1);">📦</div>
+    <div class="acceso-lbl">Productos</div>
   </div>
+  <div class="acceso-item" onclick="window.location.href='pedidos.html'">
+    <div class="acceso-icon" style="background:rgba(0,122,255,0.1);">📋</div>
+    <div class="acceso-lbl">Pedidos</div>
+  </div>
+  <div class="acceso-item" onclick="window.location.href='chat.html'">
+    <div class="acceso-icon" style="background:rgba(168,230,61,0.1);">💬</div>
+    <div class="acceso-lbl">Chats</div>
+  </div>
+  <div class="acceso-item" onclick="window.location.href='plugins.html'">
+    <div class="acceso-icon" style="background:rgba(175,82,222,0.1);">⚡</div>
+    <div class="acceso-lbl">Plugins</div>
+  </div>
+  <div class="acceso-item" onclick="window.location.href='estadisticas.html'">
+    <div class="acceso-icon" style="background:rgba(255,140,0,0.08);">📊</div>
+    <div class="acceso-lbl">Stats</div>
+  </div>
+  <div class="acceso-item" onclick="window.location.href='inventario.html'">
+    <div class="acceso-icon" style="background:rgba(0,122,255,0.08);">🏭</div>
+    <div class="acceso-lbl">Inventario</div>
+  </div>
+  <div class="acceso-item corp-section" onclick="window.location.href='sucursales-pro.html'">
+    <div class="acceso-icon" style="background:rgba(255,77,77,0.08);">🏢</div>
+    <div class="acceso-lbl">Sucursales</div>
+  </div>
+  <div class="acceso-item" onclick="window.location.href='perfil.html'">
+    <div class="acceso-icon" style="background:rgba(168,230,61,0.08);">👤</div>
+    <div class="acceso-lbl">Perfil</div>
+  </div>
+</div>
 
+<!-- GRÁFICO 7 DÍAS -->
+<div class="sec-title">
+  <span>Ventas últimos 7 días</span>
+</div>
+<div class="mini-chart" id="mini-chart"></div>
+
+<!-- PEDIDOS RECIENTES -->
+<div class="sec-title">
+  <span>Pedidos recientes</span>
+  <button class="sec-btn" onclick="window.location.href='pedidos.html'">Ver todos →</button>
+</div>
+<div id="pedidos-lista"><div class="empty-mini">Cargando pedidos...</div></div>
+
+<!-- CHATS ACTIVOS -->
+<div class="sec-title">
+  <span>Chats activos</span>
+  <button class="sec-btn" onclick="window.location.href='chat.html'">Ver todos →</button>
+</div>
+<div id="chats-lista"><div class="empty-mini">Sin chats activos</div></div>
+
+<!-- PRODUCTOS TOP -->
+<div class="sec-title">
+  <span>Mis productos</span>
+  <button class="sec-btn" onclick="window.location.href='productos.html'">Gestionar →</button>
+</div>
+<div id="productos-lista"><div class="empty-mini">Cargando productos...</div></div>
+
+<!-- SUCURSALES (SOLO CORP) -->
+<div class="corp-section">
   <div class="sec-title">
-    <span class="sec-title-txt">Hoy en números</span>
-    <span class="realtime-badge"><div class="realtime-dot"></div>Tiempo real</span>
+    <span>Mis sucursales</span>
+    <button class="sec-btn" onclick="window.location.href='sucursales-pro.html'">Ver mapa →</button>
   </div>
-  <div class="kpi-grid">
-    <div class="kpi-card">
-      <div class="kpi-icon" style="background:var(--acc-dim);">💰</div>
-      <div class="kpi-val" style="color:var(--acc);" id="k-ventas">$0</div>
-      <div class="kpi-lbl">Ventas hoy</div>
-    </div>
-    <div class="kpi-card">
-      <div class="kpi-icon" style="background:var(--azul-dim);">📦</div>
-      <div class="kpi-val" style="color:var(--azul);" id="k-pedidos">0</div>
-      <div class="kpi-lbl">Pedidos hoy</div>
-    </div>
-    <div class="kpi-card">
-      <div class="kpi-icon" style="background:var(--verde-dim);">🏢</div>
-      <div class="kpi-val" style="color:var(--verde);" id="k-suc">0</div>
-      <div class="kpi-lbl">Sucursales activas</div>
-    </div>
-    <div class="kpi-card">
-      <div class="kpi-icon" style="background:var(--rojo-dim);">⚠️</div>
-      <div class="kpi-val" style="color:var(--rojo);" id="k-alertas">0</div>
-      <div class="kpi-lbl">Alertas stock</div>
-    </div>
-  </div>
-  <div class="kpi-grid">
-    <div class="kpi-card">
-      <div class="kpi-val" style="color:var(--acc);" id="k-mes">$0</div>
-      <div class="kpi-lbl">Ventas del mes</div>
-    </div>
-    <div class="kpi-card">
-      <div class="kpi-val" id="k-stock">0</div>
-      <div class="kpi-lbl">Unidades en stock</div>
-    </div>
-  </div>
-
-  <div class="sec-title"><span class="sec-title-txt">Últimas ventas</span></div>
-  <div id="ultimas-ventas"><div class="empty-state"><p>Sin ventas registradas</p></div></div>
-
-  <div class="sec-title" style="margin-top:14px;"><span class="sec-title-txt">Stock bajo ⚠</span></div>
-  <div id="alertas-stock"><div class="empty-state"><p>Inventario saludable ✓</p></div></div>
-</div>
-
-<!-- SUCURSALES -->
-<div class="section" id="sec-sucursales">
-  <div class="sec-title">
-    <span class="sec-title-txt">Mis sucursales</span>
-    <button class="sec-btn" onclick="abrirModalSucursal()">+ Nueva</button>
-  </div>
-  <div id="sucursales-lista"><div class="empty-state"><p>Sin sucursales</p></div></div>
-</div>
-
-<!-- INVENTARIO -->
-<div class="section" id="sec-inventario">
-  <div class="sec-title">
-    <span class="sec-title-txt">Inventario distribuido</span>
-    <button class="sec-btn" onclick="abrirModalInventario()">+ Item</button>
-  </div>
-  <div style="display:flex;gap:8px;margin-bottom:12px;overflow-x:auto;scrollbar-width:none;">
-    <button style="padding:6px 12px;border-radius:20px;border:1px solid rgba(255,140,0,0.3);background:var(--acc-dim);font-size:0.7rem;font-weight:600;color:var(--acc);cursor:pointer;white-space:nowrap;font-family:'DM Sans',sans-serif;" onclick="renderInventario('todos')">Todos</button>
-    <button style="padding:6px 12px;border-radius:20px;border:1px solid var(--border);background:transparent;font-size:0.7rem;font-weight:600;color:var(--txt3);cursor:pointer;white-space:nowrap;font-family:'DM Sans',sans-serif;" onclick="renderInventario('bajo')">Stock bajo ⚠</button>
-    <button style="padding:6px 12px;border-radius:20px;border:1px solid var(--border);background:transparent;font-size:0.7rem;font-weight:600;color:var(--txt3);cursor:pointer;white-space:nowrap;font-family:'DM Sans',sans-serif;" onclick="renderInventario('transito')">En tránsito 🚛</button>
-  </div>
-  <div id="inventario-lista"><div class="empty-state"><p>Sin inventario</p></div></div>
-</div>
-
-<!-- LOGÍSTICA -->
-<div class="section" id="sec-logistica">
-  <div class="sec-title">
-    <span class="sec-title-txt">Stock en tránsito</span>
-    <button class="sec-btn" onclick="abrirModalTransferencia()">+ Transferir</button>
-  </div>
-  <div class="info-box"><strong>Flujo atómico garantizado</strong>Disponible → En tránsito → Destino confirmado. Sin pérdidas.</div>
-  <div id="logistica-lista"><div class="empty-state"><p>Sin transferencias activas</p></div></div>
-</div>
-
-<!-- CAJAS (CORP) -->
-<div class="section corp-only" id="sec-cajas">
-  <div class="sec-title"><span class="sec-title-txt">Cajas en tiempo real</span><span class="realtime-badge"><div class="realtime-dot"></div>LIVE</span></div>
-  <div id="cajas-lista"><div class="empty-state"><p>Sin datos</p></div></div>
-</div>
-
-<!-- WORKERS (CORP) -->
-<div class="section corp-only" id="sec-workers">
-  <div class="sec-title"><span class="sec-title-txt">Personal global hoy</span></div>
-  <div id="workers-global"><div class="empty-state"><p>Sin empleados</p></div></div>
-</div>
-
-<!-- MAPA CALOR (CORP) -->
-<div class="section corp-only" id="sec-mapa">
-  <div class="heatmap-wrap">
-    <div class="heatmap-title">🗺 Mapa de calor — Ventas por provincia</div>
-    <div class="ecuador-grid" id="ecuador-heatmap"></div>
-  </div>
-  <div class="sec-title"><span class="sec-title-txt">Ranking de provincias</span></div>
-  <div id="ranking-zonas"></div>
-</div>
-
-<!-- CONFIG -->
-<div class="section" id="sec-config">
-  <div class="sec-title"><span class="sec-title-txt">Empresa</span></div>
-  <div style="background:var(--bg2);border:1px solid var(--border);border-radius:18px;padding:16px;margin-bottom:12px;">
-    <div class="field"><label>Nombre de empresa</label><input type="text" id="cfg-nombre" placeholder="Mi Empresa S.A."></div>
-    <div class="field"><label>RUC</label><input type="text" id="cfg-ruc" placeholder="1234567890001"></div>
-    <div class="field"><label>Color de marca</label>
-      <div style="display:flex;gap:8px;align-items:center;">
-        <div id="cfg-color-dot" style="width:40px;height:40px;border-radius:10px;background:var(--acc);border:1px solid var(--border);flex-shrink:0;"></div>
-        <input type="color" id="cfg-color" value="#FF8C00" oninput="prevColor(this.value)" style="flex:1;height:40px;border-radius:10px;border:1px solid var(--border);cursor:pointer;padding:3px;background:var(--bg2);">
-      </div>
-    </div>
-    <div class="field"><label>Logo URL</label><input type="text" id="cfg-logo" placeholder="https://..."></div>
-    <button class="btn-primary" onclick="guardarConfig()">Guardar configuración</button>
-    <div class="msg-ok" id="cfg-ok">✓ Guardado correctamente</div>
-  </div>
-  <div class="sec-title"><span class="sec-title-txt">Modo del sistema</span></div>
-  <div style="background:var(--bg2);border:1px solid var(--border);border-radius:18px;padding:16px;">
-    <div style="font-size:0.78rem;font-weight:600;color:var(--txt);margin-bottom:6px;">Modo actual: <span id="cfg-modo-txt" style="color:var(--acc);">ESENCIAL</span></div>
-    <div style="font-size:0.72rem;color:var(--txt3);margin-bottom:12px;line-height:1.5;"><strong style="color:var(--verde);">ESENCIAL</strong> — 1 inventario, 1 caja.<br><strong style="color:var(--acc);">CORPORATIVO</strong> — Múltiples sucursales, cajas, mapa calor, workers global.</div>
-    <button class="btn-primary" onclick="toggleModo()">Cambiar a <span id="btn-modo-txt">CORPORATIVO</span></button>
-  </div>
+  <div id="sucursales-lista"><div class="empty-mini">Sin sucursales configuradas</div></div>
 </div>
 
 <!-- TAB BAR -->
 <nav class="tab-bar">
-  <button class="tab active" onclick="showTab('home',this)"><svg viewBox="0 0 24 24"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/></svg><span>Panel</span><div class="tab-dot"></div></button>
-  <a class="tab" href="productos.html"><svg viewBox="0 0 24 24"><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"/></svg><span>Productos</span><div class="tab-dot"></div></a>
-  <a class="tab" href="pedidos.html"><svg viewBox="0 0 24 24"><path d="M9 5H7a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2h-2"/><rect x="9" y="3" width="6" height="4" rx="1"/></svg><span>Pedidos</span><div class="tab-dot"></div></a>
-  <a class="tab" href="chat.html"><svg viewBox="0 0 24 24"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg><span>Chat</span><div class="tab-dot"></div></a>
-  <a class="tab" href="plugins.html"><svg viewBox="0 0 24 24"><path d="M20.24 12.24a6 6 0 0 0-8.49-8.49L5 10.5V19h8.5z"/><line x1="16" y1="8" x2="2" y2="22"/></svg><span>Plugins</span><div class="tab-dot"></div></a>
+  <button class="tab active">
+    <svg viewBox="0 0 24 24"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/></svg>
+    <span>Panel</span>
+  </button>
+  <a class="tab" href="productos.html">
+    <svg viewBox="0 0 24 24"><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"/></svg>
+    <span>Productos</span>
+  </a>
+  <a class="tab" href="pedidos.html">
+    <svg viewBox="0 0 24 24"><path d="M9 5H7a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2h-2"/><rect x="9" y="3" width="6" height="4" rx="1"/></svg>
+    <span>Pedidos</span>
+  </a>
+  <a class="tab" href="chat.html">
+    <svg viewBox="0 0 24 24"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
+    <span>Chat</span>
+  </a>
+  <a class="tab" href="plugins.html">
+    <svg viewBox="0 0 24 24"><path d="M20.24 12.24a6 6 0 0 0-8.49-8.49L5 10.5V19h8.5z"/><line x1="16" y1="8" x2="2" y2="22"/></svg>
+    <span>Plugins</span>
+  </a>
 </nav>
 
-<!-- MODAL SUCURSAL -->
-<div class="modal-overlay" id="modal-suc" onclick="cerrarModal('modal-suc',event)">
+<!-- MODO EMPRESARIAL -->
+<div class="empresa-banner esencial" id="empresa-banner" onclick="abrirModalModo()">
+  <div class="eb-icon esencial" id="eb-icon">🚀</div>
+  <div class="eb-info">
+    <div class="eb-title" id="eb-title">Modo Esencial</div>
+    <div class="eb-sub" id="eb-sub">Toca para activar modo Corporativo con sucursales y más</div>
+  </div>
+  <div class="eb-badge esencial" id="eb-badge">ESENCIAL</div>
+</div>
+
+<!-- KPI HOY -->
+<div class="kpi-scroll" id="kpi-grid">
+  <div class="kpi-card"><div class="kpi-val naranja" id="k-ventas">$0</div><div class="kpi-lbl">Ventas hoy</div></div>
+  <div class="kpi-card"><div class="kpi-val azul" id="k-pedidos">0</div><div class="kpi-lbl">Pedidos hoy</div></div>
+  <div class="kpi-card"><div class="kpi-val verde" id="k-productos">0</div><div class="kpi-lbl">Productos activos</div></div>
+  <div class="kpi-card"><div class="kpi-val rojo" id="k-pendientes">0</div><div class="kpi-lbl">Pendientes</div></div>
+</div>
+
+<!-- ACCESOS RÁPIDOS -->
+<div class="accesos-grid">
+  <div class="acceso-item" onclick="window.location.href='productos.html'">
+    <div class="acceso-icon" style="background:rgba(255,140,0,0.1);">📦</div>
+    <div class="acceso-lbl">Productos</div>
+  </div>
+  <div class="acceso-item" onclick="window.location.href='pedidos.html'">
+    <div class="acceso-icon" style="background:rgba(0,122,255,0.1);">📋</div>
+    <div class="acceso-lbl">Pedidos</div>
+  </div>
+  <div class="acceso-item" onclick="window.location.href='chat.html'">
+    <div class="acceso-icon" style="background:rgba(168,230,61,0.1);">💬</div>
+    <div class="acceso-lbl">Chats</div>
+  </div>
+  <div class="acceso-item" onclick="window.location.href='plugins.html'">
+    <div class="acceso-icon" style="background:rgba(175,82,222,0.1);">⚡</div>
+    <div class="acceso-lbl">Plugins</div>
+  </div>
+  <div class="acceso-item" onclick="window.location.href='estadisticas.html'">
+    <div class="acceso-icon" style="background:rgba(255,140,0,0.08);">📊</div>
+    <div class="acceso-lbl">Stats</div>
+  </div>
+  <div class="acceso-item" onclick="window.location.href='inventario.html'">
+    <div class="acceso-icon" style="background:rgba(0,122,255,0.08);">🏭</div>
+    <div class="acceso-lbl">Inventario</div>
+  </div>
+  <div class="acceso-item corp-section" onclick="window.location.href='sucursales-pro.html'">
+    <div class="acceso-icon" style="background:rgba(255,77,77,0.08);">🏢</div>
+    <div class="acceso-lbl">Sucursales</div>
+  </div>
+  <div class="acceso-item" onclick="window.location.href='perfil.html'">
+    <div class="acceso-icon" style="background:rgba(168,230,61,0.08);">👤</div>
+    <div class="acceso-lbl">Perfil</div>
+  </div>
+</div>
+
+<!-- GRÁFICO 7 DÍAS -->
+<div class="sec-title">
+  <span>Ventas últimos 7 días</span>
+</div>
+<div class="mini-chart" id="mini-chart"></div>
+
+<!-- PEDIDOS RECIENTES -->
+<div class="sec-title">
+  <span>Pedidos recientes</span>
+  <button class="sec-btn" onclick="window.location.href='pedidos.html'">Ver todos →</button>
+</div>
+<div id="pedidos-lista"><div class="empty-mini">Cargando pedidos...</div></div>
+
+<!-- CHATS ACTIVOS -->
+<div class="sec-title">
+  <span>Chats activos</span>
+  <button class="sec-btn" onclick="window.location.href='chat.html'">Ver todos →</button>
+</div>
+<div id="chats-lista"><div class="empty-mini">Sin chats activos</div></div>
+
+<!-- PRODUCTOS TOP -->
+<div class="sec-title">
+  <span>Mis productos</span>
+  <button class="sec-btn" onclick="window.location.href='productos.html'">Gestionar →</button>
+</div>
+<div id="productos-lista"><div class="empty-mini">Cargando productos...</div></div>
+
+<!-- SUCURSALES (SOLO CORP) -->
+<div class="corp-section">
+  <div class="sec-title">
+    <span>Mis sucursales</span>
+    <button class="sec-btn" onclick="window.location.href='sucursales-pro.html'">Ver mapa →</button>
+  </div>
+  <div id="sucursales-lista"><div class="empty-mini">Sin sucursales configuradas</div></div>
+</div>
+
+<!-- TAB BAR -->
+<nav class="tab-bar">
+  <button class="tab active">
+    <svg viewBox="0 0 24 24"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/></svg>
+    <span>Panel</span>
+  </button>
+  <a class="tab" href="productos.html">
+    <svg viewBox="0 0 24 24"><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"/></svg>
+    <span>Productos</span>
+  </a>
+  <a class="tab" href="pedidos.html">
+    <svg viewBox="0 0 24 24"><path d="M9 5H7a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2h-2"/><rect x="9" y="3" width="6" height="4" rx="1"/></svg>
+    <span>Pedidos</span>
+  </a>
+  <a class="tab" href="chat.html">
+    <svg viewBox="0 0 24 24"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
+    <span>Chat</span>
+  </a>
+  <a class="tab" href="plugins.html">
+    <svg viewBox="0 0 24 24"><path d="M20.24 12.24a6 6 0 0 0-8.49-8.49L5 10.5V19h8.5z"/><line x1="16" y1="8" x2="2" y2="22"/></svg>
+    <span>Plugins</span>
+  </a>
+</nav>
+
+<!-- MODAL MODO EMPRESARIAL -->
+<div class="modal-overlay" id="modal-modo" onclick="cerrarModalModo(event)">
   <div class="modal-sheet">
     <div class="drag"></div>
-    <div class="modal-header">
-      <span class="modal-title">Nueva Sucursal</span>
-      <button class="close-btn" onclick="cerrarM('modal-suc')"><svg viewBox="0 0 24 24"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg></button>
-    </div>
     <div class="modal-body">
-      <div class="msg-ok" id="suc-ok">✓ Sucursal creada</div>
-      <div class="field"><label>Nombre *</label><input type="text" id="suc-nombre" placeholder="Sucursal Quito Norte"></div>
-      <div class="field-row">
-        <div class="field"><label>Provincia *</label>
-          <select id="suc-provincia">
-            <option value="">Seleccionar</option>
-            <option>Pichincha</option><option>Guayas</option><option>Azuay</option><option>Manabí</option>
-            <option>Los Ríos</option><option>El Oro</option><option>Esmeraldas</option><option>Tungurahua</option>
-            <option>Loja</option><option>Imbabura</option><option>Chimborazo</option><option>Cotopaxi</option>
-            <option>Bolívar</option><option>Carchi</option><option>Cañar</option><option>Napo</option>
-            <option>Orellana</option><option>Pastaza</option><option>Santa Elena</option><option>Santo Domingo</option>
-            <option>Sucumbíos</option><option>Morona Santiago</option><option>Zamora Chinchipe</option><option>Galápagos</option>
-          </select>
+      <div class="modal-title">Modo del sistema</div>
+      <div class="modal-sub">Elige cómo quieres operar tu negocio. Puedes cambiar en cualquier momento.</div>
+      <div class="modo-opciones">
+
+        <div class="modo-opt" id="opt-esencial" onclick="seleccionarModo('ESENCIAL')">
+          <div class="mo-header">
+            <div class="mo-icon" style="background:rgba(168,230,61,0.1);">🚀</div>
+            <div>
+              <div class="mo-title">Modo Esencial</div>
+            </div>
+            <div class="mo-badge" style="background:rgba(168,230,61,0.12);color:var(--verde);">GRATIS</div>
+          </div>
+          <div class="mo-desc">Un local, un inventario, una caja. Perfecto para emprendedores y negocios pequeños.</div>
+          <div class="mo-features">
+            <span class="mo-feat on">Catálogo</span>
+            <span class="mo-feat on">Pedidos</span>
+            <span class="mo-feat on">Chat</span>
+            <span class="mo-feat on">Plugins</span>
+            <span class="mo-feat">Sucursales</span>
+            <span class="mo-feat">Cajas multi</span>
+            <span class="mo-feat">Mapa calor</span>
+          </div>
         </div>
-        <div class="field"><label>Ciudad *</label><input type="text" id="suc-ciudad" placeholder="Ciudad"></div>
-      </div>
-      <div class="field"><label>Dirección</label><input type="text" id="suc-dir" placeholder="Av. Principal..."></div>
-      <div class="field-row">
-        <div class="field"><label>Tipo</label>
-          <select id="suc-tipo"><option value="tienda">Tienda</option><option value="bodega">Bodega</option><option value="matriz">Matriz</option><option value="distribucion">Distribución</option></select>
+
+        <div class="modo-opt" id="opt-corporativo" onclick="seleccionarModo('CORPORATIVO')">
+          <div class="mo-header">
+            <div class="mo-icon" style="background:rgba(255,140,0,0.1);">🏢</div>
+            <div>
+              <div class="mo-title">Modo Corporativo</div>
+            </div>
+            <div class="mo-badge" style="background:rgba(255,140,0,0.12);color:var(--naranja);">ENTERPRISE</div>
+          </div>
+          <div class="mo-desc">Red de sucursales, inventario distribuido, cajas en tiempo real y mapa de calor nacional.</div>
+          <div class="mo-features">
+            <span class="mo-feat on">Catálogo</span>
+            <span class="mo-feat on">Pedidos</span>
+            <span class="mo-feat on">Chat</span>
+            <span class="mo-feat on">Plugins</span>
+            <span class="mo-feat on">Sucursales PRO</span>
+            <span class="mo-feat on">Cajas multi</span>
+            <span class="mo-feat on">Mapa calor</span>
+            <span class="mo-feat on">Workers global</span>
+            <span class="mo-feat on">Logística</span>
+          </div>
         </div>
-        <div class="field"><label>Región</label>
-          <select id="suc-region"><option value="sierra">Sierra</option><option value="costa">Costa</option><option value="oriente">Oriente</option><option value="insular">Insular</option></select>
-        </div>
+
       </div>
-      <div class="field"><label>Responsable</label><input type="text" id="suc-resp" placeholder="Nombre del gerente"></div>
-      <div class="field-row">
-        <div class="field"><label>Horario inicio</label><input type="time" id="suc-hini" value="08:00"></div>
-        <div class="field"><label>Horario fin</label><input type="time" id="suc-hfin" value="18:00"></div>
-      </div>
-      <div class="field"><label>Radio geofencing (metros)</label><input type="number" id="suc-geo" value="200"></div>
-      <button class="btn-primary" onclick="guardarSucursal()">Crear sucursal</button>
+      <button class="btn-activar-modo" id="btn-activar-modo" onclick="aplicarModo()">Activar modo seleccionado</button>
     </div>
   </div>
 </div>
 
-<!-- MODAL INVENTARIO -->
-<div class="modal-overlay" id="modal-inv" onclick="cerrarModal('modal-inv',event)">
-  <div class="modal-sheet">
-    <div class="drag"></div>
-    <div class="modal-header">
-      <span class="modal-title">Agregar inventario</span>
-      <button class="close-btn" onclick="cerrarM('modal-inv')"><svg viewBox="0 0 24 24"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg></button>
-    </div>
-    <div class="modal-body">
-      <div class="msg-ok" id="inv-ok">✓ Inventario actualizado</div>
-      <div class="field"><label>Sucursal *</label><select id="inv-branch"><option value="">Seleccionar</option></select></div>
-      <div class="field"><label>Nombre del producto *</label><input type="text" id="inv-prod-nombre" placeholder="Nombre del producto"></div>
-      <div class="field-row">
-        <div class="field"><label>Stock disponible *</label><input type="number" id="inv-stock" placeholder="0" min="0"></div>
-        <div class="field"><label>Stock mínimo</label><input type="number" id="inv-minimo" placeholder="5" min="0"></div>
-      </div>
-      <div class="field-row">
-        <div class="field"><label>Precio venta ($)</label><input type="number" id="inv-precio" placeholder="0.00" step="0.01"></div>
-        <div class="field"><label>Precio costo ($)</label><input type="number" id="inv-costo" placeholder="0.00" step="0.01"></div>
-      </div>
-      <button class="btn-primary" onclick="guardarInventario()">Agregar al inventario</button>
-    </div>
-  </div>
-</div>
-
-<!-- MODAL TRANSFERENCIA -->
-<div class="modal-overlay" id="modal-transfer" onclick="cerrarModal('modal-transfer',event)">
-  <div class="modal-sheet">
-    <div class="drag"></div>
-    <div class="modal-header">
-      <span class="modal-title">Transferir stock</span>
-      <button class="close-btn" onclick="cerrarM('modal-transfer')"><svg viewBox="0 0 24 24"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg></button>
-    </div>
-    <div class="modal-body">
-      <div class="info-box"><strong>Transferencia atómica</strong>El stock pasa a "en tránsito" en origen hasta que el destino confirme recepción.</div>
-      <div class="field"><label>Sucursal origen *</label><select id="tr-origen"><option value="">Seleccionar</option></select></div>
-      <div class="field"><label>Sucursal destino *</label><select id="tr-destino"><option value="">Seleccionar</option></select></div>
-      <div class="field"><label>Producto *</label><select id="tr-producto"><option value="">Seleccionar</option></select></div>
-      <div class="field-row">
-        <div class="field"><label>Cantidad *</label><input type="number" id="tr-cant" placeholder="0" min="1"></div>
-        <div class="field"><label>Transportadora</label><input type="text" id="tr-trans" placeholder="Servientrega..."></div>
-      </div>
-      <button class="btn-primary" onclick="crearTransferencia()">Generar guía de tránsito →</button>
-    </div>
-  </div>
-</div>
-
-<div class="upload-overlay" id="upload-overlay"><div class="upload-box"><div class="spinner"></div><p>Procesando...</p></div></div>
 <div class="toast" id="toast"></div>
 
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
@@ -494,368 +472,242 @@ body.modo-corp .corp-only{display:block;}
 const { createClient } = supabase;
 const sb = createClient('https://hfmsyrmkewscnvwynzfq.supabase.co','sb_publishable_d1oLsq70a6ZV33vW3XkRgw_nYcN2Z9v');
 
-let userId='', userData={}, companyId='', companyData={};
-let branches=[], inventory=[], transfers=[], sales=[], employees=[];
-let appMode='ESENCIAL';
-
-const PROVINCIAS=['Pichincha','Guayas','Azuay','Manabí','Los Ríos','El Oro','Esmeraldas','Tungurahua','Loja','Imbabura','Chimborazo','Cotopaxi','Bolívar','Carchi','Cañar','Napo','Orellana','Pastaza','Santa Elena','Santo Domingo','Sucumbíos','Morona S.','Zamora C.','Galápagos'];
+let userId='', userData={}, appMode='ESENCIAL', modoSeleccionado='ESENCIAL';
+const COLORES=['#FF8C00','#2563EB','#22C55E','#A855F7','#EF4444','#F59E0B'];
+function colorAvatar(s){ return COLORES[Math.abs((s||'').charCodeAt(0)||0)%COLORES.length]; }
 
 (async()=>{
   const { data:{session} } = await sb.auth.getSession();
   if(!session){ window.location.href='login.html'; return; }
   userId=session.user.id;
   const { data:u } = await sb.from('usuarios').select('*').eq('id',userId).single();
-  if(u) userData=u;
-  let { data:comp } = await sb.from('pv_companies').select('*').eq('owner_id',userId).single().catch(()=>({data:null}));
-  if(!comp){
-    const { data:nc } = await sb.from('pv_companies').insert({ owner_id:userId, nombre:userData.empresa||userData.nombre||'Mi Empresa', ruc:userData.ruc||'', logo:userData.logo_empresa||'', color_marca:userData.workers_color||'#FF8C00', app_mode:'ESENCIAL' }).select().single();
-    comp=nc;
-  }
-  companyId=comp.id; companyData=comp;
-  appMode=comp.app_mode||'ESENCIAL';
-  aplicarModo(appMode,false);
-  cargarConfigUI();
+  if(u){ userData=u; }
+
+  // Cargar modo guardado
+  appMode=localStorage.getItem(`app_mode_${userId}`)||'ESENCIAL';
+  modoSeleccionado=appMode;
+  aplicarModoUI(appMode);
+  cargarMarca();
   await cargarTodo();
   suscribirRealtime();
 })();
 
-function cargarConfigUI(){
-  const logo=companyData.logo||'';
-  const nombre=companyData.nombre||'Mi Empresa';
-  const color=companyData.color_marca||'#FF8C00';
-  document.documentElement.style.setProperty('--acc',color);
-  const ini=(nombre||'P')[0].toUpperCase();
-  if(logo){
-    document.getElementById('brand-logo').innerHTML=`<img src="${logo}" alt="">`;
-    document.getElementById('empresa-logo').innerHTML=`<img src="${logo}" alt="">`;
-  } else {
-    document.getElementById('brand-logo').textContent=ini;
-    document.getElementById('empresa-logo').textContent=ini;
-  }
-  document.getElementById('empresa-nombre').textContent=nombre;
-  document.getElementById('empresa-meta').textContent=(companyData.ruc||'—')+' · Ecuador';
-  document.getElementById('cfg-nombre').value=nombre;
-  document.getElementById('cfg-ruc').value=companyData.ruc||'';
-  document.getElementById('cfg-color').value=color;
-  document.getElementById('cfg-logo').value=logo;
-  document.getElementById('cfg-color-dot').style.background=color;
+function cargarMarca(){
+  const nombre=userData.empresa||userData.nombre||'Mi empresa';
+  const logo=userData.logo_empresa||userData.foto_perfil||'';
+  const color=userData.workers_color||'#FF8C00';
+  document.documentElement.style.setProperty('--naranja',color);
+  document.getElementById('brand-nombre').textContent=nombre;
+  document.getElementById('brand-sub').textContent=appMode==='CORPORATIVO'?'Centro de mando':'Panel del proveedor';
+  const logoEl=document.getElementById('brand-logo');
+  if(logo){ logoEl.innerHTML=`<img src="${logo}" alt="">`; }
+  else { logoEl.textContent=nombre[0].toUpperCase(); logoEl.style.background=color; }
 }
 
 async function cargarTodo(){
-  const [brR,invR,trR,saleR,empR]=await Promise.all([
-    sb.from('pv_branches').select('*').eq('company_id',companyId),
-    sb.from('pv_inventory').select('*').eq('company_id',companyId),
-    sb.from('pv_transfers').select('*').eq('company_id',companyId).eq('estado','en_transito'),
-    sb.from('pv_sales').select('*').eq('company_id',companyId).order('created_at',{ascending:false}).limit(50),
-    sb.from('pv_employees').select('*').eq('company_id',companyId).eq('activo',true)
+  const hoy=new Date().toISOString().split('T')[0];
+  const [{ data:pedidos },{ data:productos },{ data:chats },{ data:pv_branches }] = await Promise.all([
+    sb.from('pedidos').select('*').eq('proveedor_id',userId).order('created_at',{ascending:false}).limit(50),
+    sb.from('productos').select('*').eq('proveedor_id',userId).eq('activo',true).limit(10),
+    sb.from('chats').select('*').eq('proveedor_id',userId).order('ultimo_mensaje_at',{ascending:false}).limit(5),
+    sb.from('pv_branches').select('*').eq('company_id',userId).limit(10)
   ]);
-  branches=brR.data||[]; inventory=invR.data||[];
-  transfers=trR.data||[]; sales=saleR.data||[]; employees=empR.data||[];
-  renderTodo();
+
+  const pedHoy=(pedidos||[]).filter(p=>p.created_at?.startsWith(hoy));
+  const totalHoy=pedHoy.reduce((s,p)=>s+(p.total||0),0);
+  const pendientes=(pedidos||[]).filter(p=>p.estado==='pendiente').length;
+  const noLeidos=(chats||[]).filter(c=>(c.no_leidos||0)>0).length;
+
+  document.getElementById('k-ventas').textContent='$'+totalHoy.toFixed(0);
+  document.getElementById('k-pedidos').textContent=pedHoy.length;
+  document.getElementById('k-productos').textContent=(productos||[]).length;
+  document.getElementById('k-pendientes').textContent=pendientes;
+  if(noLeidos>0) document.getElementById('chat-dot').style.display='block';
+
+  renderChart(pedidos||[]);
+  renderPedidos(pedidos||[]);
+  renderChats(chats||[]);
+  renderProductos(productos||[]);
+  renderSucursales(pv_branches||[]);
 }
-
-function renderTodo(){
-  renderHome(); renderSucursales(); renderInventario('todos');
-  renderLogistica(); renderCajas(); renderWorkers(); renderMapa();
-  poblarSelects();
-  document.getElementById('cnt-suc').textContent=branches.length;
-  document.getElementById('cnt-log').textContent=transfers.length;
-  document.getElementById('pill-suc').textContent=branches.length+' sucursal'+(branches.length!==1?'es':'');
-  document.getElementById('pill-emps').textContent=employees.length+' empleado'+(employees.length!==1?'s':'');
-}
-
-function renderHome(){
-  const hoy=new Date().toISOString().split('T')[0];
-  const vHoy=sales.filter(s=>s.created_at?.startsWith(hoy));
-  const tHoy=vHoy.reduce((s,v)=>s+(v.total||0),0);
-  const tMes=sales.reduce((s,v)=>s+(v.total||0),0);
-  const alertas=inventory.filter(i=>(i.stock_disponible||0)<=(i.stock_minimo||5)).length;
-  const stock=inventory.reduce((s,i)=>s+(i.stock_disponible||0),0);
-  document.getElementById('k-ventas').textContent='$'+tHoy.toFixed(0);
-  document.getElementById('k-pedidos').textContent=vHoy.length;
-  document.getElementById('k-suc').textContent=branches.filter(b=>b.activa).length;
-  document.getElementById('k-alertas').textContent=alertas;
-  document.getElementById('k-mes').textContent='$'+tMes.toFixed(0);
-  document.getElementById('k-stock').textContent=stock;
-
-  const uvEl=document.getElementById('ultimas-ventas');
-  if(!sales.slice(0,5).length){ uvEl.innerHTML='<div class="empty-state"><p>Sin ventas</p></div>'; return; }
-  uvEl.innerHTML='';
-  sales.slice(0,5).forEach(v=>{
-    const hora=new Date(v.created_at).toLocaleTimeString('es-EC',{hour:'2-digit',minute:'2-digit'});
-    const div=document.createElement('div');
-    div.style.cssText='background:var(--bg2);border:1px solid var(--border);border-radius:13px;padding:12px 14px;margin-bottom:7px;display:flex;align-items:center;gap:10px;';
-    div.innerHTML=`<div style="flex:1;"><div style="font-size:0.82rem;font-weight:600;color:var(--txt);">${v.emprendedor_nombre||v.cajero_nombre||'Venta'}</div><div style="font-size:0.65rem;color:var(--txt3);">${v.branch_nombre||'Matriz'} · ${hora}</div></div><div style="font-family:'DM Mono',monospace;font-size:0.88rem;color:var(--acc);">$${Number(v.total||0).toFixed(2)}</div>`;
-    uvEl.appendChild(div);
-  });
-
-  const asEl=document.getElementById('alertas-stock');
-  const bajo=inventory.filter(i=>(i.stock_disponible||0)<=(i.stock_minimo||5));
-  if(!bajo.length){ asEl.innerHTML='<div class="empty-state"><p>Inventario saludable ✓</p></div>'; return; }
-  asEl.innerHTML='';
-  bajo.forEach(i=>{
-    const div=document.createElement('div');
-    div.style.cssText='background:var(--rojo-dim);border:1px solid rgba(239,68,68,0.2);border-radius:13px;padding:11px 14px;margin-bottom:7px;display:flex;align-items:center;gap:10px;';
-    div.innerHTML=`<div style="font-size:1rem;">⚠️</div><div style="flex:1;"><div style="font-size:0.82rem;font-weight:600;color:var(--txt);">${i.producto_nombre||'Producto'}</div><div style="font-size:0.65rem;color:var(--rojo);">${i.branch_nombre||'—'} · Stock: ${i.stock_disponible||0}</div></div>`;
-    asEl.appendChild(div);
+function renderChart(pedidos){
+  const chart=document.getElementById('mini-chart'); chart.innerHTML='';
+  const dias=[];
+  for(let i=6;i>=0;i--){
+    const d=new Date(); d.setDate(d.getDate()-i);
+    const str=d.toISOString().split('T')[0];
+    const total=pedidos.filter(p=>p.created_at?.startsWith(str)).reduce((s,p)=>s+(p.total||0),0);
+    dias.push({str,total,esHoy:i===0});
+  }
+  const max=Math.max(...dias.map(d=>d.total),1);
+  dias.forEach(d=>{
+    const bar=document.createElement('div');
+    bar.className='mini-bar'+(d.esHoy?' hoy':'');
+    bar.style.height=Math.max(4,Math.round(d.total/max*40))+'px';
+    bar.title='$'+d.total.toFixed(0);
+    chart.appendChild(bar);
   });
 }
 
-function renderSucursales(){
+function renderPedidos(pedidos){
+  const cont=document.getElementById('pedidos-lista');
+  const lista=pedidos.slice(0,5);
+  if(!lista.length){ cont.innerHTML='<div class="empty-mini">Sin pedidos aún</div>'; return; }
+  cont.innerHTML='';
+  lista.forEach(p=>{
+    const nombre=p.emprendedor_nombre||p.nombre_emprendedor||'Cliente';
+    const hora=new Date(p.created_at).toLocaleTimeString('es-EC',{hour:'2-digit',minute:'2-digit'});
+    const items=p.items||[];
+    const bg=colorAvatar(p.emprendedor_id||p.id);
+    const estMap={pendiente:'est-pendiente',proceso:'est-proceso',entregado:'est-entregado'};
+    const div=document.createElement('div');
+    div.className='pedido-mini'+(p.estado==='pendiente'?' nuevo':'');
+    div.onclick=()=>window.location.href='pedidos.html';
+    div.innerHTML=`
+      <div class="pm-avatar" style="background:${bg};">${nombre[0].toUpperCase()}</div>
+      <div class="pm-info">
+        <div class="pm-nombre">${nombre}</div>
+        <div class="pm-det">${items.length} producto${items.length!==1?'s':''} · ${hora}</div>
+      </div>
+      <div class="pm-right">
+        <div class="pm-total">$${Number(p.total||0).toFixed(2)}</div>
+        <div class="pm-estado ${estMap[p.estado]||'est-pendiente'}">${p.estado||'pendiente'}</div>
+      </div>`;
+    cont.appendChild(div);
+  });
+}
+
+function renderChats(chats){
+  const cont=document.getElementById('chats-lista');
+  if(!chats.length){ cont.innerHTML='<div class="empty-mini">Sin chats activos</div>'; return; }
+  cont.innerHTML='';
+  chats.slice(0,4).forEach(c=>{
+    const nombre=c.emprendedor_nombre||c.proveedor_nombre||'Usuario';
+    const hora=c.ultimo_mensaje_at?new Date(c.ultimo_mensaje_at).toLocaleTimeString('es-EC',{hour:'2-digit',minute:'2-digit'}):'';
+    const bg=colorAvatar(c.emprendedor_id||c.id);
+    const div=document.createElement('div'); div.className='chat-mini';
+    div.onclick=()=>window.location.href='chat.html';
+    div.innerHTML=`
+      <div class="chat-avatar" style="background:${bg};">${nombre[0].toUpperCase()}</div>
+      <div class="chat-info">
+        <div class="chat-nombre">${nombre}</div>
+        <div class="chat-preview">${c.ultimo_mensaje||'Nueva conversación'}</div>
+      </div>
+      <div class="chat-right">
+        <div class="chat-hora">${hora}</div>
+        ${(c.no_leidos||0)>0?`<div class="chat-badge">${c.no_leidos}</div>`:''}
+      </div>`;
+    cont.appendChild(div);
+  });
+}
+
+function renderProductos(productos){
+  const cont=document.getElementById('productos-lista');
+  if(!productos.length){ cont.innerHTML='<div class="empty-mini">Sin productos activos. <a href="productos.html" style="color:var(--naranja);">Agregar →</a></div>'; return; }
+  cont.innerHTML='';
+  productos.slice(0,4).forEach(p=>{
+    const img=p.imagenes?.[0]||p.imagen||'';
+    const bajo=(p.stock||0)<10;
+    const div=document.createElement('div'); div.className='prod-mini';
+    div.innerHTML=`
+      <div class="prod-mini-img">${img?`<img src="${img}" alt="">`:''}</div>
+      <div class="prod-mini-info">
+        <div class="prod-mini-nombre">${p.nombre||'Producto'}</div>
+        <div class="prod-mini-sub">${p.categoria||'—'} · ${p.stock||0} und</div>
+      </div>
+      <div style="text-align:right;">
+        <div class="prod-mini-precio">$${Number(p.precio||0).toFixed(2)}</div>
+        <div class="prod-mini-stock ${bajo?'stock-bajo':'stock-ok'}">${bajo?'Bajo':'OK'}</div>
+      </div>`;
+    cont.appendChild(div);
+  });
+}
+
+function renderSucursales(branches){
   const cont=document.getElementById('sucursales-lista');
-  if(!branches.length){ cont.innerHTML='<div class="empty-state"><p>Sin sucursales</p></div>'; return; }
-  const icons={tienda:'🏪',bodega:'🏭',matriz:'🏢',distribucion:'🚛'};
-  const colors={sierra:'rgba(59,130,246,0.15)',costa:'rgba(34,197,94,0.12)',oriente:'rgba(168,85,247,0.12)',insular:'rgba(255,140,0,0.12)'};
+  if(!branches.length){ cont.innerHTML='<div class="empty-mini">Sin sucursales. Activa en Plugins.</div>'; return; }
   cont.innerHTML='';
   branches.forEach(b=>{
-    const vB=sales.filter(s=>s.branch_id===b.id).reduce((s,v)=>s+(v.total||0),0);
-    const sB=inventory.filter(i=>i.branch_id===b.id).reduce((s,i)=>s+(i.stock_disponible||0),0);
-    const eB=employees.filter(e=>e.branch_id===b.id).length;
-    const aB=inventory.filter(i=>i.branch_id===b.id&&(i.stock_disponible||0)<=(i.stock_minimo||5)).length;
-    const div=document.createElement('div'); div.className=`branch-card${aB>0?' alerta':' activa'}`;
-    div.innerHTML=`<div class="bc-header"><div class="bc-icon" style="background:${colors[b.region||'sierra']||'var(--bg3)'};">${icons[b.tipo||'tienda']||'🏪'}</div><div style="flex:1;"><div class="bc-nombre">${b.nombre}</div><div class="bc-ubicacion">📍 ${b.ciudad||'—'}, ${b.provincia||'—'}</div></div><div class="bc-estado ${aB>0?'est-alerta':'est-activa'}">${aB>0?'⚠ ALERTA':'ACTIVA'}</div></div><div class="bc-stats"><div class="bc-stat"><div class="bc-stat-val" style="color:var(--acc);">$${vB.toFixed(0)}</div><div class="bc-stat-lbl">Ventas</div></div><div class="bc-stat"><div class="bc-stat-val">${sB}</div><div class="bc-stat-lbl">Stock</div></div><div class="bc-stat"><div class="bc-stat-val">${eB}</div><div class="bc-stat-lbl">Personal</div></div></div>`;
+    const div=document.createElement('div'); div.className='suc-mini';
+    div.innerHTML=`
+      <div class="suc-icon" style="background:rgba(255,140,0,0.1);">🏪</div>
+      <div class="suc-info">
+        <div class="suc-nombre">${b.nombre||'Sucursal'}</div>
+        <div class="suc-loc">📍 ${b.ciudad||'—'}, ${b.provincia||'—'}</div>
+      </div>
+      <div class="suc-kpi">
+        <div class="suc-venta">$0</div>
+        <div class="suc-stock">hoy</div>
+      </div>
+      <div class="suc-alert alert-ok"></div>`;
     cont.appendChild(div);
   });
 }
 
-window.renderInventario=function(filtro){
-  const cont=document.getElementById('inventario-lista');
-  let lista=inventory;
-  if(filtro==='bajo') lista=inventory.filter(i=>(i.stock_disponible||0)<=(i.stock_minimo||5));
-  else if(filtro==='transito') lista=inventory.filter(i=>(i.stock_en_transito||0)>0);
-  if(!lista.length){ cont.innerHTML='<div class="empty-state"><p>Sin resultados</p></div>'; return; }
-  cont.innerHTML='';
-  lista.forEach(i=>{
-    const bajo=(i.stock_disponible||0)<=(i.stock_minimo||5);
-    const div=document.createElement('div'); div.className='inv-item';
-    div.innerHTML=`<div class="inv-img">${i.producto_imagen?`<img src="${i.producto_imagen}" alt="">`:i.producto_nombre?.[0]||'📦'}</div><div style="flex:1;min-width:0;"><div class="inv-nombre">${i.producto_nombre||'Producto'}</div><div class="inv-branch">📍 ${i.branch_nombre||branches.find(b=>b.id===i.branch_id)?.nombre||'—'}</div><div class="inv-stocks"><span class="inv-chip ${bajo?'chip-bajo':'chip-disp'}">Disp: ${i.stock_disponible||0}</span>${(i.stock_en_transito||0)>0?`<span class="inv-chip chip-transit">Tráns: ${i.stock_en_transito}</span>`:''}</div></div><div class="inv-precio">$${Number(i.precio_venta||0).toFixed(2)}</div>`;
-    cont.appendChild(div);
-  });
+// MODO
+function abrirModalModo(){
+  modoSeleccionado=appMode;
+  actualizarOpcionesUI();
+  document.getElementById('modal-modo').classList.add('show');
+}
+
+function cerrarModalModo(e){ if(e.target===document.getElementById('modal-modo')) document.getElementById('modal-modo').classList.remove('show'); }
+
+window.seleccionarModo=function(modo){
+  modoSeleccionado=modo;
+  actualizarOpcionesUI();
 };
-function renderLogistica(){
-  const cont=document.getElementById('logistica-lista');
-  if(!transfers.length){ cont.innerHTML='<div class="empty-state"><p>Sin transferencias activas</p></div>'; return; }
-  cont.innerHTML='';
-  transfers.forEach(t=>{
-    const fecha=new Date(t.created_at).toLocaleDateString('es-EC',{day:'2-digit',month:'short'});
-    const div=document.createElement('div'); div.className='transfer-card';
-    div.innerHTML=`<div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px;"><div class="tr-guia">${t.guia||'GR-'+t.id.slice(-6).toUpperCase()}</div><span class="tr-estado">en_tránsito</span></div><div class="tr-ruta"><span class="tr-node">${t.origen_nombre||'Origen'}</span><span class="tr-arrow">→</span><span class="tr-node">${t.destino_nombre||'Destino'}</span></div><div class="tr-det">${t.cantidad} und · ${t.producto_nombre||'—'} · ${fecha}</div><div class="tr-acc"><button class="btn-tr ok" onclick="confirmarTransfer('${t.id}')">✓ Confirmar</button><button class="btn-tr cancel" onclick="cancelarTransfer('${t.id}')">Cancelar</button></div>`;
-    cont.appendChild(div);
-  });
+
+function actualizarOpcionesUI(){
+  document.getElementById('opt-esencial').classList.toggle('selected',modoSeleccionado==='ESENCIAL');
+  document.getElementById('opt-corporativo').classList.toggle('selected',modoSeleccionado==='CORPORATIVO');
+  const btn=document.getElementById('btn-activar-modo');
+  btn.textContent=modoSeleccionado===appMode?'Modo actual activo':`Activar ${modoSeleccionado}`;
+  btn.style.opacity=modoSeleccionado===appMode?'0.5':'1';
 }
 
-function renderCajas(){
-  const cont=document.getElementById('cajas-lista');
-  if(!branches.length){ cont.innerHTML='<div class="empty-state"><p>Sin sucursales</p></div>'; return; }
-  const hoy=new Date().toISOString().split('T')[0];
-  cont.innerHTML='';
-  branches.forEach(b=>{
-    const vB=sales.filter(s=>s.branch_id===b.id&&s.created_at?.startsWith(hoy));
-    const tB=vB.reduce((s,v)=>s+(v.total||0),0);
-    const div=document.createElement('div'); div.className='caja-item';
-    div.innerHTML=`<div class="caja-dot"></div><div style="flex:1;"><div class="caja-nombre">${b.nombre}</div><div class="caja-ciudad">${b.ciudad||'—'} · ${vB.length} ventas</div></div><div class="caja-total">$${tB.toFixed(2)}</div>`;
-    cont.appendChild(div);
-  });
-}
+window.aplicarModo=function(){
+  if(modoSeleccionado===appMode){ document.getElementById('modal-modo').classList.remove('show'); return; }
+  appMode=modoSeleccionado;
+  localStorage.setItem(`app_mode_${userId}`,appMode);
+  aplicarModoUI(appMode);
+  document.getElementById('modal-modo').classList.remove('show');
+  showToast('✓ Modo '+appMode+' activado');
+  cargarMarca();
+};
 
-function renderWorkers(){
-  const cont=document.getElementById('workers-global');
-  if(!employees.length){ cont.innerHTML='<div class="empty-state"><p>Sin empleados</p></div>'; return; }
-  cont.innerHTML='';
-  const colors=['#FF8C00','#3B82F6','#22C55E','#A855F7'];
-  employees.forEach(e=>{
-    const bg=colors[Math.abs((e.nombre||'').charCodeAt(0)||0)%4];
-    const branch=branches.find(b=>b.id===e.branch_id);
-    const div=document.createElement('div'); div.className='worker-row';
-    div.innerHTML=`<div class="wr-avatar" style="background:${bg};">${e.foto?`<img src="${e.foto}" alt="">`:( e.nombre||'E')[0]}</div><div style="flex:1;"><div class="wr-nombre">${e.nombre||'Empleado'}</div><div class="wr-branch">${branch?.nombre||'Sin sucursal'} · ${e.cargo||'—'}</div></div><div class="wr-asist asist-pendiente">Sin reg.</div>`;
-    cont.appendChild(div);
-  });
-}
-
-function renderMapa(){
-  const heatEl=document.getElementById('ecuador-heatmap');
-  if(!heatEl) return;
-  heatEl.innerHTML='';
-  const pvVentas={};
-  sales.forEach(s=>{ const b=branches.find(br=>br.id===s.branch_id); if(b?.provincia) pvVentas[b.provincia]=(pvVentas[b.provincia]||0)+(s.total||0); });
-  const maxV=Math.max(...Object.values(pvVentas),1);
-  PROVINCIAS.forEach(p=>{
-    const val=pvVentas[p]||0;
-    const alpha=0.12+( val/maxV)*0.88;
-    const cell=document.createElement('div'); cell.className='prov-cell';
-    cell.style.background=`rgba(255,140,0,${alpha})`;
-    cell.title=`${p}: $${val.toFixed(0)}`;
-    cell.innerHTML=`<div class="prov-nombre">${p}</div><div class="prov-val">${val>0?'$'+val.toFixed(0):'—'}</div>`;
-    heatEl.appendChild(cell);
-  });
-  const rankEl=document.getElementById('ranking-zonas');
-  if(!rankEl) return;
-  const ranking=Object.entries(pvVentas).sort((a,b)=>b[1]-a[1]).slice(0,5);
-  if(!ranking.length){ rankEl.innerHTML='<div class="empty-state"><p>Sin datos</p></div>'; return; }
-  rankEl.innerHTML='';
-  ranking.forEach(([prov,total],i)=>{
-    const div=document.createElement('div');
-    div.style.cssText='background:var(--bg2);border:1px solid var(--border);border-radius:13px;padding:12px 14px;margin-bottom:7px;display:flex;align-items:center;gap:10px;';
-    div.innerHTML=`<div style="font-family:DM Mono,monospace;font-size:1rem;font-weight:700;color:var(--acc);width:24px;">${i+1}.</div><div style="flex:1;font-size:0.82rem;font-weight:600;color:var(--txt);">${prov}</div><div style="font-family:DM Mono,monospace;color:var(--acc);">$${total.toFixed(0)}</div>`;
-    rankEl.appendChild(div);
-  });
-}
-
-function poblarSelects(){
-  ['inv-branch','tr-origen','tr-destino'].forEach(id=>{
-    const el=document.getElementById(id); if(!el) return;
-    el.innerHTML='<option value="">Seleccionar sucursal</option>';
-    branches.forEach(b=>{ el.innerHTML+=`<option value="${b.id}">${b.nombre}</option>`; });
-  });
-  const tp=document.getElementById('tr-producto');
-  if(tp){
-    tp.innerHTML='<option value="">Seleccionar producto</option>';
-    const unique=[...new Map(inventory.map(i=>[i.producto_id||i.producto_nombre,i])).values()];
-    unique.forEach(i=>{ tp.innerHTML+=`<option value="${i.producto_id||''}">${i.producto_nombre}</option>`; });
+function aplicarModoUI(modo){
+  const isCorp=modo==='CORPORATIVO';
+  document.body.classList.toggle('modo-corp',isCorp);
+  const banner=document.getElementById('empresa-banner');
+  const icon=document.getElementById('eb-icon');
+  const badge=document.getElementById('eb-badge');
+  const title=document.getElementById('eb-title');
+  const sub=document.getElementById('eb-sub');
+  if(isCorp){
+    banner.className='empresa-banner corporativo';
+    icon.className='eb-icon corporativo'; icon.textContent='🏢';
+    badge.className='eb-badge corporativo'; badge.textContent='CORPORATIVO';
+    title.textContent='Modo Corporativo activo';
+    sub.textContent='Sucursales, cajas y logística habilitados';
+  } else {
+    banner.className='empresa-banner esencial';
+    icon.className='eb-icon esencial'; icon.textContent='🚀';
+    badge.className='eb-badge esencial'; badge.textContent='ESENCIAL';
+    title.textContent='Modo Esencial';
+    sub.textContent='Toca para activar modo Corporativo con sucursales';
   }
 }
 
-function toggleModo(){
-  appMode=appMode==='ESENCIAL'?'CORPORATIVO':'ESENCIAL';
-  aplicarModo(appMode,true);
-  sb.from('pv_companies').update({app_mode:appMode}).eq('id',companyId);
-}
-
-function aplicarModo(modo,save){
-  const isCorp=modo==='CORPORATIVO';
-  document.body.classList.toggle('modo-corp',isCorp);
-  const badge=document.getElementById('mode-badge');
-  badge.className='mode-pill '+(isCorp?'corporativo':'esencial');
-  badge.querySelector('.mode-dot').style.background=isCorp?'var(--acc)':'var(--verde)';
-  document.getElementById('mode-label').textContent=modo;
-  const track=document.getElementById('toggle-track');
-  const thumb=document.getElementById('toggle-thumb');
-  track.classList.toggle('on',isCorp);
-  thumb.style.left=isCorp?'27px':'3px';
-  thumb.style.background=isCorp?'var(--acc)':'var(--txt3)';
-  document.getElementById('modo-titulo').textContent=isCorp?'Modo Corporativo':'Modo Esencial';
-  document.getElementById('modo-desc').textContent=isCorp?'Centro de mando: sucursales, cajas, workers y mapa calor.':'Un local, un inventario, una caja.';
-  document.getElementById('cfg-modo-txt').textContent=modo;
-  document.getElementById('btn-modo-txt').textContent=isCorp?'ESENCIAL':'CORPORATIVO';
-  document.getElementById('pill-plan').textContent=modo;
-  if(save) showToast('Modo '+modo+' activado ✓');
-}
-
-window.abrirModalSucursal=()=>document.getElementById('modal-suc').classList.add('show');
-window.abrirModalInventario=()=>{ poblarSelects(); document.getElementById('modal-inv').classList.add('show'); };
-window.abrirModalTransferencia=()=>{ poblarSelects(); document.getElementById('modal-transfer').classList.add('show'); };
-
-window.guardarSucursal=async function(){
-  const nombre=document.getElementById('suc-nombre').value.trim();
-  const ciudad=document.getElementById('suc-ciudad').value.trim();
-  if(!nombre||!ciudad){ showToast('Nombre y ciudad requeridos'); return; }
-  document.getElementById('upload-overlay').classList.add('show');
-  try{
-    await sb.from('pv_branches').insert({ company_id:companyId, nombre, ciudad, provincia:document.getElementById('suc-provincia').value, tipo:document.getElementById('suc-tipo').value, region:document.getElementById('suc-region').value, direccion:document.getElementById('suc-dir').value.trim(), responsable:document.getElementById('suc-resp').value.trim(), horario_ini:document.getElementById('suc-hini').value, horario_fin:document.getElementById('suc-hfin').value, geo_radio:parseInt(document.getElementById('suc-geo').value)||200, activa:true });
-    document.getElementById('suc-ok').classList.add('show');
-    setTimeout(()=>{ document.getElementById('suc-ok').classList.remove('show'); cerrarM('modal-suc'); },1500);
-    await cargarTodo();
-  } catch(e){ showToast('Error: '+e.message); }
-  document.getElementById('upload-overlay').classList.remove('show');
-};
-
-window.guardarInventario=async function(){
-  const branchId=document.getElementById('inv-branch').value;
-  const nombre=document.getElementById('inv-prod-nombre').value.trim();
-  const stock=parseInt(document.getElementById('inv-stock').value)||0;
-  if(!branchId||!nombre){ showToast('Completa sucursal y nombre del producto'); return; }
-  const branch=branches.find(b=>b.id===branchId);
-  document.getElementById('upload-overlay').classList.add('show');
-  try{
-    await sb.from('pv_inventory').insert({ company_id:companyId, branch_id:branchId, branch_nombre:branch?.nombre||'', producto_nombre:nombre, stock_disponible:stock, stock_minimo:parseInt(document.getElementById('inv-minimo').value)||5, precio_venta:parseFloat(document.getElementById('inv-precio').value)||0, precio_costo:parseFloat(document.getElementById('inv-costo').value)||0, updated_at:new Date().toISOString() });
-    document.getElementById('inv-ok').classList.add('show');
-    setTimeout(()=>{ document.getElementById('inv-ok').classList.remove('show'); cerrarM('modal-inv'); },1500);
-    await cargarTodo();
-  } catch(e){ showToast('Error: '+e.message); }
-  document.getElementById('upload-overlay').classList.remove('show');
-};
-
-window.crearTransferencia=async function(){
-  const origenId=document.getElementById('tr-origen').value;
-  const destinoId=document.getElementById('tr-destino').value;
-  const cant=parseInt(document.getElementById('tr-cant').value)||0;
-  if(!origenId||!destinoId||cant<=0||origenId===destinoId){ showToast('Completa todos los campos'); return; }
-  const origen=branches.find(b=>b.id===origenId);
-  const destino=branches.find(b=>b.id===destinoId);
-  const invO=inventory.find(i=>i.branch_id===origenId);
-  if(!invO||(invO.stock_disponible||0)<cant){ showToast('Stock insuficiente'); return; }
-  document.getElementById('upload-overlay').classList.add('show');
-  try{
-    const guia='GR-'+Date.now().toString().slice(-8);
-    await sb.from('pv_transfers').insert({ company_id:companyId, guia, origen_branch_id:origenId, origen_nombre:origen?.nombre||'', destino_branch_id:destinoId, destino_nombre:destino?.nombre||'', producto_nombre:invO?.producto_nombre||'Producto', cantidad:cant, transportadora:document.getElementById('tr-trans').value.trim(), iniciado_por:userId });
-    await sb.from('pv_inventory').update({ stock_disponible:Math.max(0,(invO.stock_disponible||0)-cant), stock_en_transito:(invO.stock_en_transito||0)+cant, updated_at:new Date().toISOString() }).eq('id',invO.id);
-    cerrarM('modal-transfer');
-    await cargarTodo();
-    showToast('✓ Guía '+guia+' generada');
-  } catch(e){ showToast('Error: '+e.message); }
-  document.getElementById('upload-overlay').classList.remove('show');
-};
-
-window.confirmarTransfer=async function(id){
-  if(!confirm('¿Confirmar recepción?')) return;
-  document.getElementById('upload-overlay').classList.add('show');
-  const t=transfers.find(tr=>tr.id===id); if(!t) return;
-  await sb.from('pv_transfers').update({estado:'confirmado',fecha_confirmacion:new Date().toISOString(),confirmado_por:userId}).eq('id',id);
-  const invD=inventory.find(i=>i.branch_id===t.destino_branch_id);
-  if(invD){ await sb.from('pv_inventory').update({stock_disponible:(invD.stock_disponible||0)+t.cantidad,updated_at:new Date().toISOString()}).eq('id',invD.id); }
-  else { await sb.from('pv_inventory').insert({company_id:companyId,branch_id:t.destino_branch_id,branch_nombre:t.destino_nombre,producto_nombre:t.producto_nombre,stock_disponible:t.cantidad}); }
-  const invO=inventory.find(i=>i.branch_id===t.origen_branch_id);
-  if(invO) await sb.from('pv_inventory').update({stock_en_transito:Math.max(0,(invO.stock_en_transito||0)-t.cantidad)}).eq('id',invO.id);
-  await cargarTodo();
-  document.getElementById('upload-overlay').classList.remove('show');
-  showToast('✓ Stock confirmado en destino');
-};
-
-window.cancelarTransfer=async function(id){
-  if(!confirm('¿Cancelar transferencia?')) return;
-  document.getElementById('upload-overlay').classList.add('show');
-  const t=transfers.find(tr=>tr.id===id); if(!t) return;
-  await sb.from('pv_transfers').update({estado:'cancelado'}).eq('id',id);
-  const invO=inventory.find(i=>i.branch_id===t.origen_branch_id);
-  if(invO) await sb.from('pv_inventory').update({stock_disponible:(invO.stock_disponible||0)+t.cantidad,stock_en_transito:Math.max(0,(invO.stock_en_transito||0)-t.cantidad)}).eq('id',invO.id);
-  await cargarTodo();
-  document.getElementById('upload-overlay').classList.remove('show');
-  showToast('Cancelado — stock devuelto al origen');
-};
-
-window.guardarConfig=async function(){
-  const nombre=document.getElementById('cfg-nombre').value.trim();
-  const color=document.getElementById('cfg-color').value;
-  const logo=document.getElementById('cfg-logo').value.trim();
-  document.getElementById('upload-overlay').classList.add('show');
-  await sb.from('pv_companies').update({nombre,ruc:document.getElementById('cfg-ruc').value.trim(),color_marca:color,logo}).eq('id',companyId);
-  await sb.from('usuarios').update({...(nombre?{empresa:nombre}:{}),workers_color:color,...(logo?{logo_empresa:logo}:{})}).eq('id',userId);
-  companyData={...companyData,nombre,color_marca:color,logo};
-  document.documentElement.style.setProperty('--acc',color);
-  document.getElementById('upload-overlay').classList.remove('show');
-  document.getElementById('cfg-ok').classList.add('show');
-  setTimeout(()=>document.getElementById('cfg-ok').classList.remove('show'),2000);
-};
-
-window.prevColor=v=>{ document.getElementById('cfg-color-dot').style.background=v; document.documentElement.style.setProperty('--acc',v); };
-
 function suscribirRealtime(){
-  sb.channel('enterprise-'+companyId)
-    .on('postgres_changes',{event:'INSERT',schema:'public',table:'pv_sales',filter:`company_id=eq.${companyId}`},()=>cargarTodo())
-    .on('postgres_changes',{event:'*',schema:'public',table:'pv_transfers',filter:`company_id=eq.${companyId}`},()=>cargarTodo())
+  sb.channel('dash-'+userId)
+    .on('postgres_changes',{event:'INSERT',schema:'public',table:'pedidos',filter:`proveedor_id=eq.${userId}`},()=>{ cargarTodo(); showToast('🔔 Nuevo pedido recibido'); })
+    .on('postgres_changes',{event:'INSERT',schema:'public',table:'mensajes',},()=>cargarTodo())
     .subscribe();
 }
 
-window.showTab=function(tab,btn){
-  document.querySelectorAll('.section').forEach(s=>s.classList.remove('active'));
-  document.querySelectorAll('.snav-btn,.tab').forEach(b=>b.classList.remove('active'));
-  document.getElementById('sec-'+tab)?.classList.add('active');
-  if(btn) btn.classList.add('active');
-};
-window.doLogout=async function(){ await sb.auth.signOut(); window.location.href='login.html'; };
-window.cerrarModal=(id,e)=>{ if(e.target===document.getElementById(id)) document.getElementById(id).classList.remove('show'); };
-window.cerrarM=(id)=>document.getElementById(id).classList.remove('show');
 function showToast(msg){ const t=document.getElementById('toast'); t.textContent=msg; t.classList.add('show'); setTimeout(()=>t.classList.remove('show'),2500); }
 </script>
 </body>
 </html>
+          
