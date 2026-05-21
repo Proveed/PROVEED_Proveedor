@@ -3,187 +3,859 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-<title>PROVEED — Panel Proveedor</title>
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+<title>PROVEED Enterprise — Centro de Mando</title>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:wght@300;400;500;600&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
 <style>
-  *{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent;}
-  :root{ --naranja:#FF8C00; --verde:#A8E63D; --negro:#0A0A0A; --gris:#F2F3F0; --rojo:#FF4D4D; --azul:#007AFF; }
-  body{ background:var(--negro); font-family:'Inter',sans-serif; padding-bottom:90px; -webkit-font-smoothing:antialiased; }
-  .header{ background:var(--negro); padding:48px 20px 20px; }
-  .header-top{ display:flex; align-items:center; justify-content:space-between; margin-bottom:6px; }
-  .logo-row{ display:flex; align-items:center; gap:8px; }
-  .logo-hex{ width:32px; height:32px; }
-  .logo-text{ font-size:1.1rem; font-weight:800; color:white; }
-  .logo-text span{ color:var(--naranja); }
-  .header-icons{ display:flex; gap:10px; }
-  .h-icon{ width:36px; height:36px; background:rgba(255,255,255,0.08); border-radius:10px; display:flex; align-items:center; justify-content:center; cursor:pointer; position:relative; }
-  .h-icon svg{ width:18px; height:18px; stroke:white; fill:none; stroke-width:2; }
-  .h-badge{ position:absolute; top:-4px; right:-4px; background:var(--rojo); color:white; font-size:0.52rem; font-weight:800; padding:2px 5px; border-radius:8px; border:2px solid var(--negro); display:none; }
-  .welcome-text{ font-size:0.82rem; color:#555; }
-  .welcome-name{ font-size:1.1rem; font-weight:700; color:white; }
-  .kpi-strip{ display:flex; gap:10px; padding:16px 20px; overflow-x:auto; scrollbar-width:none; }
-  .kpi-strip::-webkit-scrollbar{ display:none; }
-  .kpi-card{ background:#161616; border-radius:16px; padding:14px 16px; flex-shrink:0; min-width:120px; border:1px solid #222; }
-  .kpi-val{ font-size:1.4rem; font-weight:800; color:white; line-height:1; }
-  .kpi-val.naranja{ color:var(--naranja); }
-  .kpi-val.verde{ color:var(--verde); }
-  .kpi-lbl{ font-size:0.65rem; color:#555; font-weight:600; text-transform:uppercase; letter-spacing:0.5px; margin-top:4px; }
-  .kpi-trend{ font-size:0.68rem; color:var(--verde); margin-top:2px; }
-  .section-label{ font-size:0.7rem; font-weight:700; color:#444; text-transform:uppercase; letter-spacing:1px; padding:16px 20px 8px; }
-  .modulos-grid{ display:grid; grid-template-columns:repeat(3,1fr); gap:10px; padding:0 20px; }
-  .modulo{ background:#161616; border-radius:16px; padding:16px 12px; display:flex; flex-direction:column; align-items:center; gap:8px; cursor:pointer; transition:0.2s; border:1px solid #222; text-decoration:none; position:relative; }
-  .modulo:active{ transform:scale(0.95); background:#1e1e1e; }
-  .mod-icon{ width:44px; height:44px; border-radius:14px; display:flex; align-items:center; justify-content:center; }
-  .mod-icon svg{ width:22px; height:22px; fill:none; stroke-width:2; stroke-linecap:round; stroke-linejoin:round; }
-  .mod-label{ font-size:0.68rem; font-weight:600; color:#aaa; text-align:center; }
-  .mod-badge{ position:absolute; top:8px; right:8px; font-size:0.58rem; font-weight:800; padding:2px 6px; border-radius:6px; }
-  .mod-naranja .mod-icon{ background:rgba(255,140,0,0.12); }
-  .mod-naranja .mod-icon svg{ stroke:var(--naranja); }
-  .mod-verde .mod-icon{ background:rgba(168,230,61,0.12); }
-  .mod-verde .mod-icon svg{ stroke:var(--verde); }
-  .mod-azul .mod-icon{ background:rgba(0,122,255,0.12); }
-  .mod-azul .mod-icon svg{ stroke:var(--azul); }
-  .mod-rojo .mod-icon{ background:rgba(255,77,77,0.12); }
-  .mod-rojo .mod-icon svg{ stroke:var(--rojo); }
-  .mod-morado .mod-icon{ background:rgba(175,82,222,0.12); }
-  .mod-morado .mod-icon svg{ stroke:#AF52DE; }
-  .mod-cyan .mod-icon{ background:rgba(50,173,230,0.12); }
-  .mod-cyan .mod-icon svg{ stroke:#32ADE6; }
-  .mod-pink .mod-icon{ background:rgba(255,45,85,0.12); }
-  .mod-pink .mod-icon svg{ stroke:#FF2D55; }
-  .mod-yellow .mod-icon{ background:rgba(255,204,0,0.12); }
-  .mod-yellow .mod-icon svg{ stroke:#FFCC00; }
-  .mod-teal .mod-icon{ background:rgba(90,200,250,0.12); }
-  .mod-teal .mod-icon svg{ stroke:#5AC8FA; }
-  .pedidos-recientes{ padding:0 20px 8px; }
-  .ped-item{ background:#161616; border-radius:14px; padding:14px; margin-bottom:8px; display:flex; align-items:center; gap:12px; border:1px solid #222; cursor:pointer; }
-  .ped-num{ font-size:0.82rem; font-weight:700; color:white; }
-  .ped-cliente{ font-size:0.72rem; color:#555; margin-top:1px; }
-  .ped-total{ font-size:0.88rem; font-weight:700; color:var(--naranja); margin-left:auto; white-space:nowrap; }
-  .ped-estado{ font-size:0.62rem; font-weight:700; padding:3px 8px; border-radius:6px; white-space:nowrap; }
-  .est-pendiente{ background:rgba(0,122,255,0.15); color:var(--azul); }
-  .est-proceso{ background:rgba(255,140,0,0.15); color:var(--naranja); }
-  .est-completado{ background:rgba(168,230,61,0.15); color:var(--verde); }
-  .empty-ped{ text-align:center; padding:24px; color:#444; font-size:0.82rem; }
-  .tab-bar{ position:fixed; bottom:0; width:100%; background:#111; display:flex; justify-content:space-around; align-items:center; padding:10px 0 22px; border-top:1px solid #1e1e1e; z-index:200; }
-  .tab{ display:flex; flex-direction:column; align-items:center; gap:4px; cursor:pointer; flex:1; color:#444; text-decoration:none; }
-  .tab.active{ color:var(--naranja); }
-  .tab svg{ width:22px; height:22px; stroke:currentColor; fill:none; stroke-width:2; stroke-linecap:round; stroke-linejoin:round; }
-  .tab span{ font-size:0.56rem; font-weight:600; text-transform:uppercase; }
+*{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent;}
+:root{
+  --bg:#08090D; --bg1:#0E0F14; --bg2:#13141A; --bg3:#1A1B23;
+  --border:rgba(255,255,255,0.06); --border-acc:rgba(255,140,0,0.25);
+  --txt:#F2F3F7; --txt2:#8B8D9A; --txt3:#4A4C59;
+  --acc:#FF8C00; --acc-dim:rgba(255,140,0,0.12);
+  --verde:#22C55E; --verde-dim:rgba(34,197,94,0.12);
+  --rojo:#EF4444; --rojo-dim:rgba(239,68,68,0.1);
+  --azul:#3B82F6; --azul-dim:rgba(59,130,246,0.12);
+  --morado:#A855F7;
+}
+body{background:var(--bg);font-family:'DM Sans',sans-serif;color:var(--txt);min-height:100vh;-webkit-font-smoothing:antialiased;}
+
+/* MODE PILL */
+.mode-pill{display:inline-flex;align-items:center;gap:6px;padding:4px 12px;border-radius:20px;font-size:0.65rem;font-weight:600;font-family:'DM Mono',monospace;letter-spacing:1px;text-transform:uppercase;cursor:pointer;border:1px solid;}
+.mode-pill.esencial{background:var(--verde-dim);color:var(--verde);border-color:rgba(34,197,94,0.3);}
+.mode-pill.corporativo{background:var(--acc-dim);color:var(--acc);border-color:var(--border-acc);box-shadow:0 0 20px rgba(255,140,0,0.1);}
+.mode-dot{width:6px;height:6px;border-radius:50%;animation:pulse 2s infinite;}
+@keyframes pulse{0%,100%{opacity:1}50%{opacity:0.4}}
+
+/* TOPNAV */
+.topnav{background:var(--bg1);border-bottom:1px solid var(--border);padding:14px 16px;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;z-index:200;}
+.brand{display:flex;align-items:center;gap:10px;}
+.brand-logo{width:34px;height:34px;border-radius:9px;background:linear-gradient(135deg,#FF8C00,#FF5500);display:flex;align-items:center;justify-content:center;font-family:'Syne',sans-serif;font-weight:800;font-size:0.75rem;color:white;overflow:hidden;}
+.brand-logo img{width:100%;height:100%;object-fit:cover;}
+.brand-name{font-family:'Syne',sans-serif;font-weight:800;font-size:0.92rem;color:var(--txt);}
+.nav-right{display:flex;gap:8px;align-items:center;}
+.nav-btn{width:32px;height:32px;border-radius:8px;background:var(--bg2);border:1px solid var(--border);cursor:pointer;display:flex;align-items:center;justify-content:center;}
+.nav-btn svg{width:15px;height:15px;stroke:var(--txt3);fill:none;stroke-width:2;}
+
+/* SUBNAV */
+.subnav{background:var(--bg1);border-bottom:1px solid var(--border);display:flex;overflow-x:auto;scrollbar-width:none;padding:0 16px;}
+.subnav::-webkit-scrollbar{display:none;}
+.snav-btn{padding:13px 16px;border:none;background:transparent;font-family:'DM Sans',sans-serif;font-size:0.74rem;font-weight:500;color:var(--txt3);cursor:pointer;white-space:nowrap;border-bottom:2px solid transparent;transition:all 0.2s;}
+.snav-btn.active{color:var(--acc);border-bottom-color:var(--acc);}
+.snav-count{font-size:0.6rem;font-weight:700;padding:1px 6px;border-radius:8px;background:var(--acc-dim);color:var(--acc);font-family:'DM Mono',monospace;}
+
+/* SECTIONS */
+.section{display:none;padding:14px 16px 100px;}
+.section.active{display:block;}
+
+/* EMPRESA HERO */
+.empresa-hero{background:var(--bg2);border:1px solid var(--border);border-radius:20px;padding:20px;margin-bottom:14px;display:flex;align-items:center;gap:14px;position:relative;overflow:hidden;}
+.empresa-hero::before{content:'';position:absolute;right:-30px;top:-30px;width:150px;height:150px;background:radial-gradient(circle,rgba(255,140,0,0.08) 0%,transparent 70%);}
+.empresa-logo{width:58px;height:58px;border-radius:16px;background:var(--bg3);display:flex;align-items:center;justify-content:center;font-family:'Syne',sans-serif;font-weight:800;font-size:1.2rem;color:var(--acc);flex-shrink:0;overflow:hidden;border:1px solid var(--border);}
+.empresa-logo img{width:100%;height:100%;object-fit:cover;}
+.empresa-nombre{font-family:'Syne',sans-serif;font-size:1.1rem;font-weight:800;color:var(--txt);margin-bottom:4px;}
+.empresa-meta{font-size:0.72rem;color:var(--txt3);margin-bottom:8px;}
+.empresa-pills{display:flex;gap:6px;flex-wrap:wrap;}
+.e-pill{font-size:0.62rem;font-weight:600;padding:3px 8px;border-radius:8px;background:var(--bg3);color:var(--txt2);border:1px solid var(--border);font-family:'DM Mono',monospace;}
+.e-pill.acc{background:var(--acc-dim);color:var(--acc);border-color:var(--border-acc);}
+
+/* KPI */
+.kpi-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:14px;}
+.kpi-card{background:var(--bg2);border:1px solid var(--border);border-radius:16px;padding:16px 14px;position:relative;overflow:hidden;transition:border-color 0.3s;}
+.kpi-card:hover{border-color:rgba(255,140,0,0.2);}
+.kpi-icon{width:30px;height:30px;border-radius:9px;display:flex;align-items:center;justify-content:center;margin-bottom:12px;font-size:0.9rem;}
+.kpi-val{font-family:'Syne',sans-serif;font-size:1.6rem;font-weight:800;line-height:1;margin-bottom:4px;}
+.kpi-lbl{font-size:0.62rem;color:var(--txt3);font-weight:600;text-transform:uppercase;letter-spacing:0.8px;}
+.kpi-delta{font-size:0.65rem;font-weight:600;margin-top:6px;}
+.kpi-delta.up{color:var(--verde);}
+
+/* MODO TOGGLE */
+.modo-card{background:var(--bg2);border:1px solid var(--border);border-radius:18px;padding:16px;margin-bottom:14px;display:flex;align-items:center;gap:14px;}
+.modo-info{flex:1;}
+.modo-titulo{font-family:'Syne',sans-serif;font-size:0.88rem;font-weight:700;color:var(--txt);margin-bottom:3px;}
+.modo-desc{font-size:0.72rem;color:var(--txt3);}
+.toggle-switch{position:relative;width:52px;height:28px;flex-shrink:0;cursor:pointer;}
+.toggle-track{width:100%;height:100%;border-radius:14px;background:var(--bg3);border:1px solid var(--border);transition:all 0.3s;}
+.toggle-track.on{background:rgba(255,140,0,0.2);border-color:rgba(255,140,0,0.4);}
+.toggle-thumb{position:absolute;top:3px;left:3px;width:22px;height:22px;border-radius:50%;background:var(--txt3);transition:all 0.3s cubic-bezier(0.34,1.56,0.64,1);}
+
+/* BRANCH CARD */
+.branch-card{background:var(--bg2);border:1px solid var(--border);border-radius:18px;padding:14px;margin-bottom:10px;cursor:pointer;transition:all 0.2s;}
+.branch-card.activa{border-left:3px solid var(--verde);}
+.branch-card.alerta{border-color:rgba(239,68,68,0.3);}
+.bc-header{display:flex;align-items:center;gap:12px;margin-bottom:10px;}
+.bc-icon{width:40px;height:40px;border-radius:12px;display:flex;align-items:center;justify-content:center;font-size:1.1rem;flex-shrink:0;}
+.bc-nombre{font-family:'Syne',sans-serif;font-size:0.88rem;font-weight:700;color:var(--txt);}
+.bc-ubicacion{font-size:0.68rem;color:var(--txt3);margin-top:2px;}
+.bc-estado{font-size:0.6rem;font-weight:700;padding:3px 8px;border-radius:20px;font-family:'DM Mono',monospace;}
+.est-activa{background:var(--verde-dim);color:var(--verde);}
+.est-alerta{background:var(--rojo-dim);color:var(--rojo);}
+.bc-stats{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;}
+.bc-stat{background:var(--bg3);border-radius:10px;padding:8px 10px;text-align:center;}
+.bc-stat-val{font-family:'DM Mono',monospace;font-size:0.85rem;font-weight:500;color:var(--txt);}
+.bc-stat-lbl{font-size:0.58rem;color:var(--txt3);margin-top:2px;}
+
+/* INVENTARIO */
+.inv-item{background:var(--bg2);border:1px solid var(--border);border-radius:14px;padding:13px;margin-bottom:8px;display:flex;align-items:center;gap:12px;}
+.inv-img{width:44px;height:44px;border-radius:10px;background:var(--bg3);flex-shrink:0;overflow:hidden;display:flex;align-items:center;justify-content:center;font-size:1.2rem;}
+.inv-img img{width:100%;height:100%;object-fit:cover;}
+.inv-nombre{font-size:0.85rem;font-weight:600;color:var(--txt);}
+.inv-branch{font-size:0.65rem;color:var(--txt3);margin-top:2px;}
+.inv-stocks{display:flex;gap:6px;margin-top:6px;flex-wrap:wrap;}
+.inv-chip{font-size:0.6rem;font-weight:700;padding:2px 7px;border-radius:6px;font-family:'DM Mono',monospace;}
+.chip-disp{background:var(--verde-dim);color:var(--verde);}
+.chip-transit{background:rgba(255,140,0,0.1);color:var(--acc);}
+.chip-bajo{background:var(--rojo-dim);color:var(--rojo);}
+.inv-precio{font-family:'DM Mono',monospace;font-size:0.9rem;font-weight:500;color:var(--acc);flex-shrink:0;}
+
+/* TRANSFERENCIA */
+.transfer-card{background:var(--bg2);border:1px solid rgba(255,140,0,0.15);border-radius:16px;padding:14px;margin-bottom:10px;}
+.tr-guia{font-family:'DM Mono',monospace;font-size:0.72rem;color:var(--acc);}
+.tr-estado{font-size:0.62rem;font-weight:700;padding:3px 8px;border-radius:6px;background:rgba(255,140,0,0.1);color:var(--acc);font-family:'DM Mono',monospace;}
+.tr-ruta{display:flex;align-items:center;gap:8px;margin:8px 0;}
+.tr-node{font-size:0.78rem;font-weight:600;color:var(--txt);}
+.tr-arrow{color:var(--acc);}
+.tr-det{font-size:0.7rem;color:var(--txt3);}
+.tr-acc{display:flex;gap:6px;margin-top:10px;}
+.btn-tr{padding:7px 14px;border-radius:9px;border:none;font-family:'DM Sans',sans-serif;font-size:0.72rem;font-weight:600;cursor:pointer;}
+.btn-tr.ok{background:var(--verde-dim);color:var(--verde);}
+.btn-tr.cancel{background:var(--rojo-dim);color:var(--rojo);}
+
+/* HEATMAP */
+.heatmap-wrap{background:var(--bg2);border:1px solid var(--border);border-radius:18px;padding:16px;margin-bottom:14px;}
+.heatmap-title{font-family:'Syne',sans-serif;font-size:0.82rem;font-weight:700;color:var(--txt);margin-bottom:12px;}
+.ecuador-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:5px;}
+.prov-cell{border-radius:8px;padding:8px 4px;text-align:center;cursor:pointer;transition:all 0.3s;}
+.prov-cell:hover{transform:scale(1.05);}
+.prov-nombre{font-size:0.55rem;color:rgba(255,255,255,0.7);font-weight:600;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
+.prov-val{font-family:'DM Mono',monospace;font-size:0.65rem;color:white;}
+
+/* CAJA */
+.caja-item{background:var(--bg2);border:1px solid var(--border);border-radius:14px;padding:13px;margin-bottom:8px;display:flex;align-items:center;gap:12px;}
+.caja-nombre{font-size:0.82rem;font-weight:600;color:var(--txt);}
+.caja-ciudad{font-size:0.65rem;color:var(--txt3);}
+.caja-total{font-family:'DM Mono',monospace;font-size:1rem;font-weight:500;color:var(--acc);}
+.caja-dot{width:8px;height:8px;border-radius:50%;background:var(--verde);animation:pulse 2s infinite;flex-shrink:0;}
+
+/* WORKERS */
+.worker-row{display:flex;align-items:center;gap:10px;padding:10px;background:var(--bg2);border-radius:12px;margin-bottom:7px;border:1px solid var(--border);}
+.wr-avatar{width:36px;height:36px;border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:0.82rem;font-weight:700;color:white;flex-shrink:0;overflow:hidden;}
+.wr-avatar img{width:100%;height:100%;object-fit:cover;}
+.wr-nombre{font-size:0.82rem;font-weight:600;color:var(--txt);}
+.wr-branch{font-size:0.65rem;color:var(--txt3);}
+.wr-asist{font-size:0.65rem;font-weight:700;padding:2px 8px;border-radius:6px;}
+.asist-puntual{background:var(--verde-dim);color:var(--verde);}
+.asist-tarde{background:rgba(255,140,0,0.1);color:var(--acc);}
+.asist-pendiente{background:var(--bg3);color:var(--txt3);}
+
+/* SEC TITLE */
+.sec-title{display:flex;align-items:center;justify-content:space-between;margin-bottom:12px;}
+.sec-title-txt{font-family:'Syne',sans-serif;font-size:0.78rem;font-weight:700;color:var(--txt2);text-transform:uppercase;letter-spacing:0.8px;}
+.sec-btn{font-size:0.68rem;font-weight:600;color:var(--acc);background:none;border:none;cursor:pointer;font-family:'DM Sans',sans-serif;}
+
+/* CORP-ONLY */
+.corp-only{display:none;}
+body.modo-corp .corp-only{display:block;}
+
+/* MODALES */
+.modal-overlay{position:fixed;inset:0;background:rgba(0,0,0,0.8);display:none;z-index:500;align-items:flex-end;backdrop-filter:blur(4px);}
+.modal-overlay.show{display:flex;}
+.modal-sheet{background:var(--bg1);width:100%;max-height:92vh;border-radius:24px 24px 0 0;transform:translateY(100%);transition:0.4s cubic-bezier(0.16,1,0.3,1);display:flex;flex-direction:column;overflow:hidden;border:1px solid var(--border);border-bottom:none;}
+.modal-overlay.show .modal-sheet{transform:translateY(0);}
+.drag{width:36px;height:4px;background:var(--bg3);border-radius:4px;margin:14px auto 0;flex-shrink:0;}
+.modal-header{padding:12px 16px;display:flex;justify-content:space-between;align-items:center;border-bottom:1px solid var(--border);flex-shrink:0;}
+.modal-title{font-family:'Syne',sans-serif;font-size:0.95rem;font-weight:700;color:var(--txt);}
+.close-btn{width:28px;height:28px;background:var(--bg2);border:1px solid var(--border);border-radius:8px;display:flex;align-items:center;justify-content:center;cursor:pointer;}
+.close-btn svg{width:13px;height:13px;stroke:var(--txt3);fill:none;stroke-width:2.5;}
+.modal-body{overflow-y:auto;padding:16px 16px 32px;flex:1;}
+
+/* FORMS */
+.field{margin-bottom:12px;}
+.field label{display:block;font-size:0.65rem;font-weight:700;color:var(--txt3);text-transform:uppercase;letter-spacing:0.8px;margin-bottom:5px;font-family:'DM Mono',monospace;}
+.field input,.field select{width:100%;padding:12px 14px;background:var(--bg2);border:1px solid var(--border);border-radius:12px;font-family:'DM Sans',sans-serif;font-size:0.88rem;color:var(--txt);outline:none;-webkit-appearance:none;}
+.field input:focus,.field select:focus{border-color:rgba(255,140,0,0.4);}
+.field input::placeholder{color:var(--txt3);}
+.field select option{background:var(--bg1);}
+.field-row{display:grid;grid-template-columns:1fr 1fr;gap:10px;}
+.btn-primary{width:100%;padding:14px;background:linear-gradient(135deg,#FF8C00,#FF5500);color:white;border:none;border-radius:13px;font-family:'Syne',sans-serif;font-size:0.88rem;font-weight:700;cursor:pointer;margin-top:6px;}
+.info-box{background:rgba(255,140,0,0.06);border:1px solid rgba(255,140,0,0.12);border-radius:12px;padding:12px;font-size:0.74rem;color:var(--txt3);margin-bottom:12px;line-height:1.5;}
+.info-box strong{color:var(--acc);display:block;margin-bottom:2px;}
+.msg-ok{background:var(--verde-dim);border:1px solid rgba(34,197,94,0.2);border-radius:12px;padding:10px 14px;font-size:0.78rem;color:var(--verde);margin-bottom:10px;display:none;font-weight:600;}
+.msg-ok.show{display:block;}
+
+/* TAB BAR */
+.tab-bar{position:fixed;bottom:0;width:100%;background:var(--bg1);display:flex;border-top:1px solid var(--border);z-index:200;}
+.tab{flex:1;display:flex;flex-direction:column;align-items:center;gap:3px;padding:10px 4px 14px;cursor:pointer;border:none;background:transparent;font-family:'DM Sans',sans-serif;color:var(--txt3);text-decoration:none;}
+.tab.active{color:var(--acc);}
+.tab svg{width:21px;height:21px;stroke:currentColor;fill:none;stroke-width:2;stroke-linecap:round;stroke-linejoin:round;}
+.tab span{font-size:0.53rem;font-weight:600;text-transform:uppercase;letter-spacing:0.5px;}
+.tab-dot{width:4px;height:4px;border-radius:50%;background:var(--acc);display:none;}
+.tab.active .tab-dot{display:block;}
+
+/* UTILS */
+.realtime-badge{display:inline-flex;align-items:center;gap:5px;font-size:0.6rem;font-weight:600;color:var(--verde);font-family:'DM Mono',monospace;}
+.realtime-dot{width:5px;height:5px;border-radius:50%;background:var(--verde);animation:pulse 1.5s infinite;}
+.empty-state{text-align:center;padding:40px 20px;color:var(--txt3);}
+.empty-state p{font-size:0.8rem;font-weight:500;}
+.toast{position:fixed;bottom:80px;left:50%;transform:translateX(-50%) translateY(20px);background:var(--bg2);color:var(--txt);padding:10px 20px;border-radius:24px;font-size:0.8rem;font-weight:600;opacity:0;transition:0.3s;pointer-events:none;z-index:2000;white-space:nowrap;border:1px solid var(--border);}
+.toast.show{opacity:1;transform:translateX(-50%) translateY(0);}
+.upload-overlay{position:fixed;inset:0;background:rgba(0,0,0,0.6);display:none;align-items:center;justify-content:center;z-index:1000;}
+.upload-overlay.show{display:flex;}
+.upload-box{background:var(--bg1);border-radius:20px;padding:28px;width:80%;max-width:280px;text-align:center;border:1px solid var(--border);}
+.spinner{width:36px;height:36px;border:2px solid var(--border);border-top-color:var(--acc);border-radius:50%;animation:spin 0.7s linear infinite;margin:0 auto 12px;}
+.upload-box p{font-size:0.78rem;color:var(--txt3);font-weight:500;}
+@keyframes spin{to{transform:rotate(360deg);}}
 </style>
 </head>
 <body>
 
-<div class="header">
-  <div class="header-top">
-    <div class="logo-row">
-      <svg class="logo-hex" viewBox="0 0 100 100"><defs><linearGradient id="g1" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" style="stop-color:#FF8C00"/><stop offset="100%" style="stop-color:#e67300"/></linearGradient></defs><path d="M50 4 L93 28 V72 L50 96 L7 72 V28 Z" fill="url(#g1)"/><path d="M30 52 L44 66 L70 36" stroke="white" stroke-width="7" stroke-linecap="round" stroke-linejoin="round" fill="none"/></svg>
-      <div class="logo-text">PRO<span>VEED</span></div>
-    </div>
-    <div class="header-icons">
-      <div class="h-icon" onclick="window.location.href='chat.html'"><svg viewBox="0 0 24 24"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg><div class="h-badge" id="badge-chat">!</div></div>
-      <div class="h-icon" onclick="window.location.href='perfil.html'"><svg viewBox="0 0 24 24"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg></div>
+<div class="topnav">
+  <div class="brand">
+    <div class="brand-logo" id="brand-logo">PV</div>
+    <div>
+      <div class="brand-name">PROVEED <span style="color:var(--acc);">Enterprise</span></div>
     </div>
   </div>
-  <div class="welcome-text">Bienvenido de vuelta</div>
-  <div class="welcome-name" id="welcome-name">Proveedor</div>
+  <div class="nav-right">
+    <div class="realtime-badge"><div class="realtime-dot"></div>LIVE</div>
+    <div id="mode-badge" class="mode-pill esencial" onclick="toggleModo()">
+      <div class="mode-dot" style="background:var(--verde);"></div>
+      <span id="mode-label">ESENCIAL</span>
+    </div>
+    <button class="nav-btn" onclick="doLogout()"><svg viewBox="0 0 24 24"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/></svg></button>
+  </div>
 </div>
 
-<div class="kpi-strip">
-  <div class="kpi-card"><div class="kpi-val naranja" id="kpi-ventas">$0</div><div class="kpi-lbl">Ventas hoy</div><div class="kpi-trend" id="kpi-trend">cargando...</div></div>
-  <div class="kpi-card"><div class="kpi-val" id="kpi-pedidos">0</div><div class="kpi-lbl">Pedidos nuevos</div></div>
-  <div class="kpi-card"><div class="kpi-val verde" id="kpi-productos">0</div><div class="kpi-lbl">Productos activos</div></div>
-  <div class="kpi-card"><div class="kpi-val" id="kpi-chats">0</div><div class="kpi-lbl">Chats activos</div></div>
+<div class="subnav">
+  <button class="snav-btn active" onclick="showTab('home',this)">Resumen</button>
+  <button class="snav-btn" onclick="showTab('sucursales',this)">Sucursales <span class="snav-count" id="cnt-suc">0</span></button>
+  <button class="snav-btn" onclick="showTab('inventario',this)">Inventario</button>
+  <button class="snav-btn" onclick="showTab('logistica',this)">Logística <span class="snav-count" id="cnt-log">0</span></button>
+  <button class="snav-btn corp-only" onclick="showTab('cajas',this)">Cajas</button>
+  <button class="snav-btn corp-only" onclick="showTab('workers',this)">Workers</button>
+  <button class="snav-btn corp-only" onclick="showTab('mapa',this)">Mapa calor</button>
+  <button class="snav-btn" onclick="showTab('config',this)">Config</button>
 </div>
 
-<div class="section-label">Módulos</div>
-<div class="modulos-grid">
-  <a class="modulo mod-naranja" href="productos.html"><div class="mod-icon"><svg viewBox="0 0 24 24"><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"/></svg></div><div class="mod-label">Productos</div></a>
-  <a class="modulo mod-azul" href="pedidos.html"><div class="mod-icon"><svg viewBox="0 0 24 24"><rect x="1" y="3" width="15" height="13" rx="1"/><path d="M16 8h4l3 3v5h-7V8z"/><circle cx="5.5" cy="18.5" r="2.5"/><circle cx="18.5" cy="18.5" r="2.5"/></svg></div><div class="mod-label">Pedidos</div><div class="mod-badge est-pendiente" id="mod-badge-ped" style="display:none;">0</div></a>
-  <a class="modulo mod-verde" href="chat.html"><div class="mod-icon"><svg viewBox="0 0 24 24"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg></div><div class="mod-label">Chat</div><div class="mod-badge" id="mod-badge-chat" style="display:none;background:rgba(168,230,61,0.2);color:var(--verde);">0</div></a>
-  <a class="modulo mod-cyan" href="inventario.html"><div class="mod-icon"><svg viewBox="0 0 24 24"><line x1="8" y1="6" x2="21" y2="6"/><line x1="8" y1="12" x2="21" y2="12"/><line x1="8" y1="18" x2="21" y2="18"/><line x1="3" y1="6" x2="3.01" y2="6"/><line x1="3" y1="12" x2="3.01" y2="12"/><line x1="3" y1="18" x2="3.01" y2="18"/></svg></div><div class="mod-label">Inventario</div></a>
-  <a class="modulo mod-morado" href="estadisticas.html"><div class="mod-icon"><svg viewBox="0 0 24 24"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/></svg></div><div class="mod-label">Estadísticas</div></a>
-  <a class="modulo mod-yellow" href="facturador.html"><div class="mod-icon"><svg viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/></svg></div><div class="mod-label">Facturador</div></a>
-  <a class="modulo mod-teal" href="sucursales.html"><div class="mod-icon"><svg viewBox="0 0 24 24"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg></div><div class="mod-label">Sucursales</div></a>
-  <a class="modulo mod-pink" href="acceso.html"><div class="mod-icon"><svg viewBox="0 0 24 24"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg></div><div class="mod-label">Accesos</div></a>
-  <a class="modulo mod-verde" href="contabilidad.html"><div class="mod-icon"><svg viewBox="0 0 24 24"><line x1="12" y1="1" x2="12" y2="23"/><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg></div><div class="mod-label">Contabilidad</div></a>
-  <a class="modulo mod-azul" href="transporte.html"><div class="mod-icon"><svg viewBox="0 0 24 24"><rect x="1" y="3" width="15" height="13" rx="1"/><path d="M16 8h4l3 3v5h-7V8z"/><circle cx="5.5" cy="18.5" r="2.5"/><circle cx="18.5" cy="18.5" r="2.5"/></svg></div><div class="mod-label">Transporte</div></a>
-  <a class="modulo mod-rojo" href="servicio.html"><div class="mod-icon"><svg viewBox="0 0 24 24"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07A19.5 19.5 0 0 1 4.69 12 19.79 19.79 0 0 1 1.62 3.38 2 2 0 0 1 3.62 1h3a2 2 0 0 1 2 1.72c.127.96.361 1.903.7 2.81a2 2 0 0 1-.45 2.11L8.09 8.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0 1 22 16.92z"/></svg></div><div class="mod-label">Servicio</div></a>
-  <a class="modulo mod-naranja" href="tips.html"><div class="mod-icon"><svg viewBox="0 0 24 24"><path d="M15 10l4.553-2.069A1 1 0 0 1 21 8.87v6.26a1 1 0 0 1-1.447.894L15 14"/><rect x="1" y="6" width="15" height="12" rx="2" ry="2"/></svg></div><div class="mod-label">Tips</div></a>
-  <a class="modulo mod-morado" href="plugins.html"><div class="mod-icon"><svg viewBox="0 0 24 24"><path d="M20.24 12.24a6 6 0 0 0-8.49-8.49L5 10.5V19h8.5l6.74-6.76z"/><line x1="16" y1="8" x2="2" y2="22"/><line x1="17.5" y1="15" x2="9" y2="15"/></svg></div><div class="mod-label">Plugins</div></a>
+<!-- HOME -->
+<div class="section active" id="sec-home">
+  <div class="empresa-hero">
+    <div class="empresa-logo" id="empresa-logo">PV</div>
+    <div class="empresa-info" style="flex:1;">
+      <div class="empresa-nombre" id="empresa-nombre">Tu empresa</div>
+      <div class="empresa-meta" id="empresa-meta">—</div>
+      <div class="empresa-pills">
+        <span class="e-pill acc" id="pill-plan">ESENCIAL</span>
+        <span class="e-pill" id="pill-suc">0 sucursales</span>
+        <span class="e-pill" id="pill-emps">0 empleados</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="modo-card">
+    <div class="modo-info">
+      <div class="modo-titulo" id="modo-titulo">Modo Esencial</div>
+      <div class="modo-desc" id="modo-desc">Un local, un inventario, una caja.</div>
+    </div>
+    <div class="toggle-switch" onclick="toggleModo()">
+      <div class="toggle-track" id="toggle-track"></div>
+      <div class="toggle-thumb" id="toggle-thumb"></div>
+    </div>
+  </div>
+
+  <div class="sec-title">
+    <span class="sec-title-txt">Hoy en números</span>
+    <span class="realtime-badge"><div class="realtime-dot"></div>Tiempo real</span>
+  </div>
+  <div class="kpi-grid">
+    <div class="kpi-card">
+      <div class="kpi-icon" style="background:var(--acc-dim);">💰</div>
+      <div class="kpi-val" style="color:var(--acc);" id="k-ventas">$0</div>
+      <div class="kpi-lbl">Ventas hoy</div>
+    </div>
+    <div class="kpi-card">
+      <div class="kpi-icon" style="background:var(--azul-dim);">📦</div>
+      <div class="kpi-val" style="color:var(--azul);" id="k-pedidos">0</div>
+      <div class="kpi-lbl">Pedidos hoy</div>
+    </div>
+    <div class="kpi-card">
+      <div class="kpi-icon" style="background:var(--verde-dim);">🏢</div>
+      <div class="kpi-val" style="color:var(--verde);" id="k-suc">0</div>
+      <div class="kpi-lbl">Sucursales activas</div>
+    </div>
+    <div class="kpi-card">
+      <div class="kpi-icon" style="background:var(--rojo-dim);">⚠️</div>
+      <div class="kpi-val" style="color:var(--rojo);" id="k-alertas">0</div>
+      <div class="kpi-lbl">Alertas stock</div>
+    </div>
+  </div>
+  <div class="kpi-grid">
+    <div class="kpi-card">
+      <div class="kpi-val" style="color:var(--acc);" id="k-mes">$0</div>
+      <div class="kpi-lbl">Ventas del mes</div>
+    </div>
+    <div class="kpi-card">
+      <div class="kpi-val" id="k-stock">0</div>
+      <div class="kpi-lbl">Unidades en stock</div>
+    </div>
+  </div>
+
+  <div class="sec-title"><span class="sec-title-txt">Últimas ventas</span></div>
+  <div id="ultimas-ventas"><div class="empty-state"><p>Sin ventas registradas</p></div></div>
+
+  <div class="sec-title" style="margin-top:14px;"><span class="sec-title-txt">Stock bajo ⚠</span></div>
+  <div id="alertas-stock"><div class="empty-state"><p>Inventario saludable ✓</p></div></div>
 </div>
 
-<div class="section-label" style="margin-top:8px;">Pedidos recientes</div>
-<div class="pedidos-recientes" id="pedidos-recientes">
-  <div class="empty-ped">Cargando pedidos...</div>
+<!-- SUCURSALES -->
+<div class="section" id="sec-sucursales">
+  <div class="sec-title">
+    <span class="sec-title-txt">Mis sucursales</span>
+    <button class="sec-btn" onclick="abrirModalSucursal()">+ Nueva</button>
+  </div>
+  <div id="sucursales-lista"><div class="empty-state"><p>Sin sucursales</p></div></div>
 </div>
 
+<!-- INVENTARIO -->
+<div class="section" id="sec-inventario">
+  <div class="sec-title">
+    <span class="sec-title-txt">Inventario distribuido</span>
+    <button class="sec-btn" onclick="abrirModalInventario()">+ Item</button>
+  </div>
+  <div style="display:flex;gap:8px;margin-bottom:12px;overflow-x:auto;scrollbar-width:none;">
+    <button style="padding:6px 12px;border-radius:20px;border:1px solid rgba(255,140,0,0.3);background:var(--acc-dim);font-size:0.7rem;font-weight:600;color:var(--acc);cursor:pointer;white-space:nowrap;font-family:'DM Sans',sans-serif;" onclick="renderInventario('todos')">Todos</button>
+    <button style="padding:6px 12px;border-radius:20px;border:1px solid var(--border);background:transparent;font-size:0.7rem;font-weight:600;color:var(--txt3);cursor:pointer;white-space:nowrap;font-family:'DM Sans',sans-serif;" onclick="renderInventario('bajo')">Stock bajo ⚠</button>
+    <button style="padding:6px 12px;border-radius:20px;border:1px solid var(--border);background:transparent;font-size:0.7rem;font-weight:600;color:var(--txt3);cursor:pointer;white-space:nowrap;font-family:'DM Sans',sans-serif;" onclick="renderInventario('transito')">En tránsito 🚛</button>
+  </div>
+  <div id="inventario-lista"><div class="empty-state"><p>Sin inventario</p></div></div>
+</div>
+
+<!-- LOGÍSTICA -->
+<div class="section" id="sec-logistica">
+  <div class="sec-title">
+    <span class="sec-title-txt">Stock en tránsito</span>
+    <button class="sec-btn" onclick="abrirModalTransferencia()">+ Transferir</button>
+  </div>
+  <div class="info-box"><strong>Flujo atómico garantizado</strong>Disponible → En tránsito → Destino confirmado. Sin pérdidas.</div>
+  <div id="logistica-lista"><div class="empty-state"><p>Sin transferencias activas</p></div></div>
+</div>
+
+<!-- CAJAS (CORP) -->
+<div class="section corp-only" id="sec-cajas">
+  <div class="sec-title"><span class="sec-title-txt">Cajas en tiempo real</span><span class="realtime-badge"><div class="realtime-dot"></div>LIVE</span></div>
+  <div id="cajas-lista"><div class="empty-state"><p>Sin datos</p></div></div>
+</div>
+
+<!-- WORKERS (CORP) -->
+<div class="section corp-only" id="sec-workers">
+  <div class="sec-title"><span class="sec-title-txt">Personal global hoy</span></div>
+  <div id="workers-global"><div class="empty-state"><p>Sin empleados</p></div></div>
+</div>
+
+<!-- MAPA CALOR (CORP) -->
+<div class="section corp-only" id="sec-mapa">
+  <div class="heatmap-wrap">
+    <div class="heatmap-title">🗺 Mapa de calor — Ventas por provincia</div>
+    <div class="ecuador-grid" id="ecuador-heatmap"></div>
+  </div>
+  <div class="sec-title"><span class="sec-title-txt">Ranking de provincias</span></div>
+  <div id="ranking-zonas"></div>
+</div>
+
+<!-- CONFIG -->
+<div class="section" id="sec-config">
+  <div class="sec-title"><span class="sec-title-txt">Empresa</span></div>
+  <div style="background:var(--bg2);border:1px solid var(--border);border-radius:18px;padding:16px;margin-bottom:12px;">
+    <div class="field"><label>Nombre de empresa</label><input type="text" id="cfg-nombre" placeholder="Mi Empresa S.A."></div>
+    <div class="field"><label>RUC</label><input type="text" id="cfg-ruc" placeholder="1234567890001"></div>
+    <div class="field"><label>Color de marca</label>
+      <div style="display:flex;gap:8px;align-items:center;">
+        <div id="cfg-color-dot" style="width:40px;height:40px;border-radius:10px;background:var(--acc);border:1px solid var(--border);flex-shrink:0;"></div>
+        <input type="color" id="cfg-color" value="#FF8C00" oninput="prevColor(this.value)" style="flex:1;height:40px;border-radius:10px;border:1px solid var(--border);cursor:pointer;padding:3px;background:var(--bg2);">
+      </div>
+    </div>
+    <div class="field"><label>Logo URL</label><input type="text" id="cfg-logo" placeholder="https://..."></div>
+    <button class="btn-primary" onclick="guardarConfig()">Guardar configuración</button>
+    <div class="msg-ok" id="cfg-ok">✓ Guardado correctamente</div>
+  </div>
+  <div class="sec-title"><span class="sec-title-txt">Modo del sistema</span></div>
+  <div style="background:var(--bg2);border:1px solid var(--border);border-radius:18px;padding:16px;">
+    <div style="font-size:0.78rem;font-weight:600;color:var(--txt);margin-bottom:6px;">Modo actual: <span id="cfg-modo-txt" style="color:var(--acc);">ESENCIAL</span></div>
+    <div style="font-size:0.72rem;color:var(--txt3);margin-bottom:12px;line-height:1.5;"><strong style="color:var(--verde);">ESENCIAL</strong> — 1 inventario, 1 caja.<br><strong style="color:var(--acc);">CORPORATIVO</strong> — Múltiples sucursales, cajas, mapa calor, workers global.</div>
+    <button class="btn-primary" onclick="toggleModo()">Cambiar a <span id="btn-modo-txt">CORPORATIVO</span></button>
+  </div>
+</div>
+
+<!-- TAB BAR -->
 <nav class="tab-bar">
-  <a class="tab active" href="dashboard.html"><svg viewBox="0 0 24 24"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/></svg><span>Panel</span></a>
-  <a class="tab" href="productos.html"><svg viewBox="0 0 24 24"><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"/></svg><span>Productos</span></a>
-  <a class="tab" href="tips.html"><svg viewBox="0 0 24 24"><path d="M15 10l4.553-2.069A1 1 0 0 1 21 8.87v6.26a1 1 0 0 1-1.447.894L15 14"/><rect x="1" y="6" width="15" height="12" rx="2" ry="2"/></svg><span>Tips</span></a>
-  <a class="tab" href="pedidos.html"><svg viewBox="0 0 24 24"><rect x="1" y="3" width="15" height="13" rx="1"/><path d="M16 8h4l3 3v5h-7V8z"/><circle cx="5.5" cy="18.5" r="2.5"/><circle cx="18.5" cy="18.5" r="2.5"/></svg><span>Pedidos</span></a>
-  <a class="tab" href="plugins.html"><svg viewBox="0 0 24 24"><path d="M20.24 12.24a6 6 0 0 0-8.49-8.49L5 10.5V19h8.5l6.74-6.76z"/><line x1="16" y1="8" x2="2" y2="22"/><line x1="17.5" y1="15" x2="9" y2="15"/></svg><span>Plugins</span></a>
+  <button class="tab active" onclick="showTab('home',this)"><svg viewBox="0 0 24 24"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/></svg><span>Panel</span><div class="tab-dot"></div></button>
+  <a class="tab" href="productos.html"><svg viewBox="0 0 24 24"><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"/></svg><span>Productos</span><div class="tab-dot"></div></a>
+  <a class="tab" href="pedidos.html"><svg viewBox="0 0 24 24"><path d="M9 5H7a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2h-2"/><rect x="9" y="3" width="6" height="4" rx="1"/></svg><span>Pedidos</span><div class="tab-dot"></div></a>
+  <a class="tab" href="chat.html"><svg viewBox="0 0 24 24"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg><span>Chat</span><div class="tab-dot"></div></a>
+  <a class="tab" href="plugins.html"><svg viewBox="0 0 24 24"><path d="M20.24 12.24a6 6 0 0 0-8.49-8.49L5 10.5V19h8.5z"/><line x1="16" y1="8" x2="2" y2="22"/></svg><span>Plugins</span><div class="tab-dot"></div></a>
 </nav>
+
+<!-- MODAL SUCURSAL -->
+<div class="modal-overlay" id="modal-suc" onclick="cerrarModal('modal-suc',event)">
+  <div class="modal-sheet">
+    <div class="drag"></div>
+    <div class="modal-header">
+      <span class="modal-title">Nueva Sucursal</span>
+      <button class="close-btn" onclick="cerrarM('modal-suc')"><svg viewBox="0 0 24 24"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg></button>
+    </div>
+    <div class="modal-body">
+      <div class="msg-ok" id="suc-ok">✓ Sucursal creada</div>
+      <div class="field"><label>Nombre *</label><input type="text" id="suc-nombre" placeholder="Sucursal Quito Norte"></div>
+      <div class="field-row">
+        <div class="field"><label>Provincia *</label>
+          <select id="suc-provincia">
+            <option value="">Seleccionar</option>
+            <option>Pichincha</option><option>Guayas</option><option>Azuay</option><option>Manabí</option>
+            <option>Los Ríos</option><option>El Oro</option><option>Esmeraldas</option><option>Tungurahua</option>
+            <option>Loja</option><option>Imbabura</option><option>Chimborazo</option><option>Cotopaxi</option>
+            <option>Bolívar</option><option>Carchi</option><option>Cañar</option><option>Napo</option>
+            <option>Orellana</option><option>Pastaza</option><option>Santa Elena</option><option>Santo Domingo</option>
+            <option>Sucumbíos</option><option>Morona Santiago</option><option>Zamora Chinchipe</option><option>Galápagos</option>
+          </select>
+        </div>
+        <div class="field"><label>Ciudad *</label><input type="text" id="suc-ciudad" placeholder="Ciudad"></div>
+      </div>
+      <div class="field"><label>Dirección</label><input type="text" id="suc-dir" placeholder="Av. Principal..."></div>
+      <div class="field-row">
+        <div class="field"><label>Tipo</label>
+          <select id="suc-tipo"><option value="tienda">Tienda</option><option value="bodega">Bodega</option><option value="matriz">Matriz</option><option value="distribucion">Distribución</option></select>
+        </div>
+        <div class="field"><label>Región</label>
+          <select id="suc-region"><option value="sierra">Sierra</option><option value="costa">Costa</option><option value="oriente">Oriente</option><option value="insular">Insular</option></select>
+        </div>
+      </div>
+      <div class="field"><label>Responsable</label><input type="text" id="suc-resp" placeholder="Nombre del gerente"></div>
+      <div class="field-row">
+        <div class="field"><label>Horario inicio</label><input type="time" id="suc-hini" value="08:00"></div>
+        <div class="field"><label>Horario fin</label><input type="time" id="suc-hfin" value="18:00"></div>
+      </div>
+      <div class="field"><label>Radio geofencing (metros)</label><input type="number" id="suc-geo" value="200"></div>
+      <button class="btn-primary" onclick="guardarSucursal()">Crear sucursal</button>
+    </div>
+  </div>
+</div>
+
+<!-- MODAL INVENTARIO -->
+<div class="modal-overlay" id="modal-inv" onclick="cerrarModal('modal-inv',event)">
+  <div class="modal-sheet">
+    <div class="drag"></div>
+    <div class="modal-header">
+      <span class="modal-title">Agregar inventario</span>
+      <button class="close-btn" onclick="cerrarM('modal-inv')"><svg viewBox="0 0 24 24"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg></button>
+    </div>
+    <div class="modal-body">
+      <div class="msg-ok" id="inv-ok">✓ Inventario actualizado</div>
+      <div class="field"><label>Sucursal *</label><select id="inv-branch"><option value="">Seleccionar</option></select></div>
+      <div class="field"><label>Nombre del producto *</label><input type="text" id="inv-prod-nombre" placeholder="Nombre del producto"></div>
+      <div class="field-row">
+        <div class="field"><label>Stock disponible *</label><input type="number" id="inv-stock" placeholder="0" min="0"></div>
+        <div class="field"><label>Stock mínimo</label><input type="number" id="inv-minimo" placeholder="5" min="0"></div>
+      </div>
+      <div class="field-row">
+        <div class="field"><label>Precio venta ($)</label><input type="number" id="inv-precio" placeholder="0.00" step="0.01"></div>
+        <div class="field"><label>Precio costo ($)</label><input type="number" id="inv-costo" placeholder="0.00" step="0.01"></div>
+      </div>
+      <button class="btn-primary" onclick="guardarInventario()">Agregar al inventario</button>
+    </div>
+  </div>
+</div>
+
+<!-- MODAL TRANSFERENCIA -->
+<div class="modal-overlay" id="modal-transfer" onclick="cerrarModal('modal-transfer',event)">
+  <div class="modal-sheet">
+    <div class="drag"></div>
+    <div class="modal-header">
+      <span class="modal-title">Transferir stock</span>
+      <button class="close-btn" onclick="cerrarM('modal-transfer')"><svg viewBox="0 0 24 24"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg></button>
+    </div>
+    <div class="modal-body">
+      <div class="info-box"><strong>Transferencia atómica</strong>El stock pasa a "en tránsito" en origen hasta que el destino confirme recepción.</div>
+      <div class="field"><label>Sucursal origen *</label><select id="tr-origen"><option value="">Seleccionar</option></select></div>
+      <div class="field"><label>Sucursal destino *</label><select id="tr-destino"><option value="">Seleccionar</option></select></div>
+      <div class="field"><label>Producto *</label><select id="tr-producto"><option value="">Seleccionar</option></select></div>
+      <div class="field-row">
+        <div class="field"><label>Cantidad *</label><input type="number" id="tr-cant" placeholder="0" min="1"></div>
+        <div class="field"><label>Transportadora</label><input type="text" id="tr-trans" placeholder="Servientrega..."></div>
+      </div>
+      <button class="btn-primary" onclick="crearTransferencia()">Generar guía de tránsito →</button>
+    </div>
+  </div>
+</div>
+
+<div class="upload-overlay" id="upload-overlay"><div class="upload-box"><div class="spinner"></div><p>Procesando...</p></div></div>
+<div class="toast" id="toast"></div>
 
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script>
 const { createClient } = supabase;
 const sb = createClient('https://hfmsyrmkewscnvwynzfq.supabase.co','sb_publishable_d1oLsq70a6ZV33vW3XkRgw_nYcN2Z9v');
-let empresa = '', userId = '';
 
-(async () => {
-  const { data: { session } } = await sb.auth.getSession();
+let userId='', userData={}, companyId='', companyData={};
+let branches=[], inventory=[], transfers=[], sales=[], employees=[];
+let appMode='ESENCIAL';
+
+const PROVINCIAS=['Pichincha','Guayas','Azuay','Manabí','Los Ríos','El Oro','Esmeraldas','Tungurahua','Loja','Imbabura','Chimborazo','Cotopaxi','Bolívar','Carchi','Cañar','Napo','Orellana','Pastaza','Santa Elena','Santo Domingo','Sucumbíos','Morona S.','Zamora C.','Galápagos'];
+
+(async()=>{
+  const { data:{session} } = await sb.auth.getSession();
   if(!session){ window.location.href='login.html'; return; }
-  userId = session.user.id;
-  const { data: u } = await sb.from('usuarios').select('*').eq('id',userId).single();
-  if(u){ empresa=u.empresa||u.nombre||'Proveedor'; document.getElementById('welcome-name').textContent=empresa; }
-  cargarKPIs();
-  cargarPedidos();
-  cargarChats();
+  userId=session.user.id;
+  const { data:u } = await sb.from('usuarios').select('*').eq('id',userId).single();
+  if(u) userData=u;
+  let { data:comp } = await sb.from('pv_companies').select('*').eq('owner_id',userId).single().catch(()=>({data:null}));
+  if(!comp){
+    const { data:nc } = await sb.from('pv_companies').insert({ owner_id:userId, nombre:userData.empresa||userData.nombre||'Mi Empresa', ruc:userData.ruc||'', logo:userData.logo_empresa||'', color_marca:userData.workers_color||'#FF8C00', app_mode:'ESENCIAL' }).select().single();
+    comp=nc;
+  }
+  companyId=comp.id; companyData=comp;
+  appMode=comp.app_mode||'ESENCIAL';
+  aplicarModo(appMode,false);
+  cargarConfigUI();
+  await cargarTodo();
+  suscribirRealtime();
 })();
 
-async function cargarKPIs() {
-  const { count: prods } = await sb.from('productos').select('*',{count:'exact',head:true}).eq('proveedor_id',userId).eq('activo',true);
-  document.getElementById('kpi-productos').textContent = prods||0;
-  const { data: pedidos } = await sb.from('pedidos').select('*');
-  const hoy = new Date(); hoy.setHours(0,0,0,0);
-  let ventasHoy=0, pedidosHoy=0, pendientes=0;
-  (pedidos||[]).forEach(p => {
-    const items = p.items||[];
-    const esDeEste = items.some(i => i.proveedor===empresa);
-    if(!esDeEste) return;
-    if(p.estado==='pendiente') pendientes++;
-    const fecha = new Date(p.created_at);
-    if(fecha>=hoy){ pedidosHoy++; ventasHoy+=p.total||0; }
+function cargarConfigUI(){
+  const logo=companyData.logo||'';
+  const nombre=companyData.nombre||'Mi Empresa';
+  const color=companyData.color_marca||'#FF8C00';
+  document.documentElement.style.setProperty('--acc',color);
+  const ini=(nombre||'P')[0].toUpperCase();
+  if(logo){
+    document.getElementById('brand-logo').innerHTML=`<img src="${logo}" alt="">`;
+    document.getElementById('empresa-logo').innerHTML=`<img src="${logo}" alt="">`;
+  } else {
+    document.getElementById('brand-logo').textContent=ini;
+    document.getElementById('empresa-logo').textContent=ini;
+  }
+  document.getElementById('empresa-nombre').textContent=nombre;
+  document.getElementById('empresa-meta').textContent=(companyData.ruc||'—')+' · Ecuador';
+  document.getElementById('cfg-nombre').value=nombre;
+  document.getElementById('cfg-ruc').value=companyData.ruc||'';
+  document.getElementById('cfg-color').value=color;
+  document.getElementById('cfg-logo').value=logo;
+  document.getElementById('cfg-color-dot').style.background=color;
+}
+
+async function cargarTodo(){
+  const [brR,invR,trR,saleR,empR]=await Promise.all([
+    sb.from('pv_branches').select('*').eq('company_id',companyId),
+    sb.from('pv_inventory').select('*').eq('company_id',companyId),
+    sb.from('pv_transfers').select('*').eq('company_id',companyId).eq('estado','en_transito'),
+    sb.from('pv_sales').select('*').eq('company_id',companyId).order('created_at',{ascending:false}).limit(50),
+    sb.from('pv_employees').select('*').eq('company_id',companyId).eq('activo',true)
+  ]);
+  branches=brR.data||[]; inventory=invR.data||[];
+  transfers=trR.data||[]; sales=saleR.data||[]; employees=empR.data||[];
+  renderTodo();
+}
+
+function renderTodo(){
+  renderHome(); renderSucursales(); renderInventario('todos');
+  renderLogistica(); renderCajas(); renderWorkers(); renderMapa();
+  poblarSelects();
+  document.getElementById('cnt-suc').textContent=branches.length;
+  document.getElementById('cnt-log').textContent=transfers.length;
+  document.getElementById('pill-suc').textContent=branches.length+' sucursal'+(branches.length!==1?'es':'');
+  document.getElementById('pill-emps').textContent=employees.length+' empleado'+(employees.length!==1?'s':'');
+}
+
+function renderHome(){
+  const hoy=new Date().toISOString().split('T')[0];
+  const vHoy=sales.filter(s=>s.created_at?.startsWith(hoy));
+  const tHoy=vHoy.reduce((s,v)=>s+(v.total||0),0);
+  const tMes=sales.reduce((s,v)=>s+(v.total||0),0);
+  const alertas=inventory.filter(i=>(i.stock_disponible||0)<=(i.stock_minimo||5)).length;
+  const stock=inventory.reduce((s,i)=>s+(i.stock_disponible||0),0);
+  document.getElementById('k-ventas').textContent='$'+tHoy.toFixed(0);
+  document.getElementById('k-pedidos').textContent=vHoy.length;
+  document.getElementById('k-suc').textContent=branches.filter(b=>b.activa).length;
+  document.getElementById('k-alertas').textContent=alertas;
+  document.getElementById('k-mes').textContent='$'+tMes.toFixed(0);
+  document.getElementById('k-stock').textContent=stock;
+
+  const uvEl=document.getElementById('ultimas-ventas');
+  if(!sales.slice(0,5).length){ uvEl.innerHTML='<div class="empty-state"><p>Sin ventas</p></div>'; return; }
+  uvEl.innerHTML='';
+  sales.slice(0,5).forEach(v=>{
+    const hora=new Date(v.created_at).toLocaleTimeString('es-EC',{hour:'2-digit',minute:'2-digit'});
+    const div=document.createElement('div');
+    div.style.cssText='background:var(--bg2);border:1px solid var(--border);border-radius:13px;padding:12px 14px;margin-bottom:7px;display:flex;align-items:center;gap:10px;';
+    div.innerHTML=`<div style="flex:1;"><div style="font-size:0.82rem;font-weight:600;color:var(--txt);">${v.emprendedor_nombre||v.cajero_nombre||'Venta'}</div><div style="font-size:0.65rem;color:var(--txt3);">${v.branch_nombre||'Matriz'} · ${hora}</div></div><div style="font-family:'DM Mono',monospace;font-size:0.88rem;color:var(--acc);">$${Number(v.total||0).toFixed(2)}</div>`;
+    uvEl.appendChild(div);
   });
-  document.getElementById('kpi-ventas').textContent='$'+ventasHoy.toFixed(0);
-  document.getElementById('kpi-pedidos').textContent=pedidosHoy;
-  document.getElementById('kpi-trend').textContent=pedidosHoy>0?`↑ ${pedidosHoy} hoy`:'— sin pedidos hoy';
-  if(pendientes>0){ const b=document.getElementById('mod-badge-ped'); b.textContent=pendientes; b.style.display='block'; }
+
+  const asEl=document.getElementById('alertas-stock');
+  const bajo=inventory.filter(i=>(i.stock_disponible||0)<=(i.stock_minimo||5));
+  if(!bajo.length){ asEl.innerHTML='<div class="empty-state"><p>Inventario saludable ✓</p></div>'; return; }
+  asEl.innerHTML='';
+  bajo.forEach(i=>{
+    const div=document.createElement('div');
+    div.style.cssText='background:var(--rojo-dim);border:1px solid rgba(239,68,68,0.2);border-radius:13px;padding:11px 14px;margin-bottom:7px;display:flex;align-items:center;gap:10px;';
+    div.innerHTML=`<div style="font-size:1rem;">⚠️</div><div style="flex:1;"><div style="font-size:0.82rem;font-weight:600;color:var(--txt);">${i.producto_nombre||'Producto'}</div><div style="font-size:0.65rem;color:var(--rojo);">${i.branch_nombre||'—'} · Stock: ${i.stock_disponible||0}</div></div>`;
+    asEl.appendChild(div);
+  });
 }
 
-async function cargarChats() {
-  const { data } = await sb.from('chats').select('*').eq('proveedor_id',userId);
-  document.getElementById('kpi-chats').textContent=(data||[]).length;
-  const noLeidos=(data||[]).reduce((s,c)=>s+(c.no_leidos||0),0);
-  if(noLeidos>0){ document.getElementById('badge-chat').textContent=noLeidos; document.getElementById('badge-chat').style.display='block'; const mc=document.getElementById('mod-badge-chat'); mc.textContent=noLeidos; mc.style.display='block'; }
-}
-
-async function cargarPedidos() {
-  const cont=document.getElementById('pedidos-recientes');
-  const { data } = await sb.from('pedidos').select('*').order('created_at',{ascending:false}).limit(50);
-  let pedidos=(data||[]).filter(p=>(p.items||[]).some(i=>i.proveedor===empresa)).slice(0,5);
-  if(!pedidos.length){ cont.innerHTML='<div class="empty-ped">Sin pedidos aún</div>'; return; }
+function renderSucursales(){
+  const cont=document.getElementById('sucursales-lista');
+  if(!branches.length){ cont.innerHTML='<div class="empty-state"><p>Sin sucursales</p></div>'; return; }
+  const icons={tienda:'🏪',bodega:'🏭',matriz:'🏢',distribucion:'🚛'};
+  const colors={sierra:'rgba(59,130,246,0.15)',costa:'rgba(34,197,94,0.12)',oriente:'rgba(168,85,247,0.12)',insular:'rgba(255,140,0,0.12)'};
   cont.innerHTML='';
-  pedidos.forEach(p => {
-    const div=document.createElement('div'); div.className='ped-item';
-    div.onclick=()=>window.location.href='pedidos.html';
-    const est=p.estado||'pendiente';
-    div.innerHTML=`<div style="flex:1;"><div class="ped-num">#PV-${p.id.slice(-6).toUpperCase()}</div><div class="ped-cliente">${p.entrega?.nombre||'Cliente'}</div></div><div class="ped-total">$${Number(p.total||0).toFixed(2)}</div><div class="ped-estado est-${est}">${est}</div>`;
+  branches.forEach(b=>{
+    const vB=sales.filter(s=>s.branch_id===b.id).reduce((s,v)=>s+(v.total||0),0);
+    const sB=inventory.filter(i=>i.branch_id===b.id).reduce((s,i)=>s+(i.stock_disponible||0),0);
+    const eB=employees.filter(e=>e.branch_id===b.id).length;
+    const aB=inventory.filter(i=>i.branch_id===b.id&&(i.stock_disponible||0)<=(i.stock_minimo||5)).length;
+    const div=document.createElement('div'); div.className=`branch-card${aB>0?' alerta':' activa'}`;
+    div.innerHTML=`<div class="bc-header"><div class="bc-icon" style="background:${colors[b.region||'sierra']||'var(--bg3)'};">${icons[b.tipo||'tienda']||'🏪'}</div><div style="flex:1;"><div class="bc-nombre">${b.nombre}</div><div class="bc-ubicacion">📍 ${b.ciudad||'—'}, ${b.provincia||'—'}</div></div><div class="bc-estado ${aB>0?'est-alerta':'est-activa'}">${aB>0?'⚠ ALERTA':'ACTIVA'}</div></div><div class="bc-stats"><div class="bc-stat"><div class="bc-stat-val" style="color:var(--acc);">$${vB.toFixed(0)}</div><div class="bc-stat-lbl">Ventas</div></div><div class="bc-stat"><div class="bc-stat-val">${sB}</div><div class="bc-stat-lbl">Stock</div></div><div class="bc-stat"><div class="bc-stat-val">${eB}</div><div class="bc-stat-lbl">Personal</div></div></div>`;
     cont.appendChild(div);
   });
 }
+
+window.renderInventario=function(filtro){
+  const cont=document.getElementById('inventario-lista');
+  let lista=inventory;
+  if(filtro==='bajo') lista=inventory.filter(i=>(i.stock_disponible||0)<=(i.stock_minimo||5));
+  else if(filtro==='transito') lista=inventory.filter(i=>(i.stock_en_transito||0)>0);
+  if(!lista.length){ cont.innerHTML='<div class="empty-state"><p>Sin resultados</p></div>'; return; }
+  cont.innerHTML='';
+  lista.forEach(i=>{
+    const bajo=(i.stock_disponible||0)<=(i.stock_minimo||5);
+    const div=document.createElement('div'); div.className='inv-item';
+    div.innerHTML=`<div class="inv-img">${i.producto_imagen?`<img src="${i.producto_imagen}" alt="">`:i.producto_nombre?.[0]||'📦'}</div><div style="flex:1;min-width:0;"><div class="inv-nombre">${i.producto_nombre||'Producto'}</div><div class="inv-branch">📍 ${i.branch_nombre||branches.find(b=>b.id===i.branch_id)?.nombre||'—'}</div><div class="inv-stocks"><span class="inv-chip ${bajo?'chip-bajo':'chip-disp'}">Disp: ${i.stock_disponible||0}</span>${(i.stock_en_transito||0)>0?`<span class="inv-chip chip-transit">Tráns: ${i.stock_en_transito}</span>`:''}</div></div><div class="inv-precio">$${Number(i.precio_venta||0).toFixed(2)}</div>`;
+    cont.appendChild(div);
+  });
+};
+function renderLogistica(){
+  const cont=document.getElementById('logistica-lista');
+  if(!transfers.length){ cont.innerHTML='<div class="empty-state"><p>Sin transferencias activas</p></div>'; return; }
+  cont.innerHTML='';
+  transfers.forEach(t=>{
+    const fecha=new Date(t.created_at).toLocaleDateString('es-EC',{day:'2-digit',month:'short'});
+    const div=document.createElement('div'); div.className='transfer-card';
+    div.innerHTML=`<div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px;"><div class="tr-guia">${t.guia||'GR-'+t.id.slice(-6).toUpperCase()}</div><span class="tr-estado">en_tránsito</span></div><div class="tr-ruta"><span class="tr-node">${t.origen_nombre||'Origen'}</span><span class="tr-arrow">→</span><span class="tr-node">${t.destino_nombre||'Destino'}</span></div><div class="tr-det">${t.cantidad} und · ${t.producto_nombre||'—'} · ${fecha}</div><div class="tr-acc"><button class="btn-tr ok" onclick="confirmarTransfer('${t.id}')">✓ Confirmar</button><button class="btn-tr cancel" onclick="cancelarTransfer('${t.id}')">Cancelar</button></div>`;
+    cont.appendChild(div);
+  });
+}
+
+function renderCajas(){
+  const cont=document.getElementById('cajas-lista');
+  if(!branches.length){ cont.innerHTML='<div class="empty-state"><p>Sin sucursales</p></div>'; return; }
+  const hoy=new Date().toISOString().split('T')[0];
+  cont.innerHTML='';
+  branches.forEach(b=>{
+    const vB=sales.filter(s=>s.branch_id===b.id&&s.created_at?.startsWith(hoy));
+    const tB=vB.reduce((s,v)=>s+(v.total||0),0);
+    const div=document.createElement('div'); div.className='caja-item';
+    div.innerHTML=`<div class="caja-dot"></div><div style="flex:1;"><div class="caja-nombre">${b.nombre}</div><div class="caja-ciudad">${b.ciudad||'—'} · ${vB.length} ventas</div></div><div class="caja-total">$${tB.toFixed(2)}</div>`;
+    cont.appendChild(div);
+  });
+}
+
+function renderWorkers(){
+  const cont=document.getElementById('workers-global');
+  if(!employees.length){ cont.innerHTML='<div class="empty-state"><p>Sin empleados</p></div>'; return; }
+  cont.innerHTML='';
+  const colors=['#FF8C00','#3B82F6','#22C55E','#A855F7'];
+  employees.forEach(e=>{
+    const bg=colors[Math.abs((e.nombre||'').charCodeAt(0)||0)%4];
+    const branch=branches.find(b=>b.id===e.branch_id);
+    const div=document.createElement('div'); div.className='worker-row';
+    div.innerHTML=`<div class="wr-avatar" style="background:${bg};">${e.foto?`<img src="${e.foto}" alt="">`:( e.nombre||'E')[0]}</div><div style="flex:1;"><div class="wr-nombre">${e.nombre||'Empleado'}</div><div class="wr-branch">${branch?.nombre||'Sin sucursal'} · ${e.cargo||'—'}</div></div><div class="wr-asist asist-pendiente">Sin reg.</div>`;
+    cont.appendChild(div);
+  });
+}
+
+function renderMapa(){
+  const heatEl=document.getElementById('ecuador-heatmap');
+  if(!heatEl) return;
+  heatEl.innerHTML='';
+  const pvVentas={};
+  sales.forEach(s=>{ const b=branches.find(br=>br.id===s.branch_id); if(b?.provincia) pvVentas[b.provincia]=(pvVentas[b.provincia]||0)+(s.total||0); });
+  const maxV=Math.max(...Object.values(pvVentas),1);
+  PROVINCIAS.forEach(p=>{
+    const val=pvVentas[p]||0;
+    const alpha=0.12+( val/maxV)*0.88;
+    const cell=document.createElement('div'); cell.className='prov-cell';
+    cell.style.background=`rgba(255,140,0,${alpha})`;
+    cell.title=`${p}: $${val.toFixed(0)}`;
+    cell.innerHTML=`<div class="prov-nombre">${p}</div><div class="prov-val">${val>0?'$'+val.toFixed(0):'—'}</div>`;
+    heatEl.appendChild(cell);
+  });
+  const rankEl=document.getElementById('ranking-zonas');
+  if(!rankEl) return;
+  const ranking=Object.entries(pvVentas).sort((a,b)=>b[1]-a[1]).slice(0,5);
+  if(!ranking.length){ rankEl.innerHTML='<div class="empty-state"><p>Sin datos</p></div>'; return; }
+  rankEl.innerHTML='';
+  ranking.forEach(([prov,total],i)=>{
+    const div=document.createElement('div');
+    div.style.cssText='background:var(--bg2);border:1px solid var(--border);border-radius:13px;padding:12px 14px;margin-bottom:7px;display:flex;align-items:center;gap:10px;';
+    div.innerHTML=`<div style="font-family:DM Mono,monospace;font-size:1rem;font-weight:700;color:var(--acc);width:24px;">${i+1}.</div><div style="flex:1;font-size:0.82rem;font-weight:600;color:var(--txt);">${prov}</div><div style="font-family:DM Mono,monospace;color:var(--acc);">$${total.toFixed(0)}</div>`;
+    rankEl.appendChild(div);
+  });
+}
+
+function poblarSelects(){
+  ['inv-branch','tr-origen','tr-destino'].forEach(id=>{
+    const el=document.getElementById(id); if(!el) return;
+    el.innerHTML='<option value="">Seleccionar sucursal</option>';
+    branches.forEach(b=>{ el.innerHTML+=`<option value="${b.id}">${b.nombre}</option>`; });
+  });
+  const tp=document.getElementById('tr-producto');
+  if(tp){
+    tp.innerHTML='<option value="">Seleccionar producto</option>';
+    const unique=[...new Map(inventory.map(i=>[i.producto_id||i.producto_nombre,i])).values()];
+    unique.forEach(i=>{ tp.innerHTML+=`<option value="${i.producto_id||''}">${i.producto_nombre}</option>`; });
+  }
+}
+
+function toggleModo(){
+  appMode=appMode==='ESENCIAL'?'CORPORATIVO':'ESENCIAL';
+  aplicarModo(appMode,true);
+  sb.from('pv_companies').update({app_mode:appMode}).eq('id',companyId);
+}
+
+function aplicarModo(modo,save){
+  const isCorp=modo==='CORPORATIVO';
+  document.body.classList.toggle('modo-corp',isCorp);
+  const badge=document.getElementById('mode-badge');
+  badge.className='mode-pill '+(isCorp?'corporativo':'esencial');
+  badge.querySelector('.mode-dot').style.background=isCorp?'var(--acc)':'var(--verde)';
+  document.getElementById('mode-label').textContent=modo;
+  const track=document.getElementById('toggle-track');
+  const thumb=document.getElementById('toggle-thumb');
+  track.classList.toggle('on',isCorp);
+  thumb.style.left=isCorp?'27px':'3px';
+  thumb.style.background=isCorp?'var(--acc)':'var(--txt3)';
+  document.getElementById('modo-titulo').textContent=isCorp?'Modo Corporativo':'Modo Esencial';
+  document.getElementById('modo-desc').textContent=isCorp?'Centro de mando: sucursales, cajas, workers y mapa calor.':'Un local, un inventario, una caja.';
+  document.getElementById('cfg-modo-txt').textContent=modo;
+  document.getElementById('btn-modo-txt').textContent=isCorp?'ESENCIAL':'CORPORATIVO';
+  document.getElementById('pill-plan').textContent=modo;
+  if(save) showToast('Modo '+modo+' activado ✓');
+}
+
+window.abrirModalSucursal=()=>document.getElementById('modal-suc').classList.add('show');
+window.abrirModalInventario=()=>{ poblarSelects(); document.getElementById('modal-inv').classList.add('show'); };
+window.abrirModalTransferencia=()=>{ poblarSelects(); document.getElementById('modal-transfer').classList.add('show'); };
+
+window.guardarSucursal=async function(){
+  const nombre=document.getElementById('suc-nombre').value.trim();
+  const ciudad=document.getElementById('suc-ciudad').value.trim();
+  if(!nombre||!ciudad){ showToast('Nombre y ciudad requeridos'); return; }
+  document.getElementById('upload-overlay').classList.add('show');
+  try{
+    await sb.from('pv_branches').insert({ company_id:companyId, nombre, ciudad, provincia:document.getElementById('suc-provincia').value, tipo:document.getElementById('suc-tipo').value, region:document.getElementById('suc-region').value, direccion:document.getElementById('suc-dir').value.trim(), responsable:document.getElementById('suc-resp').value.trim(), horario_ini:document.getElementById('suc-hini').value, horario_fin:document.getElementById('suc-hfin').value, geo_radio:parseInt(document.getElementById('suc-geo').value)||200, activa:true });
+    document.getElementById('suc-ok').classList.add('show');
+    setTimeout(()=>{ document.getElementById('suc-ok').classList.remove('show'); cerrarM('modal-suc'); },1500);
+    await cargarTodo();
+  } catch(e){ showToast('Error: '+e.message); }
+  document.getElementById('upload-overlay').classList.remove('show');
+};
+
+window.guardarInventario=async function(){
+  const branchId=document.getElementById('inv-branch').value;
+  const nombre=document.getElementById('inv-prod-nombre').value.trim();
+  const stock=parseInt(document.getElementById('inv-stock').value)||0;
+  if(!branchId||!nombre){ showToast('Completa sucursal y nombre del producto'); return; }
+  const branch=branches.find(b=>b.id===branchId);
+  document.getElementById('upload-overlay').classList.add('show');
+  try{
+    await sb.from('pv_inventory').insert({ company_id:companyId, branch_id:branchId, branch_nombre:branch?.nombre||'', producto_nombre:nombre, stock_disponible:stock, stock_minimo:parseInt(document.getElementById('inv-minimo').value)||5, precio_venta:parseFloat(document.getElementById('inv-precio').value)||0, precio_costo:parseFloat(document.getElementById('inv-costo').value)||0, updated_at:new Date().toISOString() });
+    document.getElementById('inv-ok').classList.add('show');
+    setTimeout(()=>{ document.getElementById('inv-ok').classList.remove('show'); cerrarM('modal-inv'); },1500);
+    await cargarTodo();
+  } catch(e){ showToast('Error: '+e.message); }
+  document.getElementById('upload-overlay').classList.remove('show');
+};
+
+window.crearTransferencia=async function(){
+  const origenId=document.getElementById('tr-origen').value;
+  const destinoId=document.getElementById('tr-destino').value;
+  const cant=parseInt(document.getElementById('tr-cant').value)||0;
+  if(!origenId||!destinoId||cant<=0||origenId===destinoId){ showToast('Completa todos los campos'); return; }
+  const origen=branches.find(b=>b.id===origenId);
+  const destino=branches.find(b=>b.id===destinoId);
+  const invO=inventory.find(i=>i.branch_id===origenId);
+  if(!invO||(invO.stock_disponible||0)<cant){ showToast('Stock insuficiente'); return; }
+  document.getElementById('upload-overlay').classList.add('show');
+  try{
+    const guia='GR-'+Date.now().toString().slice(-8);
+    await sb.from('pv_transfers').insert({ company_id:companyId, guia, origen_branch_id:origenId, origen_nombre:origen?.nombre||'', destino_branch_id:destinoId, destino_nombre:destino?.nombre||'', producto_nombre:invO?.producto_nombre||'Producto', cantidad:cant, transportadora:document.getElementById('tr-trans').value.trim(), iniciado_por:userId });
+    await sb.from('pv_inventory').update({ stock_disponible:Math.max(0,(invO.stock_disponible||0)-cant), stock_en_transito:(invO.stock_en_transito||0)+cant, updated_at:new Date().toISOString() }).eq('id',invO.id);
+    cerrarM('modal-transfer');
+    await cargarTodo();
+    showToast('✓ Guía '+guia+' generada');
+  } catch(e){ showToast('Error: '+e.message); }
+  document.getElementById('upload-overlay').classList.remove('show');
+};
+
+window.confirmarTransfer=async function(id){
+  if(!confirm('¿Confirmar recepción?')) return;
+  document.getElementById('upload-overlay').classList.add('show');
+  const t=transfers.find(tr=>tr.id===id); if(!t) return;
+  await sb.from('pv_transfers').update({estado:'confirmado',fecha_confirmacion:new Date().toISOString(),confirmado_por:userId}).eq('id',id);
+  const invD=inventory.find(i=>i.branch_id===t.destino_branch_id);
+  if(invD){ await sb.from('pv_inventory').update({stock_disponible:(invD.stock_disponible||0)+t.cantidad,updated_at:new Date().toISOString()}).eq('id',invD.id); }
+  else { await sb.from('pv_inventory').insert({company_id:companyId,branch_id:t.destino_branch_id,branch_nombre:t.destino_nombre,producto_nombre:t.producto_nombre,stock_disponible:t.cantidad}); }
+  const invO=inventory.find(i=>i.branch_id===t.origen_branch_id);
+  if(invO) await sb.from('pv_inventory').update({stock_en_transito:Math.max(0,(invO.stock_en_transito||0)-t.cantidad)}).eq('id',invO.id);
+  await cargarTodo();
+  document.getElementById('upload-overlay').classList.remove('show');
+  showToast('✓ Stock confirmado en destino');
+};
+
+window.cancelarTransfer=async function(id){
+  if(!confirm('¿Cancelar transferencia?')) return;
+  document.getElementById('upload-overlay').classList.add('show');
+  const t=transfers.find(tr=>tr.id===id); if(!t) return;
+  await sb.from('pv_transfers').update({estado:'cancelado'}).eq('id',id);
+  const invO=inventory.find(i=>i.branch_id===t.origen_branch_id);
+  if(invO) await sb.from('pv_inventory').update({stock_disponible:(invO.stock_disponible||0)+t.cantidad,stock_en_transito:Math.max(0,(invO.stock_en_transito||0)-t.cantidad)}).eq('id',invO.id);
+  await cargarTodo();
+  document.getElementById('upload-overlay').classList.remove('show');
+  showToast('Cancelado — stock devuelto al origen');
+};
+
+window.guardarConfig=async function(){
+  const nombre=document.getElementById('cfg-nombre').value.trim();
+  const color=document.getElementById('cfg-color').value;
+  const logo=document.getElementById('cfg-logo').value.trim();
+  document.getElementById('upload-overlay').classList.add('show');
+  await sb.from('pv_companies').update({nombre,ruc:document.getElementById('cfg-ruc').value.trim(),color_marca:color,logo}).eq('id',companyId);
+  await sb.from('usuarios').update({...(nombre?{empresa:nombre}:{}),workers_color:color,...(logo?{logo_empresa:logo}:{})}).eq('id',userId);
+  companyData={...companyData,nombre,color_marca:color,logo};
+  document.documentElement.style.setProperty('--acc',color);
+  document.getElementById('upload-overlay').classList.remove('show');
+  document.getElementById('cfg-ok').classList.add('show');
+  setTimeout(()=>document.getElementById('cfg-ok').classList.remove('show'),2000);
+};
+
+window.prevColor=v=>{ document.getElementById('cfg-color-dot').style.background=v; document.documentElement.style.setProperty('--acc',v); };
+
+function suscribirRealtime(){
+  sb.channel('enterprise-'+companyId)
+    .on('postgres_changes',{event:'INSERT',schema:'public',table:'pv_sales',filter:`company_id=eq.${companyId}`},()=>cargarTodo())
+    .on('postgres_changes',{event:'*',schema:'public',table:'pv_transfers',filter:`company_id=eq.${companyId}`},()=>cargarTodo())
+    .subscribe();
+}
+
+window.showTab=function(tab,btn){
+  document.querySelectorAll('.section').forEach(s=>s.classList.remove('active'));
+  document.querySelectorAll('.snav-btn,.tab').forEach(b=>b.classList.remove('active'));
+  document.getElementById('sec-'+tab)?.classList.add('active');
+  if(btn) btn.classList.add('active');
+};
+window.doLogout=async function(){ await sb.auth.signOut(); window.location.href='login.html'; };
+window.cerrarModal=(id,e)=>{ if(e.target===document.getElementById(id)) document.getElementById(id).classList.remove('show'); };
+window.cerrarM=(id)=>document.getElementById(id).classList.remove('show');
+function showToast(msg){ const t=document.getElementById('toast'); t.textContent=msg; t.classList.add('show'); setTimeout(()=>t.classList.remove('show'),2500); }
 </script>
 </body>
 </html>
