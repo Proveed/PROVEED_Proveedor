@@ -6,254 +6,721 @@
 <title>PROVEED — Facturador</title>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
 <style>
-  *{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent;}
-  :root{ --naranja:#FF8C00; --verde:#A8E63D; --negro:#0A0A0A; --gris:#F5F6F2; --rojo:#FF4D4D; --azul:#007AFF; }
-  body{ background:var(--negro); font-family:'Inter',sans-serif; padding-bottom:90px; -webkit-font-smoothing:antialiased; }
-  .header{ background:var(--negro); padding:44px 16px 16px; display:flex; align-items:center; justify-content:space-between; position:sticky; top:0; z-index:100; border-bottom:1px solid #1e1e1e; }
-  .h-left{ display:flex; align-items:center; gap:12px; }
-  .back-btn{ width:36px; height:36px; background:rgba(255,255,255,0.08); border-radius:10px; display:flex; align-items:center; justify-content:center; cursor:pointer; border:none; }
-  .back-btn svg{ width:18px; height:18px; stroke:white; fill:none; stroke-width:2.5; }
-  .page-title{ font-size:1.1rem; font-weight:700; color:white; }
-  .btn-nueva{ background:var(--naranja); color:#000; border:none; padding:10px 16px; border-radius:12px; font-family:'Inter',sans-serif; font-weight:700; font-size:0.82rem; cursor:pointer; }
-  .stats-row{ display:grid; grid-template-columns:repeat(3,1fr); gap:10px; padding:14px 16px 0; }
-  .stat-box{ background:#111; border:1px solid #1e1e1e; border-radius:16px; padding:14px 10px; text-align:center; }
-  .stat-val{ font-size:1.2rem; font-weight:800; color:white; }
-  .stat-val.naranja{ color:var(--naranja); }
-  .stat-val.verde{ color:var(--verde); }
-  .stat-lbl{ font-size:0.6rem; color:#555; font-weight:600; text-transform:uppercase; margin-top:3px; }
-  .tabs-row{ display:flex; gap:8px; padding:12px 16px; overflow-x:auto; scrollbar-width:none; }
-  .tabs-row::-webkit-scrollbar{ display:none; }
-  .vtab{ padding:7px 14px; border-radius:20px; border:1px solid #222; background:transparent; font-size:0.76rem; font-weight:600; color:#555; cursor:pointer; white-space:nowrap; font-family:'Inter',sans-serif; }
-  .vtab.active{ background:#1e1e1e; color:white; border-color:#333; }
-  .facturas-lista{ padding:0 16px; }
-  .factura-card{ background:#111; border:1px solid #1e1e1e; border-radius:16px; padding:16px; margin-bottom:10px; cursor:pointer; transition:0.2s; }
-  .factura-card:hover{ border-color:#333; }
-  .fac-header{ display:flex; align-items:center; justify-content:space-between; margin-bottom:10px; }
-  .fac-num{ font-size:0.88rem; font-weight:800; color:white; }
-  .fac-fecha{ font-size:0.7rem; color:#555; }
-  .fac-estado{ font-size:0.65rem; font-weight:700; padding:3px 10px; border-radius:20px; }
-  .est-pagada{ background:rgba(168,230,61,0.12); color:var(--verde); }
-  .est-pendiente{ background:rgba(255,140,0,0.12); color:var(--naranja); }
-  .est-vencida{ background:rgba(255,77,77,0.12); color:var(--rojo); }
-  .fac-cliente{ font-size:0.8rem; color:#aaa; margin-bottom:8px; }
-  .fac-items{ font-size:0.75rem; color:#555; margin-bottom:10px; }
-  .fac-footer{ display:flex; align-items:center; justify-content:space-between; }
-  .fac-total{ font-size:1rem; font-weight:800; color:var(--naranja); }
-  .fac-actions{ display:flex; gap:6px; }
-  .fac-btn{ padding:6px 12px; border-radius:8px; border:none; font-family:'Inter',sans-serif; font-size:0.72rem; font-weight:700; cursor:pointer; }
-  .btn-ver{ background:#1e1e1e; color:#aaa; }
-  .btn-cobrar{ background:rgba(168,230,61,0.1); color:#3a7a00; }
-  .empty{ text-align:center; padding:48px 20px; color:#444; }
-  .empty svg{ width:52px; height:52px; stroke:#333; fill:none; stroke-width:1.2; margin:0 auto 14px; display:block; }
-  .empty p{ font-size:0.85rem; }
+*{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent;}
+:root{ --naranja:#FF8C00; --verde:#A8E63D; --negro:#0A0A0A; --rojo:#FF4D4D; --azul:#007AFF; }
+body{ background:var(--negro); font-family:'Inter',sans-serif; -webkit-font-smoothing:antialiased; padding-bottom:100px; }
 
-  /* MODAL NUEVA FACTURA */
-  .modal-overlay{ position:fixed; inset:0; background:rgba(0,0,0,0.7); display:none; z-index:500; align-items:flex-end; }
-  .modal-overlay.show{ display:flex; }
-  .modal-sheet{ background:#111; width:100%; max-height:92vh; border-radius:24px 24px 0 0; transform:translateY(100%); transition:0.4s cubic-bezier(0.16,1,0.3,1); display:flex; flex-direction:column; overflow:hidden; border:1px solid #1e1e1e; border-bottom:none; }
-  .modal-overlay.show .modal-sheet{ transform:translateY(0); }
-  .drag{ width:36px; height:4px; background:#333; border-radius:4px; margin:14px auto 0; flex-shrink:0; }
-  .modal-header{ padding:12px 16px; display:flex; justify-content:space-between; align-items:center; border-bottom:1px solid #1e1e1e; flex-shrink:0; }
-  .modal-title{ font-size:1rem; font-weight:700; color:white; }
-  .close-btn{ width:30px; height:30px; background:#1e1e1e; border-radius:8px; display:flex; align-items:center; justify-content:center; cursor:pointer; border:none; }
-  .close-btn svg{ width:14px; height:14px; stroke:#666; fill:none; stroke-width:2.5; }
-  .modal-body{ overflow-y:auto; padding:16px 16px 32px; flex:1; }
-  .field{ margin-bottom:14px; }
-  .field label{ display:block; font-size:0.7rem; font-weight:700; color:#555; text-transform:uppercase; letter-spacing:0.8px; margin-bottom:6px; }
-  .field input,.field textarea,.field select{ width:100%; padding:12px 14px; background:#1a1a1a; border:1px solid #222; border-radius:12px; outline:none; font-family:'Inter',sans-serif; font-size:0.9rem; color:white; -webkit-appearance:none; }
-  .field input:focus,.field textarea:focus{ border-color:var(--naranja); }
-  .field-row{ display:grid; grid-template-columns:1fr 1fr; gap:10px; }
-  .items-lista{ margin-bottom:14px; }
-  .item-fac{ display:flex; gap:8px; align-items:center; background:#1a1a1a; border-radius:11px; padding:10px 12px; margin-bottom:8px; border:1px solid #222; }
-  .item-fac-info{ flex:1; }
-  .item-fac-nombre{ font-size:0.82rem; color:white; font-weight:600; }
-  .item-fac-sub{ font-size:0.7rem; color:#555; margin-top:1px; }
-  .item-fac-total{ font-size:0.85rem; font-weight:700; color:var(--naranja); white-space:nowrap; }
-  .del-item{ width:26px; height:26px; background:rgba(255,77,77,0.1); border-radius:8px; border:none; cursor:pointer; display:flex; align-items:center; justify-content:center; flex-shrink:0; }
-  .del-item svg{ width:12px; height:12px; stroke:var(--rojo); fill:none; stroke-width:2.5; }
-  .btn-add-item{ width:100%; padding:11px; background:#1a1a1a; border:1px dashed #333; border-radius:12px; color:#555; font-family:'Inter',sans-serif; font-size:0.82rem; font-weight:600; cursor:pointer; margin-bottom:14px; }
-  .total-fac-wrap{ background:#1a1a1a; border-radius:12px; padding:14px; margin-bottom:16px; display:flex; justify-content:space-between; align-items:center; border:1px solid #222; }
-  .total-fac-label{ font-size:0.82rem; color:#555; }
-  .total-fac-val{ font-size:1.3rem; font-weight:800; color:var(--naranja); }
-  .btn-crear-fac{ width:100%; padding:14px; background:var(--naranja); color:#000; border:none; border-radius:14px; font-family:'Inter',sans-serif; font-size:0.95rem; font-weight:800; cursor:pointer; }
+/* HEADER */
+.header{ background:#111; padding:44px 16px 14px; display:flex; align-items:center; gap:12px; border-bottom:1px solid #1e1e1e; position:sticky; top:0; z-index:100; }
+.back-btn{ width:36px; height:36px; background:rgba(255,255,255,0.07); border-radius:10px; display:flex; align-items:center; justify-content:center; cursor:pointer; border:none; }
+.back-btn svg{ width:18px; height:18px; stroke:white; fill:none; stroke-width:2.5; }
+.page-title{ font-size:1rem; font-weight:800; color:white; }
+.page-sub{ font-size:0.65rem; color:#444; margin-top:1px; }
+.h-right{ margin-left:auto; display:flex; gap:8px; }
+.btn-hd{ padding:8px 14px; border-radius:10px; border:none; font-family:'Inter',sans-serif; font-size:0.76rem; font-weight:700; cursor:pointer; }
+.btn-hd.naranja{ background:var(--naranja); color:white; }
+.btn-hd.ghost{ background:rgba(255,255,255,0.07); color:#888; }
 
-  .tab-bar{ position:fixed; bottom:0; width:100%; background:#111; display:flex; justify-content:space-around; align-items:center; padding:10px 0 22px; border-top:1px solid #1e1e1e; z-index:200; }
-  .tab{ display:flex; flex-direction:column; align-items:center; gap:4px; cursor:pointer; flex:1; color:#444; text-decoration:none; }
-  .tab.active{ color:var(--naranja); }
-  .tab svg{ width:22px; height:22px; stroke:currentColor; fill:none; stroke-width:2; stroke-linecap:round; stroke-linejoin:round; }
-  .tab span{ font-size:0.56rem; font-weight:600; text-transform:uppercase; }
+/* TABS */
+.tabs{ display:flex; border-bottom:1px solid #1e1e1e; padding:0 16px; background:#111; }
+.tab-pill{ padding:12px 14px; border:none; background:transparent; font-family:'Inter',sans-serif; font-size:0.74rem; font-weight:700; color:#333; cursor:pointer; border-bottom:2px solid transparent; }
+.tab-pill.active{ color:var(--naranja); border-bottom-color:var(--naranja); }
+
+/* SECTIONS */
+.section{ display:none; padding:16px 16px 20px; }
+.section.active{ display:block; }
+
+/* CARDS */
+.config-card{ background:#111; border:1px solid #1e1e1e; border-radius:18px; padding:16px; margin-bottom:12px; }
+.config-card-title{ font-size:0.72rem; font-weight:800; color:#444; text-transform:uppercase; letter-spacing:0.8px; margin-bottom:14px; display:flex; align-items:center; gap:7px; }
+.config-card-title span{ font-size:0.9rem; }
+
+/* FORM */
+.field{ margin-bottom:12px; }
+.field label{ display:block; font-size:0.65rem; font-weight:700; color:#444; text-transform:uppercase; letter-spacing:0.5px; margin-bottom:5px; }
+.field input,.field select,.field textarea{ width:100%; padding:11px 14px; background:#1a1a1a; border:1.5px solid #222; border-radius:11px; font-family:'Inter',sans-serif; font-size:0.88rem; color:white; outline:none; -webkit-appearance:none; }
+.field input:focus,.field select:focus,.field textarea:focus{ border-color:var(--naranja); }
+.field input::placeholder,.field textarea::placeholder{ color:#333; }
+.field select option{ background:#111; }
+.field textarea{ resize:none; height:70px; }
+.field-row{ display:grid; grid-template-columns:1fr 1fr; gap:10px; }
+
+/* COLOR PICKER */
+.color-row{ display:flex; gap:10px; align-items:center; }
+.color-preview{ width:40px; height:40px; border-radius:10px; flex-shrink:0; border:2px solid #222; }
+.color-picker{ flex:1; height:40px; border-radius:10px; border:1.5px solid #222; cursor:pointer; padding:3px; background:#1a1a1a; }
+.color-hex{ flex:1; padding:11px 12px; background:#1a1a1a; border:1.5px solid #222; border-radius:10px; font-family:'Inter',sans-serif; font-size:0.85rem; color:white; outline:none; }
+.color-hex:focus{ border-color:var(--naranja); }
+
+/* LOGO UPLOAD */
+.logo-upload{ border:2px dashed #222; border-radius:14px; padding:16px; text-align:center; position:relative; cursor:pointer; transition:0.2s; }
+.logo-upload.filled{ border-color:var(--naranja); background:rgba(255,140,0,0.04); }
+.logo-upload svg{ width:24px; height:24px; stroke:#333; fill:none; stroke-width:1.5; display:block; margin:0 auto 6px; }
+.logo-upload.filled svg{ stroke:var(--naranja); }
+.logo-upload p{ font-size:0.72rem; color:#333; }
+.logo-upload.filled p{ color:var(--naranja); }
+.logo-file-input{ position:absolute; inset:0; opacity:0; cursor:pointer; }
+.logo-preview{ width:60px; height:60px; border-radius:12px; object-fit:cover; display:none; margin:0 auto 8px; }
+
+/* MARCA AGUA TOGGLE */
+.marca-agua-toggle{ display:flex; align-items:center; justify-content:space-between; padding:13px 0; border-bottom:1px solid #1a1a1a; }
+.mat-info{ }
+.mat-title{ font-size:0.85rem; font-weight:700; color:white; }
+.mat-sub{ font-size:0.68rem; color:#444; margin-top:2px; }
+.toggle{ width:44px; height:24px; border-radius:12px; background:#222; border:1px solid #333; position:relative; cursor:pointer; flex-shrink:0; transition:0.3s; }
+.toggle.on{ background:rgba(168,230,61,0.2); border-color:rgba(168,230,61,0.4); }
+.toggle-thumb{ position:absolute; top:2px; left:2px; width:20px; height:20px; border-radius:50%; background:#444; transition:0.3s; }
+.toggle.on .toggle-thumb{ left:22px; background:var(--verde); }
+
+/* FACTURA PREVIEW */
+.preview-wrap{ background:#1a1a1a; border-radius:18px; padding:16px; margin-bottom:12px; }
+.preview-label{ font-size:0.65rem; font-weight:700; color:#333; text-transform:uppercase; letter-spacing:0.8px; margin-bottom:12px; display:flex; align-items:center; justify-content:space-between; }
+.preview-label span{ color:var(--naranja); font-size:0.68rem; cursor:pointer; }
+
+/* LA FACTURA EN SÍ — fondo blanco */
+.factura-doc{ background:white; border-radius:14px; padding:20px; position:relative; overflow:hidden; min-height:400px; }
+
+/* MARCA DE AGUA PROVEED */
+.marca-agua{ position:absolute; inset:0; display:flex; align-items:center; justify-content:center; pointer-events:none; opacity:0.055; }
+.marca-agua svg{ width:200px; height:200px; }
+.marca-agua.hidden{ display:none; }
+
+/* CABECERA FACTURA */
+.fact-header{ display:flex; align-items:flex-start; justify-content:space-between; margin-bottom:16px; }
+.fact-logo{ width:56px; height:56px; border-radius:12px; overflow:hidden; display:flex; align-items:center; justify-content:center; font-size:1.2rem; font-weight:800; color:white; flex-shrink:0; }
+.fact-logo img{ width:100%; height:100%; object-fit:cover; }
+.fact-empresa{ flex:1; padding-left:12px; }
+.fact-empresa-nombre{ font-size:1rem; font-weight:900; color:#0A0A0A; }
+.fact-empresa-ruc{ font-size:0.68rem; color:#888; margin-top:2px; }
+.fact-empresa-tel{ font-size:0.68rem; color:#888; }
+.fact-num-box{ text-align:right; }
+.fact-num-lbl{ font-size:0.6rem; font-weight:700; text-transform:uppercase; color:#aaa; }
+.fact-num{ font-size:1rem; font-weight:900; font-family:monospace; }
+.fact-fecha{ font-size:0.65rem; color:#aaa; margin-top:3px; }
+.fact-divider{ height:2px; border-radius:2px; margin:12px 0; }
+
+/* INFO CLIENTE */
+.fact-info-row{ display:grid; grid-template-columns:1fr 1fr; gap:10px; margin-bottom:12px; }
+.fact-info-box{ background:#F8F9FA; border-radius:9px; padding:10px; }
+.fact-info-lbl{ font-size:0.58rem; font-weight:700; text-transform:uppercase; color:#aaa; margin-bottom:4px; }
+.fact-info-val{ font-size:0.78rem; font-weight:700; color:#0A0A0A; }
+.fact-info-sub{ font-size:0.65rem; color:#888; margin-top:2px; }
+
+/* TABLA PRODUCTOS */
+.fact-table{ width:100%; border-collapse:collapse; margin-bottom:12px; }
+.fact-table th{ font-size:0.58rem; font-weight:700; text-transform:uppercase; color:#aaa; padding:6px 8px; border-bottom:1.5px solid #eee; text-align:left; }
+.fact-table th:last-child{ text-align:right; }
+.fact-table td{ font-size:0.72rem; color:#333; padding:7px 8px; border-bottom:1px solid #F0F0F0; vertical-align:top; }
+.fact-table td:last-child{ text-align:right; font-weight:700; color:#0A0A0A; }
+.fact-table .prod-nombre{ font-weight:600; color:#0A0A0A; }
+.fact-table .prod-cat{ font-size:0.62rem; color:#aaa; margin-top:1px; }
+
+/* TOTALES */
+.fact-totales{ background:#F8F9FA; border-radius:10px; padding:12px; }
+.fact-total-row{ display:flex; justify-content:space-between; padding:3px 0; }
+.fact-total-lbl{ font-size:0.72rem; color:#888; }
+.fact-total-val{ font-size:0.72rem; font-weight:700; color:#333; }
+.fact-total-final{ display:flex; justify-content:space-between; padding-top:8px; margin-top:4px; border-top:2px solid; }
+.fact-total-final-lbl{ font-size:0.85rem; font-weight:800; color:#0A0A0A; }
+.fact-total-final-val{ font-size:1rem; font-weight:900; }
+
+/* FOOTER FACTURA */
+.fact-footer{ margin-top:12px; text-align:center; }
+.fact-footer-txt{ font-size:0.62rem; color:#aaa; line-height:1.6; }
+.fact-gracias{ font-size:0.78rem; font-weight:700; margin-bottom:4px; }
+.fact-proveed{ display:flex; align-items:center; justify-content:center; gap:5px; margin-top:8px; padding-top:8px; border-top:1px solid #eee; }
+.fact-proveed-txt{ font-size:0.58rem; color:#ccc; }
+.fact-proveed-logo{ display:flex; align-items:center; gap:3px; }
+.fact-proveed-logo svg{ width:14px; height:14px; }
+.fact-proveed-logo span{ font-size:0.62rem; font-weight:800; color:#aaa; }
+
+/* PEDIDOS LISTA */
+.pedido-item{ background:#111; border:1px solid #1e1e1e; border-radius:14px; padding:13px 14px; margin-bottom:8px; display:flex; align-items:center; gap:12px; cursor:pointer; transition:0.15s; }
+.pedido-item:active{ transform:scale(0.98); }
+.pedido-item.selected{ border-color:rgba(255,140,0,0.4); background:rgba(255,140,0,0.04); }
+.pi-avatar{ width:38px; height:38px; border-radius:11px; display:flex; align-items:center; justify-content:center; font-size:0.85rem; font-weight:800; color:white; flex-shrink:0; }
+.pi-info{ flex:1; }
+.pi-nombre{ font-size:0.85rem; font-weight:700; color:white; }
+.pi-det{ font-size:0.68rem; color:#444; margin-top:2px; }
+.pi-right{ text-align:right; }
+.pi-total{ font-size:0.88rem; font-weight:800; color:var(--naranja); }
+.pi-fecha{ font-size:0.62rem; color:#333; margin-top:2px; }
+
+/* BOTONES */
+.btn-primary{ width:100%; padding:14px; background:var(--naranja); color:white; border:none; border-radius:13px; font-family:'Inter',sans-serif; font-size:0.92rem; font-weight:800; cursor:pointer; margin-top:8px; }
+.btn-secondary{ width:100%; padding:12px; background:#1a1a1a; color:#888; border:1px solid #222; border-radius:13px; font-family:'Inter',sans-serif; font-size:0.85rem; font-weight:700; cursor:pointer; margin-top:8px; }
+.info-box{ background:rgba(255,140,0,0.06); border:1px solid rgba(255,140,0,0.15); border-radius:12px; padding:12px; font-size:0.75rem; color:#666; margin-bottom:12px; line-height:1.5; }
+.info-box strong{ color:var(--naranja); display:block; margin-bottom:2px; }
+.msg-ok{ background:rgba(168,230,61,0.08); border:1px solid rgba(168,230,61,0.2); border-radius:12px; padding:10px 14px; font-size:0.8rem; color:var(--verde); margin-bottom:12px; display:none; font-weight:600; }
+.msg-ok.show{ display:block; }
+
+/* TOAST / LOADING */
+.toast{ position:fixed; bottom:80px; left:50%; transform:translateX(-50%) translateY(20px); background:#1e1e1e; color:white; padding:10px 20px; border-radius:24px; font-size:0.82rem; font-weight:700; opacity:0; transition:0.3s; pointer-events:none; z-index:2000; white-space:nowrap; border:1px solid #333; }
+.toast.show{ opacity:1; transform:translateX(-50%) translateY(0); }
+.upload-overlay{ position:fixed; inset:0; background:rgba(0,0,0,0.7); display:none; align-items:center; justify-content:center; z-index:1000; }
+.upload-overlay.show{ display:flex; }
+.upload-box{ background:#111; border-radius:20px; padding:24px; width:80%; max-width:280px; text-align:center; border:1px solid #222; }
+.spinner{ width:36px; height:36px; border:3px solid #222; border-top-color:var(--naranja); border-radius:50%; animation:spin 0.7s linear infinite; margin:0 auto 10px; }
+.upload-box p{ font-size:0.82rem; color:#444; }
+@keyframes spin{ to{ transform:rotate(360deg); } }
+
+/* TAB BAR */
+.tab-bar{ position:fixed; bottom:0; width:100%; background:#111; display:flex; justify-content:space-around; padding:10px 0 22px; border-top:1px solid #1e1e1e; z-index:200; }
+.nav-tab{ display:flex; flex-direction:column; align-items:center; gap:4px; cursor:pointer; flex:1; color:#333; text-decoration:none; border:none; background:transparent; font-family:'Inter',sans-serif; }
+.nav-tab.active{ color:var(--naranja); }
+.nav-tab svg{ width:22px; height:22px; stroke:currentColor; fill:none; stroke-width:2; stroke-linecap:round; stroke-linejoin:round; }
+.nav-tab span{ font-size:0.54rem; font-weight:600; text-transform:uppercase; }
 </style>
 </head>
 <body>
 
 <div class="header">
-  <div class="h-left">
-    <button class="back-btn" onclick="window.location.href='dashboard.html'"><svg viewBox="0 0 24 24"><path d="M19 12H5M12 19l-7-7 7-7"/></svg></button>
+  <button class="back-btn" onclick="window.location.href='dashboard.html'">
+    <svg viewBox="0 0 24 24"><path d="M19 12H5M12 19l-7-7 7-7"/></svg>
+  </button>
+  <div>
     <div class="page-title">Facturador</div>
+    <div class="page-sub">Diseña y genera facturas profesionales</div>
   </div>
-  <button class="btn-nueva" onclick="abrirModal()">+ Nueva</button>
+  <div class="h-right">
+    <button class="btn-hd ghost" onclick="showTab('pedidos',document.querySelectorAll('.tab-pill')[1])">📋 Pedidos</button>
+    <button class="btn-hd naranja" onclick="generarPDF()">⬇ PDF</button>
+  </div>
 </div>
 
-<div class="stats-row">
-  <div class="stat-box"><div class="stat-val naranja" id="st-total">$0</div><div class="stat-lbl">Total facturado</div></div>
-  <div class="stat-box"><div class="stat-val" id="st-pendiente">0</div><div class="stat-lbl">Pendientes</div></div>
-  <div class="stat-box"><div class="stat-val verde" id="st-pagadas">0</div><div class="stat-lbl">Pagadas</div></div>
+<div class="tabs">
+  <button class="tab-pill active" onclick="showTab('config',this)">Diseño</button>
+  <button class="tab-pill" onclick="showTab('pedidos',this)">Seleccionar pedido</button>
+  <button class="tab-pill" onclick="showTab('preview',this)">Vista previa</button>
+  <button class="tab-pill" onclick="showTab('historial',this)">Historial</button>
 </div>
 
-<div class="tabs-row">
-  <div class="vtab active" onclick="filtrar('todos',this)">Todas</div>
-  <div class="vtab" onclick="filtrar('pendiente',this)">Pendientes</div>
-  <div class="vtab" onclick="filtrar('pagada',this)">Pagadas</div>
-  <div class="vtab" onclick="filtrar('vencida',this)">Vencidas</div>
-</div>
+<!-- SECCIÓN CONFIG -->
+<div class="section active" id="sec-config">
 
-<div class="facturas-lista" id="facturas-lista">
-  <div class="empty"><p>Cargando facturas...</p></div>
-</div>
-
-<div class="modal-overlay" id="modal-overlay" onclick="cerrarModal(event)">
-  <div class="modal-sheet">
-    <div class="drag"></div>
-    <div class="modal-header">
-      <span class="modal-title">Nueva Factura</span>
-      <button class="close-btn" onclick="cerrarModalDirecto()"><svg viewBox="0 0 24 24"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg></button>
+  <div class="config-card">
+    <div class="config-card-title"><span>🏢</span> Datos de tu empresa</div>
+    <div class="field"><label>Nombre de empresa *</label><input type="text" id="cfg-empresa" placeholder="Mi Empresa S.A."></div>
+    <div class="field-row">
+      <div class="field"><label>RUC *</label><input type="text" id="cfg-ruc" placeholder="1234567890001"></div>
+      <div class="field"><label>Teléfono</label><input type="text" id="cfg-tel" placeholder="0991234567"></div>
     </div>
-    <div class="modal-body">
-      <div class="field"><label>Cliente / Empresa *</label><input type="text" id="f-cliente" placeholder="Nombre del cliente"></div>
-      <div class="field"><label>RUC o Cédula</label><input type="text" id="f-ruc" placeholder="1234567890"></div>
-      <div class="field-row">
-        <div class="field"><label>Fecha emisión</label><input type="date" id="f-fecha"></div>
-        <div class="field"><label>Fecha vencimiento</label><input type="date" id="f-vence"></div>
+    <div class="field"><label>Dirección</label><input type="text" id="cfg-dir" placeholder="Av. Principal 123, Quito"></div>
+    <div class="field"><label>Email</label><input type="email" id="cfg-email" placeholder="ventas@empresa.com"></div>
+    <div class="field"><label>Web / Instagram</label><input type="text" id="cfg-web" placeholder="@miempresa"></div>
+  </div>
+
+  <div class="config-card">
+    <div class="config-card-title"><span>🎨</span> Diseño de la factura</div>
+
+    <div class="field">
+      <label>Logo de empresa</label>
+      <div class="logo-upload" id="logo-wrap">
+        <img class="logo-preview" id="logo-preview" src="" alt="">
+        <svg viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg>
+        <p id="logo-txt">Toca para subir tu logo</p>
+        <input type="file" accept="image/*" class="logo-file-input" onchange="cargarLogo(this)">
       </div>
-      <div class="field"><label>Notas</label><input type="text" id="f-notas" placeholder="Observaciones opcionales"></div>
-      <div class="field"><label>Ítems de la factura</label></div>
-      <div class="items-lista" id="items-lista"></div>
-      <button class="btn-add-item" onclick="agregarItem()">+ Agregar ítem</button>
-      <div class="total-fac-wrap"><div class="total-fac-label">Total</div><div class="total-fac-val" id="total-fac">$0.00</div></div>
-      <button class="btn-crear-fac" onclick="crearFactura()">CREAR FACTURA →</button>
+    </div>
+
+    <div class="field">
+      <label>Color principal de la factura</label>
+      <div class="color-row">
+        <div class="color-preview" id="color-preview" style="background:#FF8C00;"></div>
+        <input type="color" class="color-picker" id="color-picker" value="#FF8C00" oninput="prevColor(this.value)">
+        <input type="text" class="color-hex" id="color-hex" value="#FF8C00" placeholder="#FF8C00" oninput="prevColorHex(this.value)">
+      </div>
+    </div>
+
+    <div class="field">
+      <label>Fuente de la factura</label>
+      <select id="cfg-fuente">
+        <option value="Inter">Inter (Moderna)</option>
+        <option value="Georgia">Georgia (Clásica)</option>
+        <option value="Arial">Arial (Corporativa)</option>
+        <option value="'Courier New'">Courier (Técnica)</option>
+      </select>
+    </div>
+
+    <div class="field">
+      <label>Estilo del número de factura</label>
+      <select id="cfg-estilo-num">
+        <option value="FAC">FAC-001</option>
+        <option value="INV">INV-001</option>
+        <option value="PRV">PRV-001</option>
+        <option value="personalizado">Personalizado</option>
+      </select>
+    </div>
+
+    <div class="marca-agua-toggle">
+      <div class="mat-info">
+        <div class="mat-title">Marca de agua PROVEED</div>
+        <div class="mat-sub">Hexágono con check — se imprime en el fondo de la factura</div>
+      </div>
+      <div class="toggle on" id="toggle-mda" onclick="toggleMarcaAgua()">
+        <div class="toggle-thumb"></div>
+      </div>
+    </div>
+
+    <div class="marca-agua-toggle" style="border-bottom:none;">
+      <div class="mat-info">
+        <div class="mat-title">Pie de página PROVEED</div>
+        <div class="mat-sub">Pequeño logo al final de la factura</div>
+      </div>
+      <div class="toggle on" id="toggle-pie" onclick="togglePie()">
+        <div class="toggle-thumb"></div>
+      </div>
     </div>
   </div>
+
+  <div class="config-card">
+    <div class="config-card-title"><span>📝</span> Textos personalizados</div>
+    <div class="field"><label>Mensaje de agradecimiento</label><input type="text" id="cfg-gracias" placeholder="¡Gracias por tu compra!" value="¡Gracias por tu compra!"></div>
+    <div class="field"><label>Notas al pie</label><textarea id="cfg-notas" placeholder="Tiempo de entrega: 2-5 días. Garantía: 30 días."></textarea></div>
+    <div class="field"><label>Política de devoluciones (opcional)</label><input type="text" id="cfg-politica" placeholder="Devoluciones dentro de 7 días con ticket"></div>
+  </div>
+
+  <div class="msg-ok" id="cfg-ok">✓ Configuración guardada</div>
+  <button class="btn-primary" onclick="guardarConfig()">Guardar configuración</button>
+  <button class="btn-secondary" onclick="showTab('preview',document.querySelectorAll('.tab-pill')[2])">Ver factura de ejemplo →</button>
 </div>
 
+<!-- SECCIÓN PEDIDOS -->
+<div class="section" id="sec-pedidos">
+  <div class="info-box"><strong>Selecciona un pedido</strong>La factura se generará automáticamente con todos los datos del pedido y del cliente.</div>
+  <div id="pedidos-lista"><div style="text-align:center;padding:30px;color:#333;">Cargando pedidos...</div></div>
+</div>
+
+<!-- SECCIÓN PREVIEW -->
+<div class="section" id="sec-preview">
+  <div class="preview-label">
+    Vista previa de la factura
+    <span onclick="generarPDF()">⬇ Descargar PDF</span>
+  </div>
+
+  <!-- LA FACTURA -->
+  <div class="preview-wrap">
+    <div class="factura-doc" id="factura-doc">
+
+      <!-- MARCA DE AGUA PROVEED -->
+      <div class="marca-agua" id="marca-agua">
+        <svg viewBox="0 0 200 200" fill="none">
+          <!-- Hexágono -->
+          <polygon points="100,10 182,55 182,145 100,190 18,145 18,55" fill="#FF8C00" opacity="1"/>
+          <!-- Check grande -->
+          <polyline points="55,100 85,130 145,70" stroke="white" stroke-width="14" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
+        </svg>
+      </div>
+
+      <!-- CABECERA -->
+      <div class="fact-header">
+        <div class="fact-logo" id="fact-logo" style="background:#FF8C00;">P</div>
+        <div class="fact-empresa">
+          <div class="fact-empresa-nombre" id="fact-empresa-nombre">Mi Empresa</div>
+          <div class="fact-empresa-ruc" id="fact-empresa-ruc">RUC: —</div>
+          <div class="fact-empresa-tel" id="fact-empresa-tel">Tel: —</div>
+        </div>
+        <div class="fact-num-box">
+          <div class="fact-num-lbl">FACTURA</div>
+          <div class="fact-num" id="fact-num" style="color:#FF8C00;">#FAC-001</div>
+          <div class="fact-fecha" id="fact-fecha">—</div>
+        </div>
+      </div>
+
+      <!-- LÍNEA COLOR -->
+      <div class="fact-divider" id="fact-divider" style="background:#FF8C00;"></div>
+
+   <!-- INFO CLIENTE + EMPRESA -->
+      <div class="fact-info-row">
+        <div class="fact-info-box">
+          <div class="fact-info-lbl">Facturar a</div>
+          <div class="fact-info-val" id="fact-cliente-nombre">Cliente Ejemplo</div>
+          <div class="fact-info-sub" id="fact-cliente-empresa">Empresa del cliente</div>
+          <div class="fact-info-sub" id="fact-cliente-email">email@cliente.com</div>
+          <div class="fact-info-sub" id="fact-cliente-cedula">CI: —</div>
+        </div>
+        <div class="fact-info-box">
+          <div class="fact-info-lbl">Datos de entrega</div>
+          <div class="fact-info-val" id="fact-entrega-ciudad">Ciudad, Provincia</div>
+          <div class="fact-info-sub" id="fact-entrega-dir">Dirección de entrega</div>
+          <div class="fact-info-sub" id="fact-metodo-pago">Pago: Transferencia</div>
+        </div>
+      </div>
+
+      <!-- TABLA PRODUCTOS -->
+      <table class="fact-table" id="fact-tabla">
+        <thead>
+          <tr>
+            <th>Producto</th>
+            <th style="text-align:center;">Cant.</th>
+            <th style="text-align:right;">P.Unit</th>
+            <th>Subtotal</th>
+          </tr>
+        </thead>
+        <tbody id="fact-items">
+          <tr>
+            <td><div class="prod-nombre">Producto de ejemplo</div><div class="prod-cat">Categoría</div></td>
+            <td style="text-align:center;">1</td>
+            <td style="text-align:right;">$10.00</td>
+            <td>$10.00</td>
+          </tr>
+        </tbody>
+      </table>
+
+      <!-- TOTALES -->
+      <div class="fact-totales">
+        <div class="fact-total-row"><span class="fact-total-lbl">Subtotal</span><span class="fact-total-val" id="fact-subtotal">$10.00</span></div>
+        <div class="fact-total-row" id="fact-cupon-row" style="display:none;"><span class="fact-total-lbl" style="color:#22C55E;">Descuento cupón</span><span class="fact-total-val" style="color:#22C55E;" id="fact-descuento">-$0.00</span></div>
+        <div class="fact-total-row"><span class="fact-total-lbl">IVA (0% - No grabado)</span><span class="fact-total-val">$0.00</span></div>
+        <div class="fact-total-final" id="fact-total-final" style="border-top-color:#FF8C00;">
+          <span class="fact-total-final-lbl">TOTAL</span>
+          <span class="fact-total-final-val" id="fact-total" style="color:#FF8C00;">$10.00</span>
+        </div>
+      </div>
+
+      <!-- FOOTER -->
+      <div class="fact-footer">
+        <div class="fact-gracias" id="fact-gracias" style="color:#FF8C00;">¡Gracias por tu compra!</div>
+        <div class="fact-footer-txt" id="fact-notas">Tiempo de entrega: 2-5 días hábiles.</div>
+        <div class="fact-footer-txt" id="fact-politica" style="margin-top:4px;"></div>
+        <div class="fact-proveed" id="fact-pie-proveed">
+          <span class="fact-proveed-txt">Factura emitida por</span>
+          <div class="fact-proveed-logo">
+            <svg viewBox="0 0 20 20" fill="none">
+              <polygon points="10,1 18.5,5.5 18.5,14.5 10,19 1.5,14.5 1.5,5.5" fill="#FF8C00"/>
+              <polyline points="5.5,10 8.5,13 14.5,7" stroke="white" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+            <span>PROVEED</span>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <button class="btn-primary" onclick="generarPDF()">⬇ Descargar factura PDF</button>
+  <button class="btn-secondary" onclick="compartirFactura()">📤 Compartir factura</button>
+</div>
+
+<!-- SECCIÓN HISTORIAL -->
+<div class="section" id="sec-historial">
+  <div class="info-box"><strong>Historial de facturas</strong>Todas las facturas generadas desde PROVEED.</div>
+  <div id="historial-lista"><div style="text-align:center;padding:30px;color:#333;">Sin facturas generadas aún</div></div>
+</div>
+
+<!-- TAB BAR -->
 <nav class="tab-bar">
-  <a class="tab" href="dashboard.html"><svg viewBox="0 0 24 24"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/></svg><span>Panel</span></a>
-  <a class="tab" href="productos.html"><svg viewBox="0 0 24 24"><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"/></svg><span>Productos</span></a>
-  <a class="tab active" href="facturador.html"><svg viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg><span>Facturas</span></a>
-  <a class="tab" href="pedidos.html"><svg viewBox="0 0 24 24"><rect x="1" y="3" width="15" height="13" rx="1"/><path d="M16 8h4l3 3v5h-7V8z"/></svg><span>Pedidos</span></a>
-  <a class="tab" href="plugins.html"><svg viewBox="0 0 24 24"><path d="M20.24 12.24a6 6 0 0 0-8.49-8.49L5 10.5V19h8.5l6.74-6.76z"/><line x1="16" y1="8" x2="2" y2="22"/></svg><span>Plugins</span></a>
+  <a class="nav-tab" href="dashboard.html"><svg viewBox="0 0 24 24"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/></svg><span>Panel</span></a>
+  <a class="nav-tab" href="pedidos.html"><svg viewBox="0 0 24 24"><path d="M9 5H7a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2h-2"/><rect x="9" y="3" width="6" height="4" rx="1"/></svg><span>Pedidos</span></a>
+  <a class="nav-tab active" href="facturador.html"><svg viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/><polyline points="10 9 9 9 8 9"/></svg><span>Facturas</span></a>
+  <a class="nav-tab" href="perfil.html"><svg viewBox="0 0 24 24"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg><span>Perfil</span></a>
 </nav>
 
+<div class="upload-overlay" id="upload-overlay"><div class="upload-box"><div class="spinner"></div><p>Generando PDF...</p></div></div>
+<div class="toast" id="toast"></div>
+
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
 <script>
 const { createClient } = supabase;
 const sb = createClient('https://hfmsyrmkewscnvwynzfq.supabase.co','sb_publishable_d1oLsq70a6ZV33vW3XkRgw_nYcN2Z9v');
-let userId='', todasFacturas=[], filtroActual='todos', itemsActuales=[];
+
+let userId='', userData={}, pedidoSeleccionado=null, logoBase64='', logoFile=null;
+let config={ color:'#FF8C00', fuente:'Inter', marcaAgua:true, pie:true, empresa:'', ruc:'', tel:'', dir:'', email:'', web:'', gracias:'¡Gracias por tu compra!', notas:'', politica:'', estiloNum:'FAC' };
+let facturaNum=1;
 
 (async()=>{
   const { data:{session} } = await sb.auth.getSession();
   if(!session){ window.location.href='login.html'; return; }
   userId=session.user.id;
-  document.getElementById('f-fecha').value=new Date().toISOString().split('T')[0];
-  const vence=new Date(); vence.setDate(vence.getDate()+30);
-  document.getElementById('f-vence').value=vence.toISOString().split('T')[0];
-  cargarFacturas();
+  const { data:u } = await sb.from('usuarios').select('*').eq('id',userId).single();
+  if(u){ userData=u; }
+  cargarConfigGuardada();
+  await cargarPedidos();
+  await cargarHistorial();
+  renderPreview();
 })();
 
-async function cargarFacturas(){
-  const { data } = await sb.from('facturas').select('*').eq('proveedor_id',userId).order('created_at',{ascending:false});
-  todasFacturas=data||[];
-  const total=todasFacturas.reduce((s,f)=>s+(f.total||0),0);
-  const pendientes=todasFacturas.filter(f=>f.estado==='pendiente').length;
-  const pagadas=todasFacturas.filter(f=>f.estado==='pagada').length;
-  document.getElementById('st-total').textContent='$'+total.toFixed(0);
-  document.getElementById('st-pendiente').textContent=pendientes;
-  document.getElementById('st-pagadas').textContent=pagadas;
-  renderFacturas();
+function cargarConfigGuardada(){
+  const saved=localStorage.getItem(`facturador_config_${userId}`);
+  if(saved){ try{ config={...config,...JSON.parse(saved)}; }catch(e){} }
+
+  // Precargar desde datos del usuario
+  config.empresa=config.empresa||userData.empresa||userData.nombre||'';
+  config.ruc=config.ruc||userData.ruc||'';
+  config.tel=config.tel||userData.telefono||'';
+  config.email=config.email||userData.email||'';
+  config.color=config.color||userData.workers_color||'#FF8C00';
+  const logoUrl=userData.logo_empresa||userData.foto_perfil||'';
+  if(logoUrl&&!logoBase64){ logoBase64=logoUrl; actualizarLogoUI(logoUrl); }
+
+  // Poner en los campos
+  document.getElementById('cfg-empresa').value=config.empresa;
+  document.getElementById('cfg-ruc').value=config.ruc;
+  document.getElementById('cfg-tel').value=config.tel;
+  document.getElementById('cfg-dir').value=config.dir||'';
+  document.getElementById('cfg-email').value=config.email;
+  document.getElementById('cfg-web').value=config.web||'';
+  document.getElementById('cfg-gracias').value=config.gracias;
+  document.getElementById('cfg-notas').value=config.notas||'';
+  document.getElementById('cfg-politica').value=config.politica||'';
+  document.getElementById('color-picker').value=config.color;
+  document.getElementById('color-hex').value=config.color;
+  document.getElementById('color-preview').style.background=config.color;
+  document.getElementById('cfg-fuente').value=config.fuente||'Inter';
+  document.getElementById('cfg-estilo-num').value=config.estiloNum||'FAC';
+
+  const tma=document.getElementById('toggle-mda');
+  const tpie=document.getElementById('toggle-pie');
+  if(!config.marcaAgua) tma.classList.remove('on');
+  if(!config.pie) tpie.classList.remove('on');
 }
 
-function renderFacturas(){
-  let lista=[...todasFacturas];
-  if(filtroActual!=='todos') lista=lista.filter(f=>f.estado===filtroActual);
-  const cont=document.getElementById('facturas-lista');
-  if(!lista.length){ cont.innerHTML='<div class="empty"><svg viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg><p>Sin facturas aún</p></div>'; return; }
+function actualizarLogoUI(src){
+  document.getElementById('logo-preview').src=src;
+  document.getElementById('logo-preview').style.display='block';
+  document.getElementById('logo-txt').textContent='Logo cargado ✓';
+  document.getElementById('logo-wrap').classList.add('filled');
+}
+window.cargarLogo=function(input){
+  const f=input.files[0]; if(!f) return;
+  logoFile=f;
+  const r=new FileReader();
+  r.onload=e=>{
+    logoBase64=e.target.result;
+    actualizarLogoUI(logoBase64);
+    renderPreview();
+  };
+  r.readAsDataURL(f);
+};
+
+window.prevColor=function(val){
+  document.getElementById('color-preview').style.background=val;
+  document.getElementById('color-hex').value=val;
+  config.color=val;
+  renderPreview();
+};
+window.prevColorHex=function(val){
+  if(/^#[0-9A-Fa-f]{6}$/.test(val)){
+    document.getElementById('color-picker').value=val;
+    document.getElementById('color-preview').style.background=val;
+    config.color=val;
+    renderPreview();
+  }
+};
+
+let marcaAguaOn=true, pieOn=true;
+window.toggleMarcaAgua=function(){
+  marcaAguaOn=!marcaAguaOn;
+  const t=document.getElementById('toggle-mda');
+  t.classList.toggle('on',marcaAguaOn);
+  config.marcaAgua=marcaAguaOn;
+  document.getElementById('marca-agua').classList.toggle('hidden',!marcaAguaOn);
+};
+window.togglePie=function(){
+  pieOn=!pieOn;
+  const t=document.getElementById('toggle-pie');
+  t.classList.toggle('on',pieOn);
+  config.pie=pieOn;
+  document.getElementById('fact-pie-proveed').style.display=pieOn?'flex':'none';
+};
+
+window.guardarConfig=function(){
+  config.empresa=document.getElementById('cfg-empresa').value.trim();
+  config.ruc=document.getElementById('cfg-ruc').value.trim();
+  config.tel=document.getElementById('cfg-tel').value.trim();
+  config.dir=document.getElementById('cfg-dir').value.trim();
+  config.email=document.getElementById('cfg-email').value.trim();
+  config.web=document.getElementById('cfg-web').value.trim();
+  config.gracias=document.getElementById('cfg-gracias').value.trim();
+  config.notas=document.getElementById('cfg-notas').value.trim();
+  config.politica=document.getElementById('cfg-politica').value.trim();
+  config.fuente=document.getElementById('cfg-fuente').value;
+  config.estiloNum=document.getElementById('cfg-estilo-num').value;
+  config.marcaAgua=marcaAguaOn;
+  config.pie=pieOn;
+  localStorage.setItem(`facturador_config_${userId}`,JSON.stringify(config));
+  document.getElementById('cfg-ok').classList.add('show');
+  setTimeout(()=>document.getElementById('cfg-ok').classList.remove('show'),2000);
+  renderPreview();
+  showToast('✓ Configuración guardada');
+};
+
+function renderPreview(){
+  const color=config.color||'#FF8C00';
+  const fuente=config.fuente||'Inter';
+
+  // Aplicar fuente al doc
+  document.getElementById('factura-doc').style.fontFamily=fuente;
+
+  // Logo
+  const logoEl=document.getElementById('fact-logo');
+  if(logoBase64){
+    logoEl.innerHTML=`<img src="${logoBase64}" alt="" style="width:100%;height:100%;object-fit:cover;">`;
+    logoEl.style.background='transparent';
+  } else {
+    logoEl.innerHTML=(config.empresa||'P')[0].toUpperCase();
+    logoEl.style.background=color;
+  }
+
+  // Empresa
+  document.getElementById('fact-empresa-nombre').textContent=config.empresa||'Mi Empresa';
+  document.getElementById('fact-empresa-nombre').style.color=color;
+  document.getElementById('fact-empresa-ruc').textContent=config.ruc?`RUC: ${config.ruc}`:'';
+  document.getElementById('fact-empresa-tel').textContent=config.tel?`Tel: ${config.tel} · ${config.email||''}`:config.email||'';
+
+  // Número
+  const numStr=String(facturaNum).padStart(3,'0');
+  const prefijo=config.estiloNum==='personalizado'?'FAC':config.estiloNum;
+  document.getElementById('fact-num').textContent=`#${prefijo}-${numStr}`;
+  document.getElementById('fact-num').style.color=color;
+
+  // Fecha
+  const hoy=new Date().toLocaleDateString('es-EC',{day:'2-digit',month:'long',year:'numeric'});
+  document.getElementById('fact-fecha').textContent=hoy;
+
+  // Divider color
+  document.getElementById('fact-divider').style.background=color;
+
+  // Cliente (si hay pedido seleccionado)
+  if(pedidoSeleccionado){
+    const p=pedidoSeleccionado;
+    document.getElementById('fact-cliente-nombre').textContent=p.emprendedor_nombre||'Cliente';
+    document.getElementById('fact-cliente-empresa').textContent=p.emprendedor_empresa||'—';
+    document.getElementById('fact-cliente-email').textContent=p.emprendedor_email||'—';
+    document.getElementById('fact-cliente-cedula').textContent=p.emprendedor_cedula?`CI: ${p.emprendedor_cedula}`:'';
+    const ent=p.entrega||{};
+    document.getElementById('fact-entrega-ciudad').textContent=`${ent.ciudad||'—'}, Ecuador`;
+    document.getElementById('fact-entrega-dir').textContent=ent.direccion||'—';
+    document.getElementById('fact-metodo-pago').textContent=`Pago: ${p.metodo_pago||'—'}`;
+
+    // Items
+    const items=p.items||[];
+    const tbody=document.getElementById('fact-items');
+    tbody.innerHTML='';
+    let subtotal=0;
+    items.forEach(item=>{
+      const precio=Number(item.precio||0);
+      const cant=Number(item.cantidad||1);
+      const sub=precio*cant;
+      subtotal+=sub;
+      const tr=document.createElement('tr');
+      tr.innerHTML=`<td><div class="prod-nombre">${item.nombre||'Producto'}</div><div class="prod-cat">${item.categoria||''} ${item.talla?'· Talla: '+item.talla:''} ${item.color?'· '+item.color:''}</div></td><td style="text-align:center;">${cant}</td><td style="text-align:right;">$${precio.toFixed(2)}</td><td>$${sub.toFixed(2)}</td>`;
+      tbody.appendChild(tr);
+    });
+    document.getElementById('fact-subtotal').textContent='$'+subtotal.toFixed(2);
+    const desc=p.descuento_valor||0;
+    if(desc>0){
+      document.getElementById('fact-cupon-row').style.display='flex';
+      document.getElementById('fact-descuento').textContent='-$'+desc.toFixed(2);
+    }
+    document.getElementById('fact-total').textContent='$'+Number(p.total||0).toFixed(2);
+    document.getElementById('fact-total').style.color=color;
+  }
+
+  // Total final
+  document.getElementById('fact-total-final').style.borderTopColor=color;
+  document.getElementById('fact-total').style.color=color;
+
+  // Footer
+  document.getElementById('fact-gracias').textContent=config.gracias||'¡Gracias por tu compra!';
+  document.getElementById('fact-gracias').style.color=color;
+  document.getElementById('fact-notas').textContent=config.notas||'';
+  document.getElementById('fact-politica').textContent=config.politica||'';
+
+  // Marca de agua
+  document.getElementById('marca-agua').classList.toggle('hidden',!config.marcaAgua);
+  document.getElementById('fact-pie-proveed').style.display=config.pie?'flex':'none';
+}
+
+async function cargarPedidos(){
+  const { data } = await sb.from('pedidos').select('*').eq('proveedor_id',userId).order('created_at',{ascending:false}).limit(30);
+  const lista=data||[];
+  const cont=document.getElementById('pedidos-lista');
+  if(!lista.length){ cont.innerHTML='<div style="text-align:center;padding:30px;color:#333;">Sin pedidos disponibles</div>'; return; }
   cont.innerHTML='';
-  lista.forEach(f=>{
-    const div=document.createElement('div'); div.className='factura-card';
-    const est=f.estado||'pendiente';
-    const fecha=new Date(f.created_at).toLocaleDateString('es-EC',{day:'2-digit',month:'short',year:'numeric'});
-    div.innerHTML=`
-      <div class="fac-header"><div><div class="fac-num">#FAC-${f.id.slice(-6).toUpperCase()}</div><div class="fac-fecha">${fecha}</div></div><span class="fac-estado est-${est}">${est}</span></div>
-      <div class="fac-cliente">${f.cliente||'Sin cliente'} ${f.ruc?'· '+f.ruc:''}</div>
-      <div class="fac-items">${(f.items||[]).length} ítem${(f.items||[]).length!==1?'s':''}</div>
-      <div class="fac-footer">
-        <div class="fac-total">$${Number(f.total||0).toFixed(2)}</div>
-        <div class="fac-actions">
-          ${est==='pendiente'?`<button class="fac-btn btn-cobrar" onclick="marcarPagada('${f.id}')">✓ Marcar pagada</button>`:''}
-          <button class="fac-btn btn-ver">Ver detalle</button>
-        </div>
-      </div>`;
+  const COLORES=['#FF8C00','#2563EB','#22C55E','#A855F7'];
+  lista.forEach(p=>{
+    const nombre=p.emprendedor_nombre||'Cliente';
+    const fecha=new Date(p.created_at).toLocaleDateString('es-EC',{day:'2-digit',month:'short'});
+    const bg=COLORES[Math.abs((p.emprendedor_id||'').charCodeAt(0)||0)%COLORES.length];
+    const div=document.createElement('div');
+    div.className='pedido-item'+(pedidoSeleccionado?.id===p.id?' selected':'');
+    div.onclick=()=>{ pedidoSeleccionado=p; facturaNum=Math.floor(Math.random()*900)+100; document.querySelectorAll('.pedido-item').forEach(el=>el.classList.remove('selected')); div.classList.add('selected'); renderPreview(); showToast('✓ Pedido seleccionado'); showTab('preview',document.querySelectorAll('.tab-pill')[2]); };
+    div.innerHTML=`<div class="pi-avatar" style="background:${bg};">${nombre[0].toUpperCase()}</div><div class="pi-info"><div class="pi-nombre">${nombre}</div><div class="pi-det">${(p.items||[]).length} productos · ${p.estado||'—'}</div></div><div class="pi-right"><div class="pi-total">$${Number(p.total||0).toFixed(2)}</div><div class="pi-fecha">${fecha}</div></div>`;
     cont.appendChild(div);
   });
 }
 
-window.filtrar=(f,el)=>{ filtroActual=f; document.querySelectorAll('.vtab').forEach(t=>t.classList.remove('active')); el.classList.add('active'); renderFacturas(); };
-
-window.abrirModal=function(){ itemsActuales=[]; renderItems(); document.getElementById('modal-overlay').classList.add('show'); };
-window.cerrarModal=e=>{ if(e.target===document.getElementById('modal-overlay')) document.getElementById('modal-overlay').classList.remove('show'); };
-window.cerrarModalDirecto=()=>document.getElementById('modal-overlay').classList.remove('show');
-
-window.agregarItem=function(){
-  const nombre=prompt('Nombre del ítem:');
-  if(!nombre) return;
-  const cantidad=parseFloat(prompt('Cantidad:')||1);
-  const precio=parseFloat(prompt('Precio unitario:')||0);
-  itemsActuales.push({nombre,cantidad,precio,total:cantidad*precio});
-  renderItems();
-};
-
-function renderItems(){
-  const lista=document.getElementById('items-lista');
-  if(!itemsActuales.length){ lista.innerHTML=''; actualizarTotal(); return; }
-  lista.innerHTML=itemsActuales.map((it,i)=>`
-    <div class="item-fac">
-      <div class="item-fac-info"><div class="item-fac-nombre">${it.nombre}</div><div class="item-fac-sub">${it.cantidad} × $${it.precio.toFixed(2)}</div></div>
-      <div class="item-fac-total">$${it.total.toFixed(2)}</div>
-      <button class="del-item" onclick="eliminarItem(${i})"><svg viewBox="0 0 24 24"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg></button>
-    </div>`).join('');
-  actualizarTotal();
-}
-
-window.eliminarItem=function(i){ itemsActuales.splice(i,1); renderItems(); };
-
-function actualizarTotal(){
-  const total=itemsActuales.reduce((s,i)=>s+i.total,0);
-  document.getElementById('total-fac').textContent='$'+total.toFixed(2);
-}
-
-window.crearFactura=async function(){
-  const cliente=document.getElementById('f-cliente').value.trim();
-  if(!cliente){ alert('El nombre del cliente es obligatorio'); return; }
-  if(!itemsActuales.length){ alert('Agrega al menos un ítem'); return; }
-  const total=itemsActuales.reduce((s,i)=>s+i.total,0);
-  await sb.from('facturas').insert({
-    proveedor_id:userId,
-    cliente,
-    ruc:document.getElementById('f-ruc').value.trim(),
-    fecha_emision:document.getElementById('f-fecha').value,
-    fecha_vencimiento:document.getElementById('f-vence').value,
-    notas:document.getElementById('f-notas').value.trim(),
-    items:itemsActuales,
-    total,
-    estado:'pendiente'
+async function cargarHistorial(){
+  const { data } = await sb.from('facturas').select('*').eq('proveedor_id',userId).order('created_at',{ascending:false}).limit(20).catch(()=>({data:[]}));
+  const lista=data||[];
+  const cont=document.getElementById('historial-lista');
+  if(!lista.length){ cont.innerHTML='<div style="text-align:center;padding:30px;color:#333;">Sin facturas generadas aún</div>'; return; }
+  cont.innerHTML='';
+  lista.forEach(f=>{
+    const fecha=new Date(f.created_at).toLocaleDateString('es-EC',{day:'2-digit',month:'short',year:'numeric'});
+    const div=document.createElement('div');
+    div.style.cssText='background:#111;border:1px solid #1e1e1e;border-radius:14px;padding:13px;margin-bottom:8px;display:flex;align-items:center;gap:12px;';
+    div.innerHTML=`<div style="width:36px;height:36px;border-radius:10px;background:rgba(255,140,0,0.1);display:flex;align-items:center;justify-content:center;font-size:1rem;">🧾</div><div style="flex:1;"><div style="font-size:0.85rem;font-weight:700;color:white;">${f.numero||'FAC-000'}</div><div style="font-size:0.68rem;color:#444;margin-top:2px;">${f.cliente||'—'} · ${fecha}</div></div><div style="font-size:0.88rem;font-weight:800;color:var(--naranja);">$${Number(f.total||0).toFixed(2)}</div>`;
+    cont.appendChild(div);
   });
-  document.getElementById('modal-overlay').classList.remove('show');
-  cargarFacturas();
+}
+
+window.generarPDF=async function(){
+  if(!window.jspdf){ showToast('Cargando generador PDF...'); return; }
+  document.getElementById('upload-overlay').classList.add('show');
+  try{
+    const { jsPDF } = window.jspdf;
+    const doc=document.getElementById('factura-doc');
+    const canvas=await html2canvas(doc,{ scale:2, backgroundColor:'#ffffff', useCORS:true });
+    const imgData=canvas.toDataURL('image/jpeg',0.95);
+    const pdf=new jsPDF({ orientation:'portrait', unit:'mm', format:'a4' });
+    const pdfW=pdf.internal.pageSize.getWidth();
+    const pdfH=(canvas.height*pdfW)/canvas.width;
+    pdf.addImage(imgData,'JPEG',0,0,pdfW,pdfH);
+    const numStr=document.getElementById('fact-num').textContent;
+    pdf.save(`Factura-${numStr.replace('#','')}-${config.empresa||'PROVEED'}.pdf`);
+
+    // Guardar en historial
+    try{
+      await sb.from('facturas').insert({ proveedor_id:userId, numero:numStr, cliente:pedidoSeleccionado?.emprendedor_nombre||'—', pedido_id:pedidoSeleccionado?.id||null, total:pedidoSeleccionado?.total||0 });
+    }catch(e){}
+
+    showToast('✓ PDF descargado correctamente');
+  } catch(e){ showToast('Error al generar PDF: '+e.message); }
+  document.getElementById('upload-overlay').classList.remove('show');
 };
 
-window.marcarPagada=async function(id){
-  await sb.from('facturas').update({estado:'pagada'}).eq('id',id);
-  cargarFacturas();
+window.compartirFactura=async function(){
+  if(!window.jspdf){ showToast('Cargando...'); return; }
+  document.getElementById('upload-overlay').classList.add('show');
+  try{
+    const doc=document.getElementById('factura-doc');
+    const canvas=await html2canvas(doc,{ scale:2, backgroundColor:'#ffffff', useCORS:true });
+    canvas.toBlob(async blob=>{
+      if(navigator.share&&blob){
+        const file=new File([blob],'factura-proveed.png',{type:'image/png'});
+        await navigator.share({ title:'Factura PROVEED', files:[file] });
+      } else {
+        const url=URL.createObjectURL(blob);
+        const a=document.createElement('a'); a.href=url; a.download='factura-proveed.png'; a.click();
+      }
+    },'image/png');
+  } catch(e){ showToast('Error: '+e.message); }
+  document.getElementById('upload-overlay').classList.remove('show');
 };
+
+function showTab(tab,btn){
+  document.querySelectorAll('.section').forEach(s=>s.classList.remove('active'));
+  document.querySelectorAll('.tab-pill').forEach(b=>b.classList.remove('active'));
+  document.getElementById('sec-'+tab).classList.add('active');
+  if(btn) btn.classList.add('active');
+  if(tab==='preview') renderPreview();
+}
+
+function showToast(msg){ const t=document.getElementById('toast'); t.textContent=msg; t.classList.add('show'); setTimeout(()=>t.classList.remove('show'),2500); }
 </script>
 </body>
 </html>
