@@ -3,467 +3,295 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-<title>PROVEED — Panel Proveedor</title>
+<title>PROVEED — Panel</title>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
 <style>
-  *{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent;}
-  :root{ --naranja:#FF8C00; --verde:#A8E63D; --negro:#0A0A0A; --gris:#F5F6F2; --rojo:#FF4D4D; --azul:#007AFF; }
-  body{ background:var(--negro); font-family:'Inter',sans-serif; padding-bottom:90px; -webkit-font-smoothing:antialiased; }
+*{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent;}
+:root{--acc:#FF8C00;--verde:#A8E63D;--negro:#0A0A0A;--rojo:#FF4D4D;--azul:#007AFF;}
+body{background:var(--negro);font-family:'Inter',sans-serif;-webkit-font-smoothing:antialiased;padding-bottom:90px;color:white;}
 
-  /* HEADER */
-  .header{ background:#111; padding:44px 16px 16px; display:flex; align-items:center; justify-content:space-between; border-bottom:1px solid #1e1e1e; position:sticky; top:0; z-index:100; }
-  .brand{ display:flex; align-items:center; gap:10px; }
-  .brand-logo{ width:38px; height:38px; border-radius:12px; background:var(--naranja); display:flex; align-items:center; justify-content:center; font-size:0.9rem; font-weight:800; color:white; overflow:hidden; flex-shrink:0; }
-  .brand-logo img{ width:100%; height:100%; object-fit:cover; }
-  .brand-info{ }
-  .brand-nombre{ font-size:0.92rem; font-weight:800; color:white; }
-  .brand-sub{ font-size:0.62rem; color:#444; margin-top:1px; }
-  .header-right{ display:flex; gap:8px; align-items:center; }
-  .notif-btn{ width:34px; height:34px; border-radius:10px; background:rgba(255,255,255,0.06); border:none; cursor:pointer; display:flex; align-items:center; justify-content:center; position:relative; }
-  .notif-btn svg{ width:16px; height:16px; stroke:#666; fill:none; stroke-width:2; }
-  .notif-dot{ position:absolute; top:6px; right:6px; width:7px; height:7px; border-radius:50%; background:var(--rojo); border:1.5px solid #111; }
-  .live-badge{ display:flex; align-items:center; gap:4px; background:rgba(168,230,61,0.1); border:1px solid rgba(168,230,61,0.2); border-radius:20px; padding:4px 10px; }
-  .live-dot{ width:5px; height:5px; border-radius:50%; background:var(--verde); animation:livePulse 1.5s infinite; }
-  @keyframes livePulse{ 0%,100%{opacity:1}50%{opacity:0.3} }
-  .live-txt{ font-size:0.58rem; font-weight:700; color:var(--verde); font-family:monospace; letter-spacing:1px; }
+/* HEADER */
+.header{padding:48px 20px 16px;display:flex;align-items:center;justify-content:space-between;}
+.header-left{display:flex;align-items:center;gap:10px;}
+.pv-logo{width:40px;height:40px;flex-shrink:0;position:relative;}
+.pv-logo svg{width:40px;height:40px;}
+.brand-txt{}
+.brand-name{font-size:1.1rem;font-weight:900;color:white;letter-spacing:-0.3px;line-height:1;}
+.brand-name span{color:var(--acc);}
+.brand-sub{font-size:0.72rem;color:#555;font-weight:500;margin-top:2px;}
+.header-right{display:flex;gap:8px;}
+.hbtn{width:38px;height:38px;background:#1a1a1a;border-radius:12px;border:none;cursor:pointer;display:flex;align-items:center;justify-content:center;position:relative;}
+.hbtn svg{width:18px;height:18px;stroke:#666;fill:none;stroke-width:2;stroke-linecap:round;stroke-linejoin:round;}
+.hbtn-dot{position:absolute;top:7px;right:7px;width:7px;height:7px;border-radius:50%;background:var(--rojo);border:1.5px solid var(--negro);}
 
-  /* MODO EMPRESARIAL BANNER */
-  .empresa-banner{ margin:12px 16px; border-radius:16px; padding:14px 16px; display:flex; align-items:center; gap:12px; border:1px solid; cursor:pointer; transition:0.2s; position:relative; overflow:hidden; }
-  .empresa-banner.esencial{ background:rgba(168,230,61,0.05); border-color:rgba(168,230,61,0.15); }
-  .empresa-banner.corporativo{ background:rgba(255,140,0,0.06); border-color:rgba(255,140,0,0.2); }
-  .empresa-banner::before{ content:''; position:absolute; right:-10px; top:-10px; width:80px; height:80px; border-radius:50%; opacity:0.08; }
-  .empresa-banner.esencial::before{ background:var(--verde); }
-  .empresa-banner.corporativo::before{ background:var(--naranja); }
-  .eb-icon{ width:36px; height:36px; border-radius:11px; display:flex; align-items:center; justify-content:center; font-size:1rem; flex-shrink:0; }
-  .eb-icon.esencial{ background:rgba(168,230,61,0.1); }
-  .eb-icon.corporativo{ background:rgba(255,140,0,0.1); }
-  .eb-info{ flex:1; }
-  .eb-title{ font-size:0.82rem; font-weight:700; color:white; }
-  .eb-sub{ font-size:0.68rem; color:#555; margin-top:2px; }
-  .eb-badge{ font-size:0.6rem; font-weight:800; padding:3px 9px; border-radius:20px; font-family:monospace; flex-shrink:0; }
-  .eb-badge.esencial{ background:rgba(168,230,61,0.12); color:var(--verde); }
-  .eb-badge.corporativo{ background:rgba(255,140,0,0.12); color:var(--naranja); }
+/* BIENVENIDA */
+.welcome{padding:0 20px 20px;}
+.welcome-sub{font-size:0.78rem;color:#444;font-weight:500;}
+.welcome-name{font-size:1.3rem;font-weight:900;color:white;margin-top:2px;}
 
-  /* KPI */
-  .kpi-scroll{ display:grid; grid-template-columns:repeat(2,1fr); gap:10px; padding:0 16px 12px; }
-  .kpi-card{ background:#111; border:1px solid #1e1e1e; border-radius:16px; padding:14px; }
-  .kpi-val{ font-size:1.5rem; font-weight:900; color:white; }
-  .kpi-val.naranja{ color:var(--naranja); }
-  .kpi-val.verde{ color:var(--verde); }
-  .kpi-val.azul{ color:var(--azul); }
-  .kpi-val.rojo{ color:var(--rojo); }
-  .kpi-lbl{ font-size:0.6rem; color:#444; font-weight:700; text-transform:uppercase; margin-top:3px; }
-  .kpi-delta{ font-size:0.65rem; margin-top:5px; color:#444; }
+/* KPI SCROLL */
+.kpi-row{display:flex;gap:10px;padding:0 20px 20px;overflow-x:auto;scrollbar-width:none;}
+.kpi-row::-webkit-scrollbar{display:none;}
+.kpi-card{background:#161616;border-radius:18px;padding:16px;min-width:130px;flex-shrink:0;border:1px solid #1e1e1e;}
+.kpi-val{font-size:1.6rem;font-weight:900;color:white;line-height:1;}
+.kpi-val.acc{color:var(--acc);}
+.kpi-val.verde{color:var(--verde);}
+.kpi-val.azul{color:var(--azul);}
+.kpi-lbl{font-size:0.6rem;font-weight:700;color:#444;text-transform:uppercase;letter-spacing:0.8px;margin-top:6px;}
+.kpi-delta{font-size:0.68rem;color:#555;margin-top:4px;}
+.kpi-delta.verde{color:var(--verde);}
 
-  /* SECCIONES TITULO */
-  .sec-title{ font-size:0.7rem; font-weight:800; color:#333; text-transform:uppercase; letter-spacing:0.8px; padding:0 16px; margin-bottom:10px; display:flex; align-items:center; justify-content:space-between; }
-  .sec-btn{ font-size:0.7rem; font-weight:700; color:var(--naranja); background:none; border:none; cursor:pointer; font-family:'Inter',sans-serif; }
+/* SECCIÓN TÍTULO */
+.sec-label{font-size:0.65rem;font-weight:800;color:#333;text-transform:uppercase;letter-spacing:1px;padding:0 20px;margin-bottom:12px;}
 
-  /* PEDIDOS RECIENTES */
-  .pedido-mini{ background:#111; border:1px solid #1e1e1e; border-radius:14px; padding:13px 14px; margin:0 16px 8px; display:flex; align-items:center; gap:12px; cursor:pointer; transition:0.15s; }
-  .pedido-mini:active{ transform:scale(0.98); }
-  .pedido-mini.nuevo{ border-color:rgba(255,140,0,0.3); }
-  .pm-avatar{ width:38px; height:38px; border-radius:11px; display:flex; align-items:center; justify-content:center; font-size:0.85rem; font-weight:800; color:white; flex-shrink:0; }
-  .pm-info{ flex:1; }
-  .pm-nombre{ font-size:0.85rem; font-weight:700; color:white; }
-  .pm-det{ font-size:0.68rem; color:#444; margin-top:2px; }
-  .pm-right{ text-align:right; }
-  .pm-total{ font-size:0.88rem; font-weight:800; color:white; }
-  .pm-estado{ font-size:0.6rem; font-weight:700; padding:2px 7px; border-radius:6px; margin-top:3px; display:inline-block; }
-  .est-pendiente{ background:rgba(255,140,0,0.12); color:var(--naranja); }
-  .est-proceso{ background:rgba(0,122,255,0.12); color:var(--azul); }
-  .est-entregado{ background:rgba(168,230,61,0.12); color:var(--verde); }
+/* MÓDULOS GRID */
+.modulos-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;padding:0 20px;margin-bottom:20px;}
+.modulo{background:#161616;border-radius:20px;padding:18px 12px 14px;display:flex;flex-direction:column;align-items:center;gap:10px;cursor:pointer;border:1px solid #1e1e1e;transition:0.15s;text-decoration:none;}
+.modulo:active{transform:scale(0.95);}
+.modulo-icon{width:52px;height:52px;border-radius:16px;display:flex;align-items:center;justify-content:center;}
+.modulo-icon svg{width:26px;height:26px;fill:none;stroke-width:2;stroke-linecap:round;stroke-linejoin:round;}
+.modulo-lbl{font-size:0.75rem;font-weight:700;color:white;text-align:center;}
 
-  /* PRODUCTOS */
-  .prod-mini{ background:#111; border:1px solid #1e1e1e; border-radius:14px; padding:12px 14px; margin:0 16px 8px; display:flex; align-items:center; gap:12px; }
-  .prod-mini-img{ width:44px; height:44px; border-radius:11px; object-fit:cover; background:#1a1a1a; flex-shrink:0; overflow:hidden; }
-  .prod-mini-img img{ width:100%; height:100%; object-fit:cover; }
-  .prod-mini-info{ flex:1; }
-  .prod-mini-nombre{ font-size:0.85rem; font-weight:700; color:white; }
-  .prod-mini-sub{ font-size:0.68rem; color:#444; margin-top:2px; }
-  .prod-mini-precio{ font-size:0.88rem; font-weight:800; color:var(--naranja); }
-  .prod-mini-stock{ font-size:0.62rem; font-weight:700; padding:2px 7px; border-radius:6px; }
-  .stock-ok{ background:rgba(168,230,61,0.1); color:var(--verde); }
-  .stock-bajo{ background:rgba(255,77,77,0.1); color:var(--rojo); }
+/* REALTIME */
+.realtime-pill{display:inline-flex;align-items:center;gap:5px;background:rgba(168,230,61,0.08);border:1px solid rgba(168,230,61,0.15);border-radius:20px;padding:4px 10px;margin:0 20px 16px;}
+.rt-dot{width:5px;height:5px;border-radius:50%;background:var(--verde);animation:pulse 1.5s infinite;}
+@keyframes pulse{0%,100%{opacity:1}50%{opacity:0.3}}
+.rt-txt{font-size:0.6rem;font-weight:700;color:var(--verde);letter-spacing:0.5px;}
 
-  /* ACCESOS RÁPIDOS */
-  .accesos-grid{ display:grid; grid-template-columns:repeat(4,1fr); gap:10px; padding:0 16px; margin-bottom:14px; }
-  .acceso-item{ display:flex; flex-direction:column; align-items:center; gap:6px; cursor:pointer; }
-  .acceso-icon{ width:52px; height:52px; border-radius:16px; display:flex; align-items:center; justify-content:center; font-size:1.3rem; border:1px solid #1e1e1e; transition:0.15s; }
-  .acceso-icon:active{ transform:scale(0.92); }
-  .acceso-lbl{ font-size:0.58rem; font-weight:700; color:#444; text-transform:uppercase; text-align:center; }
+/* PEDIDOS RECIENTES */
+.pedido-row{display:flex;align-items:center;gap:12px;background:#161616;border-radius:14px;padding:13px 14px;margin:0 20px 8px;border:1px solid #1e1e1e;cursor:pointer;transition:0.15s;}
+.pedido-row:active{transform:scale(0.98);}
+.pedido-row.nuevo{border-color:rgba(255,140,0,0.3);}
+.pr-ava{width:38px;height:38px;border-radius:12px;display:flex;align-items:center;justify-content:center;font-size:0.85rem;font-weight:800;color:white;flex-shrink:0;}
+.pr-info{flex:1;}
+.pr-nombre{font-size:0.85rem;font-weight:700;color:white;}
+.pr-det{font-size:0.68rem;color:#444;margin-top:2px;}
+.pr-right{text-align:right;}
+.pr-total{font-size:0.88rem;font-weight:800;color:white;}
+.pr-estado{font-size:0.58rem;font-weight:700;padding:2px 7px;border-radius:6px;margin-top:3px;display:inline-block;}
+.est-p{background:rgba(255,140,0,0.12);color:var(--acc);}
+.est-e{background:rgba(168,230,61,0.1);color:var(--verde);}
+.est-pr{background:rgba(0,122,255,0.1);color:var(--azul);}
 
-  /* SUCURSALES CORP */
-  .suc-mini{ background:#111; border:1px solid #1e1e1e; border-radius:14px; padding:13px 14px; margin:0 16px 8px; display:flex; align-items:center; gap:12px; }
-  .suc-icon{ width:38px; height:38px; border-radius:11px; display:flex; align-items:center; justify-content:center; font-size:1rem; flex-shrink:0; }
-  .suc-info{ flex:1; }
-  .suc-nombre{ font-size:0.85rem; font-weight:700; color:white; }
-  .suc-loc{ font-size:0.68rem; color:#444; margin-top:2px; }
-  .suc-kpi{ text-align:right; }
-  .suc-venta{ font-size:0.82rem; font-weight:800; color:var(--naranja); }
-  .suc-stock{ font-size:0.62rem; color:#444; margin-top:2px; }
-  .suc-alert{ width:8px; height:8px; border-radius:50%; flex-shrink:0; }
-  .alert-ok{ background:var(--verde); }
-  .alert-warn{ background:var(--rojo); animation:livePulse 1.5s infinite; }
+/* VER MÁS */
+.ver-mas{display:flex;align-items:center;justify-content:center;gap:6px;margin:0 20px 20px;padding:13px;background:#161616;border-radius:14px;border:1px solid #1e1e1e;cursor:pointer;font-size:0.8rem;font-weight:700;color:#555;text-decoration:none;}
 
-  /* CHAT PREVIEW */
-  .chat-mini{ background:#111; border:1px solid #1e1e1e; border-radius:14px; padding:13px 14px; margin:0 16px 8px; display:flex; align-items:center; gap:12px; cursor:pointer; }
-  .chat-avatar{ width:38px; height:38px; border-radius:11px; display:flex; align-items:center; justify-content:center; font-size:0.85rem; font-weight:800; color:white; flex-shrink:0; }
-  .chat-info{ flex:1; }
-  .chat-nombre{ font-size:0.85rem; font-weight:700; color:white; }
-  .chat-preview{ font-size:0.7rem; color:#444; margin-top:2px; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; max-width:200px; }
-  .chat-right{ text-align:right; flex-shrink:0; }
-  .chat-hora{ font-size:0.62rem; color:#333; }
-  .chat-badge{ width:18px; height:18px; border-radius:50%; background:var(--naranja); display:flex; align-items:center; justify-content:center; font-size:0.58rem; font-weight:800; color:white; margin-top:4px; margin-left:auto; }
+/* GRAFICOBARRA */
+.chart-wrap{background:#161616;border:1px solid #1e1e1e;border-radius:18px;margin:0 20px 20px;padding:16px;}
+.chart-title{font-size:0.68rem;font-weight:700;color:#444;text-transform:uppercase;letter-spacing:0.8px;margin-bottom:14px;}
+.chart-bars{display:flex;align-items:flex-end;gap:5px;height:50px;}
+.chart-bar{flex:1;border-radius:4px 4px 0 0;background:#222;transition:0.5s;min-height:4px;}
+.chart-bar.hoy{background:var(--acc);}
+.chart-days{display:flex;gap:5px;margin-top:6px;}
+.chart-day{flex:1;text-align:center;font-size:0.55rem;color:#333;font-weight:600;}
 
-  /* GRAFICO BAR */
-  .mini-chart{ display:flex; align-items:flex-end; gap:4px; height:40px; padding:0 16px; margin-bottom:14px; }
-  .mini-bar{ flex:1; border-radius:4px 4px 0 0; background:#1a1a1a; transition:height 0.5s; min-height:4px; }
-  .mini-bar.hoy{ background:var(--naranja); }
+/* TAB BAR */
+.tab-bar{position:fixed;bottom:0;width:100%;background:#111;border-top:1px solid #1a1a1a;display:flex;padding:10px 0 22px;z-index:200;}
+.tab{flex:1;display:flex;flex-direction:column;align-items:center;gap:4px;border:none;background:transparent;cursor:pointer;color:#333;text-decoration:none;font-family:'Inter',sans-serif;}
+.tab.active{color:var(--acc);}
+.tab svg{width:22px;height:22px;stroke:currentColor;fill:none;stroke-width:2;stroke-linecap:round;stroke-linejoin:round;}
+.tab span{font-size:0.54rem;font-weight:700;text-transform:uppercase;}
 
-  /* MODO CORP EXTRA */
-  .corp-section{ display:none; }
-  body.modo-corp .corp-section{ display:block; }
-  body.modo-corp .esencial-only{ display:none; }
-
-  /* TAB BAR */
-  .tab-bar{ position:fixed; bottom:0; width:100%; background:#111; display:flex; justify-content:space-around; align-items:center; padding:10px 0 22px; border-top:1px solid #1e1e1e; z-index:200; }
-  .tab{ display:flex; flex-direction:column; align-items:center; gap:4px; cursor:pointer; flex:1; color:#333; text-decoration:none; border:none; background:transparent; font-family:'Inter',sans-serif; }
-  .tab.active{ color:var(--naranja); }
-  .tab svg{ width:22px; height:22px; stroke:currentColor; fill:none; stroke-width:2; stroke-linecap:round; stroke-linejoin:round; }
-  .tab span{ font-size:0.54rem; font-weight:600; text-transform:uppercase; }
-
-  /* MODAL MODO */
-  .modal-overlay{ position:fixed; inset:0; background:rgba(0,0,0,0.8); display:none; z-index:500; align-items:flex-end; }
-  .modal-overlay.show{ display:flex; }
-  .modal-sheet{ background:#111; width:100%; border-radius:24px 24px 0 0; transform:translateY(100%); transition:0.4s cubic-bezier(0.16,1,0.3,1); border:1px solid #1e1e1e; border-bottom:none; }
-  .modal-overlay.show .modal-sheet{ transform:translateY(0); }
-  .drag{ width:36px; height:4px; background:#222; border-radius:4px; margin:14px auto 0; }
-  .modal-body{ padding:16px 16px 36px; }
-  .modal-title{ font-size:1rem; font-weight:800; color:white; margin-bottom:6px; }
-  .modal-sub{ font-size:0.78rem; color:#444; line-height:1.5; margin-bottom:18px; }
-  .modo-opciones{ display:grid; gap:10px; }
-  .modo-opt{ background:#1a1a1a; border-radius:16px; padding:16px; border:1.5px solid #222; cursor:pointer; transition:0.2s; }
-  .modo-opt.selected{ border-color:rgba(255,140,0,0.4); background:rgba(255,140,0,0.05); }
-  .mo-header{ display:flex; align-items:center; gap:12px; margin-bottom:8px; }
-  .mo-icon{ width:40px; height:40px; border-radius:12px; display:flex; align-items:center; justify-content:center; font-size:1.1rem; flex-shrink:0; }
-  .mo-title{ font-size:0.9rem; font-weight:800; color:white; }
-  .mo-badge{ font-size:0.6rem; font-weight:700; padding:2px 8px; border-radius:6px; margin-left:auto; }
-  .mo-desc{ font-size:0.74rem; color:#555; line-height:1.5; }
-  .mo-features{ display:flex; gap:6px; flex-wrap:wrap; margin-top:8px; }
-  .mo-feat{ font-size:0.62rem; font-weight:600; padding:2px 8px; border-radius:6px; background:#222; color:#555; }
-  .mo-feat.on{ background:rgba(168,230,61,0.08); color:var(--verde); }
-  .btn-activar-modo{ width:100%; padding:14px; background:var(--naranja); color:white; border:none; border-radius:14px; font-family:'Inter',sans-serif; font-size:0.95rem; font-weight:800; cursor:pointer; margin-top:14px; }
-
-  .toast{ position:fixed; bottom:80px; left:50%; transform:translateX(-50%) translateY(20px); background:#1e1e1e; color:white; padding:10px 20px; border-radius:24px; font-size:0.8rem; font-weight:600; opacity:0; transition:0.3s; pointer-events:none; z-index:2000; white-space:nowrap; border:1px solid #333; }
-  .toast.show{ opacity:1; transform:translateX(-50%) translateY(0); }
-  .empty-mini{ text-align:center; padding:20px; color:#333; font-size:0.78rem; }
+/* TOAST */
+.toast{position:fixed;bottom:80px;left:50%;transform:translateX(-50%) translateY(20px);background:#1e1e1e;color:white;padding:10px 20px;border-radius:24px;font-size:0.8rem;font-weight:600;opacity:0;transition:0.3s;pointer-events:none;z-index:2000;white-space:nowrap;border:1px solid #333;}
+.toast.show{opacity:1;transform:translateX(-50%) translateY(0);}
+.empty{text-align:center;padding:20px;color:#333;font-size:0.78rem;}
 </style>
 </head>
 <body>
 
 <!-- HEADER -->
 <div class="header">
-  <div class="brand">
-    <div class="brand-logo" id="brand-logo">P</div>
-    <div class="brand-info">
-      <div class="brand-nombre" id="brand-nombre">Mi empresa</div>
+  <div class="header-left">
+    <!-- LOGO PROVEED (hexágono + check) sutil -->
+    <div class="pv-logo">
+      <svg viewBox="0 0 40 40" fill="none">
+        <polygon points="20,2 36,11 36,29 20,38 4,29 4,11" fill="#FF8C00" opacity="0.9"/>
+        <polyline points="11,20 17,26 29,14" stroke="white" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
+      </svg>
+    </div>
+    <div class="brand-txt">
+      <div class="brand-name" id="brand-name">PRO<span>VEED</span></div>
       <div class="brand-sub" id="brand-sub">Panel del proveedor</div>
     </div>
   </div>
   <div class="header-right">
-    <div class="live-badge"><div class="live-dot"></div><div class="live-txt">LIVE</div></div>
-    <button class="notif-btn" onclick="window.location.href='chat.html'">
+    <button class="hbtn" onclick="window.location.href='chat.html'">
       <svg viewBox="0 0 24 24"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
-      <div class="notif-dot" id="chat-dot" style="display:none;"></div>
+      <div class="hbtn-dot" id="chat-notif" style="display:none;"></div>
+    </button>
+    <button class="hbtn" onclick="window.location.href='perfil.html'">
+      <svg viewBox="0 0 24 24"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
     </button>
   </div>
 </div>
 
-<!-- MODO EMPRESARIAL -->
-<div class="empresa-banner esencial" id="empresa-banner" onclick="abrirModalModo()">
-  <div class="eb-icon esencial" id="eb-icon">🚀</div>
-  <div class="eb-info">
-    <div class="eb-title" id="eb-title">Modo Esencial</div>
-    <div class="eb-sub" id="eb-sub">Toca para activar modo Corporativo con sucursales y más</div>
-  </div>
-  <div class="eb-badge esencial" id="eb-badge">ESENCIAL</div>
+<!-- BIENVENIDA -->
+<div class="welcome">
+  <div class="welcome-sub">Bienvenido de vuelta</div>
+  <div class="welcome-name" id="welcome-name">Proveedor</div>
 </div>
 
-<!-- KPI HOY -->
-<div class="kpi-scroll" id="kpi-grid">
-  <div class="kpi-card"><div class="kpi-val naranja" id="k-ventas">$0</div><div class="kpi-lbl">Ventas hoy</div></div>
-  <div class="kpi-card"><div class="kpi-val azul" id="k-pedidos">0</div><div class="kpi-lbl">Pedidos hoy</div></div>
-  <div class="kpi-card"><div class="kpi-val verde" id="k-productos">0</div><div class="kpi-lbl">Productos activos</div></div>
-  <div class="kpi-card"><div class="kpi-val rojo" id="k-pendientes">0</div><div class="kpi-lbl">Pendientes</div></div>
-</div>
-
-<!-- ACCESOS RÁPIDOS -->
-<div class="accesos-grid">
-  <div class="acceso-item" onclick="window.location.href='productos.html'">
-    <div class="acceso-icon" style="background:rgba(255,140,0,0.1);">📦</div>
-    <div class="acceso-lbl">Productos</div>
+<!-- KPI ROW -->
+<div class="kpi-row">
+  <div class="kpi-card">
+    <div class="kpi-val acc" id="k-ventas">$0</div>
+    <div class="kpi-lbl">Ventas hoy</div>
+    <div class="kpi-delta" id="k-ventas-d">— sin pedidos hoy</div>
   </div>
-  <div class="acceso-item" onclick="window.location.href='pedidos.html'">
-    <div class="acceso-icon" style="background:rgba(0,122,255,0.1);">📋</div>
-    <div class="acceso-lbl">Pedidos</div>
+  <div class="kpi-card">
+    <div class="kpi-val" id="k-pedidos">0</div>
+    <div class="kpi-lbl">Pedidos nuevos</div>
   </div>
-  <div class="acceso-item" onclick="window.location.href='chat.html'">
-    <div class="acceso-icon" style="background:rgba(168,230,61,0.1);">💬</div>
-    <div class="acceso-lbl">Chats</div>
+  <div class="kpi-card">
+    <div class="kpi-val verde" id="k-productos">0</div>
+    <div class="kpi-lbl">Productos</div>
   </div>
-  <div class="acceso-item" onclick="window.location.href='plugins.html'">
-    <div class="acceso-icon" style="background:rgba(175,82,222,0.1);">⚡</div>
-    <div class="acceso-lbl">Plugins</div>
-  </div>
-  <div class="acceso-item" onclick="window.location.href='estadisticas.html'">
-    <div class="acceso-icon" style="background:rgba(255,140,0,0.08);">📊</div>
-    <div class="acceso-lbl">Stats</div>
-  </div>
-  <div class="acceso-item" onclick="window.location.href='inventario.html'">
-    <div class="acceso-icon" style="background:rgba(0,122,255,0.08);">🏭</div>
-    <div class="acceso-lbl">Inventario</div>
-  </div>
-  <div class="acceso-item corp-section" onclick="window.location.href='sucursales-pro.html'">
-    <div class="acceso-icon" style="background:rgba(255,77,77,0.08);">🏢</div>
-    <div class="acceso-lbl">Sucursales</div>
-  </div>
-  <div class="acceso-item" onclick="window.location.href='perfil.html'">
-    <div class="acceso-icon" style="background:rgba(168,230,61,0.08);">👤</div>
-    <div class="acceso-lbl">Perfil</div>
+  <div class="kpi-card">
+    <div class="kpi-val azul" id="k-chats">0</div>
+    <div class="kpi-lbl">Chats activos</div>
   </div>
 </div>
 
-<!-- GRÁFICO 7 DÍAS -->
-<div class="sec-title">
-  <span>Ventas últimos 7 días</span>
-</div>
-<div class="mini-chart" id="mini-chart"></div>
-
-<!-- PEDIDOS RECIENTES -->
-<div class="sec-title">
-  <span>Pedidos recientes</span>
-  <button class="sec-btn" onclick="window.location.href='pedidos.html'">Ver todos →</button>
-</div>
-<div id="pedidos-lista"><div class="empty-mini">Cargando pedidos...</div></div>
-
-<!-- CHATS ACTIVOS -->
-<div class="sec-title">
-  <span>Chats activos</span>
-  <button class="sec-btn" onclick="window.location.href='chat.html'">Ver todos →</button>
-</div>
-<div id="chats-lista"><div class="empty-mini">Sin chats activos</div></div>
-
-<!-- PRODUCTOS TOP -->
-<div class="sec-title">
-  <span>Mis productos</span>
-  <button class="sec-btn" onclick="window.location.href='productos.html'">Gestionar →</button>
-</div>
-<div id="productos-lista"><div class="empty-mini">Cargando productos...</div></div>
-
-<!-- SUCURSALES (SOLO CORP) -->
-<div class="corp-section">
-  <div class="sec-title">
-    <span>Mis sucursales</span>
-    <button class="sec-btn" onclick="window.location.href='sucursales-pro.html'">Ver mapa →</button>
-  </div>
-  <div id="sucursales-lista"><div class="empty-mini">Sin sucursales configuradas</div></div>
+<!-- GRÁFICO -->
+<div class="chart-wrap">
+  <div class="chart-title">Ventas — últimos 7 días</div>
+  <div class="chart-bars" id="chart-bars"></div>
+  <div class="chart-days" id="chart-days"></div>
 </div>
 
-<!-- TAB BAR -->
-<nav class="tab-bar">
-  <button class="tab active">
-    <svg viewBox="0 0 24 24"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/></svg>
-    <span>Panel</span>
-  </button>
-  <a class="tab" href="productos.html">
-    <svg viewBox="0 0 24 24"><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"/></svg>
-    <span>Productos</span>
-  </a>
-  <a class="tab" href="pedidos.html">
-    <svg viewBox="0 0 24 24"><path d="M9 5H7a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2h-2"/><rect x="9" y="3" width="6" height="4" rx="1"/></svg>
-    <span>Pedidos</span>
-  </a>
-  <a class="tab" href="chat.html">
-    <svg viewBox="0 0 24 24"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
-    <span>Chat</span>
-  </a>
-  <a class="tab" href="plugins.html">
-    <svg viewBox="0 0 24 24"><path d="M20.24 12.24a6 6 0 0 0-8.49-8.49L5 10.5V19h8.5z"/><line x1="16" y1="8" x2="2" y2="22"/></svg>
-    <span>Plugins</span>
-  </a>
-</nav>
+<!-- MÓDULOS -->
+<div class="sec-label">Módulos</div>
+<div class="modulos-grid">
 
-<!-- MODO EMPRESARIAL -->
-<div class="empresa-banner esencial" id="empresa-banner" onclick="abrirModalModo()">
-  <div class="eb-icon esencial" id="eb-icon">🚀</div>
-  <div class="eb-info">
-    <div class="eb-title" id="eb-title">Modo Esencial</div>
-    <div class="eb-sub" id="eb-sub">Toca para activar modo Corporativo con sucursales y más</div>
-  </div>
-  <div class="eb-badge esencial" id="eb-badge">ESENCIAL</div>
-</div>
-
-<!-- KPI HOY -->
-<div class="kpi-scroll" id="kpi-grid">
-  <div class="kpi-card"><div class="kpi-val naranja" id="k-ventas">$0</div><div class="kpi-lbl">Ventas hoy</div></div>
-  <div class="kpi-card"><div class="kpi-val azul" id="k-pedidos">0</div><div class="kpi-lbl">Pedidos hoy</div></div>
-  <div class="kpi-card"><div class="kpi-val verde" id="k-productos">0</div><div class="kpi-lbl">Productos activos</div></div>
-  <div class="kpi-card"><div class="kpi-val rojo" id="k-pendientes">0</div><div class="kpi-lbl">Pendientes</div></div>
-</div>
-
-<!-- ACCESOS RÁPIDOS -->
-<div class="accesos-grid">
-  <div class="acceso-item" onclick="window.location.href='productos.html'">
-    <div class="acceso-icon" style="background:rgba(255,140,0,0.1);">📦</div>
-    <div class="acceso-lbl">Productos</div>
-  </div>
-  <div class="acceso-item" onclick="window.location.href='pedidos.html'">
-    <div class="acceso-icon" style="background:rgba(0,122,255,0.1);">📋</div>
-    <div class="acceso-lbl">Pedidos</div>
-  </div>
-  <div class="acceso-item" onclick="window.location.href='chat.html'">
-    <div class="acceso-icon" style="background:rgba(168,230,61,0.1);">💬</div>
-    <div class="acceso-lbl">Chats</div>
-  </div>
-  <div class="acceso-item" onclick="window.location.href='plugins.html'">
-    <div class="acceso-icon" style="background:rgba(175,82,222,0.1);">⚡</div>
-    <div class="acceso-lbl">Plugins</div>
-  </div>
-  <div class="acceso-item" onclick="window.location.href='estadisticas.html'">
-    <div class="acceso-icon" style="background:rgba(255,140,0,0.08);">📊</div>
-    <div class="acceso-lbl">Stats</div>
-  </div>
-  <div class="acceso-item" onclick="window.location.href='inventario.html'">
-    <div class="acceso-icon" style="background:rgba(0,122,255,0.08);">🏭</div>
-    <div class="acceso-lbl">Inventario</div>
-  </div>
-  <div class="acceso-item corp-section" onclick="window.location.href='sucursales-pro.html'">
-    <div class="acceso-icon" style="background:rgba(255,77,77,0.08);">🏢</div>
-    <div class="acceso-lbl">Sucursales</div>
-  </div>
-  <div class="acceso-item" onclick="window.location.href='perfil.html'">
-    <div class="acceso-icon" style="background:rgba(168,230,61,0.08);">👤</div>
-    <div class="acceso-lbl">Perfil</div>
-  </div>
-</div>
-
-<!-- GRÁFICO 7 DÍAS -->
-<div class="sec-title">
-  <span>Ventas últimos 7 días</span>
-</div>
-<div class="mini-chart" id="mini-chart"></div>
-
-<!-- PEDIDOS RECIENTES -->
-<div class="sec-title">
-  <span>Pedidos recientes</span>
-  <button class="sec-btn" onclick="window.location.href='pedidos.html'">Ver todos →</button>
-</div>
-<div id="pedidos-lista"><div class="empty-mini">Cargando pedidos...</div></div>
-
-<!-- CHATS ACTIVOS -->
-<div class="sec-title">
-  <span>Chats activos</span>
-  <button class="sec-btn" onclick="window.location.href='chat.html'">Ver todos →</button>
-</div>
-<div id="chats-lista"><div class="empty-mini">Sin chats activos</div></div>
-
-<!-- PRODUCTOS TOP -->
-<div class="sec-title">
-  <span>Mis productos</span>
-  <button class="sec-btn" onclick="window.location.href='productos.html'">Gestionar →</button>
-</div>
-<div id="productos-lista"><div class="empty-mini">Cargando productos...</div></div>
-
-<!-- SUCURSALES (SOLO CORP) -->
-<div class="corp-section">
-  <div class="sec-title">
-    <span>Mis sucursales</span>
-    <button class="sec-btn" onclick="window.location.href='sucursales-pro.html'">Ver mapa →</button>
-  </div>
-  <div id="sucursales-lista"><div class="empty-mini">Sin sucursales configuradas</div></div>
-</div>
-
-<!-- TAB BAR -->
-<nav class="tab-bar">
-  <button class="tab active">
-    <svg viewBox="0 0 24 24"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/></svg>
-    <span>Panel</span>
-  </button>
-  <a class="tab" href="productos.html">
-    <svg viewBox="0 0 24 24"><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"/></svg>
-    <span>Productos</span>
-  </a>
-  <a class="tab" href="pedidos.html">
-    <svg viewBox="0 0 24 24"><path d="M9 5H7a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2h-2"/><rect x="9" y="3" width="6" height="4" rx="1"/></svg>
-    <span>Pedidos</span>
-  </a>
-  <a class="tab" href="chat.html">
-    <svg viewBox="0 0 24 24"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
-    <span>Chat</span>
-  </a>
-  <a class="tab" href="plugins.html">
-    <svg viewBox="0 0 24 24"><path d="M20.24 12.24a6 6 0 0 0-8.49-8.49L5 10.5V19h8.5z"/><line x1="16" y1="8" x2="2" y2="22"/></svg>
-    <span>Plugins</span>
-  </a>
-</nav>
-
-<!-- MODAL MODO EMPRESARIAL -->
-<div class="modal-overlay" id="modal-modo" onclick="cerrarModalModo(event)">
-  <div class="modal-sheet">
-    <div class="drag"></div>
-    <div class="modal-body">
-      <div class="modal-title">Modo del sistema</div>
-      <div class="modal-sub">Elige cómo quieres operar tu negocio. Puedes cambiar en cualquier momento.</div>
-      <div class="modo-opciones">
-
-        <div class="modo-opt" id="opt-esencial" onclick="seleccionarModo('ESENCIAL')">
-          <div class="mo-header">
-            <div class="mo-icon" style="background:rgba(168,230,61,0.1);">🚀</div>
-            <div>
-              <div class="mo-title">Modo Esencial</div>
-            </div>
-            <div class="mo-badge" style="background:rgba(168,230,61,0.12);color:var(--verde);">GRATIS</div>
-          </div>
-          <div class="mo-desc">Un local, un inventario, una caja. Perfecto para emprendedores y negocios pequeños.</div>
-          <div class="mo-features">
-            <span class="mo-feat on">Catálogo</span>
-            <span class="mo-feat on">Pedidos</span>
-            <span class="mo-feat on">Chat</span>
-            <span class="mo-feat on">Plugins</span>
-            <span class="mo-feat">Sucursales</span>
-            <span class="mo-feat">Cajas multi</span>
-            <span class="mo-feat">Mapa calor</span>
-          </div>
-        </div>
-
-        <div class="modo-opt" id="opt-corporativo" onclick="seleccionarModo('CORPORATIVO')">
-          <div class="mo-header">
-            <div class="mo-icon" style="background:rgba(255,140,0,0.1);">🏢</div>
-            <div>
-              <div class="mo-title">Modo Corporativo</div>
-            </div>
-            <div class="mo-badge" style="background:rgba(255,140,0,0.12);color:var(--naranja);">ENTERPRISE</div>
-          </div>
-          <div class="mo-desc">Red de sucursales, inventario distribuido, cajas en tiempo real y mapa de calor nacional.</div>
-          <div class="mo-features">
-            <span class="mo-feat on">Catálogo</span>
-            <span class="mo-feat on">Pedidos</span>
-            <span class="mo-feat on">Chat</span>
-            <span class="mo-feat on">Plugins</span>
-            <span class="mo-feat on">Sucursales PRO</span>
-            <span class="mo-feat on">Cajas multi</span>
-            <span class="mo-feat on">Mapa calor</span>
-            <span class="mo-feat on">Workers global</span>
-            <span class="mo-feat on">Logística</span>
-          </div>
-        </div>
-
-      </div>
-      <button class="btn-activar-modo" id="btn-activar-modo" onclick="aplicarModo()">Activar modo seleccionado</button>
+  <a class="modulo" href="productos.html">
+    <div class="modulo-icon" style="background:rgba(255,140,0,0.15);">
+      <svg viewBox="0 0 24 24" stroke="#FF8C00"><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"/></svg>
     </div>
-  </div>
+    <div class="modulo-lbl">Productos</div>
+  </a>
+
+  <a class="modulo" href="pedidos.html">
+    <div class="modulo-icon" style="background:rgba(0,122,255,0.15);">
+      <svg viewBox="0 0 24 24" stroke="#007AFF"><rect x="1" y="3" width="15" height="13"/><path d="M16 8h4l3 3v5h-7V8z"/><circle cx="5.5" cy="18.5" r="2.5"/><circle cx="18.5" cy="18.5" r="2.5"/></svg>
+    </div>
+    <div class="modulo-lbl">Pedidos</div>
+  </a>
+
+  <a class="modulo" href="chat.html">
+    <div class="modulo-icon" style="background:rgba(168,230,61,0.12);">
+      <svg viewBox="0 0 24 24" stroke="#A8E63D"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
+    </div>
+    <div class="modulo-lbl">Chat</div>
+  </a>
+
+  <a class="modulo" href="inventario.html">
+    <div class="modulo-icon" style="background:rgba(0,122,255,0.1);">
+      <svg viewBox="0 0 24 24" stroke="#007AFF"><line x1="8" y1="6" x2="21" y2="6"/><line x1="8" y1="12" x2="21" y2="12"/><line x1="8" y1="18" x2="21" y2="18"/><line x1="3" y1="6" x2="3.01" y2="6"/><line x1="3" y1="12" x2="3.01" y2="12"/><line x1="3" y1="18" x2="3.01" y2="18"/></svg>
+    </div>
+    <div class="modulo-lbl">Inventario</div>
+  </a>
+
+  <a class="modulo" href="estadisticas.html">
+    <div class="modulo-icon" style="background:rgba(175,82,222,0.15);">
+      <svg viewBox="0 0 24 24" stroke="#AF52DE"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/></svg>
+    </div>
+    <div class="modulo-lbl">Estadísticas</div>
+  </a>
+
+  <a class="modulo" href="facturador.html">
+    <div class="modulo-icon" style="background:rgba(255,204,0,0.12);">
+      <svg viewBox="0 0 24 24" stroke="#FFCC00"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/></svg>
+    </div>
+    <div class="modulo-lbl">Facturador</div>
+  </a>
+
+  <a class="modulo" href="sucursales-pro.html">
+    <div class="modulo-icon" style="background:rgba(0,199,190,0.12);">
+      <svg viewBox="0 0 24 24" stroke="#00C7BE"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
+    </div>
+    <div class="modulo-lbl">Sucursales</div>
+  </a>
+
+  <a class="modulo" href="plugins.html">
+    <div class="modulo-icon" style="background:rgba(255,77,77,0.12);">
+      <svg viewBox="0 0 24 24" stroke="#FF4D4D"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
+    </div>
+    <div class="modulo-lbl">Accesos</div>
+  </a>
+
+  <a class="modulo" href="contabilidad.html">
+    <div class="modulo-icon" style="background:rgba(168,230,61,0.1);">
+      <svg viewBox="0 0 24 24" stroke="#A8E63D"><line x1="12" y1="1" x2="12" y2="23"/><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg>
+    </div>
+    <div class="modulo-lbl">Contabilidad</div>
+  </a>
+
+  <a class="modulo" href="rrhh.html">
+    <div class="modulo-icon" style="background:rgba(0,122,255,0.1);">
+      <svg viewBox="0 0 24 24" stroke="#007AFF"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+    </div>
+    <div class="modulo-lbl">RR.HH.</div>
+  </a>
+
+  <a class="modulo" href="workers.html">
+    <div class="modulo-icon" style="background:rgba(255,140,0,0.1);">
+      <svg viewBox="0 0 24 24" stroke="#FF8C00"><path d="M20 7H4a2 2 0 0 0-2 2v6a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V9a2 2 0 0 0-2-2z"/><path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16"/></svg>
+    </div>
+    <div class="modulo-lbl">Workers</div>
+  </a>
+
+  <!-- ENTERPRISE (antes Plugins) -->
+  <a class="modulo" href="plugins.html" id="modulo-enterprise">
+    <div class="modulo-icon" style="background:rgba(255,140,0,0.18);position:relative;">
+      <!-- Hexágono + check como ícono Enterprise -->
+      <svg viewBox="0 0 26 26" fill="none" width="28" height="28">
+        <polygon points="13,1 24,7 24,19 13,25 2,19 2,7" fill="#FF8C00" opacity="0.9"/>
+        <polyline points="7,13 11,17 19,9" stroke="white" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/>
+      </svg>
+    </div>
+    <div class="modulo-lbl" id="enterprise-lbl">Enterprise</div>
+  </a>
+
 </div>
+
+<!-- REALTIME -->
+<div class="realtime-pill">
+  <div class="rt-dot"></div>
+  <div class="rt-txt">SINCRONIZADO EN TIEMPO REAL</div>
+</div>
+
+<!-- PEDIDOS RECIENTES -->
+<div class="sec-label" style="display:flex;align-items:center;justify-content:space-between;padding-right:20px;">
+  <span>Pedidos recientes</span>
+  <a href="pedidos.html" style="font-size:0.68rem;font-weight:700;color:var(--acc);text-decoration:none;">Ver todos →</a>
+</div>
+<div id="pedidos-lista"><div class="empty">Cargando pedidos...</div></div>
+<a class="ver-mas" href="pedidos.html">Ver todos los pedidos →</a>
+
+<!-- TAB BAR -->
+<nav class="tab-bar">
+  <button class="tab active">
+    <svg viewBox="0 0 24 24"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/></svg>
+    <span>Panel</span>
+  </button>
+  <a class="tab" href="productos.html">
+    <svg viewBox="0 0 24 24"><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"/></svg>
+    <span>Productos</span>
+  </a>
+  <a class="tab" href="tips.html">
+    <svg viewBox="0 0 24 24"><polygon points="23 7 16 12 23 17 23 7"/><rect x="1" y="5" width="15" height="14" rx="2"/></svg>
+    <span>Tips</span>
+  </a>
+  <a class="tab" href="pedidos.html">
+    <svg viewBox="0 0 24 24"><rect x="1" y="3" width="15" height="13"/><path d="M16 8h4l3 3v5h-7V8z"/><circle cx="5.5" cy="18.5" r="2.5"/><circle cx="18.5" cy="18.5" r="2.5"/></svg>
+    <span>Pedidos</span>
+  </a>
+  <a class="tab" href="plugins.html">
+    <svg viewBox="0 0 24 24"><polygon points="12,2 22,8.5 22,15.5 12,22 2,15.5 2,8.5" stroke="currentColor" fill="none" stroke-width="2"/><polyline points="7,12 10,15 17,9" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+    <span>Plugins</span>
+  </a>
+</nav>
 
 <div class="toast" id="toast"></div>
 
@@ -472,242 +300,134 @@
 const { createClient } = supabase;
 const sb = createClient('https://hfmsyrmkewscnvwynzfq.supabase.co','sb_publishable_d1oLsq70a6ZV33vW3XkRgw_nYcN2Z9v');
 
-let userId='', userData={}, appMode='ESENCIAL', modoSeleccionado='ESENCIAL';
-const COLORES=['#FF8C00','#2563EB','#22C55E','#A855F7','#EF4444','#F59E0B'];
-function colorAvatar(s){ return COLORES[Math.abs((s||'').charCodeAt(0)||0)%COLORES.length]; }
+let userId='', userData={};
+const COLS=['#FF8C00','#007AFF','#A8E63D','#AF52DE','#FF4D4D','#FFCC00'];
+const colorAva=s=>COLS[Math.abs((s||'').charCodeAt(0)||0)%COLS.length];
 
 (async()=>{
-  const { data:{session} } = await sb.auth.getSession();
-  if(!session){ window.location.href='login.html'; return; }
+  const {data:{session}}=await sb.auth.getSession();
+  if(!session){window.location.href='login.html';return;}
   userId=session.user.id;
-  const { data:u } = await sb.from('usuarios').select('*').eq('id',userId).single();
-  if(u){ userData=u; }
-
-  // Cargar modo guardado
-  appMode=localStorage.getItem(`app_mode_${userId}`)||'ESENCIAL';
-  modoSeleccionado=appMode;
-  aplicarModoUI(appMode);
-  cargarMarca();
+  const {data:u}=await sb.from('usuarios').select('*').eq('id',userId).single();
+  if(u){userData=u;}
+  aplicarMarca();
   await cargarTodo();
   suscribirRealtime();
 })();
 
-function cargarMarca(){
-  const nombre=userData.empresa||userData.nombre||'Mi empresa';
-  const logo=userData.logo_empresa||userData.foto_perfil||'';
+function aplicarMarca(){
+  const nombre=userData.empresa||userData.nombre||'Proveedor';
   const color=userData.workers_color||'#FF8C00';
-  document.documentElement.style.setProperty('--naranja',color);
-  document.getElementById('brand-nombre').textContent=nombre;
-  document.getElementById('brand-sub').textContent=appMode==='CORPORATIVO'?'Centro de mando':'Panel del proveedor';
-  const logoEl=document.getElementById('brand-logo');
-  if(logo){ logoEl.innerHTML=`<img src="${logo}" alt="">`; }
-  else { logoEl.textContent=nombre[0].toUpperCase(); logoEl.style.background=color; }
+  document.documentElement.style.setProperty('--acc',color);
+
+  // Nombre empresa en lugar de PROVEED
+  const brandEl=document.getElementById('brand-name');
+  if(userData.empresa){
+    brandEl.innerHTML=`${userData.empresa}`;
+    brandEl.style.color='white';
+  }
+  document.getElementById('welcome-name').textContent=nombre;
+  document.getElementById('brand-sub').textContent='Panel del proveedor';
+
+ // Modo enterprise label
+  const appMode=localStorage.getItem(`app_mode_${userId}`)||'ESENCIAL';
+  if(appMode==='CORPORATIVO'){
+    document.getElementById('enterprise-lbl').textContent='Enterprise ✓';
+  }
 }
 
 async function cargarTodo(){
   const hoy=new Date().toISOString().split('T')[0];
-  const [{ data:pedidos },{ data:productos },{ data:chats },{ data:pv_branches }] = await Promise.all([
+  const [{data:pedidos},{data:productos},{data:chats}]=await Promise.all([
     sb.from('pedidos').select('*').eq('proveedor_id',userId).order('created_at',{ascending:false}).limit(50),
-    sb.from('productos').select('*').eq('proveedor_id',userId).eq('activo',true).limit(10),
-    sb.from('chats').select('*').eq('proveedor_id',userId).order('ultimo_mensaje_at',{ascending:false}).limit(5),
-    sb.from('pv_branches').select('*').eq('company_id',userId).limit(10)
+    sb.from('productos').select('id').eq('proveedor_id',userId).eq('activo',true),
+    sb.from('chats').select('*').eq('proveedor_id',userId)
   ]);
 
-  const pedHoy=(pedidos||[]).filter(p=>p.created_at?.startsWith(hoy));
+  const peds=pedidos||[];
+  const prods=productos||[];
+  const chatsList=chats||[];
+
+  const pedHoy=peds.filter(p=>p.created_at?.startsWith(hoy));
   const totalHoy=pedHoy.reduce((s,p)=>s+(p.total||0),0);
-  const pendientes=(pedidos||[]).filter(p=>p.estado==='pendiente').length;
-  const noLeidos=(chats||[]).filter(c=>(c.no_leidos||0)>0).length;
+  const pendientes=peds.filter(p=>p.estado==='pendiente').length;
+  const noLeidos=chatsList.filter(c=>(c.no_leidos||c.no_leido||0)>0).length;
 
   document.getElementById('k-ventas').textContent='$'+totalHoy.toFixed(0);
-  document.getElementById('k-pedidos').textContent=pedHoy.length;
-  document.getElementById('k-productos').textContent=(productos||[]).length;
-  document.getElementById('k-pendientes').textContent=pendientes;
-  if(noLeidos>0) document.getElementById('chat-dot').style.display='block';
+  document.getElementById('k-ventas-d').textContent=pedHoy.length>0?`+${pedHoy.length} pedidos hoy`:'— sin pedidos hoy';
+  document.getElementById('k-ventas-d').className='kpi-delta'+(pedHoy.length>0?' verde':'');
+  document.getElementById('k-pedidos').textContent=pendientes;
+  document.getElementById('k-productos').textContent=prods.length;
+  document.getElementById('k-chats').textContent=noLeidos||chatsList.length;
+  if(noLeidos>0) document.getElementById('chat-notif').style.display='block';
 
-  renderChart(pedidos||[]);
-  renderPedidos(pedidos||[]);
-  renderChats(chats||[]);
-  renderProductos(productos||[]);
-  renderSucursales(pv_branches||[]);
+  renderChart(peds);
+  renderPedidos(peds.slice(0,5));
 }
+
 function renderChart(pedidos){
-  const chart=document.getElementById('mini-chart'); chart.innerHTML='';
-  const dias=[];
+  const bars=document.getElementById('chart-bars');
+  const days=document.getElementById('chart-days');
+  bars.innerHTML=''; days.innerHTML='';
+  const semana=[];
   for(let i=6;i>=0;i--){
     const d=new Date(); d.setDate(d.getDate()-i);
     const str=d.toISOString().split('T')[0];
     const total=pedidos.filter(p=>p.created_at?.startsWith(str)).reduce((s,p)=>s+(p.total||0),0);
-    dias.push({str,total,esHoy:i===0});
+    const lbl=['D','L','M','M','J','V','S'][d.getDay()];
+    semana.push({str,total,lbl,esHoy:i===0});
   }
-  const max=Math.max(...dias.map(d=>d.total),1);
-  dias.forEach(d=>{
-    const bar=document.createElement('div');
-    bar.className='mini-bar'+(d.esHoy?' hoy':'');
-    bar.style.height=Math.max(4,Math.round(d.total/max*40))+'px';
-    bar.title='$'+d.total.toFixed(0);
-    chart.appendChild(bar);
+  const max=Math.max(...semana.map(d=>d.total),1);
+  semana.forEach(d=>{
+    const b=document.createElement('div');
+    b.className='chart-bar'+(d.esHoy?' hoy':'');
+    b.style.height=Math.max(4,Math.round(d.total/max*50))+'px';
+    b.title='$'+d.total.toFixed(0);
+    bars.appendChild(b);
+    const lbl=document.createElement('div');
+    lbl.className='chart-day'; lbl.textContent=d.lbl;
+    days.appendChild(lbl);
   });
 }
 
-function renderPedidos(pedidos){
+function renderPedidos(lista){
   const cont=document.getElementById('pedidos-lista');
-  const lista=pedidos.slice(0,5);
-  if(!lista.length){ cont.innerHTML='<div class="empty-mini">Sin pedidos aún</div>'; return; }
+  if(!lista.length){cont.innerHTML='<div class="empty">Sin pedidos aún</div>';return;}
   cont.innerHTML='';
+  const estMap={pendiente:'est-p',entregado:'est-e',proceso:'est-pr',enviado:'est-pr'};
+  const estTxt={pendiente:'Pendiente',entregado:'Entregado',proceso:'En proceso',enviado:'Enviado'};
   lista.forEach(p=>{
     const nombre=p.emprendedor_nombre||p.nombre_emprendedor||'Cliente';
     const hora=new Date(p.created_at).toLocaleTimeString('es-EC',{hour:'2-digit',minute:'2-digit'});
-    const items=p.items||[];
-    const bg=colorAvatar(p.emprendedor_id||p.id);
-    const estMap={pendiente:'est-pendiente',proceso:'est-proceso',entregado:'est-entregado'};
+    const items=(p.items||[]).length;
+    const bg=colorAva(p.emprendedor_id||p.id);
     const div=document.createElement('div');
-    div.className='pedido-mini'+(p.estado==='pendiente'?' nuevo':'');
+    div.className='pedido-row'+(p.estado==='pendiente'?' nuevo':'');
     div.onclick=()=>window.location.href='pedidos.html';
     div.innerHTML=`
-      <div class="pm-avatar" style="background:${bg};">${nombre[0].toUpperCase()}</div>
-      <div class="pm-info">
-        <div class="pm-nombre">${nombre}</div>
-        <div class="pm-det">${items.length} producto${items.length!==1?'s':''} · ${hora}</div>
+      <div class="pr-ava" style="background:${bg};">${nombre[0].toUpperCase()}</div>
+      <div class="pr-info">
+        <div class="pr-nombre">${nombre}</div>
+        <div class="pr-det">${items} producto${items!==1?'s':''} · ${hora}</div>
       </div>
-      <div class="pm-right">
-        <div class="pm-total">$${Number(p.total||0).toFixed(2)}</div>
-        <div class="pm-estado ${estMap[p.estado]||'est-pendiente'}">${p.estado||'pendiente'}</div>
+      <div class="pr-right">
+        <div class="pr-total">$${Number(p.total||0).toFixed(2)}</div>
+        <div class="pr-estado ${estMap[p.estado]||'est-p'}">${estTxt[p.estado]||'Pendiente'}</div>
       </div>`;
     cont.appendChild(div);
   });
-}
-
-function renderChats(chats){
-  const cont=document.getElementById('chats-lista');
-  if(!chats.length){ cont.innerHTML='<div class="empty-mini">Sin chats activos</div>'; return; }
-  cont.innerHTML='';
-  chats.slice(0,4).forEach(c=>{
-    const nombre=c.emprendedor_nombre||c.proveedor_nombre||'Usuario';
-    const hora=c.ultimo_mensaje_at?new Date(c.ultimo_mensaje_at).toLocaleTimeString('es-EC',{hour:'2-digit',minute:'2-digit'}):'';
-    const bg=colorAvatar(c.emprendedor_id||c.id);
-    const div=document.createElement('div'); div.className='chat-mini';
-    div.onclick=()=>window.location.href='chat.html';
-    div.innerHTML=`
-      <div class="chat-avatar" style="background:${bg};">${nombre[0].toUpperCase()}</div>
-      <div class="chat-info">
-        <div class="chat-nombre">${nombre}</div>
-        <div class="chat-preview">${c.ultimo_mensaje||'Nueva conversación'}</div>
-      </div>
-      <div class="chat-right">
-        <div class="chat-hora">${hora}</div>
-        ${(c.no_leidos||0)>0?`<div class="chat-badge">${c.no_leidos}</div>`:''}
-      </div>`;
-    cont.appendChild(div);
-  });
-}
-
-function renderProductos(productos){
-  const cont=document.getElementById('productos-lista');
-  if(!productos.length){ cont.innerHTML='<div class="empty-mini">Sin productos activos. <a href="productos.html" style="color:var(--naranja);">Agregar →</a></div>'; return; }
-  cont.innerHTML='';
-  productos.slice(0,4).forEach(p=>{
-    const img=p.imagenes?.[0]||p.imagen||'';
-    const bajo=(p.stock||0)<10;
-    const div=document.createElement('div'); div.className='prod-mini';
-    div.innerHTML=`
-      <div class="prod-mini-img">${img?`<img src="${img}" alt="">`:''}</div>
-      <div class="prod-mini-info">
-        <div class="prod-mini-nombre">${p.nombre||'Producto'}</div>
-        <div class="prod-mini-sub">${p.categoria||'—'} · ${p.stock||0} und</div>
-      </div>
-      <div style="text-align:right;">
-        <div class="prod-mini-precio">$${Number(p.precio||0).toFixed(2)}</div>
-        <div class="prod-mini-stock ${bajo?'stock-bajo':'stock-ok'}">${bajo?'Bajo':'OK'}</div>
-      </div>`;
-    cont.appendChild(div);
-  });
-}
-
-function renderSucursales(branches){
-  const cont=document.getElementById('sucursales-lista');
-  if(!branches.length){ cont.innerHTML='<div class="empty-mini">Sin sucursales. Activa en Plugins.</div>'; return; }
-  cont.innerHTML='';
-  branches.forEach(b=>{
-    const div=document.createElement('div'); div.className='suc-mini';
-    div.innerHTML=`
-      <div class="suc-icon" style="background:rgba(255,140,0,0.1);">🏪</div>
-      <div class="suc-info">
-        <div class="suc-nombre">${b.nombre||'Sucursal'}</div>
-        <div class="suc-loc">📍 ${b.ciudad||'—'}, ${b.provincia||'—'}</div>
-      </div>
-      <div class="suc-kpi">
-        <div class="suc-venta">$0</div>
-        <div class="suc-stock">hoy</div>
-      </div>
-      <div class="suc-alert alert-ok"></div>`;
-    cont.appendChild(div);
-  });
-}
-
-// MODO
-function abrirModalModo(){
-  modoSeleccionado=appMode;
-  actualizarOpcionesUI();
-  document.getElementById('modal-modo').classList.add('show');
-}
-
-function cerrarModalModo(e){ if(e.target===document.getElementById('modal-modo')) document.getElementById('modal-modo').classList.remove('show'); }
-
-window.seleccionarModo=function(modo){
-  modoSeleccionado=modo;
-  actualizarOpcionesUI();
-};
-
-function actualizarOpcionesUI(){
-  document.getElementById('opt-esencial').classList.toggle('selected',modoSeleccionado==='ESENCIAL');
-  document.getElementById('opt-corporativo').classList.toggle('selected',modoSeleccionado==='CORPORATIVO');
-  const btn=document.getElementById('btn-activar-modo');
-  btn.textContent=modoSeleccionado===appMode?'Modo actual activo':`Activar ${modoSeleccionado}`;
-  btn.style.opacity=modoSeleccionado===appMode?'0.5':'1';
-}
-
-window.aplicarModo=function(){
-  if(modoSeleccionado===appMode){ document.getElementById('modal-modo').classList.remove('show'); return; }
-  appMode=modoSeleccionado;
-  localStorage.setItem(`app_mode_${userId}`,appMode);
-  aplicarModoUI(appMode);
-  document.getElementById('modal-modo').classList.remove('show');
-  showToast('✓ Modo '+appMode+' activado');
-  cargarMarca();
-};
-
-function aplicarModoUI(modo){
-  const isCorp=modo==='CORPORATIVO';
-  document.body.classList.toggle('modo-corp',isCorp);
-  const banner=document.getElementById('empresa-banner');
-  const icon=document.getElementById('eb-icon');
-  const badge=document.getElementById('eb-badge');
-  const title=document.getElementById('eb-title');
-  const sub=document.getElementById('eb-sub');
-  if(isCorp){
-    banner.className='empresa-banner corporativo';
-    icon.className='eb-icon corporativo'; icon.textContent='🏢';
-    badge.className='eb-badge corporativo'; badge.textContent='CORPORATIVO';
-    title.textContent='Modo Corporativo activo';
-    sub.textContent='Sucursales, cajas y logística habilitados';
-  } else {
-    banner.className='empresa-banner esencial';
-    icon.className='eb-icon esencial'; icon.textContent='🚀';
-    badge.className='eb-badge esencial'; badge.textContent='ESENCIAL';
-    title.textContent='Modo Esencial';
-    sub.textContent='Toca para activar modo Corporativo con sucursales';
-  }
 }
 
 function suscribirRealtime(){
-  sb.channel('dash-'+userId)
-    .on('postgres_changes',{event:'INSERT',schema:'public',table:'pedidos',filter:`proveedor_id=eq.${userId}`},()=>{ cargarTodo(); showToast('🔔 Nuevo pedido recibido'); })
-    .on('postgres_changes',{event:'INSERT',schema:'public',table:'mensajes',},()=>cargarTodo())
+  sb.channel('dash-prov-'+userId)
+    .on('postgres_changes',{event:'INSERT',schema:'public',table:'pedidos',filter:`proveedor_id=eq.${userId}`},payload=>{
+      showToast('🔔 Nuevo pedido recibido');
+      cargarTodo();
+    })
     .subscribe();
 }
 
-function showToast(msg){ const t=document.getElementById('toast'); t.textContent=msg; t.classList.add('show'); setTimeout(()=>t.classList.remove('show'),2500); }
+function showToast(msg){const t=document.getElementById('toast');t.textContent=msg;t.classList.add('show');setTimeout(()=>t.classList.remove('show'),2500);}
 </script>
 </body>
 </html>
-          
