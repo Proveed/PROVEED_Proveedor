@@ -9,7 +9,6 @@
 *{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent;}
 :root{--acc:#FF8C00;--verde:#A8E63D;--verde2:#7BC234;--negro:#0A0A0A;--rojo:#FF4D4D;}
 body{background:var(--negro);font-family:'Inter',sans-serif;-webkit-font-smoothing:antialiased;}
-
 #vista-lista{display:block;}
 #vista-chat{display:none;}
 
@@ -22,13 +21,11 @@ body{background:var(--negro);font-family:'Inter',sans-serif;-webkit-font-smoothi
 .search-wrap svg{width:15px;height:15px;stroke:#555;fill:none;stroke-width:2.5;flex-shrink:0;}
 .search-wrap input{flex:1;background:transparent;border:none;outline:none;font-family:'Inter',sans-serif;font-size:0.86rem;color:white;}
 .search-wrap input::placeholder{color:#333;}
-
 .chats-scroll{overflow-y:auto;padding-bottom:90px;}
 .chat-item{display:flex;align-items:center;gap:12px;padding:14px 16px;cursor:pointer;border-bottom:1px solid #1a1a1a;background:#111;}
 .chat-item:active{background:#1a1a1a;}
 .chat-item.noleido{background:#0f0f0f;border-left:3px solid var(--acc);}
 .ci-av{width:46px;height:46px;border-radius:14px;display:flex;align-items:center;justify-content:center;font-size:1rem;font-weight:800;color:white;flex-shrink:0;overflow:hidden;position:relative;}
-.ci-av img{width:100%;height:100%;object-fit:cover;}
 .ci-dot{position:absolute;bottom:1px;right:1px;width:9px;height:9px;background:var(--verde);border-radius:50%;border:2px solid #111;}
 .ci-info{flex:1;min-width:0;}
 .ci-nombre{font-size:0.88rem;font-weight:700;color:white;margin-bottom:2px;}
@@ -40,21 +37,12 @@ body{background:var(--negro);font-family:'Inter',sans-serif;-webkit-font-smoothi
 .ci-neg{font-size:0.58rem;font-weight:800;padding:2px 7px;border-radius:20px;background:rgba(168,230,61,0.1);color:var(--verde);}
 .empty-chats{text-align:center;padding:60px 20px;color:#333;background:#111;margin:12px;border-radius:18px;border:1px solid #1e1e1e;}
 .empty-chats div{font-size:3rem;margin-bottom:10px;}
-.empty-chats p{font-size:0.82rem;line-height:1.6;color:#444;}
+.empty-chats p{font-size:0.82rem;color:#444;line-height:1.6;}
 
-/* CHAT INDIVIDUAL — todo fixed */
-.chat-header{
-  position:fixed;top:0;left:0;right:0;
-  background:#111;
-  padding:44px 12px 12px;
-  border-bottom:2.5px solid var(--acc);
-  display:flex;align-items:center;gap:10px;
-  z-index:100;
-}
+.chat-header{position:fixed;top:0;left:0;right:0;background:#111;padding:44px 12px 12px;border-bottom:2.5px solid var(--acc);display:flex;align-items:center;gap:10px;z-index:100;}
 .ch-back{width:36px;height:36px;background:rgba(255,140,0,0.12);border-radius:11px;display:flex;align-items:center;justify-content:center;border:none;cursor:pointer;flex-shrink:0;}
 .ch-back svg{width:18px;height:18px;stroke:var(--acc);fill:none;stroke-width:2.5;}
 .ch-av{width:38px;height:38px;border-radius:11px;display:flex;align-items:center;justify-content:center;font-size:0.9rem;font-weight:800;color:white;flex-shrink:0;overflow:hidden;}
-.ch-av img{width:100%;height:100%;object-fit:cover;}
 .ch-info{flex:1;min-width:0;}
 .ch-nombre{font-size:0.9rem;font-weight:800;color:white;}
 .ch-sub{font-size:0.68rem;color:var(--acc);font-weight:600;margin-top:1px;overflow:hidden;white-space:nowrap;text-overflow:ellipsis;}
@@ -62,13 +50,7 @@ body{background:var(--negro);font-family:'Inter',sans-serif;-webkit-font-smoothi
 .ch-btn{width:32px;height:32px;border-radius:10px;background:rgba(255,140,0,0.1);border:none;cursor:pointer;display:flex;align-items:center;justify-content:center;}
 .ch-btn svg{width:15px;height:15px;stroke:var(--acc);fill:none;stroke-width:2;}
 
-.prod-banner{
-  position:fixed;left:0;right:0;
-  background:#111;border-bottom:1px solid #1e1e1e;
-  padding:10px 14px;
-  display:flex;align-items:center;gap:10px;
-  z-index:99;
-}
+.prod-banner{position:fixed;left:0;right:0;background:#111;border-bottom:1px solid #1e1e1e;padding:10px 14px;display:flex;align-items:center;gap:10px;z-index:99;}
 .pb-img{width:42px;height:42px;border-radius:10px;background:#1a1a1a;flex-shrink:0;overflow:hidden;display:flex;align-items:center;justify-content:center;font-size:1.2rem;}
 .pb-img img{width:100%;height:100%;object-fit:cover;}
 .pb-info{flex:1;min-width:0;}
@@ -76,29 +58,13 @@ body{background:var(--negro);font-family:'Inter',sans-serif;-webkit-font-smoothi
 .pb-precio{font-size:0.75rem;color:var(--acc);font-weight:800;margin-top:1px;}
 .btn-neg-banner{padding:7px 14px;background:var(--verde);color:#111;border:none;border-radius:20px;font-family:'Inter',sans-serif;font-size:0.72rem;font-weight:800;cursor:pointer;white-space:nowrap;}
 
-.msgs-wrap{
-  overflow-y:auto;
-  -webkit-overflow-scrolling:touch;
-  padding:12px 14px;
-  background:var(--negro);
-  display:flex;flex-direction:column;gap:6px;
-}
+.msgs-wrap{overflow-y:auto;-webkit-overflow-scrolling:touch;padding:12px 14px;background:var(--negro);display:flex;flex-direction:column;gap:6px;}
 
-/* INPUT FIXED AL FONDO */
-.input-area{
-  position:fixed;
-  bottom:0;left:0;right:0;
-  background:#111;
-  border-top:1px solid #1e1e1e;
-  padding:8px 12px;
-  padding-bottom:max(12px,env(safe-area-inset-bottom));
-  z-index:100;
-}
-.input-extras{display:flex;gap:6px;margin-bottom:8px;overflow-x:auto;scrollbar-width:none;padding-bottom:2px;}
+.input-area{position:fixed;bottom:0;left:0;right:0;background:#111;border-top:1px solid #1e1e1e;padding:8px 12px;padding-bottom:max(12px,env(safe-area-inset-bottom));z-index:100;}
+.input-extras{display:flex;gap:6px;margin-bottom:8px;overflow-x:auto;scrollbar-width:none;}
 .input-extras::-webkit-scrollbar{display:none;}
-.btn-extra{padding:6px 12px;border-radius:20px;border:1.5px solid #222;background:#1a1a1a;font-family:'Inter',sans-serif;font-size:0.68rem;font-weight:700;color:#555;cursor:pointer;white-space:nowrap;flex-shrink:0;display:flex;align-items:center;gap:4px;}
+.btn-extra{padding:6px 12px;border-radius:20px;border:1.5px solid #222;background:#1a1a1a;font-family:'Inter',sans-serif;font-size:0.68rem;font-weight:700;color:#555;cursor:pointer;white-space:nowrap;flex-shrink:0;}
 .btn-extra.verde{border-color:var(--verde);color:var(--verde);background:rgba(168,230,61,0.06);}
-.btn-extra svg{width:11px;height:11px;stroke:currentColor;fill:none;stroke-width:2.5;}
 .input-row{display:flex;align-items:flex-end;gap:8px;}
 .input-box{flex:1;background:#1a1a1a;border-radius:22px;padding:10px 14px;display:flex;align-items:flex-end;gap:6px;border:1.5px solid #222;}
 .msg-ta{flex:1;background:transparent;border:none;outline:none;font-family:'Inter',sans-serif;font-size:0.88rem;color:white;resize:none;line-height:1.4;min-height:22px;max-height:100px;width:100%;}
@@ -106,17 +72,23 @@ body{background:var(--negro);font-family:'Inter',sans-serif;-webkit-font-smoothi
 .btn-send{width:40px;height:40px;background:var(--acc);border-radius:50%;display:flex;align-items:center;justify-content:center;border:none;cursor:pointer;flex-shrink:0;}
 .btn-send svg{width:16px;height:16px;stroke:white;fill:none;stroke-width:2.5;}
 
-/* MENSAJES */
-.msg{display:flex;flex-direction:column;}
+.msg{display:flex;flex-direction:column;position:relative;}
 .msg.mio{align-items:flex-end;}
 .msg.suyo{align-items:flex-start;}
-.msg-b{padding:10px 13px;border-radius:18px;font-size:0.86rem;line-height:1.5;max-width:78%;word-break:break-word;}
+.msg-b{padding:10px 13px;border-radius:18px;font-size:0.86rem;line-height:1.5;max-width:78%;word-break:break-word;cursor:pointer;user-select:none;-webkit-user-select:none;}
 .msg.mio .msg-b{background:var(--acc);color:white;border-bottom-right-radius:4px;}
 .msg.suyo .msg-b{background:#1a1a1a;color:white;border-bottom-left-radius:4px;}
 .msg-hora{font-size:0.58rem;color:#333;margin-top:3px;padding:0 4px;}
 
-.msg-especial{display:flex;justify-content:center;width:100%;padding:4px 0;}
+.msg-menu{position:fixed;background:#1a1a1a;border-radius:12px;box-shadow:0 4px 20px rgba(0,0,0,0.5);padding:4px;z-index:300;border:1px solid #333;display:none;}
+.msg-menu.show{display:block;}
+.msg-menu button{display:flex;align-items:center;gap:8px;width:100%;padding:9px 14px;background:transparent;border:none;font-family:'Inter',sans-serif;font-size:0.82rem;font-weight:600;color:var(--rojo);cursor:pointer;border-radius:8px;white-space:nowrap;}
+.msg-menu button:hover{background:rgba(255,77,77,0.08);}
+.msg-menu button svg{width:14px;height:14px;stroke:var(--rojo);fill:none;stroke-width:2;}
+.overlay-cierra{position:fixed;inset:0;z-index:299;display:none;}
+.overlay-cierra.show{display:block;}
 
+.msg-especial{display:flex;justify-content:center;width:100%;padding:4px 0;}
 .msg-neg-card{background:#111;border:2px solid var(--verde);border-radius:18px;padding:14px;width:92%;max-width:340px;box-shadow:0 3px 14px rgba(168,230,61,0.1);}
 .mn-head{font-size:0.66rem;font-weight:800;color:var(--verde);text-transform:uppercase;margin-bottom:8px;}
 .mn-item-row{display:flex;justify-content:space-between;font-size:0.76rem;padding:4px 0;border-bottom:1px solid #222;}
@@ -153,7 +125,6 @@ body{background:var(--negro);font-family:'Inter',sans-serif;-webkit-font-smoothi
 .mc-total-lbl{font-size:0.72rem;color:#444;}
 .mc-total-val{font-size:0.9rem;font-weight:900;color:var(--verde);}
 
-/* MODALES */
 .modal-ov{position:fixed;inset:0;background:rgba(0,0,0,0.7);display:none;align-items:flex-end;z-index:500;}
 .modal-ov.show{display:flex;}
 .modal-sh{background:#111;width:100%;border-radius:24px 24px 0 0;transform:translateY(100%);transition:0.4s cubic-bezier(0.16,1,0.3,1);max-height:92vh;display:flex;flex-direction:column;overflow:hidden;border:1px solid #1e1e1e;border-bottom:none;}
@@ -189,21 +160,18 @@ body{background:var(--negro);font-family:'Inter',sans-serif;-webkit-font-smoothi
 .neg-nota-field textarea:focus{border-color:var(--verde);}
 .btn-env-neg{width:100%;padding:14px;background:var(--verde);color:#111;border:none;border-radius:14px;font-family:'Inter',sans-serif;font-size:0.92rem;font-weight:800;cursor:pointer;}
 
-/* TAB BAR */
 .tab-bar{position:fixed;bottom:0;width:100%;background:#111;border-top:1px solid #1e1e1e;display:flex;padding:8px 0;padding-bottom:max(8px,env(safe-area-inset-bottom));z-index:200;}
 .tab{flex:1;display:flex;flex-direction:column;align-items:center;gap:3px;border:none;background:transparent;cursor:pointer;text-decoration:none;font-family:'Inter',sans-serif;padding:4px 0;}
 .tab svg{width:22px;height:22px;stroke:#333;fill:none;stroke-width:2;stroke-linecap:round;stroke-linejoin:round;}
 .tab span{font-size:0.55rem;font-weight:700;color:#333;text-transform:uppercase;}
 .tab.active svg{stroke:var(--acc);}
 .tab.active span{color:var(--acc);}
-
 .toast{position:fixed;bottom:90px;left:50%;transform:translateX(-50%) translateY(20px);background:#1e1e1e;color:white;padding:10px 20px;border-radius:24px;font-size:0.8rem;font-weight:600;opacity:0;transition:0.3s;pointer-events:none;z-index:2000;white-space:nowrap;border:1px solid #333;}
 .toast.show{opacity:1;transform:translateX(-50%) translateY(0);}
 </style>
 </head>
 <body>
 
-<!-- LISTA -->
 <div id="vista-lista">
   <div class="header-lista">
     <div class="hl-top">
@@ -220,9 +188,7 @@ body{background:var(--negro);font-family:'Inter',sans-serif;-webkit-font-smoothi
   </div>
 </div>
 
-<!-- CHAT INDIVIDUAL -->
 <div id="vista-chat">
-
   <div class="chat-header" id="chat-header">
     <button class="ch-back" onclick="volverLista()">
       <svg viewBox="0 0 24 24"><path d="M19 12H5M12 19l-7-7 7-7"/></svg>
@@ -233,10 +199,10 @@ body{background:var(--negro);font-family:'Inter',sans-serif;-webkit-font-smoothi
       <div class="ch-sub" id="ch-sub">—</div>
     </div>
     <div class="ch-btns">
-      <button class="ch-btn" onclick="abrirNeg()" title="Proponer precio">
+      <button class="ch-btn" onclick="abrirNeg()">
         <svg viewBox="0 0 24 24"><path d="M12 2L2 7l10 5 10-5-10-5z"/><path d="M2 17l10 5 10-5"/></svg>
       </button>
-      <button class="ch-btn" onclick="window.location.href='dashboard.html'" title="Panel">
+      <button class="ch-btn" onclick="window.location.href='dashboard.html'">
         <svg viewBox="0 0 24 24"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/></svg>
       </button>
     </div>
@@ -255,10 +221,7 @@ body{background:var(--negro);font-family:'Inter',sans-serif;-webkit-font-smoothi
 
   <div class="input-area" id="input-area">
     <div class="input-extras">
-      <button class="btn-extra verde" onclick="abrirNeg()">
-        <svg viewBox="0 0 24 24"><path d="M12 2L2 7l10 5 10-5-10-5z"/><path d="M2 17l10 5 10-5"/></svg>
-        💰 Proponer precio especial
-      </button>
+      <button class="btn-extra verde" onclick="abrirNeg()">💰 Proponer precio especial</button>
     </div>
     <div class="input-row">
       <div class="input-box">
@@ -270,26 +233,31 @@ body{background:var(--negro);font-family:'Inter',sans-serif;-webkit-font-smoothi
       </button>
     </div>
   </div>
-
 </div>
 
+<!-- MENÚ BORRAR -->
+<div class="overlay-cierra" id="overlay-menu" onclick="cerrarMenu()"></div>
+<div class="msg-menu" id="msg-menu">
+  <button onclick="borrarMsgConfirm()">
+    <svg viewBox="0 0 24 24"><polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 6"/><path d="M10 11v6M14 11v6"/><path d="M9 6V4h6v2"/></svg>
+    Eliminar mensaje
+  </button>
+</div>
 <!-- MODAL NEGOCIAR -->
 <div class="modal-ov" id="modal-neg" onclick="cerrarMod('modal-neg',event)">
   <div class="modal-sh">
     <div class="drag"></div>
     <div class="modal-hdr">
       <span class="modal-title">💰 Proponer precio especial</span>
-      <button class="close-btn" onclick="document.getElementById('modal-neg').classList.remove('show')">
-        <svg viewBox="0 0 24 24"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
-      </button>
+      <button class="close-btn" onclick="document.getElementById('modal-neg').classList.remove('show')"><svg viewBox="0 0 24 24"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg></button>
     </div>
     <div class="modal-body">
-      <p class="neg-intro">Ofrece un precio especial al emprendedor. Útil para compras por volumen o clientes frecuentes. El emprendedor puede aceptar, rechazar o contraofertar.</p>
+      <p class="neg-intro">Ofrece un precio especial al emprendedor. El emprendedor puede aceptar, rechazar o contraofertar.</p>
       <div id="neg-items-wrap"></div>
       <div class="neg-resumen">
-        <div class="nr-row"><span class="nr-lbl">Precio original</span><span class="nr-val" id="nr-orig">$0.00</span></div>
+        <div class="nr-row"><span class="nr-lbl">Precio actual</span><span class="nr-val" id="nr-orig">$0.00</span></div>
         <div class="nr-row"><span class="nr-lbl">Tu oferta</span><span class="nr-val" id="nr-oferta">$0.00</span></div>
-        <div class="nr-final"><span class="nr-final-lbl">Descuento total</span><span class="nr-final-val" id="nr-ahorro">$0.00</span></div>
+        <div class="nr-final"><span class="nr-final-lbl">Descuento</span><span class="nr-final-val" id="nr-ahorro">$0.00</span></div>
       </div>
       <div class="neg-nota-field">
         <label>Mensaje al emprendedor</label>
@@ -301,26 +269,11 @@ body{background:var(--negro);font-family:'Inter',sans-serif;-webkit-font-smoothi
 </div>
 
 <nav class="tab-bar">
-  <a class="tab" href="dashboard.html">
-    <svg viewBox="0 0 24 24"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/></svg>
-    <span>Panel</span>
-  </a>
-  <a class="tab" href="productos.html">
-    <svg viewBox="0 0 24 24"><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"/></svg>
-    <span>Productos</span>
-  </a>
-  <a class="tab active">
-    <svg viewBox="0 0 24 24"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
-    <span>Chats</span>
-  </a>
-  <a class="tab" href="pedidos.html">
-    <svg viewBox="0 0 24 24"><path d="M9 5H7a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2h-2"/><rect x="9" y="3" width="6" height="4" rx="1"/></svg>
-    <span>Pedidos</span>
-  </a>
-  <a class="tab" href="perfil.html">
-    <svg viewBox="0 0 24 24"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
-    <span>Perfil</span>
-  </a>
+  <a class="tab" href="dashboard.html"><svg viewBox="0 0 24 24"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/></svg><span>Panel</span></a>
+  <a class="tab" href="productos.html"><svg viewBox="0 0 24 24"><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"/></svg><span>Productos</span></a>
+  <a class="tab active"><svg viewBox="0 0 24 24"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg><span>Chats</span></a>
+  <a class="tab" href="pedidos.html"><svg viewBox="0 0 24 24"><path d="M9 5H7a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2h-2"/><rect x="9" y="3" width="6" height="4" rx="1"/></svg><span>Pedidos</span></a>
+  <a class="tab" href="perfil.html"><svg viewBox="0 0 24 24"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg><span>Perfil</span></a>
 </nav>
 
 <div class="toast" id="toast"></div>
@@ -331,7 +284,7 @@ const {createClient}=supabase;
 const sb=createClient('https://hfmsyrmkewscnvwynzfq.supabase.co','sb_publishable_d1oLsq70a6ZV33vW3XkRgw_nYcN2Z9v');
 
 let userId='',userData={},chatActivo=null,todosChats=[],msgs=[],prodActivo=null,rtSub=null;
-let itemsNeg={};
+let itemsNeg={},msgMenuId=null;
 const QS=new URLSearchParams(location.search);
 
 function ajustarAlturas(){
@@ -350,6 +303,7 @@ function ajustarAlturas(){
   w.style.minHeight='100px';
   setTimeout(()=>w.scrollTop=w.scrollHeight,50);
 }
+window.addEventListener('resize',ajustarAlturas);
 
 (async()=>{
   const{data:{session}}=await sb.auth.getSession();
@@ -397,38 +351,21 @@ function renderChats(lista){
   });
 }
 
-window.filtrarChats=q=>{
-  const ql=q.toLowerCase();
-  renderChats(todosChats.filter(c=>(c.emprendedor_nombre||'').toLowerCase().includes(ql)||(c.producto_nombre||'').toLowerCase().includes(ql)||(c.ultimo_mensaje||'').toLowerCase().includes(ql)));
-};
+window.filtrarChats=q=>{const ql=q.toLowerCase();renderChats(todosChats.filter(c=>(c.emprendedor_nombre||'').toLowerCase().includes(ql)||(c.producto_nombre||'').toLowerCase().includes(ql)||(c.ultimo_mensaje||'').toLowerCase().includes(ql)));};
 
 async function abrirChat(chat){
   chatActivo=chat;
   document.getElementById('vista-lista').style.display='none';
   document.getElementById('vista-chat').style.display='block';
-
   const nombre=chat.emprendedor_nombre||'Emprendedor';
   document.getElementById('ch-av').textContent=nombre[0].toUpperCase();
   document.getElementById('ch-av').style.background=bgCol(nombre);
   document.getElementById('ch-nombre').textContent=nombre;
   document.getElementById('ch-sub').textContent=chat.producto_nombre||'Conversación general';
-
   if(chat.producto_id){
     const{data:p}=await sb.from('productos').select('*').eq('id',chat.producto_id).single();
-    if(p){
-      prodActivo=p;
-      const ban=document.getElementById('prod-banner');
-      ban.style.display='flex';
-      const img=p.imagenes?.[0]||p.imagen||'';
-      if(img)document.getElementById('pb-img').innerHTML=`<img src="${img}" alt="">`;
-      document.getElementById('pb-nombre').textContent=p.nombre||'Producto';
-      document.getElementById('pb-precio').textContent=`$${Number(p.precio||0).toFixed(2)} / ${p.unidad||'und'}`;
-    }
-  } else {
-    prodActivo=null;
-    document.getElementById('prod-banner').style.display='none';
-  }
-
+    if(p){prodActivo=p;document.getElementById('prod-banner').style.display='flex';const img=p.imagenes?.[0]||p.imagen||'';if(img)document.getElementById('pb-img').innerHTML=`<img src="${img}" alt="">`;document.getElementById('pb-nombre').textContent=p.nombre||'Producto';document.getElementById('pb-precio').textContent=`$${Number(p.precio||0).toFixed(2)} / ${p.unidad||'und'}`;}
+  } else {prodActivo=null;document.getElementById('prod-banner').style.display='none';}
   await sb.from('chats').update({no_leido:0}).eq('id',chat.id);
   await cargarMsgs();
   setTimeout(ajustarAlturas,100);
@@ -441,12 +378,8 @@ async function cargarMsgs(){
 }
 
 function renderMsgs(){
-  const wrap=document.getElementById('msgs-wrap');
-  wrap.innerHTML='';
-  if(!msgs.length){
-    wrap.innerHTML='<div style="text-align:center;padding:40px 20px;color:#333;font-size:0.82rem;">Sin mensajes aún. ¡Responde al emprendedor! 👋</div>';
-    return;
-  }
+  const wrap=document.getElementById('msgs-wrap');wrap.innerHTML='';
+  if(!msgs.length){wrap.innerHTML='<div style="text-align:center;padding:40px 20px;color:#333;font-size:0.82rem;">Sin mensajes aún. ¡Responde al emprendedor! 👋</div>';return;}
   msgs.forEach(m=>wrap.appendChild(crearElMsg(m)));
   setTimeout(()=>wrap.scrollTop=wrap.scrollHeight,80);
 }
@@ -456,31 +389,42 @@ function crearElMsg(m){
   const hora=new Date(m.created_at).toLocaleTimeString('es-EC',{hour:'2-digit',minute:'2-digit'});
   if(m.tipo==='negociacion')return crearElNeg(m,mio,hora);
   if(m.tipo==='carrito')return crearElCarrito(m,hora);
-  const d=document.createElement('div');
-  d.className=`msg ${mio?'mio':'suyo'}`;
-  d.innerHTML=`<div class="msg-b">${escH(m.texto||'')}</div><div class="msg-hora">${hora}${mio?' ✓✓':''}</div>`;
-  return d;
+  const d=document.createElement('div');d.className=`msg ${mio?'mio':'suyo'}`;d.dataset.id=m.id;
+  const burbuja=document.createElement('div');burbuja.className='msg-b';burbuja.textContent=m.texto||'';
+  if(mio){
+    let pt;
+    burbuja.addEventListener('touchstart',e=>{pt=setTimeout(()=>mostrarMenu(m.id,e.touches[0].clientX,e.touches[0].clientY),600);},{passive:true});
+    burbuja.addEventListener('touchend',()=>clearTimeout(pt),{passive:true});
+    burbuja.addEventListener('touchmove',()=>clearTimeout(pt),{passive:true});
+    burbuja.addEventListener('contextmenu',e=>{e.preventDefault();mostrarMenu(m.id,e.clientX,e.clientY);});
+  }
+  const horaEl=document.createElement('div');horaEl.className='msg-hora';horaEl.textContent=hora+(mio?' ✓✓':'');
+  d.appendChild(burbuja);d.appendChild(horaEl);return d;
 }
+
+function mostrarMenu(msgId,x,y){
+  msgMenuId=msgId;
+  const menu=document.getElementById('msg-menu');
+  const mx=Math.min(x,window.innerWidth-160);
+  const my=Math.min(y,window.innerHeight-80);
+  menu.style.left=mx+'px';menu.style.top=my+'px';
+  menu.classList.add('show');
+  document.getElementById('overlay-menu').classList.add('show');
+}
+window.cerrarMenu=function(){document.getElementById('msg-menu').classList.remove('show');document.getElementById('overlay-menu').classList.remove('show');msgMenuId=null;};
+window.borrarMsgConfirm=async function(){
+  if(!msgMenuId)return;cerrarMenu();
+  await sb.from('mensajes').delete().eq('id',msgMenuId);
+  msgs=msgs.filter(m=>m.id!==msgMenuId);renderMsgs();showToast('Mensaje eliminado');
+};
 
 function crearElNeg(m,mio,hora){
   const dat=m.data||{};const est=dat.estado||'pendiente';
-  // Proveedor responde propuestas del emprendedor (no mio = llegó del emprendedor)
   const puedeResp=!mio&&est==='pendiente';
-  let iHtml='';
-  (dat.items||[]).forEach(it=>{iHtml+=`<div class="mn-item-row"><span class="mn-nom">${it.nombre} ×${it.cantidad||1}</span><span class="mn-orig">$${Number(it.precioOriginal||0).toFixed(2)}</span><span class="mn-new">$${Number(it.precioOfertado||0).toFixed(2)}</span></div>`;});
+  let iHtml='';(dat.items||[]).forEach(it=>{iHtml+=`<div class="mn-item-row"><span class="mn-nom">${it.nombre} ×${it.cantidad||1}</span><span class="mn-orig">$${Number(it.precioOriginal||0).toFixed(2)}</span><span class="mn-new">$${Number(it.precioOfertado||0).toFixed(2)}</span></div>`;});
   const wrap=document.createElement('div');wrap.className='msg-especial';
   const card=document.createElement('div');card.className='msg-neg-card';
-  card.innerHTML=`
-    <div class="mn-head">🤝 ${mio?'Oferta enviada':'Propuesta del emprendedor'}</div>
-    ${iHtml?`<div style="margin-bottom:8px;">${iHtml}</div>`:''}
-    <div class="mn-totales"><span class="mn-tot-orig">$${Number(dat.totalOriginal||0).toFixed(2)}</span><span style="color:#333;margin:0 4px;">→</span><span class="mn-tot-new">$${Number(dat.totalOfertado||0).toFixed(2)}</span></div>
-    ${dat.mensaje?`<div class="mn-nota-txt">"${escH(dat.mensaje)}"</div>`:''}
-    ${puedeResp?`<div class="mn-bts">
-      <button class="mn-bt ok" onclick="respNeg('${m.id}','aceptado')">✓ Aceptar</button>
-      <button class="mn-bt cnt" onclick="abrirNeg()">↔ Contraoferta</button>
-      <button class="mn-bt no" onclick="respNeg('${m.id}','rechazado')">✕ Rechazar</button>
-    </div>`:`<div class="mn-status ${est}">${est==='aceptado'?'✅ Aceptado':est==='rechazado'?'❌ Rechazado':'⏳ Pendiente de respuesta'}</div>`}
-    <div class="mn-hora-small">${hora}</div>`;
+  card.innerHTML=`<div class="mn-head">🤝 ${mio?'Oferta enviada':'Propuesta del emprendedor'}</div>${iHtml?`<div style="margin-bottom:8px;">${iHtml}</div>`:''}<div class="mn-totales"><span class="mn-tot-orig">$${Number(dat.totalOriginal||0).toFixed(2)}</span><span style="color:#333;margin:0 4px;">→</span><span class="mn-tot-new">$${Number(dat.totalOfertado||0).toFixed(2)}</span></div>${dat.mensaje?`<div class="mn-nota-txt">"${escH(dat.mensaje)}"</div>`:''}${puedeResp?`<div class="mn-bts"><button class="mn-bt ok" onclick="respNeg('${m.id}','aceptado')">✓ Aceptar</button><button class="mn-bt cnt" onclick="abrirNeg()">↔ Contraoferta</button><button class="mn-bt no" onclick="respNeg('${m.id}','rechazado')">✕ Rechazar</button></div>`:`<div class="mn-status ${est}">${est==='aceptado'?'✅ Aceptado':est==='rechazado'?'❌ Rechazado':'⏳ Pendiente'}</div>`}<div class="mn-hora-small">${hora}</div>`;
   wrap.appendChild(card);return wrap;
 }
 
@@ -496,11 +440,12 @@ function crearElCarrito(m,hora){
 window.enviarMsg=async function(){
   const ta=document.getElementById('msg-ta');const txt=ta.value.trim();
   if(!txt||!chatActivo)return;ta.value='';resizeTA(ta);
+  const temp={id:'tmp_'+Date.now(),chat_id:chatActivo.id,autor_id:userId,autor_nombre:userData.empresa||userData.nombre||'Proveedor',texto:txt,tipo:'texto',created_at:new Date().toISOString()};
+  msgs.push(temp);renderMsgs();
   const{data:nm}=await sb.from('mensajes').insert({chat_id:chatActivo.id,autor_id:userId,autor_nombre:userData.empresa||userData.nombre||'Proveedor',texto:txt,tipo:'texto',created_at:new Date().toISOString()}).select().single();
-  if(nm){msgs.push(nm);renderMsgs();}
+  if(nm){const idx=msgs.findIndex(m=>m.id===temp.id);if(idx>=0)msgs[idx]=nm;renderMsgs();}
   await sb.from('chats').update({ultimo_mensaje:txt.slice(0,60),updated_at:new Date().toISOString()}).eq('id',chatActivo.id);
 };
-
 window.keyMsg=e=>{if(e.key==='Enter'&&!e.shiftKey){e.preventDefault();enviarMsg();}};
 window.resizeTA=function(el){el.style.height='auto';el.style.height=Math.min(el.scrollHeight,120)+'px';setTimeout(ajustarAlturas,50);};
 
@@ -508,11 +453,9 @@ window.abrirNeg=function(){
   if(!prodActivo){showToast('No hay producto en esta conversación');return;}
   itemsNeg={};
   itemsNeg[prodActivo.id]={nombre:prodActivo.nombre,precio:Number(prodActivo.precio||0),oferta:Number(prodActivo.precio||0),cantidad:1,imagen:prodActivo.imagenes?.[0]||''};
-  renderNegItems();calcResumen();
-  document.getElementById('neg-nota').value='';
+  renderNegItems();calcResumen();document.getElementById('neg-nota').value='';
   document.getElementById('modal-neg').classList.add('show');
 };
-
 function renderNegItems(){
   const wrap=document.getElementById('neg-items-wrap');wrap.innerHTML='';
   Object.entries(itemsNeg).forEach(([id,it])=>{
@@ -521,16 +464,13 @@ function renderNegItems(){
     wrap.appendChild(d);
   });
 }
-
 window.updOf=function(id,v){if(itemsNeg[id])itemsNeg[id].oferta=parseFloat(v)||0;calcResumen();};
 function calcResumen(){
   let orig=0,of=0;Object.values(itemsNeg).forEach(p=>{orig+=p.precio*p.cantidad;of+=p.oferta*p.cantidad;});
   document.getElementById('nr-orig').textContent='$'+orig.toFixed(2);
   document.getElementById('nr-oferta').textContent='$'+of.toFixed(2);
-  const ah=orig-of;const el=document.getElementById('nr-ahorro');
-  el.textContent='$'+Math.abs(ah).toFixed(2);el.style.color=ah>0?'var(--verde)':'#444';
+  const ah=orig-of;const el=document.getElementById('nr-ahorro');el.textContent='$'+Math.abs(ah).toFixed(2);el.style.color=ah>0?'var(--verde)':'#444';
 }
-
 window.enviarNeg=async function(){
   if(!chatActivo)return;
   const items=Object.entries(itemsNeg).map(([id,p])=>({id,nombre:p.nombre,cantidad:p.cantidad,imagen:p.imagen,precioOriginal:p.precio,precioOfertado:p.oferta}));
@@ -542,21 +482,26 @@ window.enviarNeg=async function(){
   await sb.from('chats').update({ultimo_mensaje:`💰 Oferta $${tN.toFixed(2)}`,negociacion_activa:true,updated_at:new Date().toISOString()}).eq('id',chatActivo.id);
   document.getElementById('modal-neg').classList.remove('show');showToast('✓ Oferta enviada');
 };
-
 window.respNeg=async function(msgId,estado){
   const m=msgs.find(x=>x.id===msgId);if(!m)return;
   const dat={...m.data,estado};
   await sb.from('mensajes').update({data:dat}).eq('id',msgId);
-  const txt=estado==='aceptado'?`✅ Acepté la propuesta de $${Number(m.data.totalOfertado||0).toFixed(2)}.`:'❌ No puedo aceptar esa propuesta. Podemos seguir negociando.';
+  const txt=estado==='aceptado'?`✅ Acepté la propuesta de $${Number(m.data.totalOfertado||0).toFixed(2)}.`:'❌ No puedo aceptar esa propuesta.';
   await sb.from('mensajes').insert({chat_id:chatActivo.id,autor_id:userId,autor_nombre:userData.empresa||userData.nombre||'Proveedor',texto:txt,tipo:'texto',created_at:new Date().toISOString()});
   await sb.from('chats').update({negociacion_activa:false,ultimo_mensaje:txt.slice(0,60),updated_at:new Date().toISOString()}).eq('id',chatActivo.id);
   const idx=msgs.findIndex(x=>x.id===msgId);if(idx>=0)msgs[idx].data=dat;
-  await cargarMsgs();showToast(estado==='aceptado'?'✅ Propuesta aceptada':'Propuesta rechazada');
+  await cargarMsgs();showToast(estado==='aceptado'?'✅ Aceptada':'Rechazada');
 };
 
+// REALTIME CORRECTO
 function suscribir(){
   if(rtSub)sb.removeChannel(rtSub);
-  rtSub=sb.channel(`cprov-${chatActivo.id}`).on('postgres_changes',{event:'INSERT',schema:'public',table:'mensajes',filter:`chat_id=eq.${chatActivo.id}`},pld=>{if(pld.new.autor_id!==userId){msgs.push(pld.new);renderMsgs();}}).subscribe();
+  rtSub=sb.channel('chat-prov-'+chatActivo.id)
+    .on('postgres_changes',{event:'INSERT',schema:'public',table:'mensajes',filter:'chat_id=eq.'+chatActivo.id},
+      pld=>{if(pld.new.autor_id!==userId&&!msgs.find(m=>m.id===pld.new.id)){msgs.push(pld.new);renderMsgs();}})
+    .on('postgres_changes',{event:'DELETE',schema:'public',table:'mensajes',filter:'chat_id=eq.'+chatActivo.id},
+      pld=>{msgs=msgs.filter(m=>m.id!==pld.old.id);renderMsgs();})
+    .subscribe();
 }
 
 function volverLista(){
@@ -567,7 +512,6 @@ function volverLista(){
   cargarChats();
 }
 
-window.addEventListener('resize',ajustarAlturas);
 function bgCol(n){const c=['#FF8C00','#007AFF','#A8E63D','#A855F7','#FF4D4D','#F59E0B'];return c[Math.abs((n||'').charCodeAt(0)||0)%c.length];}
 window.cerrarMod=(id,e)=>{if(e.target===document.getElementById(id))document.getElementById(id).classList.remove('show');};
 function escH(t){return(t||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');}
