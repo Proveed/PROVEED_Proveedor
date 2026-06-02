@@ -462,22 +462,25 @@ window.respNeg=async function(msgId,estado){
 
 // REALTIME CORRECTO
 function suscribir(){
-  if(rtSub)sb.removeChannel(rtSub);
-  rtSub=sb.channel('cprov-'+chatActivo.id+'-'+Date.now())
-    .on('postgres_changes',{event:'INSERT',schema:'public',table:'mensajes',filter:`chat_id=eq.${chatActivo.id}`},pld=>{
-      const n=pld.new;
-      if(n.autor_id===userId){
-        const i=msgs.findIndex(m=>m.id&&m.id.startsWith('tmp_')&&m.texto===n.texto&&m.autor_id===n.autor_id);
-        if(i>=0)msgs[i]=n;else if(!msgs.find(m=>m.id===n.id))msgs.push(n);
-      }else{
-        if(!msgs.find(m=>m.id===n.id))msgs.push(n);
-      }
-      renderMsgs();
+  if(rtSub) sb.removeChannel(rtSub);
+  rtSub = sb.channel('room-prov-' + chatActivo.id)
+    .on('postgres_changes',{
+      event:'INSERT',
+      schema:'public',
+      table:'mensajes',
+      filter:`chat_id=eq.${chatActivo.id}`
+    }, async () => {
+      await cargarMsgs();
     })
-    .on('postgres_changes',{event:'DELETE',schema:'public',table:'mensajes',filter:`chat_id=eq.${chatActivo.id}`},pld=>{
-      msgs=msgs.filter(m=>m.id!==pld.old.id);renderMsgs();
+    .on('postgres_changes',{
+      event:'DELETE',
+      schema:'public',
+      table:'mensajes',
+      filter:`chat_id=eq.${chatActivo.id}`
+    }, async () => {
+      await cargarMsgs();
     })
-    .subscribe(s=>console.log('RT prov:',s));
+    .subscribe();
 }
 
 function volverLista(){
