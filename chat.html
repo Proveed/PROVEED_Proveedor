@@ -411,14 +411,28 @@ function crearElCarrito(m,hora){
   w.appendChild(c);return w;
 }
 
-window.enviarMsg=async function(){
-  const ta=document.getElementById('msg-ta');const txt=ta.value.trim();
-  if(!txt||!chatActivo)return;ta.value='';resizeTA(ta);
-  const tmp={id:'tmp_'+Date.now(),chat_id:chatActivo.id,autor_id:userId,autor_nombre:userData.empresa||userData.nombre||'Proveedor',texto:txt,tipo:'texto',created_at:new Date().toISOString()};
-  msgs.push(tmp);renderMsgs();
-  const{data:nm}=await sb.from('mensajes').insert({chat_id:chatActivo.id,autor_id:userId,autor_nombre:userData.empresa||userData.nombre||'Proveedor',texto:txt,tipo:'texto',created_at:new Date().toISOString()}).select().single();
-  if(nm){const i=msgs.findIndex(m=>m.id===tmp.id);if(i>=0)msgs[i]=nm;renderMsgs();}
-  await sb.from('chats').update({ultimo_mensaje:txt.slice(0,60),updated_at:new Date().toISOString()}).eq('id',chatActivo.id);
+window.enviarMsg = async function(){
+  const ta = document.getElementById('msg-ta');
+  const txt = ta.value.trim();
+  if(!txt || !chatActivo) return;
+  ta.value = ''; resizeTA(ta);
+  
+  await sb.from('mensajes').insert({
+    chat_id: chatActivo.id,
+    autor_id: userId,
+    autor_nombre: userData.nombre || userData.empresa || 'Usuario',
+    texto: txt,
+    tipo: 'texto',
+    created_at: new Date().toISOString()
+  });
+  
+  await sb.from('chats').update({
+    ultimo_mensaje: txt.slice(0,60),
+    updated_at: new Date().toISOString()
+  }).eq('id', chatActivo.id);
+  
+  // Recargar inmediatamente
+  await cargarMsgs();
 };
 window.keyMsg=e=>{if(e.key==='Enter'&&!e.shiftKey){e.preventDefault();enviarMsg();}};
 window.resizeTA=function(el){el.style.height='auto';el.style.height=Math.min(el.scrollHeight,120)+'px';setTimeout(ajustarAlturas,50);};
