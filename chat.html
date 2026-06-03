@@ -243,7 +243,6 @@ body{background:var(--negro);font-family:'Inter',sans-serif;-webkit-font-smoothi
 </nav>
 <div class="toast" id="toast"></div>
 
-
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script>
 const {createClient}=supabase;
@@ -411,28 +410,14 @@ function crearElCarrito(m,hora){
   w.appendChild(c);return w;
 }
 
-window.enviarMsg = async function(){
-  const ta = document.getElementById('msg-ta');
-  const txt = ta.value.trim();
-  if(!txt || !chatActivo) return;
-  ta.value = ''; resizeTA(ta);
-  
-  await sb.from('mensajes').insert({
-    chat_id: chatActivo.id,
-    autor_id: userId,
-    autor_nombre: userData.nombre || userData.empresa || 'Usuario',
-    texto: txt,
-    tipo: 'texto',
-    created_at: new Date().toISOString()
-  });
-  
-  await sb.from('chats').update({
-    ultimo_mensaje: txt.slice(0,60),
-    updated_at: new Date().toISOString()
-  }).eq('id', chatActivo.id);
-  
-  // Recargar inmediatamente
-  await cargarMsgs();
+window.enviarMsg=async function(){
+  const ta=document.getElementById('msg-ta');const txt=ta.value.trim();
+  if(!txt||!chatActivo)return;ta.value='';resizeTA(ta);
+  const tmp={id:'tmp_'+Date.now(),chat_id:chatActivo.id,autor_id:userId,autor_nombre:userData.empresa||userData.nombre||'Proveedor',texto:txt,tipo:'texto',created_at:new Date().toISOString()};
+  msgs.push(tmp);renderMsgs();
+  const{data:nm}=await sb.from('mensajes').insert({chat_id:chatActivo.id,autor_id:userId,autor_nombre:userData.empresa||userData.nombre||'Proveedor',texto:txt,tipo:'texto',created_at:new Date().toISOString()}).select().single();
+  if(nm){const i=msgs.findIndex(m=>m.id===tmp.id);if(i>=0)msgs[i]=nm;renderMsgs();}
+  await sb.from('chats').update({ultimo_mensaje:txt.slice(0,60),updated_at:new Date().toISOString()}).eq('id',chatActivo.id);
 };
 window.keyMsg=e=>{if(e.key==='Enter'&&!e.shiftKey){e.preventDefault();enviarMsg();}};
 window.resizeTA=function(el){el.style.height='auto';el.style.height=Math.min(el.scrollHeight,120)+'px';setTimeout(ajustarAlturas,50);};
@@ -462,7 +447,6 @@ window.enviarNeg=async function(){
   await sb.from('chats').update({ultimo_mensaje:`💰 Oferta $${tN.toFixed(2)}`,negociacion_activa:true,updated_at:new Date().toISOString()}).eq('id',chatActivo.id);
   document.getElementById('modal-neg').classList.remove('show');showToast('✓ Oferta enviada');
 };
-
 window.respNeg=async function(msgId,estado){
   const m=msgs.find(x=>x.id===msgId);if(!m)return;
   const dat={...m.data,estado};
@@ -476,25 +460,22 @@ window.respNeg=async function(msgId,estado){
 
 // REALTIME CORRECTO
 function suscribir(){
-  if(rtSub) sb.removeChannel(rtSub);
-  rtSub = sb.channel('room-prov-' + chatActivo.id)
-    .on('postgres_changes',{
-      event:'INSERT',
-      schema:'public',
-      table:'mensajes',
-      filter:`chat_id=eq.${chatActivo.id}`
-    }, async () => {
-      await cargarMsgs();
+  if(rtSub)sb.removeChannel(rtSub);
+  rtSub=sb.channel('cprov-'+chatActivo.id+'-'+Date.now())
+    .on('postgres_changes',{event:'INSERT',schema:'public',table:'mensajes',filter:`chat_id=eq.${chatActivo.id}`},pld=>{
+      const n=pld.new;
+      if(n.autor_id===userId){
+        const i=msgs.findIndex(m=>m.id&&m.id.startsWith('tmp_')&&m.texto===n.texto&&m.autor_id===n.autor_id);
+        if(i>=0)msgs[i]=n;else if(!msgs.find(m=>m.id===n.id))msgs.push(n);
+      }else{
+        if(!msgs.find(m=>m.id===n.id))msgs.push(n);
+      }
+      renderMsgs();
     })
-    .on('postgres_changes',{
-      event:'DELETE',
-      schema:'public',
-      table:'mensajes',
-      filter:`chat_id=eq.${chatActivo.id}`
-    }, async () => {
-      await cargarMsgs();
+    .on('postgres_changes',{event:'DELETE',schema:'public',table:'mensajes',filter:`chat_id=eq.${chatActivo.id}`},pld=>{
+      msgs=msgs.filter(m=>m.id!==pld.old.id);renderMsgs();
     })
-    .subscribe();
+    .subscribe(s=>console.log('RT prov:',s));
 }
 
 function volverLista(){
