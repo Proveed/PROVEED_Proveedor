@@ -356,23 +356,29 @@ async function cargarMsgs() {
       .order('created_at', { ascending: true });
 
     if (error) {
-      console.error('Error de Supabase:', error);
+      console.error('Error de carga:', error);
       return;
     }
 
     msgs = data || [];
     renderMsgs();
+
+    // NUEVO: Ajuste forzado en dos tiempos para asegurar que aparezcan
+    // 1. Ajuste inmediato
+    ajustarAlturas();
     
-    // Forzar scroll al final después de un breve momento
+    // 2. Ajuste de seguridad a los 300ms (cuando el DOM ya está listo)
     setTimeout(() => {
-        const wrap = document.getElementById('msgs-wrap');
-        wrap.scrollTop = wrap.scrollHeight;
-    }, 100);
-    
+      const wrap = document.getElementById('msgs-wrap');
+      wrap.scrollTop = wrap.scrollHeight;
+      ajustarAlturas();
+    }, 300);
+
   } catch (e) {
     console.error('Error inesperado:', e);
   }
 }
+
 
 
 function renderMsgs(){
