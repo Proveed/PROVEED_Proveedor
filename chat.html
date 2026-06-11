@@ -281,10 +281,21 @@ const QS=new URLSearchParams(location.search);
   const cId=QS.get('chat_id');
   if(cId){const c=todos.find(x=>x.id===cId);if(c) abrirChat(c);}
 })();
-
 async function cargarChats(){
-  const {data}=await db.from('chats').select('*').eq('proveedor_id',uid).order('updated_at',{ascending:false});
-  todos=data||[];pintarLista(todos);
+  const {data, error} = await db.from('chats')
+    .select('*')
+    .eq('proveedor_id', uid)
+    .order('created_at', {ascending: false});
+  
+  if(error){
+    const {data:d2} = await db.from('chats')
+      .select('*')
+      .eq('proveedor_id', uid);
+    todos = d2 || [];
+  } else {
+    todos = data || [];
+  }
+  pintarLista(todos);
 }
 
 function pintarLista(arr){
