@@ -558,8 +558,8 @@ function pintarCat(arr){
         <div class="catCardNom">${p.nombre||'Producto'}</div>
         <div class="catCardPre">$${Number(p.precio||0).toFixed(2)}</div>
         <button class="catCardBtn" style="${enOferta?'background:#333;color:#888;':'background:var(--G);color:#111;'}"
-          onclick="${catModoOferta?`addAOferta('${p.id}','${(p.nombre||'').replace(/'/g,'')}',${p.precio||0},'${img}')`:`verProd('${p.id}')`}">
-          ${catModoOferta?(enOferta?'✓ Ya en oferta':'+ Agregar a oferta'):'Ver producto'}
+          onclick="addAOferta('${p.id}','${(p.nombre||'').replace(/'/g,'')}',${p.precio||0},'${img}')">
+${enOferta?'✓ Ya agregado':'+ Agregar a oferta'}
         </button>
       </div>`;
     w.appendChild(d);
