@@ -4,135 +4,212 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
 <title>PROVEED — Panel</title>
+<meta name="theme-color" content="#ffffff" id="theme-color-meta">
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
 <style>
 *{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent;}
-:root{--acc:#FF8C00;--verde:#A8E63D;--negro:#0A0A0A;--rojo:#FF4D4D;--azul:#007AFF;}
-body{background:var(--negro);font-family:'Inter',sans-serif;-webkit-font-smoothing:antialiased;padding-bottom:90px;color:white;}
+:root{
+  --acc:#FF8C00;
+  --verde:#A8E63D;
+  --rojo:#FF4D4D;
+  --azul:#007AFF;
+}
+
+/* MODO OSCURO (default) */
+body{background:#0A0A0A;font-family:'Inter',sans-serif;-webkit-font-smoothing:antialiased;padding-bottom:90px;color:white;}
+body.dark{background:#0A0A0A;color:white;}
+body.light{background:#F5F6F2;color:#111;}
 
 /* HEADER */
-.header{padding:48px 20px 16px;display:flex;align-items:center;justify-content:space-between;}
+body.dark .header{background:#0A0A0A;}
+body.light .header{background:#fff;border-bottom:1px solid #eee;}
+.header{padding:48px 20px 16px;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;z-index:100;transition:.2s;}
+
 .header-left{display:flex;align-items:center;gap:10px;}
-.pv-logo{width:40px;height:40px;flex-shrink:0;position:relative;}
-.pv-logo svg{width:40px;height:40px;}
-.brand-txt{}
-.brand-name{font-size:1.1rem;font-weight:900;color:white;letter-spacing:-0.3px;line-height:1;}
+.brand-name{font-size:1.1rem;font-weight:900;letter-spacing:-0.3px;line-height:1;}
+body.dark .brand-name{color:white;}
+body.light .brand-name{color:#111;}
 .brand-name span{color:var(--acc);}
-.brand-sub{font-size:0.72rem;color:#555;font-weight:500;margin-top:2px;}
-.header-right{display:flex;gap:8px;}
-.hbtn{width:38px;height:38px;background:#1a1a1a;border-radius:12px;border:none;cursor:pointer;display:flex;align-items:center;justify-content:center;position:relative;}
-.hbtn svg{width:18px;height:18px;stroke:#666;fill:none;stroke-width:2;stroke-linecap:round;stroke-linejoin:round;}
-.hbtn-dot{position:absolute;top:7px;right:7px;width:7px;height:7px;border-radius:50%;background:var(--rojo);border:1.5px solid var(--negro);}
+.brand-sub{font-size:0.72rem;font-weight:500;margin-top:2px;}
+body.dark .brand-sub{color:#555;}
+body.light .brand-sub{color:#aaa;}
+.header-right{display:flex;gap:8px;align-items:center;}
+
+/* BOTONES HEADER */
+.hbtn{width:38px;height:38px;border-radius:12px;border:none;cursor:pointer;display:flex;align-items:center;justify-content:center;position:relative;}
+body.dark .hbtn{background:#1a1a1a;}
+body.light .hbtn{background:var(--F,#F5F6F2);border:1px solid #eee;}
+.hbtn svg{width:18px;height:18px;fill:none;stroke-width:2;stroke-linecap:round;stroke-linejoin:round;}
+body.dark .hbtn svg{stroke:#666;}
+body.light .hbtn svg{stroke:#555;}
+.hbtn-dot{position:absolute;top:7px;right:7px;width:7px;height:7px;border-radius:50%;background:var(--rojo);}
+body.dark .hbtn-dot{border:1.5px solid #0A0A0A;}
+body.light .hbtn-dot{border:1.5px solid #fff;}
+
+/* TOGGLE MODO */
+.modo-btn{width:38px;height:38px;border-radius:12px;border:none;cursor:pointer;display:flex;align-items:center;justify-content:center;font-size:1.1rem;}
+body.dark .modo-btn{background:#1a1a1a;}
+body.light .modo-btn{background:#F5F6F2;border:1px solid #eee;}
 
 /* BIENVENIDA */
 .welcome{padding:0 20px 20px;}
-.welcome-sub{font-size:0.78rem;color:#444;font-weight:500;}
-.welcome-name{font-size:1.3rem;font-weight:900;color:white;margin-top:2px;}
+.welcome-sub{font-size:0.78rem;font-weight:500;}
+body.dark .welcome-sub{color:#444;}
+body.light .welcome-sub{color:#aaa;}
+.welcome-name{font-size:1.3rem;font-weight:900;margin-top:2px;}
+body.dark .welcome-name{color:white;}
+body.light .welcome-name{color:#111;}
 
-/* KPI SCROLL */
+/* KPI */
 .kpi-row{display:flex;gap:10px;padding:0 20px 20px;overflow-x:auto;scrollbar-width:none;}
 .kpi-row::-webkit-scrollbar{display:none;}
-.kpi-card{background:#161616;border-radius:18px;padding:16px;min-width:130px;flex-shrink:0;border:1px solid #1e1e1e;}
-.kpi-val{font-size:1.6rem;font-weight:900;color:white;line-height:1;}
+.kpi-card{border-radius:18px;padding:16px;min-width:130px;flex-shrink:0;}
+body.dark .kpi-card{background:#161616;border:1px solid #1e1e1e;}
+body.light .kpi-card{background:#fff;border:1px solid #eee;box-shadow:0 1px 6px rgba(0,0,0,.05);}
+.kpi-val{font-size:1.6rem;font-weight:900;line-height:1;}
+body.dark .kpi-val{color:white;}
+body.light .kpi-val{color:#111;}
 .kpi-val.acc{color:var(--acc);}
 .kpi-val.verde{color:var(--verde);}
 .kpi-val.azul{color:var(--azul);}
-.kpi-lbl{font-size:0.6rem;font-weight:700;color:#444;text-transform:uppercase;letter-spacing:0.8px;margin-top:6px;}
-.kpi-delta{font-size:0.68rem;color:#555;margin-top:4px;}
-.kpi-delta.verde{color:var(--verde);}
+.kpi-lbl{font-size:0.6rem;font-weight:700;text-transform:uppercase;letter-spacing:0.8px;margin-top:6px;}
+body.dark .kpi-lbl{color:#444;}
+body.light .kpi-lbl{color:#aaa;}
+.kpi-delta{font-size:0.68rem;margin-top:4px;}
+body.dark .kpi-delta{color:#555;}
+body.light .kpi-delta{color:#bbb;}
+.kpi-delta.verde{color:var(--verde)!important;}
 
 /* SECCIÓN TÍTULO */
-.sec-label{font-size:0.65rem;font-weight:800;color:#333;text-transform:uppercase;letter-spacing:1px;padding:0 20px;margin-bottom:12px;}
+.sec-label{font-size:0.65rem;font-weight:800;text-transform:uppercase;letter-spacing:1px;padding:0 20px;margin-bottom:12px;}
+body.dark .sec-label{color:#333;}
+body.light .sec-label{color:#aaa;}
 
-/* MÓDULOS GRID */
+/* MÓDULOS */
 .modulos-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;padding:0 20px;margin-bottom:20px;}
-.modulo{background:#161616;border-radius:20px;padding:18px 12px 14px;display:flex;flex-direction:column;align-items:center;gap:10px;cursor:pointer;border:1px solid #1e1e1e;transition:0.15s;text-decoration:none;}
+.modulo{border-radius:20px;padding:18px 12px 14px;display:flex;flex-direction:column;align-items:center;gap:10px;cursor:pointer;transition:0.15s;text-decoration:none;}
 .modulo:active{transform:scale(0.95);}
+body.dark .modulo{background:#161616;border:1px solid #1e1e1e;}
+body.light .modulo{background:#fff;border:1px solid #eee;box-shadow:0 1px 6px rgba(0,0,0,.04);}
 .modulo-icon{width:52px;height:52px;border-radius:16px;display:flex;align-items:center;justify-content:center;}
 .modulo-icon svg{width:26px;height:26px;fill:none;stroke-width:2;stroke-linecap:round;stroke-linejoin:round;}
-.modulo-lbl{font-size:0.75rem;font-weight:700;color:white;text-align:center;}
+.modulo-lbl{font-size:0.75rem;font-weight:700;text-align:center;}
+body.dark .modulo-lbl{color:white;}
+body.light .modulo-lbl{color:#111;}
 
 /* REALTIME */
-.realtime-pill{display:inline-flex;align-items:center;gap:5px;background:rgba(168,230,61,0.08);border:1px solid rgba(168,230,61,0.15);border-radius:20px;padding:4px 10px;margin:0 20px 16px;}
+.realtime-pill{display:inline-flex;align-items:center;gap:5px;border-radius:20px;padding:4px 10px;margin:0 20px 16px;}
+body.dark .realtime-pill{background:rgba(168,230,61,0.08);border:1px solid rgba(168,230,61,0.15);}
+body.light .realtime-pill{background:rgba(168,230,61,0.1);border:1px solid rgba(168,230,61,0.2);}
 .rt-dot{width:5px;height:5px;border-radius:50%;background:var(--verde);animation:pulse 1.5s infinite;}
 @keyframes pulse{0%,100%{opacity:1}50%{opacity:0.3}}
 .rt-txt{font-size:0.6rem;font-weight:700;color:var(--verde);letter-spacing:0.5px;}
 
-/* PEDIDOS RECIENTES */
-.pedido-row{display:flex;align-items:center;gap:12px;background:#161616;border-radius:14px;padding:13px 14px;margin:0 20px 8px;border:1px solid #1e1e1e;cursor:pointer;transition:0.15s;}
+/* GRÁFICO */
+.chart-wrap{border-radius:18px;margin:0 20px 20px;padding:16px;}
+body.dark .chart-wrap{background:#161616;border:1px solid #1e1e1e;}
+body.light .chart-wrap{background:#fff;border:1px solid #eee;box-shadow:0 1px 6px rgba(0,0,0,.04);}
+.chart-title{font-size:0.68rem;font-weight:700;text-transform:uppercase;letter-spacing:0.8px;margin-bottom:14px;}
+body.dark .chart-title{color:#444;}
+body.light .chart-title{color:#aaa;}
+.chart-bars{display:flex;align-items:flex-end;gap:5px;height:50px;}
+.chart-bar{flex:1;border-radius:4px 4px 0 0;transition:0.5s;min-height:4px;}
+body.dark .chart-bar{background:#222;}
+body.light .chart-bar{background:#eee;}
+.chart-bar.hoy{background:var(--acc);}
+.chart-days{display:flex;gap:5px;margin-top:6px;}
+.chart-day{flex:1;text-align:center;font-size:0.55rem;font-weight:600;}
+body.dark .chart-day{color:#333;}
+body.light .chart-day{color:#bbb;}
+
+/* PEDIDOS */
+.pedido-row{display:flex;align-items:flex-start;gap:12px;border-radius:14px;padding:13px 14px;margin:0 20px 8px;cursor:pointer;transition:0.15s;}
 .pedido-row:active{transform:scale(0.98);}
-.pedido-row.nuevo{border-color:rgba(255,140,0,0.3);}
-.pr-ava{width:38px;height:38px;border-radius:12px;display:flex;align-items:center;justify-content:center;font-size:0.85rem;font-weight:800;color:white;flex-shrink:0;}
-.pr-info{flex:1;}
-.pr-nombre{font-size:0.85rem;font-weight:700;color:white;}
-.pr-det{font-size:0.68rem;color:#444;margin-top:2px;}
-.pr-right{text-align:right;}
-.pr-total{font-size:0.88rem;font-weight:800;color:white;}
+body.dark .pedido-row{background:#161616;border:1px solid #1e1e1e;}
+body.light .pedido-row{background:#fff;border:1px solid #eee;box-shadow:0 1px 4px rgba(0,0,0,.04);}
+body.dark .pedido-row.nuevo{border-color:rgba(255,140,0,0.3);}
+body.light .pedido-row.nuevo{border-color:rgba(255,140,0,0.4);background:rgba(255,140,0,.02);}
+.pr-ava{width:40px;height:40px;border-radius:12px;display:flex;align-items:center;justify-content:center;font-size:0.85rem;font-weight:800;color:white;flex-shrink:0;}
+.pr-info{flex:1;min-width:0;}
+.pr-nombre{font-size:0.85rem;font-weight:700;}
+body.dark .pr-nombre{color:white;}
+body.light .pr-nombre{color:#111;}
+.pr-det{font-size:0.68rem;margin-top:2px;}
+body.dark .pr-det{color:#444;}
+body.light .pr-det{color:#aaa;}
+/* DATOS ENVÍO */
+.pr-envio{font-size:0.64rem;margin-top:4px;line-height:1.5;}
+body.dark .pr-envio{color:#555;}
+body.light .pr-envio{color:#bbb;}
+.pr-envio b{font-weight:700;}
+body.dark .pr-envio b{color:#888;}
+body.light .pr-envio b{color:#555;}
+.pr-right{text-align:right;flex-shrink:0;}
+.pr-total{font-size:0.88rem;font-weight:800;}
+body.dark .pr-total{color:white;}
+body.light .pr-total{color:#111;}
 .pr-estado{font-size:0.58rem;font-weight:700;padding:2px 7px;border-radius:6px;margin-top:3px;display:inline-block;}
 .est-p{background:rgba(255,140,0,0.12);color:var(--acc);}
 .est-e{background:rgba(168,230,61,0.1);color:var(--verde);}
 .est-pr{background:rgba(0,122,255,0.1);color:var(--azul);}
 
-/* VER MÁS */
-.ver-mas{display:flex;align-items:center;justify-content:center;gap:6px;margin:0 20px 20px;padding:13px;background:#161616;border-radius:14px;border:1px solid #1e1e1e;cursor:pointer;font-size:0.8rem;font-weight:700;color:#555;text-decoration:none;}
+.ver-mas{display:flex;align-items:center;justify-content:center;gap:6px;margin:0 20px 20px;padding:13px;border-radius:14px;cursor:pointer;font-size:0.8rem;font-weight:700;text-decoration:none;}
+body.dark .ver-mas{background:#161616;border:1px solid #1e1e1e;color:#555;}
+body.light .ver-mas{background:#fff;border:1px solid #eee;color:#aaa;}
 
-/* GRAFICOBARRA */
-.chart-wrap{background:#161616;border:1px solid #1e1e1e;border-radius:18px;margin:0 20px 20px;padding:16px;}
-.chart-title{font-size:0.68rem;font-weight:700;color:#444;text-transform:uppercase;letter-spacing:0.8px;margin-bottom:14px;}
-.chart-bars{display:flex;align-items:flex-end;gap:5px;height:50px;}
-.chart-bar{flex:1;border-radius:4px 4px 0 0;background:#222;transition:0.5s;min-height:4px;}
-.chart-bar.hoy{background:var(--acc);}
-.chart-days{display:flex;gap:5px;margin-top:6px;}
-.chart-day{flex:1;text-align:center;font-size:0.55rem;color:#333;font-weight:600;}
+.empty{text-align:center;padding:20px;font-size:0.78rem;}
+body.dark .empty{color:#333;}
+body.light .empty{color:#bbb;}
 
 /* TAB BAR */
-.tab-bar{position:fixed;bottom:0;width:100%;background:#111;border-top:1px solid #1a1a1a;display:flex;padding:10px 0 22px;z-index:200;}
-.tab{flex:1;display:flex;flex-direction:column;align-items:center;gap:4px;border:none;background:transparent;cursor:pointer;color:#333;text-decoration:none;font-family:'Inter',sans-serif;}
+.tab-bar{position:fixed;bottom:0;width:100%;display:flex;padding:10px 0 22px;z-index:200;}
+body.dark .tab-bar{background:#111;border-top:1px solid #1a1a1a;}
+body.light .tab-bar{background:#fff;border-top:1px solid #eee;box-shadow:0 -2px 12px rgba(0,0,0,.05);}
+.tab{flex:1;display:flex;flex-direction:column;align-items:center;gap:4px;border:none;background:transparent;cursor:pointer;text-decoration:none;font-family:'Inter',sans-serif;}
+body.dark .tab{color:#333;}
+body.light .tab{color:#ccc;}
 .tab.active{color:var(--acc);}
 .tab svg{width:22px;height:22px;stroke:currentColor;fill:none;stroke-width:2;stroke-linecap:round;stroke-linejoin:round;}
 .tab span{font-size:0.54rem;font-weight:700;text-transform:uppercase;}
 
-/* TOAST */
 .toast{position:fixed;bottom:80px;left:50%;transform:translateX(-50%) translateY(20px);background:#1e1e1e;color:white;padding:10px 20px;border-radius:24px;font-size:0.8rem;font-weight:600;opacity:0;transition:0.3s;pointer-events:none;z-index:2000;white-space:nowrap;border:1px solid #333;}
 .toast.show{opacity:1;transform:translateX(-50%) translateY(0);}
-.empty{text-align:center;padding:20px;color:#333;font-size:0.78rem;}
 </style>
 </head>
-<body>
+<body class="dark">
 
-<!-- HEADER -->
 <div class="header">
   <div class="header-left">
-    <!-- LOGO PROVEED (hexágono + check) sutil -->
-    <div class="pv-logo">
-      <svg viewBox="0 0 40 40" fill="none">
-        <polygon points="20,2 36,11 36,29 20,38 4,29 4,11" fill="#FF8C00" opacity="0.9"/>
-        <polyline points="11,20 17,26 29,14" stroke="white" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
-      </svg>
-    </div>
-    <div class="brand-txt">
-      <div class="brand-name" id="brand-name">PRO<span>VEED</span></div>
+    <!-- LOGO PROVEED verde lima -->
+    <svg width="40" height="40" viewBox="0 0 40 40" fill="none">
+      <polygon points="20,2 36,11 36,29 20,38 4,29 4,11" fill="#A8E63D" opacity="0.95"/>
+      <polyline points="11,20 17,26 29,14" stroke="#111" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
+    </svg>
+    <div>
+      <div class="brand-name">PRO<span>VEED</span></div>
       <div class="brand-sub" id="brand-sub">Panel del proveedor</div>
     </div>
   </div>
   <div class="header-right">
-    <button class="hbtn" onclick="window.location.href='chat.html'">
+    <!-- TOGGLE MODO CLARO/OSCURO -->
+    <button class="modo-btn" id="modo-btn" onclick="toggleModo()" title="Cambiar modo">🌙</button>
+    <!-- CHAT -->
+    <button class="hbtn" onclick="location.href='chat-proveedor.html'">
       <svg viewBox="0 0 24 24"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
       <div class="hbtn-dot" id="chat-notif" style="display:none;"></div>
     </button>
-    <button class="hbtn" onclick="window.location.href='perfil.html'">
+    <!-- PERFIL -->
+    <button class="hbtn" onclick="location.href='perfil.html'">
       <svg viewBox="0 0 24 24"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
     </button>
   </div>
 </div>
 
-<!-- BIENVENIDA -->
 <div class="welcome">
   <div class="welcome-sub">Bienvenido de vuelta</div>
   <div class="welcome-name" id="welcome-name">Proveedor</div>
 </div>
 
-<!-- KPI ROW -->
 <div class="kpi-row">
   <div class="kpi-card">
     <div class="kpi-val acc" id="k-ventas">$0</div>
@@ -153,14 +230,12 @@ body{background:var(--negro);font-family:'Inter',sans-serif;-webkit-font-smoothi
   </div>
 </div>
 
-<!-- GRÁFICO -->
 <div class="chart-wrap">
   <div class="chart-title">Ventas — últimos 7 días</div>
   <div class="chart-bars" id="chart-bars"></div>
   <div class="chart-days" id="chart-days"></div>
 </div>
 
-<!-- MÓDULOS -->
 <div class="sec-label">Módulos</div>
 <div class="modulos-grid">
 
@@ -178,7 +253,7 @@ body{background:var(--negro);font-family:'Inter',sans-serif;-webkit-font-smoothi
     <div class="modulo-lbl">Pedidos</div>
   </a>
 
-  <a class="modulo" href="chat.html">
+  <a class="modulo" href="chat-proveedor.html">
     <div class="modulo-icon" style="background:rgba(168,230,61,0.12);">
       <svg viewBox="0 0 24 24" stroke="#A8E63D"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
     </div>
@@ -206,11 +281,11 @@ body{background:var(--negro);font-family:'Inter',sans-serif;-webkit-font-smoothi
     <div class="modulo-lbl">Facturador</div>
   </a>
 
-  <a class="modulo" href="sucursales-pro.html">
-    <div class="modulo-icon" style="background:rgba(0,199,190,0.12);">
-      <svg viewBox="0 0 24 24" stroke="#00C7BE"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
+  <a class="modulo" href="contabilidad.html">
+    <div class="modulo-icon" style="background:rgba(168,230,61,0.1);">
+      <svg viewBox="0 0 24 24" stroke="#A8E63D"><line x1="12" y1="1" x2="12" y2="23"/><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg>
     </div>
-    <div class="modulo-lbl">Sucursales</div>
+    <div class="modulo-lbl">Contabilidad</div>
   </a>
 
   <a class="modulo" href="plugins.html">
@@ -220,48 +295,26 @@ body{background:var(--negro);font-family:'Inter',sans-serif;-webkit-font-smoothi
     <div class="modulo-lbl">Accesos</div>
   </a>
 
-  <a class="modulo" href="contabilidad.html">
-    <div class="modulo-icon" style="background:rgba(168,230,61,0.1);">
-      <svg viewBox="0 0 24 24" stroke="#A8E63D"><line x1="12" y1="1" x2="12" y2="23"/><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg>
-    </div>
-    <div class="modulo-lbl">Contabilidad</div>
-  </a>
-
-  <a class="modulo" href="rrhh.html">
-    <div class="modulo-icon" style="background:rgba(0,122,255,0.1);">
-      <svg viewBox="0 0 24 24" stroke="#007AFF"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
-    </div>
-    <div class="modulo-lbl">RR.HH.</div>
-  </a>
-
-  <a class="modulo" href="workers.html">
-    <div class="modulo-icon" style="background:rgba(255,140,0,0.1);">
-      <svg viewBox="0 0 24 24" stroke="#FF8C00"><path d="M20 7H4a2 2 0 0 0-2 2v6a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V9a2 2 0 0 0-2-2z"/><path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16"/></svg>
-    </div>
-    <div class="modulo-lbl">Workers</div>
-  </a>
-
-  <!-- ENTERPRISE (antes Plugins) -->
-  <a class="modulo" href="plugins.html" id="modulo-enterprise">
-    <div class="modulo-icon" style="background:rgba(255,140,0,0.18);position:relative;">
-      <!-- Hexágono + check como ícono Enterprise -->
-      <svg viewBox="0 0 26 26" fill="none" width="28" height="28">
-        <polygon points="13,1 24,7 24,19 13,25 2,19 2,7" fill="#FF8C00" opacity="0.9"/>
-        <polyline points="7,13 11,17 19,9" stroke="white" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/>
+  <!-- SERVICIO AL CLIENTE — claro y visible -->
+  <a class="modulo" href="servicio-cliente-proveedor.html">
+    <div class="modulo-icon" style="background:rgba(0,199,190,0.15);">
+      <svg viewBox="0 0 24 24" stroke="#00C7BE" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/>
+        <circle cx="9" cy="10" r="1" fill="#00C7BE" stroke="none"/>
+        <circle cx="12" cy="10" r="1" fill="#00C7BE" stroke="none"/>
+        <circle cx="15" cy="10" r="1" fill="#00C7BE" stroke="none"/>
       </svg>
     </div>
-    <div class="modulo-lbl" id="enterprise-lbl">Enterprise</div>
+    <div class="modulo-lbl">Soporte</div>
   </a>
 
 </div>
 
-<!-- REALTIME -->
 <div class="realtime-pill">
   <div class="rt-dot"></div>
   <div class="rt-txt">SINCRONIZADO EN TIEMPO REAL</div>
 </div>
 
-<!-- PEDIDOS RECIENTES -->
 <div class="sec-label" style="display:flex;align-items:center;justify-content:space-between;padding-right:20px;">
   <span>Pedidos recientes</span>
   <a href="pedidos.html" style="font-size:0.68rem;font-weight:700;color:var(--acc);text-decoration:none;">Ver todos →</a>
@@ -269,9 +322,8 @@ body{background:var(--negro);font-family:'Inter',sans-serif;-webkit-font-smoothi
 <div id="pedidos-lista"><div class="empty">Cargando pedidos...</div></div>
 <a class="ver-mas" href="pedidos.html">Ver todos los pedidos →</a>
 
-<!-- TAB BAR -->
 <nav class="tab-bar">
-  <button class="tab active">
+  <button class="tab active" onclick="location.href='dashboard.html'">
     <svg viewBox="0 0 24 24"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/></svg>
     <span>Panel</span>
   </button>
@@ -297,19 +349,39 @@ body{background:var(--negro);font-family:'Inter',sans-serif;-webkit-font-smoothi
 
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script>
-const { createClient } = supabase;
-const sb = createClient('https://hfmsyrmkewscnvwynzfq.supabase.co','sb_publishable_d1oLsq70a6ZV33vW3XkRgw_nYcN2Z9v');
+const {createClient}=supabase;
+const sb=createClient('https://hfmsyrmkewscnvwynzfq.supabase.co','sb_publishable_d1oLsq70a6ZV33vW3XkRgw_nYcN2Z9v');
 
-let userId='', userData={};
+let userId='',userData={};
 const COLS=['#FF8C00','#007AFF','#A8E63D','#AF52DE','#FF4D4D','#FFCC00'];
 const colorAva=s=>COLS[Math.abs((s||'').charCodeAt(0)||0)%COLS.length];
 
+// MODO CLARO/OSCURO
+const modoGuardado=localStorage.getItem('proveed_modo')||'dark';
+document.body.className=modoGuardado;
+actualizarModoBtn();
+
+function toggleModo(){
+  const esOscuro=document.body.classList.contains('dark');
+  document.body.className=esOscuro?'light':'dark';
+  localStorage.setItem('proveed_modo',esOscuro?'light':'dark');
+  // Cambiar theme-color del navegador
+  document.getElementById('theme-color-meta').content=esOscuro?'#ffffff':'#0A0A0A';
+  actualizarModoBtn();
+}
+
+function actualizarModoBtn(){
+  const esOscuro=document.body.classList.contains('dark');
+  document.getElementById('modo-btn').textContent=esOscuro?'☀️':'🌙';
+  document.getElementById('theme-color-meta').content=esOscuro?'#0A0A0A':'#ffffff';
+}
+
 (async()=>{
   const {data:{session}}=await sb.auth.getSession();
-  if(!session){window.location.href='login.html';return;}
+  if(!session){location.href='login.html';return;}
   userId=session.user.id;
   const {data:u}=await sb.from('usuarios').select('*').eq('id',userId).single();
-  if(u){userData=u;}
+  if(u)userData=u;
   aplicarMarca();
   await cargarTodo();
   suscribirRealtime();
@@ -317,23 +389,8 @@ const colorAva=s=>COLS[Math.abs((s||'').charCodeAt(0)||0)%COLS.length];
 
 function aplicarMarca(){
   const nombre=userData.empresa||userData.nombre||'Proveedor';
-  const color=userData.workers_color||'#FF8C00';
-  document.documentElement.style.setProperty('--acc',color);
-
-  // Nombre empresa en lugar de PROVEED
-  const brandEl=document.getElementById('brand-name');
-  if(userData.empresa){
-    brandEl.innerHTML=`${userData.empresa}`;
-    brandEl.style.color='white';
-  }
   document.getElementById('welcome-name').textContent=nombre;
   document.getElementById('brand-sub').textContent='Panel del proveedor';
-
- // Modo enterprise label
-  const appMode=localStorage.getItem(`app_mode_${userId}`)||'ESENCIAL';
-  if(appMode==='CORPORATIVO'){
-    document.getElementById('enterprise-lbl').textContent='Enterprise ✓';
-  }
 }
 
 async function cargarTodo(){
@@ -350,8 +407,8 @@ async function cargarTodo(){
 
   const pedHoy=peds.filter(p=>p.created_at?.startsWith(hoy));
   const totalHoy=pedHoy.reduce((s,p)=>s+(p.total||0),0);
-  const pendientes=peds.filter(p=>p.estado==='pendiente').length;
-  const noLeidos=chatsList.filter(c=>(c.no_leidos||c.no_leido||0)>0).length;
+  const pendientes=peds.filter(p=>p.estado==='pendiente'||p.estado==='confirmado').length;
+  const noLeidos=chatsList.filter(c=>(c.no_leido_prov||c.no_leidos||0)>0).length;
 
   document.getElementById('k-ventas').textContent='$'+totalHoy.toFixed(0);
   document.getElementById('k-ventas-d').textContent=pedHoy.length>0?`+${pedHoy.length} pedidos hoy`:'— sin pedidos hoy';
@@ -359,7 +416,7 @@ async function cargarTodo(){
   document.getElementById('k-pedidos').textContent=pendientes;
   document.getElementById('k-productos').textContent=prods.length;
   document.getElementById('k-chats').textContent=noLeidos||chatsList.length;
-  if(noLeidos>0) document.getElementById('chat-notif').style.display='block';
+  if(noLeidos>0)document.getElementById('chat-notif').style.display='block';
 
   renderChart(peds);
   renderPedidos(peds.slice(0,5));
@@ -368,10 +425,10 @@ async function cargarTodo(){
 function renderChart(pedidos){
   const bars=document.getElementById('chart-bars');
   const days=document.getElementById('chart-days');
-  bars.innerHTML=''; days.innerHTML='';
+  bars.innerHTML='';days.innerHTML='';
   const semana=[];
   for(let i=6;i>=0;i--){
-    const d=new Date(); d.setDate(d.getDate()-i);
+    const d=new Date();d.setDate(d.getDate()-i);
     const str=d.toISOString().split('T')[0];
     const total=pedidos.filter(p=>p.created_at?.startsWith(str)).reduce((s,p)=>s+(p.total||0),0);
     const lbl=['D','L','M','M','J','V','S'][d.getDay()];
@@ -385,7 +442,7 @@ function renderChart(pedidos){
     b.title='$'+d.total.toFixed(0);
     bars.appendChild(b);
     const lbl=document.createElement('div');
-    lbl.className='chart-day'; lbl.textContent=d.lbl;
+    lbl.className='chart-day';lbl.textContent=d.lbl;
     days.appendChild(lbl);
   });
 }
@@ -394,21 +451,41 @@ function renderPedidos(lista){
   const cont=document.getElementById('pedidos-lista');
   if(!lista.length){cont.innerHTML='<div class="empty">Sin pedidos aún</div>';return;}
   cont.innerHTML='';
-  const estMap={pendiente:'est-p',entregado:'est-e',proceso:'est-pr',enviado:'est-pr'};
-  const estTxt={pendiente:'Pendiente',entregado:'Entregado',proceso:'En proceso',enviado:'Enviado'};
+  const estMap={pendiente:'est-p',confirmado:'est-p',entregado:'est-e',proceso:'est-pr',enviado:'est-pr'};
+  const estTxt={pendiente:'Pendiente',confirmado:'Confirmado',entregado:'Entregado',proceso:'En proceso',enviado:'Enviado'};
+
   lista.forEach(p=>{
-    const nombre=p.emprendedor_nombre||p.nombre_emprendedor||'Cliente';
+    // NOMBRE DEL CLIENTE — buscar en todos los campos posibles
+    const nombre=p.emprendedor_nombre||p.nombre_emprendedor||p.cliente_nombre||p.nombre_cliente||'Cliente';
+
+    // DATOS DE ENVÍO — dirección, teléfono, ciudad
+    const items=p.items||[];
+    const itemsCount=items.length;
+    const itemsResumen=items.slice(0,2).map(i=>i.nombre||'Producto').join(', ')+(items.length>2?` +${items.length-2} más`:'');
     const hora=new Date(p.created_at).toLocaleTimeString('es-EC',{hour:'2-digit',minute:'2-digit'});
-    const items=(p.items||[]).length;
+    const fecha=new Date(p.created_at).toLocaleDateString('es-EC',{day:'2-digit',month:'short'});
     const bg=colorAva(p.emprendedor_id||p.id);
+
+    // Dirección de entrega
+    const direccion=p.direccion_entrega||p.direccion||p.dir_entrega||'';
+    const telefono=p.telefono_contacto||p.telefono||'';
+    const ciudad=p.ciudad||'';
+    const destinatario=p.destinatario||'';
+
     const div=document.createElement('div');
-    div.className='pedido-row'+(p.estado==='pendiente'?' nuevo':'');
-    div.onclick=()=>window.location.href='pedidos.html';
+    div.className='pedido-row'+(p.estado==='pendiente'||p.estado==='confirmado'?' nuevo':'');
+    div.onclick=()=>location.href='pedidos.html';
     div.innerHTML=`
       <div class="pr-ava" style="background:${bg};">${nombre[0].toUpperCase()}</div>
       <div class="pr-info">
         <div class="pr-nombre">${nombre}</div>
-        <div class="pr-det">${items} producto${items!==1?'s':''} · ${hora}</div>
+        <div class="pr-det">${itemsCount} producto${itemsCount!==1?'s':''} · ${fecha} ${hora}</div>
+        ${itemsResumen?`<div class="pr-det" style="margin-top:1px;font-size:.62rem;">${itemsResumen}</div>`:''}
+        <div class="pr-envio">
+          ${direccion?`<b>📍 Envío:</b> ${destinatario?destinatario+' · ':''}${direccion}${ciudad?' ('+ciudad+')':''}<br>`:''}
+          ${telefono?`<b>📞</b> ${telefono}`:''}
+          ${!direccion&&!telefono?'<span style="color:#666;">Sin datos de envío registrados</span>':''}
+        </div>
       </div>
       <div class="pr-right">
         <div class="pr-total">$${Number(p.total||0).toFixed(2)}</div>
@@ -420,8 +497,11 @@ function renderPedidos(lista){
 
 function suscribirRealtime(){
   sb.channel('dash-prov-'+userId)
-    .on('postgres_changes',{event:'INSERT',schema:'public',table:'pedidos',filter:`proveedor_id=eq.${userId}`},payload=>{
+    .on('postgres_changes',{event:'INSERT',schema:'public',table:'pedidos',filter:`proveedor_id=eq.${userId}`},()=>{
       showToast('🔔 Nuevo pedido recibido');
+      cargarTodo();
+    })
+    .on('postgres_changes',{event:'UPDATE',schema:'public',table:'pedidos',filter:`proveedor_id=eq.${userId}`},()=>{
       cargarTodo();
     })
     .subscribe();
