@@ -4,31 +4,27 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
 <title>PROVEED — Panel</title>
-<meta name="theme-color" content="#0A0A0A" id="theme-meta">
+<meta name="theme-color" content="#ffffff" id="theme-color-meta">
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
-<script>
-// Aplicar modo SIN parpadeo antes de que cargue el DOM
-(function(){
-  const m=localStorage.getItem('proveed_modo')||'dark';
-  document.addEventListener('DOMContentLoaded',function(){
-    document.body.className=m;
-    document.getElementById('theme-meta').content=m==='light'?'#ffffff':'#0A0A0A';
-    document.getElementById('modo-btn').textContent=m==='dark'?'☀️':'🌙';
-  });
-})();
-</script>
 <style>
 *{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent;}
-:root{--acc:#FF8C00;--verde:#A8E63D;--rojo:#FF4D4D;--azul:#007AFF;}
+:root{
+  --acc:#FF8C00;
+  --verde:#A8E63D;
+  --rojo:#FF4D4D;
+  --azul:#007AFF;
+}
 
+/* MODO OSCURO (default) */
+body{background:#0A0A0A;font-family:'Inter',sans-serif;-webkit-font-smoothing:antialiased;padding-bottom:90px;color:white;}
 body.dark{background:#0A0A0A;color:white;}
 body.light{background:#F5F6F2;color:#111;}
-body{font-family:'Inter',sans-serif;-webkit-font-smoothing:antialiased;padding-bottom:90px;transition:background .2s,color .2s;}
 
 /* HEADER */
-.header{padding:48px 20px 16px;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;z-index:100;}
 body.dark .header{background:#0A0A0A;}
-body.light .header{background:#fff;border-bottom:1px solid #eee;box-shadow:0 1px 8px rgba(0,0,0,.06);}
+body.light .header{background:#fff;border-bottom:1px solid #eee;}
+.header{padding:48px 20px 16px;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;z-index:100;transition:.2s;}
+
 .header-left{display:flex;align-items:center;gap:10px;}
 .brand-name{font-size:1.1rem;font-weight:900;letter-spacing:-0.3px;line-height:1;}
 body.dark .brand-name{color:white;}
@@ -38,16 +34,20 @@ body.light .brand-name{color:#111;}
 body.dark .brand-sub{color:#555;}
 body.light .brand-sub{color:#aaa;}
 .header-right{display:flex;gap:8px;align-items:center;}
+
+/* BOTONES HEADER */
 .hbtn{width:38px;height:38px;border-radius:12px;border:none;cursor:pointer;display:flex;align-items:center;justify-content:center;position:relative;}
 body.dark .hbtn{background:#1a1a1a;}
-body.light .hbtn{background:#F5F6F2;border:1px solid #eee;}
+body.light .hbtn{background:var(--F,#F5F6F2);border:1px solid #eee;}
 .hbtn svg{width:18px;height:18px;fill:none;stroke-width:2;stroke-linecap:round;stroke-linejoin:round;}
-body.dark .hbtn svg{stroke:#888;}
+body.dark .hbtn svg{stroke:#666;}
 body.light .hbtn svg{stroke:#555;}
 .hbtn-dot{position:absolute;top:7px;right:7px;width:7px;height:7px;border-radius:50%;background:var(--rojo);}
 body.dark .hbtn-dot{border:1.5px solid #0A0A0A;}
 body.light .hbtn-dot{border:1.5px solid #fff;}
-.modo-btn{width:38px;height:38px;border-radius:12px;border:none;cursor:pointer;font-size:1.1rem;display:flex;align-items:center;justify-content:center;}
+
+/* TOGGLE MODO */
+.modo-btn{width:38px;height:38px;border-radius:12px;border:none;cursor:pointer;display:flex;align-items:center;justify-content:center;font-size:1.1rem;}
 body.dark .modo-btn{background:#1a1a1a;}
 body.light .modo-btn{background:#F5F6F2;border:1px solid #eee;}
 
@@ -65,14 +65,14 @@ body.light .welcome-name{color:#111;}
 .kpi-row::-webkit-scrollbar{display:none;}
 .kpi-card{border-radius:18px;padding:16px;min-width:130px;flex-shrink:0;}
 body.dark .kpi-card{background:#161616;border:1px solid #1e1e1e;}
-body.light .kpi-card{background:#fff;border:1px solid #eee;box-shadow:0 2px 8px rgba(0,0,0,.05);}
+body.light .kpi-card{background:#fff;border:1px solid #eee;box-shadow:0 1px 6px rgba(0,0,0,.05);}
 .kpi-val{font-size:1.6rem;font-weight:900;line-height:1;}
 body.dark .kpi-val{color:white;}
 body.light .kpi-val{color:#111;}
-.kpi-val.acc{color:var(--acc)!important;}
-.kpi-val.verde{color:var(--verde)!important;}
-.kpi-val.azul{color:var(--azul)!important;}
-.kpi-lbl{font-size:0.6rem;font-weight:700;text-transform:uppercase;letter-spacing:.8px;margin-top:6px;}
+.kpi-val.acc{color:var(--acc);}
+.kpi-val.verde{color:var(--verde);}
+.kpi-val.azul{color:var(--azul);}
+.kpi-lbl{font-size:0.6rem;font-weight:700;text-transform:uppercase;letter-spacing:0.8px;margin-top:6px;}
 body.dark .kpi-lbl{color:#444;}
 body.light .kpi-lbl{color:#aaa;}
 .kpi-delta{font-size:0.68rem;margin-top:4px;}
@@ -80,17 +80,17 @@ body.dark .kpi-delta{color:#555;}
 body.light .kpi-delta{color:#bbb;}
 .kpi-delta.verde{color:var(--verde)!important;}
 
-/* SECCIÓN */
+/* SECCIÓN TÍTULO */
 .sec-label{font-size:0.65rem;font-weight:800;text-transform:uppercase;letter-spacing:1px;padding:0 20px;margin-bottom:12px;}
 body.dark .sec-label{color:#333;}
 body.light .sec-label{color:#aaa;}
 
 /* MÓDULOS */
 .modulos-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;padding:0 20px;margin-bottom:20px;}
-.modulo{border-radius:20px;padding:18px 12px 14px;display:flex;flex-direction:column;align-items:center;gap:10px;cursor:pointer;transition:.15s;text-decoration:none;}
-.modulo:active{transform:scale(.95);}
+.modulo{border-radius:20px;padding:18px 12px 14px;display:flex;flex-direction:column;align-items:center;gap:10px;cursor:pointer;transition:0.15s;text-decoration:none;}
+.modulo:active{transform:scale(0.95);}
 body.dark .modulo{background:#161616;border:1px solid #1e1e1e;}
-body.light .modulo{background:#fff;border:1px solid #eee;box-shadow:0 2px 8px rgba(0,0,0,.05);}
+body.light .modulo{background:#fff;border:1px solid #eee;box-shadow:0 1px 6px rgba(0,0,0,.04);}
 .modulo-icon{width:52px;height:52px;border-radius:16px;display:flex;align-items:center;justify-content:center;}
 .modulo-icon svg{width:26px;height:26px;fill:none;stroke-width:2;stroke-linecap:round;stroke-linejoin:round;}
 .modulo-lbl{font-size:0.75rem;font-weight:700;text-align:center;}
@@ -99,64 +99,65 @@ body.light .modulo-lbl{color:#111;}
 
 /* REALTIME */
 .realtime-pill{display:inline-flex;align-items:center;gap:5px;border-radius:20px;padding:4px 10px;margin:0 20px 16px;}
-body.dark .realtime-pill{background:rgba(168,230,61,.08);border:1px solid rgba(168,230,61,.15);}
-body.light .realtime-pill{background:rgba(168,230,61,.1);border:1px solid rgba(168,230,61,.2);}
+body.dark .realtime-pill{background:rgba(168,230,61,0.08);border:1px solid rgba(168,230,61,0.15);}
+body.light .realtime-pill{background:rgba(168,230,61,0.1);border:1px solid rgba(168,230,61,0.2);}
 .rt-dot{width:5px;height:5px;border-radius:50%;background:var(--verde);animation:pulse 1.5s infinite;}
-@keyframes pulse{0%,100%{opacity:1}50%{opacity:.3}}
-.rt-txt{font-size:0.6rem;font-weight:700;color:var(--verde);letter-spacing:.5px;}
+@keyframes pulse{0%,100%{opacity:1}50%{opacity:0.3}}
+.rt-txt{font-size:0.6rem;font-weight:700;color:var(--verde);letter-spacing:0.5px;}
 
 /* GRÁFICO */
 .chart-wrap{border-radius:18px;margin:0 20px 20px;padding:16px;}
 body.dark .chart-wrap{background:#161616;border:1px solid #1e1e1e;}
-body.light .chart-wrap{background:#fff;border:1px solid #eee;box-shadow:0 2px 8px rgba(0,0,0,.05);}
-.chart-title{font-size:0.68rem;font-weight:700;text-transform:uppercase;letter-spacing:.8px;margin-bottom:14px;}
+body.light .chart-wrap{background:#fff;border:1px solid #eee;box-shadow:0 1px 6px rgba(0,0,0,.04);}
+.chart-title{font-size:0.68rem;font-weight:700;text-transform:uppercase;letter-spacing:0.8px;margin-bottom:14px;}
 body.dark .chart-title{color:#444;}
 body.light .chart-title{color:#aaa;}
 .chart-bars{display:flex;align-items:flex-end;gap:5px;height:50px;}
-.chart-bar{flex:1;border-radius:4px 4px 0 0;transition:.5s;min-height:4px;}
+.chart-bar{flex:1;border-radius:4px 4px 0 0;transition:0.5s;min-height:4px;}
 body.dark .chart-bar{background:#222;}
 body.light .chart-bar{background:#eee;}
 .chart-bar.hoy{background:var(--acc);}
 .chart-days{display:flex;gap:5px;margin-top:6px;}
-.chart-day{flex:1;text-align:center;font-size:.55rem;font-weight:600;}
+.chart-day{flex:1;text-align:center;font-size:0.55rem;font-weight:600;}
 body.dark .chart-day{color:#333;}
 body.light .chart-day{color:#bbb;}
 
 /* PEDIDOS */
-.pedido-row{display:flex;align-items:flex-start;gap:12px;border-radius:14px;padding:13px 14px;margin:0 20px 8px;cursor:pointer;transition:.15s;}
-.pedido-row:active{transform:scale(.98);}
+.pedido-row{display:flex;align-items:flex-start;gap:12px;border-radius:14px;padding:13px 14px;margin:0 20px 8px;cursor:pointer;transition:0.15s;}
+.pedido-row:active{transform:scale(0.98);}
 body.dark .pedido-row{background:#161616;border:1px solid #1e1e1e;}
 body.light .pedido-row{background:#fff;border:1px solid #eee;box-shadow:0 1px 4px rgba(0,0,0,.04);}
-body.dark .pedido-row.nuevo{border-color:rgba(255,140,0,.3);}
-body.light .pedido-row.nuevo{border-color:rgba(255,140,0,.4);}
-.pr-ava{width:40px;height:40px;border-radius:12px;display:flex;align-items:center;justify-content:center;font-size:.85rem;font-weight:800;color:white;flex-shrink:0;}
+body.dark .pedido-row.nuevo{border-color:rgba(255,140,0,0.3);}
+body.light .pedido-row.nuevo{border-color:rgba(255,140,0,0.4);background:rgba(255,140,0,.02);}
+.pr-ava{width:40px;height:40px;border-radius:12px;display:flex;align-items:center;justify-content:center;font-size:0.85rem;font-weight:800;color:white;flex-shrink:0;}
 .pr-info{flex:1;min-width:0;}
-.pr-nombre{font-size:.85rem;font-weight:700;}
+.pr-nombre{font-size:0.85rem;font-weight:700;}
 body.dark .pr-nombre{color:white;}
 body.light .pr-nombre{color:#111;}
-.pr-det{font-size:.68rem;margin-top:2px;}
+.pr-det{font-size:0.68rem;margin-top:2px;}
 body.dark .pr-det{color:#444;}
 body.light .pr-det{color:#aaa;}
-.pr-envio{font-size:.63rem;margin-top:5px;line-height:1.6;padding:6px 8px;border-radius:8px;}
-body.dark .pr-envio{background:#1e1e1e;color:#666;}
-body.light .pr-envio{background:#F5F6F2;color:#999;}
+/* DATOS ENVÍO */
+.pr-envio{font-size:0.64rem;margin-top:4px;line-height:1.5;}
+body.dark .pr-envio{color:#555;}
+body.light .pr-envio{color:#bbb;}
 .pr-envio b{font-weight:700;}
 body.dark .pr-envio b{color:#888;}
 body.light .pr-envio b{color:#555;}
 .pr-right{text-align:right;flex-shrink:0;}
-.pr-total{font-size:.88rem;font-weight:800;}
+.pr-total{font-size:0.88rem;font-weight:800;}
 body.dark .pr-total{color:white;}
 body.light .pr-total{color:#111;}
-.pr-estado{font-size:.58rem;font-weight:700;padding:2px 7px;border-radius:6px;margin-top:3px;display:inline-block;}
-.est-p{background:rgba(255,140,0,.12);color:var(--acc);}
-.est-e{background:rgba(168,230,61,.1);color:var(--verde);}
-.est-pr{background:rgba(0,122,255,.1);color:var(--azul);}
+.pr-estado{font-size:0.58rem;font-weight:700;padding:2px 7px;border-radius:6px;margin-top:3px;display:inline-block;}
+.est-p{background:rgba(255,140,0,0.12);color:var(--acc);}
+.est-e{background:rgba(168,230,61,0.1);color:var(--verde);}
+.est-pr{background:rgba(0,122,255,0.1);color:var(--azul);}
 
-.ver-mas{display:flex;align-items:center;justify-content:center;gap:6px;margin:0 20px 20px;padding:13px;border-radius:14px;cursor:pointer;font-size:.8rem;font-weight:700;text-decoration:none;}
+.ver-mas{display:flex;align-items:center;justify-content:center;gap:6px;margin:0 20px 20px;padding:13px;border-radius:14px;cursor:pointer;font-size:0.8rem;font-weight:700;text-decoration:none;}
 body.dark .ver-mas{background:#161616;border:1px solid #1e1e1e;color:#555;}
 body.light .ver-mas{background:#fff;border:1px solid #eee;color:#aaa;}
 
-.empty{text-align:center;padding:20px;font-size:.78rem;}
+.empty{text-align:center;padding:20px;font-size:0.78rem;}
 body.dark .empty{color:#333;}
 body.light .empty{color:#bbb;}
 
@@ -167,20 +168,19 @@ body.light .tab-bar{background:#fff;border-top:1px solid #eee;box-shadow:0 -2px 
 .tab{flex:1;display:flex;flex-direction:column;align-items:center;gap:4px;border:none;background:transparent;cursor:pointer;text-decoration:none;font-family:'Inter',sans-serif;}
 body.dark .tab{color:#333;}
 body.light .tab{color:#ccc;}
-.tab.active{color:var(--acc)!important;}
+.tab.active{color:var(--acc);}
 .tab svg{width:22px;height:22px;stroke:currentColor;fill:none;stroke-width:2;stroke-linecap:round;stroke-linejoin:round;}
-.tab span{font-size:.54rem;font-weight:700;text-transform:uppercase;}
+.tab span{font-size:0.54rem;font-weight:700;text-transform:uppercase;}
 
-.toast{position:fixed;bottom:80px;left:50%;transform:translateX(-50%) translateY(20px);padding:10px 20px;border-radius:24px;font-size:.8rem;font-weight:600;opacity:0;transition:.3s;pointer-events:none;z-index:2000;white-space:nowrap;}
-body.dark .toast{background:#1e1e1e;color:white;border:1px solid #333;}
-body.light .toast{background:#111;color:white;}
+.toast{position:fixed;bottom:80px;left:50%;transform:translateX(-50%) translateY(20px);background:#1e1e1e;color:white;padding:10px 20px;border-radius:24px;font-size:0.8rem;font-weight:600;opacity:0;transition:0.3s;pointer-events:none;z-index:2000;white-space:nowrap;border:1px solid #333;}
 .toast.show{opacity:1;transform:translateX(-50%) translateY(0);}
 </style>
 </head>
-<body>
+<body class="dark">
 
 <div class="header">
   <div class="header-left">
+    <!-- LOGO PROVEED verde lima -->
     <svg width="40" height="40" viewBox="0 0 40 40" fill="none">
       <polygon points="20,2 36,11 36,29 20,38 4,29 4,11" fill="#A8E63D" opacity="0.95"/>
       <polyline points="11,20 17,26 29,14" stroke="#111" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
@@ -191,11 +191,14 @@ body.light .toast{background:#111;color:white;}
     </div>
   </div>
   <div class="header-right">
-    <button class="modo-btn" id="modo-btn" onclick="toggleModo()" title="Modo claro/oscuro"></button>
-    <button class="hbtn" onclick="irChat()">
+    <!-- TOGGLE MODO CLARO/OSCURO -->
+    <button class="modo-btn" id="modo-btn" onclick="toggleModo()" title="Cambiar modo">🌙</button>
+    <!-- CHAT -->
+    <button class="hbtn" onclick="location.href='chat-proveedor.html'">
       <svg viewBox="0 0 24 24"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
       <div class="hbtn-dot" id="chat-notif" style="display:none;"></div>
     </button>
+    <!-- PERFIL -->
     <button class="hbtn" onclick="location.href='perfil.html'">
       <svg viewBox="0 0 24 24"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
     </button>
@@ -208,10 +211,23 @@ body.light .toast{background:#111;color:white;}
 </div>
 
 <div class="kpi-row">
-  <div class="kpi-card"><div class="kpi-val acc" id="k-ventas">$0</div><div class="kpi-lbl">Ventas hoy</div><div class="kpi-delta" id="k-ventas-d">— sin pedidos hoy</div></div>
-  <div class="kpi-card"><div class="kpi-val" id="k-pedidos">0</div><div class="kpi-lbl">Pedidos nuevos</div></div>
-  <div class="kpi-card"><div class="kpi-val verde" id="k-productos">0</div><div class="kpi-lbl">Productos</div></div>
-  <div class="kpi-card"><div class="kpi-val azul" id="k-chats">0</div><div class="kpi-lbl">Chats activos</div></div>
+  <div class="kpi-card">
+    <div class="kpi-val acc" id="k-ventas">$0</div>
+    <div class="kpi-lbl">Ventas hoy</div>
+    <div class="kpi-delta" id="k-ventas-d">— sin pedidos hoy</div>
+  </div>
+  <div class="kpi-card">
+    <div class="kpi-val" id="k-pedidos">0</div>
+    <div class="kpi-lbl">Pedidos nuevos</div>
+  </div>
+  <div class="kpi-card">
+    <div class="kpi-val verde" id="k-productos">0</div>
+    <div class="kpi-lbl">Productos</div>
+  </div>
+  <div class="kpi-card">
+    <div class="kpi-val azul" id="k-chats">0</div>
+    <div class="kpi-lbl">Chats activos</div>
+  </div>
 </div>
 
 <div class="chart-wrap">
@@ -279,7 +295,7 @@ body.light .toast{background:#111;color:white;}
     <div class="modulo-lbl">Accesos</div>
   </a>
 
-  <!-- SOPORTE / SERVICIO AL CLIENTE -->
+  <!-- SERVICIO AL CLIENTE — claro y visible -->
   <a class="modulo" href="servicio-cliente-proveedor.html">
     <div class="modulo-icon" style="background:rgba(0,199,190,0.15);">
       <svg viewBox="0 0 24 24" stroke="#00C7BE" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
@@ -301,7 +317,7 @@ body.light .toast{background:#111;color:white;}
 
 <div class="sec-label" style="display:flex;align-items:center;justify-content:space-between;padding-right:20px;">
   <span>Pedidos recientes</span>
-  <a href="pedidos.html" style="font-size:.68rem;font-weight:700;color:var(--acc);text-decoration:none;">Ver todos →</a>
+  <a href="pedidos.html" style="font-size:0.68rem;font-weight:700;color:var(--acc);text-decoration:none;">Ver todos →</a>
 </div>
 <div id="pedidos-lista"><div class="empty">Cargando pedidos...</div></div>
 <a class="ver-mas" href="pedidos.html">Ver todos los pedidos →</a>
@@ -324,7 +340,7 @@ body.light .toast{background:#111;color:white;}
     <span>Pedidos</span>
   </a>
   <a class="tab" href="plugins.html">
-    <svg viewBox="0 0 24 24"><polygon points="12,2 22,8.5 22,15.5 12,22 2,15.5 2,8.5" fill="none" stroke="currentColor" stroke-width="2"/><polyline points="7,12 10,15 17,9" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+    <svg viewBox="0 0 24 24"><polygon points="12,2 22,8.5 22,15.5 12,22 2,15.5 2,8.5" stroke="currentColor" fill="none" stroke-width="2"/><polyline points="7,12 10,15 17,9" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
     <span>Plugins</span>
   </a>
 </nav>
@@ -340,20 +356,24 @@ let userId='',userData={};
 const COLS=['#FF8C00','#007AFF','#A8E63D','#AF52DE','#FF4D4D','#FFCC00'];
 const colorAva=s=>COLS[Math.abs((s||'').charCodeAt(0)||0)%COLS.length];
 
-// MODO CLARO/OSCURO — controlado desde aquí, se propaga a todas las páginas via localStorage
+// MODO CLARO/OSCURO
+const modoGuardado=localStorage.getItem('proveed_modo')||'dark';
+document.body.className=modoGuardado;
+actualizarModoBtn();
+
 function toggleModo(){
   const esOscuro=document.body.classList.contains('dark');
-  const nuevo=esOscuro?'light':'dark';
-  document.body.className=nuevo;
-  localStorage.setItem('proveed_modo',nuevo);
-  document.getElementById('theme-meta').content=nuevo==='light'?'#ffffff':'#0A0A0A';
-  document.getElementById('modo-btn').textContent=nuevo==='dark'?'☀️':'🌙';
-  showToast(nuevo==='light'?'☀️ Modo claro activado':'🌙 Modo oscuro activado');
+  document.body.className=esOscuro?'light':'dark';
+  localStorage.setItem('proveed_modo',esOscuro?'light':'dark');
+  // Cambiar theme-color del navegador
+  document.getElementById('theme-color-meta').content=esOscuro?'#ffffff':'#0A0A0A';
+  actualizarModoBtn();
 }
 
-// NAVEGACIÓN CHAT — apunta al archivo correcto
-function irChat(){
-  location.href='chat-proveedor.html';
+function actualizarModoBtn(){
+  const esOscuro=document.body.classList.contains('dark');
+  document.getElementById('modo-btn').textContent=esOscuro?'☀️':'🌙';
+  document.getElementById('theme-color-meta').content=esOscuro?'#0A0A0A':'#ffffff';
 }
 
 (async()=>{
@@ -362,10 +382,16 @@ function irChat(){
   userId=session.user.id;
   const {data:u}=await sb.from('usuarios').select('*').eq('id',userId).single();
   if(u)userData=u;
-  document.getElementById('welcome-name').textContent=userData.empresa||userData.nombre||'Proveedor';
+  aplicarMarca();
   await cargarTodo();
   suscribirRealtime();
 })();
+
+function aplicarMarca(){
+  const nombre=userData.empresa||userData.nombre||'Proveedor';
+  document.getElementById('welcome-name').textContent=nombre;
+  document.getElementById('brand-sub').textContent='Panel del proveedor';
+}
 
 async function cargarTodo(){
   const hoy=new Date().toISOString().split('T')[0];
@@ -381,7 +407,7 @@ async function cargarTodo(){
 
   const pedHoy=peds.filter(p=>p.created_at?.startsWith(hoy));
   const totalHoy=pedHoy.reduce((s,p)=>s+(p.total||0),0);
-  const pendientes=peds.filter(p=>['pendiente','confirmado'].includes(p.estado)).length;
+  const pendientes=peds.filter(p=>p.estado==='pendiente'||p.estado==='confirmado').length;
   const noLeidos=chatsList.filter(c=>(c.no_leido_prov||c.no_leidos||0)>0).length;
 
   document.getElementById('k-ventas').textContent='$'+totalHoy.toFixed(0);
@@ -405,7 +431,8 @@ function renderChart(pedidos){
     const d=new Date();d.setDate(d.getDate()-i);
     const str=d.toISOString().split('T')[0];
     const total=pedidos.filter(p=>p.created_at?.startsWith(str)).reduce((s,p)=>s+(p.total||0),0);
-    semana.push({total,lbl:['D','L','M','M','J','V','S'][d.getDay()],esHoy:i===0});
+    const lbl=['D','L','M','M','J','V','S'][d.getDay()];
+    semana.push({str,total,lbl,esHoy:i===0});
   }
   const max=Math.max(...semana.map(d=>d.total),1);
   semana.forEach(d=>{
@@ -428,31 +455,36 @@ function renderPedidos(lista){
   const estTxt={pendiente:'Pendiente',confirmado:'Confirmado',entregado:'Entregado',proceso:'En proceso',enviado:'Enviado'};
 
   lista.forEach(p=>{
-    const nombre=p.emprendedor_nombre||p.nombre_emprendedor||p.cliente_nombre||'Cliente';
+    // NOMBRE DEL CLIENTE — buscar en todos los campos posibles
+    const nombre=p.emprendedor_nombre||p.nombre_emprendedor||p.cliente_nombre||p.nombre_cliente||'Cliente';
+
+    // DATOS DE ENVÍO — dirección, teléfono, ciudad
     const items=p.items||[];
     const itemsCount=items.length;
     const itemsResumen=items.slice(0,2).map(i=>i.nombre||'Producto').join(', ')+(items.length>2?` +${items.length-2} más`:'');
     const hora=new Date(p.created_at).toLocaleTimeString('es-EC',{hour:'2-digit',minute:'2-digit'});
     const fecha=new Date(p.created_at).toLocaleDateString('es-EC',{day:'2-digit',month:'short'});
     const bg=colorAva(p.emprendedor_id||p.id);
-    const direccion=p.direccion_entrega||p.direccion||'';
+
+    // Dirección de entrega
+    const direccion=p.direccion_entrega||p.direccion||p.dir_entrega||'';
     const telefono=p.telefono_contacto||p.telefono||'';
     const ciudad=p.ciudad||'';
     const destinatario=p.destinatario||'';
 
     const div=document.createElement('div');
-    div.className='pedido-row'+((['pendiente','confirmado'].includes(p.estado))?' nuevo':'');
+    div.className='pedido-row'+(p.estado==='pendiente'||p.estado==='confirmado'?' nuevo':'');
     div.onclick=()=>location.href='pedidos.html';
     div.innerHTML=`
       <div class="pr-ava" style="background:${bg};">${nombre[0].toUpperCase()}</div>
       <div class="pr-info">
         <div class="pr-nombre">${nombre}</div>
         <div class="pr-det">${itemsCount} producto${itemsCount!==1?'s':''} · ${fecha} ${hora}</div>
-        ${itemsResumen?`<div class="pr-det" style="font-size:.62rem;margin-top:1px;">${itemsResumen}</div>`:''}
+        ${itemsResumen?`<div class="pr-det" style="margin-top:1px;font-size:.62rem;">${itemsResumen}</div>`:''}
         <div class="pr-envio">
-          ${direccion?`<b>📍</b> ${destinatario?`<b>${destinatario}</b> · `:''}${direccion}${ciudad?', '+ciudad:''}<br>`:'' }
+          ${direccion?`<b>📍 Envío:</b> ${destinatario?destinatario+' · ':''}${direccion}${ciudad?' ('+ciudad+')':''}<br>`:''}
           ${telefono?`<b>📞</b> ${telefono}`:''}
-          ${!direccion&&!telefono?'Sin dirección de envío registrada':''}
+          ${!direccion&&!telefono?'<span style="color:#666;">Sin datos de envío registrados</span>':''}
         </div>
       </div>
       <div class="pr-right">
@@ -465,8 +497,13 @@ function renderPedidos(lista){
 
 function suscribirRealtime(){
   sb.channel('dash-prov-'+userId)
-    .on('postgres_changes',{event:'INSERT',schema:'public',table:'pedidos',filter:`proveedor_id=eq.${userId}`},()=>{showToast('🔔 Nuevo pedido recibido');cargarTodo();})
-    .on('postgres_changes',{event:'UPDATE',schema:'public',table:'pedidos',filter:`proveedor_id=eq.${userId}`},()=>{cargarTodo();})
+    .on('postgres_changes',{event:'INSERT',schema:'public',table:'pedidos',filter:`proveedor_id=eq.${userId}`},()=>{
+      showToast('🔔 Nuevo pedido recibido');
+      cargarTodo();
+    })
+    .on('postgres_changes',{event:'UPDATE',schema:'public',table:'pedidos',filter:`proveedor_id=eq.${userId}`},()=>{
+      cargarTodo();
+    })
     .subscribe();
 }
 
