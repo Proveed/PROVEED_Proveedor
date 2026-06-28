@@ -6,6 +6,9 @@
 <title>PROVEED — Mis productos</title>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
 <style>
+/* MODO CLARO/OSCURO UNIVERSAL */
+body.dark{background:#0A0A0A;color:white;}
+body.light{background:#F5F6F2;color:#111;}
 *{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent;}
 :root{--acc:#FF8C00;--verde:#A8E63D;--negro:#0A0A0A;--rojo:#FF4D4D;--azul:#007AFF;}
 body{background:var(--negro);font-family:'Inter',sans-serif;-webkit-font-smoothing:antialiased;padding-bottom:90px;}
@@ -134,6 +137,18 @@ body{background:var(--negro);font-family:'Inter',sans-serif;-webkit-font-smoothi
 .tab svg{width:22px;height:22px;stroke:currentColor;fill:none;stroke-width:2;stroke-linecap:round;stroke-linejoin:round;}
 .tab span{font-size:0.54rem;font-weight:600;text-transform:uppercase;}
 </style>
+<!-- MODO CLARO/OSCURO UNIVERSAL — mismo en todas las páginas -->
+<script>
+(function(){
+  const m=localStorage.getItem('proveed_modo')||'dark';
+  document.documentElement.setAttribute('data-modo',m);
+  // Aplicar clase apenas carga, sin parpadeo
+  document.addEventListener('DOMContentLoaded',function(){
+    document.body.className=m;
+  });
+})();
+</script>
+
 </head>
 <body>
 
