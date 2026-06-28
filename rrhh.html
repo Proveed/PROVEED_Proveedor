@@ -13,21 +13,35 @@
   /* HEADER */
   .header{ background:white; padding:44px 16px 14px; display:flex; align-items:center; justify-content:space-between; border-bottom:1px solid #eee; position:sticky; top:0; z-index:100; box-shadow:0 2px 8px rgba(0,0,0,0.04); }
   .h-left{ display:flex; align-items:center; gap:10px; }
-  .back-btn{ width:36px; height:36px; background:var(--gris); border-radius:10px; display:flex; align-items:center; justify-content:center; cursor:pointer; border:none; }
+  .back-btn{ width:36px; height:36px; background:var(--gris); border-radius:10px; display:flex; align-items:center; justify-content:center; cursor:pointer; border:none; flex-shrink:0; }
   .back-btn svg{ width:18px; height:18px; stroke:var(--negro); fill:none; stroke-width:2.5; }
-  .page-title{ font-size:1rem; font-weight:800; color:var(--negro); }
+  .empresa-logo{ width:38px; height:38px; border-radius:10px; object-fit:cover; background:#eee; flex-shrink:0; display:flex; align-items:center; justify-content:center; font-size:1rem; font-weight:800; color:var(--verde); border:1px solid #eee; overflow:hidden; }
+  .empresa-logo img{ width:100%; height:100%; object-fit:cover; }
+  .page-title{ font-size:1rem; font-weight:800; color:var(--negro); line-height:1.2; }
   .page-sub{ font-size:0.62rem; color:#aaa; font-weight:600; }
+  .header-right{ display:flex; align-items:center; gap:8px; }
   .header-badge{ background:rgba(50,205,50,0.1); color:var(--verde); font-size:0.62rem; font-weight:800; padding:4px 10px; border-radius:20px; border:1px solid rgba(50,205,50,0.2); }
+  .rol-badge{ font-size:0.6rem; font-weight:800; padding:3px 8px; border-radius:10px; }
+  .rol-gerente{ background:rgba(175,82,222,0.12); color:var(--morado); }
+  .rol-worker{ background:rgba(0,122,255,0.12); color:var(--azul); }
+  .rol-admin{ background:rgba(50,205,50,0.12); color:var(--verde); }
 
   /* TABS */
   .tabs-nav{ display:flex; overflow-x:auto; scrollbar-width:none; background:white; border-bottom:1px solid #eee; padding:0 16px; }
   .tabs-nav::-webkit-scrollbar{ display:none; }
   .tab-btn{ padding:13px 14px; border:none; background:transparent; font-family:'Inter',sans-serif; font-size:0.74rem; font-weight:700; color:#aaa; cursor:pointer; white-space:nowrap; border-bottom:2px solid transparent; transition:0.2s; }
   .tab-btn.active{ color:var(--verde); border-bottom-color:var(--verde); }
+  .tab-btn.hidden{ display:none; }
 
   /* SECCIONES */
   .section{ display:none; padding:14px 16px 100px; }
   .section.active{ display:block; }
+
+  /* ACCESO DENEGADO */
+  .acceso-denegado{ text-align:center; padding:60px 24px; }
+  .acceso-denegado svg{ width:56px; height:56px; stroke:#ddd; fill:none; stroke-width:1.2; margin:0 auto 16px; display:block; }
+  .acceso-denegado h3{ font-size:1rem; font-weight:800; color:var(--negro); margin-bottom:8px; }
+  .acceso-denegado p{ font-size:0.8rem; color:#aaa; line-height:1.6; }
 
   /* KPI */
   .kpi-grid{ display:grid; grid-template-columns:repeat(2,1fr); gap:10px; margin-bottom:14px; }
@@ -44,6 +58,7 @@
   .card{ background:white; border-radius:18px; padding:16px; margin-bottom:12px; border:1px solid #eee; box-shadow:0 2px 6px rgba(0,0,0,0.04); }
   .btn-nuevo-sm{ background:var(--negro); color:white; border:none; padding:7px 14px; border-radius:10px; font-family:'Inter',sans-serif; font-size:0.72rem; font-weight:700; cursor:pointer; }
   .btn-verde-sm{ background:rgba(50,205,50,0.1); color:var(--verde); border:none; padding:7px 14px; border-radius:10px; font-family:'Inter',sans-serif; font-size:0.72rem; font-weight:700; cursor:pointer; }
+  .btn-azul-sm{ background:rgba(0,122,255,0.1); color:var(--azul); border:none; padding:7px 14px; border-radius:10px; font-family:'Inter',sans-serif; font-size:0.72rem; font-weight:700; cursor:pointer; }
 
   /* EMPLEADO CARD */
   .empleado-item{ display:flex; align-items:center; gap:12px; padding:12px; background:var(--gris); border-radius:14px; margin-bottom:8px; cursor:pointer; transition:0.15s; }
@@ -58,22 +73,31 @@
   .badge-activo{ background:rgba(50,205,50,0.1); color:var(--verde); }
   .badge-riesgo{ background:rgba(255,77,77,0.1); color:var(--rojo); }
   .badge-pendiente{ background:rgba(255,140,0,0.1); color:var(--naranja); }
+  .badge-morado{ background:rgba(175,82,222,0.1); color:var(--morado); }
 
   /* ASISTENCIA */
-  .asist-item{ background:white; border-radius:14px; padding:14px; margin-bottom:8px; border:1px solid #eee; display:flex; align-items:center; gap:12px; }
+  .asist-item{ background:white; border-radius:14px; padding:14px; margin-bottom:8px; border:1px solid #eee; }
+  .asist-header{ display:flex; align-items:center; gap:12px; margin-bottom:10px; }
   .asist-foto{ width:44px; height:44px; border-radius:12px; object-fit:cover; background:#eee; flex-shrink:0; overflow:hidden; display:flex; align-items:center; justify-content:center; font-size:0.8rem; font-weight:700; color:#aaa; }
   .asist-foto img{ width:100%; height:100%; object-fit:cover; }
   .asist-info{ flex:1; }
   .asist-nombre{ font-size:0.85rem; font-weight:700; color:var(--negro); }
   .asist-hora{ font-size:0.72rem; color:#aaa; margin-top:2px; }
-  .asist-atraso{ font-size:0.68rem; font-weight:700; }
-  .atraso-ok{ color:var(--verde); }
-  .atraso-warning{ color:var(--naranja); }
-  .atraso-danger{ color:var(--rojo); }
   .asist-estado{ font-size:0.7rem; font-weight:700; padding:4px 10px; border-radius:8px; flex-shrink:0; }
   .est-puntual{ background:rgba(50,205,50,0.1); color:var(--verde); }
   .est-tarde{ background:rgba(255,140,0,0.1); color:var(--naranja); }
   .est-falta{ background:rgba(255,77,77,0.1); color:var(--rojo); }
+  .est-permiso{ background:rgba(0,122,255,0.1); color:var(--azul); }
+  /* Horas entrada/salida */
+  .asist-horario{ display:grid; grid-template-columns:1fr 1fr; gap:8px; margin-top:6px; }
+  .asist-hora-box{ background:var(--gris); border-radius:10px; padding:8px 10px; }
+  .asist-hora-lbl{ font-size:0.6rem; font-weight:700; color:#aaa; text-transform:uppercase; margin-bottom:2px; }
+  .asist-hora-val{ font-size:0.88rem; font-weight:800; color:var(--negro); }
+  .asist-hora-val.entrada{ color:var(--verde); }
+  .asist-hora-val.salida{ color:var(--azul); }
+  .asist-hora-val.pendiente{ color:#ccc; }
+  /* Botón registrar salida */
+  .btn-salida{ width:100%; margin-top:8px; padding:8px; background:rgba(0,122,255,0.08); color:var(--azul); border:none; border-radius:10px; font-family:'Inter',sans-serif; font-size:0.76rem; font-weight:700; cursor:pointer; }
 
   /* NÓMINA */
   .nomina-item{ background:var(--gris); border-radius:14px; padding:14px; margin-bottom:8px; }
@@ -99,12 +123,20 @@
   .serv-empresa{ font-size:0.88rem; font-weight:700; color:var(--negro); }
   .serv-monto{ font-size:0.92rem; font-weight:800; color:var(--naranja); }
   .serv-desc{ font-size:0.76rem; color:#666; margin-bottom:8px; }
-  .serv-evidencias{ display:flex; gap:6px; margin-bottom:8px; }
+  .serv-evidencias{ display:flex; gap:6px; margin-bottom:8px; flex-wrap:wrap; }
   .serv-foto{ width:60px; height:60px; border-radius:10px; object-fit:cover; background:#ddd; cursor:pointer; }
   .serv-estado{ font-size:0.65rem; font-weight:700; padding:3px 8px; border-radius:6px; }
   .serv-pendiente{ background:rgba(255,140,0,0.1); color:var(--naranja); }
   .serv-aprobado{ background:rgba(50,205,50,0.1); color:var(--verde); }
   .serv-rechazado{ background:rgba(255,77,77,0.1); color:var(--rojo); }
+
+  /* GESTORES RRHH */
+  .gestor-item{ display:flex; align-items:center; gap:12px; padding:12px; background:var(--gris); border-radius:14px; margin-bottom:8px; }
+  .gestor-avatar{ width:44px; height:44px; border-radius:12px; background:rgba(175,82,222,0.12); display:flex; align-items:center; justify-content:center; font-size:1rem; font-weight:800; color:var(--morado); flex-shrink:0; }
+  .gestor-info{ flex:1; }
+  .gestor-nombre{ font-size:0.85rem; font-weight:700; color:var(--negro); }
+  .gestor-email{ font-size:0.72rem; color:#aaa; margin-top:2px; }
+  .gestor-acciones{ display:flex; gap:6px; }
 
   /* MODALES */
   .modal-overlay{ position:fixed; inset:0; background:rgba(0,0,0,0.5); display:none; z-index:500; align-items:flex-end; }
@@ -126,7 +158,8 @@
   .field textarea{ resize:none; height:70px; }
   .field-row{ display:grid; grid-template-columns:1fr 1fr; gap:10px; }
   .btn-submit{ width:100%; padding:14px; background:var(--negro); color:white; border:none; border-radius:14px; font-family:'Inter',sans-serif; font-size:0.92rem; font-weight:800; cursor:pointer; margin-top:6px; }
-  .btn-verde{ background:var(--verde); color:white; }
+  .btn-verde{ background:var(--verde) !important; }
+  .btn-azul{ background:var(--azul) !important; }
 
   /* GEOFENCE */
   .geo-card{ background:linear-gradient(135deg,#f0fff0,#e8ffe8); border:1px solid rgba(50,205,50,0.2); border-radius:16px; padding:16px; margin-bottom:14px; }
@@ -151,16 +184,34 @@
   .foto-upload-area svg{ width:28px; height:28px; stroke:#ccc; fill:none; stroke-width:1.5; display:block; margin:0 auto 6px; }
   .foto-upload-area.filled svg{ stroke:var(--verde); }
   .foto-upload-area p{ font-size:0.76rem; color:#bbb; }
-  .foto-upload-area.filled p{ color:var(--verde); }
+  .foto-upload-area.filled p{ color:var(--verde); font-weight:700; }
   .foto-file-input{ position:absolute; inset:0; opacity:0; cursor:pointer; }
   .fotos-preview{ display:flex; gap:8px; flex-wrap:wrap; margin-top:8px; }
   .foto-prev-item{ width:70px; height:70px; border-radius:10px; object-fit:cover; }
 
   /* SUCURSAL CHIP */
-  .sucursal-chip{ display:flex; align-items:center; gap:6px; background:rgba(50,205,50,0.08); border:1px solid rgba(50,205,50,0.2); border-radius:20px; padding:6px 12px; display:inline-flex; margin-bottom:12px; }
+  .sucursal-chip{ display:inline-flex; align-items:center; gap:6px; background:rgba(50,205,50,0.08); border:1px solid rgba(50,205,50,0.2); border-radius:20px; padding:6px 12px; margin-bottom:12px; }
   .sucursal-chip svg{ width:12px; height:12px; stroke:var(--verde); fill:none; stroke-width:2.5; }
   .sucursal-chip span{ font-size:0.72rem; font-weight:700; color:var(--verde); }
 
+  /* EMPRESA BANNER */
+  .empresa-banner{ background:white; border-radius:18px; padding:16px; margin-bottom:14px; border:1px solid #eee; display:flex; align-items:center; gap:14px; box-shadow:0 2px 8px rgba(0,0,0,0.04); }
+  .empresa-banner-logo{ width:56px; height:56px; border-radius:14px; object-fit:cover; background:#f0f0f0; flex-shrink:0; display:flex; align-items:center; justify-content:center; font-size:1.4rem; font-weight:900; color:var(--verde); overflow:hidden; border:1px solid #eee; }
+  .empresa-banner-logo img{ width:100%; height:100%; object-fit:cover; }
+  .empresa-banner-info{ flex:1; min-width:0; }
+  .empresa-banner-nombre{ font-size:1rem; font-weight:800; color:var(--negro); }
+  .empresa-banner-ruc{ font-size:0.72rem; color:#aaa; margin-top:2px; }
+  .empresa-banner-dir{ font-size:0.72rem; color:#666; margin-top:2px; }
+
+  /* WORKER PANEL */
+  .worker-mi-asist{ background:white; border-radius:18px; padding:18px; margin-bottom:14px; border:1px solid #eee; box-shadow:0 2px 8px rgba(0,0,0,0.04); }
+  .worker-mi-asist h3{ font-size:0.88rem; font-weight:800; color:var(--negro); margin-bottom:14px; }
+  .worker-estado-badge{ display:inline-block; font-size:0.72rem; font-weight:700; padding:5px 12px; border-radius:10px; margin-bottom:14px; }
+  .btn-registrar-entrada{ width:100%; padding:16px; background:var(--verde); color:white; border:none; border-radius:14px; font-family:'Inter',sans-serif; font-size:1rem; font-weight:800; cursor:pointer; margin-bottom:10px; }
+  .btn-registrar-salida{ width:100%; padding:16px; background:var(--azul); color:white; border:none; border-radius:14px; font-family:'Inter',sans-serif; font-size:1rem; font-weight:800; cursor:pointer; }
+  .btn-disabled{ opacity:0.4; cursor:not-allowed; }
+
+  /* MISC */
   .msg-ok{ background:rgba(50,205,50,0.08); border:1px solid rgba(50,205,50,0.2); border-radius:12px; padding:10px 14px; font-size:0.8rem; color:var(--verde); margin-bottom:12px; display:none; }
   .msg-ok.show{ display:block; }
   .upload-overlay{ position:fixed; inset:0; background:rgba(0,0,0,0.5); display:none; align-items:center; justify-content:center; z-index:1000; }
@@ -174,70 +225,90 @@
   .empty-state{ text-align:center; padding:40px 20px; color:#aaa; }
   .empty-state svg{ width:48px; height:48px; stroke:#ddd; fill:none; stroke-width:1.2; margin:0 auto 12px; display:block; }
   .empty-state p{ font-size:0.82rem; }
+  .divider{ height:1px; background:#f0f0f0; margin:14px 0; }
+  .info-box{ background:rgba(0,122,255,0.05); border:1px solid rgba(0,122,255,0.15); border-radius:12px; padding:12px 14px; font-size:0.78rem; color:#555; line-height:1.5; margin-bottom:14px; }
+  .warn-box{ background:rgba(255,140,0,0.06); border:1px solid rgba(255,140,0,0.2); border-radius:12px; padding:12px 14px; font-size:0.78rem; color:#666; line-height:1.5; margin-bottom:14px; }
 </style>
 </head>
 <body>
 
+<!-- HEADER -->
 <div class="header">
   <div class="h-left">
     <button class="back-btn" onclick="window.location.href='dashboard.html'">
       <svg viewBox="0 0 24 24"><path d="M19 12H5M12 19l-7-7 7-7"/></svg>
     </button>
+    <div id="empresa-logo-header" class="empresa-logo">
+      <span id="empresa-inicial-header">P</span>
+    </div>
     <div>
-      <div class="page-title">RR.HH. PRO</div>
-      <div class="page-sub" id="empresa-sub">Cargando...</div>
+      <div class="page-title" id="empresa-nombre-header">RR.HH. PRO</div>
+      <div class="page-sub" id="empresa-sub-header">Cargando...</div>
     </div>
   </div>
-  <div class="header-badge">ERP</div>
+  <div class="header-right">
+    <span class="rol-badge" id="rol-badge-header"></span>
+    <div class="header-badge">ERP</div>
+  </div>
 </div>
 
-<div class="tabs-nav">
-  <button class="tab-btn active" onclick="showTab('dashboard',this)">Dashboard</button>
-  <button class="tab-btn" onclick="showTab('empleados',this)">Empleados</button>
-  <button class="tab-btn" onclick="showTab('asistencia',this)">Asistencia</button>
-  <button class="tab-btn" onclick="showTab('nomina',this)">Nómina</button>
-  <button class="tab-btn" onclick="showTab('contratos',this)">Contratos</button>
-  <button class="tab-btn" onclick="showTab('servicios',this)">Servicios B2B</button>
-  <button class="tab-btn" onclick="showTab('geofence',this)">Geofencing</button>
+<!-- TABS (se muestran según rol) -->
+<div class="tabs-nav" id="tabs-nav">
+  <!-- Se generan dinámicamente según rol -->
 </div>
 
-<!-- DASHBOARD -->
-<div class="section active" id="sec-dashboard">
+<!-- ═══════════════════════════════════════ SECCIONES ═══════════════════════════════════════ -->
+
+<!-- DASHBOARD (Admin/Gerente) -->
+<div class="section" id="sec-dashboard">
+  <div id="empresa-banner-dash"></div>
   <div class="kpi-grid">
     <div class="kpi"><div class="kpi-val verde" id="k-empleados">—</div><div class="kpi-lbl">Empleados activos</div></div>
     <div class="kpi"><div class="kpi-val azul" id="k-asistencia">—</div><div class="kpi-lbl">Asistencia hoy</div></div>
     <div class="kpi"><div class="kpi-val naranja" id="k-nomina">—</div><div class="kpi-lbl">Nómina mensual</div></div>
     <div class="kpi"><div class="kpi-val rojo" id="k-alertas">—</div><div class="kpi-lbl">Alertas activas</div></div>
   </div>
-
-  <div class="sec-title">Sucursal asignada</div>
-  <div class="card" id="sucursal-card">
-    <div id="sucursal-info-dash" style="color:#aaa;font-size:0.82rem;">Sin sucursal asignada</div>
-  </div>
-
+  <div class="sec-title">Sucursal principal</div>
+  <div class="card" id="sucursal-card"><div id="sucursal-info-dash" style="color:#aaa;font-size:0.82rem;">Sin sucursal asignada</div></div>
   <div class="sec-title">Alertas de desempeño</div>
-  <div id="alertas-lista">
-    <div class="empty-state"><svg viewBox="0 0 24 24"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg><p>Sin alertas activas</p></div>
-  </div>
-
-  <div class="sec-title">Resumen de asistencia — últimos 7 días</div>
-  <div class="card">
-    <div id="resumen-asist"></div>
-  </div>
+  <div id="alertas-lista"></div>
+  <div class="sec-title">Asistencia — últimos 7 días</div>
+  <div class="card"><div id="resumen-asist"></div></div>
 </div>
 
-<!-- EMPLEADOS -->
+<!-- MI ASISTENCIA (Worker) -->
+<div class="section" id="sec-mi-asistencia">
+  <div id="worker-empresa-banner"></div>
+  <div class="worker-mi-asist">
+    <h3>Mi registro de hoy</h3>
+    <div id="worker-estado-hoy" class="worker-estado-badge est-falta">Sin registro</div>
+    <div class="asist-horario" style="margin-bottom:14px;">
+      <div class="asist-hora-box">
+        <div class="asist-hora-lbl">Entrada</div>
+        <div class="asist-hora-val entrada" id="worker-hora-entrada">—:——</div>
+      </div>
+      <div class="asist-hora-box">
+        <div class="asist-hora-lbl">Salida</div>
+        <div class="asist-hora-val salida" id="worker-hora-salida">—:——</div>
+      </div>
+    </div>
+    <button class="btn-registrar-entrada" id="btn-worker-entrada" onclick="workerRegistrarEntrada()">⏱ Registrar entrada</button>
+    <button class="btn-registrar-salida btn-disabled" id="btn-worker-salida" onclick="workerRegistrarSalida()">🏁 Registrar salida</button>
+  </div>
+  <div class="sec-title">Mis últimas asistencias</div>
+  <div id="worker-historial-lista"></div>
+</div>
+
+<!-- EMPLEADOS (Admin/Gerente) -->
 <div class="section" id="sec-empleados">
   <div class="sec-title">Personal <button class="btn-nuevo-sm" onclick="abrirModalEmpleado()">+ Nuevo</button></div>
-  <div id="empleados-lista">
-    <div class="empty-state"><p>Cargando...</p></div>
-  </div>
+  <div id="empleados-lista"><div class="empty-state"><p>Cargando...</p></div></div>
 </div>
 
-<!-- ASISTENCIA -->
+<!-- ASISTENCIA (Admin/Gerente) -->
 <div class="section" id="sec-asistencia">
   <div class="sec-title">Registro de hoy <button class="btn-verde-sm" onclick="abrirRegistroManual()">+ Manual</button></div>
-  <div class="geo-card" id="geo-status-card">
+  <div class="geo-card">
     <div class="geo-status">
       <div class="geo-dot"></div>
       <div>
@@ -246,12 +317,10 @@
       </div>
     </div>
   </div>
-  <div id="asistencia-lista">
-    <div class="empty-state"><p>Cargando asistencia...</p></div>
-  </div>
+  <div id="asistencia-lista"><div class="empty-state"><p>Cargando asistencia...</p></div></div>
 </div>
 
-<!-- NÓMINA -->
+<!-- NÓMINA (Admin/Gerente) -->
 <div class="section" id="sec-nomina">
   <div class="sec-title">Nómina mensual <button class="btn-nuevo-sm" onclick="abrirModalNomina()">+ Agregar</button></div>
   <div class="card" style="margin-bottom:12px;">
@@ -263,46 +332,42 @@
       <button class="btn-verde-sm" onclick="calcularDecimos()">Calcular décimos</button>
     </div>
   </div>
-  <div id="nomina-lista">
-    <div class="empty-state"><p>Cargando nómina...</p></div>
-  </div>
+  <div id="nomina-lista"><div class="empty-state"><p>Cargando nómina...</p></div></div>
 </div>
 
-<!-- CONTRATOS -->
+<!-- CONTRATOS (Admin/Gerente) -->
 <div class="section" id="sec-contratos">
   <div class="sec-title">Contratos <button class="btn-nuevo-sm" onclick="abrirModalContrato()">+ Nuevo</button></div>
-  <div id="contratos-lista">
-    <div class="empty-state"><p>Cargando contratos...</p></div>
-  </div>
+  <div id="contratos-lista"><div class="empty-state"><p>Cargando contratos...</p></div></div>
 </div>
 
-<!-- SERVICIOS B2B -->
+<!-- SERVICIOS B2B (Admin/Gerente) -->
 <div class="section" id="sec-servicios">
   <div class="sec-title">Servicios externos <button class="btn-nuevo-sm" onclick="abrirModalServicio()">+ Registrar</button></div>
-  <div class="card" style="background:rgba(255,140,0,0.04);border-color:rgba(255,140,0,0.2);margin-bottom:12px;">
-    <div style="font-size:0.78rem;color:#666;line-height:1.5;">⚠️ Los servicios B2B requieren subir <strong>evidencias fotográficas</strong> antes de autorizar el pago. Sin evidencia no se procesa el pago.</div>
-  </div>
-  <div id="servicios-lista">
-    <div class="empty-state"><p>Cargando servicios...</p></div>
-  </div>
+  <div class="warn-box">⚠️ Los servicios B2B requieren subir <strong>evidencias fotográficas</strong> antes de autorizar el pago.</div>
+  <div id="servicios-lista"><div class="empty-state"><p>Cargando servicios...</p></div></div>
 </div>
-<!-- GEOFENCING -->
+
+<!-- GEOFENCING (Admin/Gerente) -->
 <div class="section" id="sec-geofence">
   <div class="sec-title">Configuración de zona</div>
   <div class="card">
     <div style="font-size:0.82rem;font-weight:700;color:var(--negro);margin-bottom:8px;">Zona de asistencia válida</div>
-    <div style="font-size:0.76rem;color:#666;margin-bottom:12px;">El registro de asistencia solo es válido si el empleado está dentro del radio configurado y en la ventana de tiempo establecida.</div>
-    <div class="field"><label>Radio permitido (metros)</label><input type="number" id="geo-radio" value="200" placeholder="200"></div>
+    <div style="font-size:0.76rem;color:#666;margin-bottom:12px;">El registro solo es válido dentro del radio y ventana de tiempo configurados.</div>
+    <div class="field"><label>Radio permitido (metros)</label><input type="number" id="geo-radio" value="200"></div>
     <div class="field-row">
       <div class="field"><label>Hora inicio</label><input type="time" id="geo-hora-ini" value="08:00"></div>
       <div class="field"><label>Hora límite entrada</label><input type="time" id="geo-hora-fin" value="08:40"></div>
     </div>
-    <div class="field"><label>Minutos de gracia antes de alerta</label><input type="number" id="geo-gracia" value="10" placeholder="10"></div>
-    <div class="field"><label>Minutos para riesgo de despido</label><input type="number" id="geo-despido" value="30" placeholder="30"></div>
+    <div class="field"><label>Hora de salida esperada</label><input type="time" id="geo-hora-salida" value="17:00"></div>
+    <div class="field-row">
+      <div class="field"><label>Minutos de gracia</label><input type="number" id="geo-gracia" value="10"></div>
+      <div class="field"><label>Min. para riesgo despido</label><input type="number" id="geo-despido" value="30"></div>
+    </div>
     <button class="btn-submit btn-verde" onclick="guardarGeoConfig()">Guardar configuración</button>
   </div>
   <div class="card" style="margin-top:4px;">
-    <div style="font-size:0.82rem;font-weight:700;color:var(--negro);margin-bottom:10px;">Protocolo automático de desempeño</div>
+    <div style="font-size:0.82rem;font-weight:700;color:var(--negro);margin-bottom:10px;">Protocolo de desempeño</div>
     <div class="desemp-bar-wrap">
       <div class="desemp-bar-label"><span>Puntual (0-5 min)</span><span style="color:var(--verde)">Aumento potencial</span></div>
       <div class="desemp-bar-track"><div class="desemp-bar-fill fill-verde" style="width:100%"></div></div>
@@ -317,13 +382,24 @@
     </div>
   </div>
 </div>
+
+<!-- GESTORES RRHH (Solo Admin) -->
+<div class="section" id="sec-gestores">
+  <div class="sec-title">Gerentes / Gestores RRHH <button class="btn-nuevo-sm" onclick="abrirModalGestor()">+ Agregar</button></div>
+  <div class="info-box">ℹ️ Los gestores pueden acceder al módulo RRHH como gerentes. Los workers solo ven su propia asistencia. Asegúrate de que el empleado ya esté registrado con su correo.</div>
+  <div id="gestores-lista"><div class="empty-state"><p>Cargando gestores...</p></div></div>
+</div>
+
+
+<!-- ═══════════════════════════════════════ MODALES ═══════════════════════════════════════ -->
+
 <!-- MODAL EMPLEADO -->
 <div class="modal-overlay" id="modal-empleado" onclick="cerrarModal('modal-empleado',event)">
   <div class="modal-sheet">
     <div class="drag"></div>
     <div class="modal-header">
       <span class="modal-title" id="modal-emp-title">Nuevo Empleado</span>
-      <button class="close-btn" onclick="document.getElementById('modal-empleado').classList.remove('show')"><svg viewBox="0 0 24 24"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg></button>
+      <button class="close-btn" onclick="cerrarModalById('modal-empleado')"><svg viewBox="0 0 24 24"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg></button>
     </div>
     <div class="modal-body">
       <div class="msg-ok" id="emp-ok">✓ Empleado guardado correctamente</div>
@@ -334,7 +410,7 @@
             <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
             <span style="font-size:0.6rem;margin-top:4px;">Foto</span>
           </div>
-          <input type="file" accept="image/*" capture="user" style="position:absolute;inset:0;opacity:0;cursor:pointer;" onchange="prevFotoEmp(this)">
+          <input type="file" accept="image/*" capture="user" style="position:absolute;inset:0;opacity:0;cursor:pointer;" id="emp-foto-input" onchange="prevFotoEmp(this)">
         </div>
       </div>
       <div class="field"><label>Nombre completo *</label><input type="text" id="emp-nombre" placeholder="Juan Torres"></div>
@@ -342,6 +418,7 @@
         <div class="field"><label>Cédula *</label><input type="text" id="emp-cedula" placeholder="1712345678" maxlength="10"></div>
         <div class="field"><label>Teléfono</label><input type="tel" id="emp-tel" placeholder="0991234567"></div>
       </div>
+      <div class="field"><label>Correo electrónico</label><input type="email" id="emp-email" placeholder="juan@empresa.com"></div>
       <div class="field"><label>Cargo / Posición *</label><input type="text" id="emp-cargo" placeholder="Vendedor, Bodeguero, etc."></div>
       <div class="field-row">
         <div class="field"><label>Fecha inicio</label><input type="date" id="emp-fecha"></div>
@@ -349,13 +426,46 @@
       </div>
       <div class="field"><label>Banco</label><input type="text" id="emp-banco" placeholder="Banco Pichincha"></div>
       <div class="field"><label>Número de cuenta</label><input type="text" id="emp-cuenta" placeholder="2200123456"></div>
-      <div class="field"><label>Cargas familiares (para utilidades)</label><input type="number" id="emp-cargas" placeholder="0" min="0"></div>
+      <div class="field"><label>Cargas familiares (utilidades)</label><input type="number" id="emp-cargas" placeholder="0" min="0"></div>
       <div class="field"><label>Sucursal</label>
-        <select id="emp-sucursal">
-          <option value="">Sin sucursal asignada</option>
-        </select>
+        <select id="emp-sucursal"><option value="">Sin sucursal asignada</option></select>
       </div>
       <button class="btn-submit" onclick="guardarEmpleado()">Guardar empleado</button>
+    </div>
+  </div>
+</div>
+
+<!-- MODAL ASISTENCIA MANUAL -->
+<div class="modal-overlay" id="modal-asistencia" onclick="cerrarModal('modal-asistencia',event)">
+  <div class="modal-sheet">
+    <div class="drag"></div>
+    <div class="modal-header">
+      <span class="modal-title">Registro manual</span>
+      <button class="close-btn" onclick="cerrarModalById('modal-asistencia')"><svg viewBox="0 0 24 24"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg></button>
+    </div>
+    <div class="modal-body">
+      <div class="field"><label>Empleado *</label><select id="asist-empleado"></select></div>
+      <div class="field-row">
+        <div class="field"><label>Fecha</label><input type="date" id="asist-fecha"></div>
+        <div class="field"><label>Hora entrada *</label><input type="time" id="asist-hora-entrada"></div>
+      </div>
+      <div class="field"><label>Hora salida (opcional)</label><input type="time" id="asist-hora-salida-campo"></div>
+      <div class="field"><label>Estado</label>
+        <select id="asist-estado">
+          <option value="puntual">Puntual</option>
+          <option value="tarde">Tarde</option>
+          <option value="falta">Falta</option>
+          <option value="permiso">Permiso</option>
+        </select>
+      </div>
+      <div class="field"><label>Foto del empleado (opcional)</label>
+        <div class="foto-upload-area" id="asist-foto-area">
+          <svg viewBox="0 0 24 24"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+          <p>Foto de verificación</p>
+          <input type="file" accept="image/*" capture="user" class="foto-file-input" id="asist-foto-input" onchange="selAsistFoto(this)">
+        </div>
+      </div>
+      <button class="btn-submit btn-verde" onclick="guardarAsistencia()">Registrar asistencia</button>
     </div>
   </div>
 </div>
@@ -366,12 +476,10 @@
     <div class="drag"></div>
     <div class="modal-header">
       <span class="modal-title">Configurar nómina</span>
-      <button class="close-btn" onclick="document.getElementById('modal-nomina').classList.remove('show')"><svg viewBox="0 0 24 24"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg></button>
+      <button class="close-btn" onclick="cerrarModalById('modal-nomina')"><svg viewBox="0 0 24 24"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg></button>
     </div>
     <div class="modal-body">
-      <div class="field"><label>Empleado *</label>
-        <select id="nom-empleado"></select>
-      </div>
+      <div class="field"><label>Empleado *</label><select id="nom-empleado"></select></div>
       <div class="field-row">
         <div class="field"><label>Salario base ($)</label><input type="number" id="nom-salario" placeholder="450.00" step="0.01"></div>
         <div class="field"><label>Horas extras</label><input type="number" id="nom-horas-extras" placeholder="0" min="0"></div>
@@ -397,7 +505,7 @@
     <div class="drag"></div>
     <div class="modal-header">
       <span class="modal-title">Nuevo Contrato</span>
-      <button class="close-btn" onclick="document.getElementById('modal-contrato').classList.remove('show')"><svg viewBox="0 0 24 24"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg></button>
+      <button class="close-btn" onclick="cerrarModalById('modal-contrato')"><svg viewBox="0 0 24 24"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg></button>
     </div>
     <div class="modal-body">
       <div class="msg-ok" id="cont-ok">✓ Contrato registrado</div>
@@ -428,21 +536,20 @@
       <button class="btn-submit" onclick="guardarContrato()">Registrar contrato</button>
     </div>
   </div>
-</div
+</div>
+
 <!-- MODAL SERVICIO B2B -->
 <div class="modal-overlay" id="modal-servicio" onclick="cerrarModal('modal-servicio',event)">
   <div class="modal-sheet">
     <div class="drag"></div>
     <div class="modal-header">
       <span class="modal-title">Registrar Servicio B2B</span>
-      <button class="close-btn" onclick="document.getElementById('modal-servicio').classList.remove('show')"><svg viewBox="0 0 24 24"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg></button>
+      <button class="close-btn" onclick="cerrarModalById('modal-servicio')"><svg viewBox="0 0 24 24"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg></button>
     </div>
     <div class="modal-body">
-      <div style="background:rgba(255,140,0,0.06);border:1px solid rgba(255,140,0,0.15);border-radius:12px;padding:12px;margin-bottom:14px;font-size:0.76rem;color:#666;">
-        ⚠️ Debes subir al menos una foto de evidencia del servicio prestado para poder autorizar el pago.
-      </div>
+      <div class="warn-box">⚠️ Debes subir al menos una foto de evidencia para autorizar el pago.</div>
       <div class="field"><label>Empresa / Proveedor externo *</label><input type="text" id="serv-empresa" placeholder="Nombre de la empresa"></div>
-      <div class="field"><label>Descripción del servicio *</label><textarea id="serv-desc" placeholder="Ej: Mantenimiento de equipos, Servicio de limpieza..."></textarea></div>
+      <div class="field"><label>Descripción del servicio *</label><textarea id="serv-desc" placeholder="Ej: Mantenimiento de equipos..."></textarea></div>
       <div class="field-row">
         <div class="field"><label>Monto ($) *</label><input type="number" id="serv-monto" placeholder="0.00" step="0.01"></div>
         <div class="field"><label>Fecha del servicio</label><input type="date" id="serv-fecha"></div>
@@ -459,41 +566,60 @@
   </div>
 </div>
 
-<!-- MODAL ASISTENCIA MANUAL -->
-<div class="modal-overlay" id="modal-asistencia" onclick="cerrarModal('modal-asistencia',event)">
+<!-- MODAL GESTOR RRHH -->
+<div class="modal-overlay" id="modal-gestor" onclick="cerrarModal('modal-gestor',event)">
   <div class="modal-sheet">
     <div class="drag"></div>
     <div class="modal-header">
-      <span class="modal-title">Registro manual</span>
-      <button class="close-btn" onclick="document.getElementById('modal-asistencia').classList.remove('show')"><svg viewBox="0 0 24 24"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg></button>
+      <span class="modal-title">Agregar Gestor RRHH</span>
+      <button class="close-btn" onclick="cerrarModalById('modal-gestor')"><svg viewBox="0 0 24 24"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg></button>
     </div>
     <div class="modal-body">
-      <div class="field"><label>Empleado *</label><select id="asist-empleado"></select></div>
-      <div class="field-row">
-        <div class="field"><label>Fecha</label><input type="date" id="asist-fecha"></div>
-        <div class="field"><label>Hora entrada</label><input type="time" id="asist-hora"></div>
-      </div>
-      <div class="field"><label>Estado</label>
-        <select id="asist-estado">
-          <option value="puntual">Puntual</option>
-          <option value="tarde">Tarde</option>
-          <option value="falta">Falta</option>
-          <option value="permiso">Permiso</option>
+      <div class="info-box">El gestor recibirá acceso completo al módulo RRHH como <strong>Gerente</strong>. El worker solo puede registrar su propia asistencia.</div>
+      <div class="field"><label>Nombre del gestor *</label><input type="text" id="gest-nombre" placeholder="María García"></div>
+      <div class="field"><label>Correo electrónico *</label><input type="email" id="gest-email" placeholder="maria@empresa.com"></div>
+      <div class="field"><label>Rol *</label>
+        <select id="gest-rol">
+          <option value="gerente">Gerente RRHH (acceso completo)</option>
+          <option value="worker">Worker (solo su asistencia)</option>
         </select>
       </div>
-      <div class="field"><label>Foto del empleado (opcional)</label>
-        <div class="foto-upload-area" id="asist-foto-area">
-          <svg viewBox="0 0 24 24"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
-          <p>Foto de verificación</p>
-          <input type="file" accept="image/*" capture="user" class="foto-file-input" id="asist-foto-input" onchange="selAsistFoto(this)">
-        </div>
+      <div class="field"><label>Empleado vinculado</label>
+        <select id="gest-empleado">
+          <option value="">Sin vincular a empleado</option>
+        </select>
       </div>
-      <button class="btn-submit btn-verde" onclick="guardarAsistencia()">Registrar asistencia</button>
+       <div class="field"><label>Empleado vinculado</label>
+        <select id="gest-empleado">
+          <option value="">Sin vincular a empleado</option>
+        </select>
+      </div>
+      <div class="field"><label>PIN de acceso (4 dígitos) *</label><input type="number" id="gest-pin" placeholder="1234" maxlength="4" min="1000" max="9999"></div>
+      <button class="btn-submit" onclick="guardarGestor()">Registrar gestor</button>
     </div>
   </div>
 </div>
 
-
+<!-- MODAL LOGIN GESTOR (para workers) -->
+<div class="modal-overlay" id="modal-login-gestor" style="z-index:600;">
+  <div class="modal-sheet">
+    <div class="drag"></div>
+    <div class="modal-header">
+      <span class="modal-title">Acceso RRHH</span>
+    </div>
+    <div class="modal-body">
+      <div style="text-align:center;padding:20px 0 10px;">
+        <div id="login-empresa-logo" style="width:64px;height:64px;border-radius:16px;background:rgba(50,205,50,0.1);margin:0 auto 12px;display:flex;align-items:center;justify-content:center;font-size:1.6rem;font-weight:900;color:var(--verde);overflow:hidden;"></div>
+        <div style="font-size:1rem;font-weight:800;color:var(--negro);" id="login-empresa-nombre">PROVEED</div>
+        <div style="font-size:0.76rem;color:#aaa;margin-top:4px;">RR.HH. PRO</div>
+      </div>
+      <div class="field"><label>Correo electrónico</label><input type="email" id="login-email" placeholder="tu@empresa.com" autocomplete="email"></div>
+      <div class="field"><label>PIN de acceso (4 dígitos)</label><input type="number" id="login-pin" placeholder="••••" maxlength="4"></div>
+      <div id="login-error" style="background:rgba(255,77,77,0.08);border:1px solid rgba(255,77,77,0.2);border-radius:10px;padding:10px;font-size:0.78rem;color:var(--rojo);margin-bottom:12px;display:none;"></div>
+      <button class="btn-submit btn-verde" onclick="loginGestor()">Ingresar</button>
+    </div>
+  </div>
+</div>
 
 <!-- MODAL DETALLE EMPLEADO -->
 <div class="modal-overlay" id="modal-detalle-emp" onclick="cerrarModal('modal-detalle-emp',event)">
@@ -501,7 +627,7 @@
     <div class="drag"></div>
     <div class="modal-header">
       <span class="modal-title">Perfil del empleado</span>
-      <button class="close-btn" onclick="document.getElementById('modal-detalle-emp').classList.remove('show')"><svg viewBox="0 0 24 24"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg></button>
+      <button class="close-btn" onclick="cerrarModalById('modal-detalle-emp')"><svg viewBox="0 0 24 24"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg></button>
     </div>
     <div class="modal-body" id="detalle-emp-body"></div>
   </div>
@@ -515,612 +641,965 @@
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script>
 const { createClient } = supabase;
-const sb = createClient('https://hfmsyrmkewscnvwynzfq.supabase.co','sb_publishable_d1oLsq70a6ZV33vW3XkRgw_nYcN2Z9v');
+const sb = createClient(
+  'https://hfmsyrmkewscnvwynzfq.supabase.co',
+  'sb_publishable_d1oLsq70a6ZV33vW3XkRgw_nYcN2Z9v'
+);
 
-let userId='', userData={}, empleados=[], sucursales=[], contratos=[], nominas=[], servicios=[], asistencias=[];
-let empFotoFile=null, servFotosFiles=[], asistFotoFile=null, contratoScanFile=null;
-let editandoEmpId=null;
+// ═══════════════════════ ESTADO GLOBAL ═══════════════════════
+let userId = '', userData = {}, empresaData = {};
+let empleados = [], sucursales = [], contratos = [], nominas = [], servicios = [], asistencias = [], gestores = [];
+let empFotoFile = null, servFotosFiles = [], asistFotoFile = null, contratoScanFile = null;
+let editandoEmpId = null;
+let rolActual = 'admin'; // 'admin' | 'gerente' | 'worker'
+let gestorActual = null; // datos del gestor logueado (si aplica)
+let workerEmpleadoId = null; // empleado vinculado al worker
 
-const SBU=450; // Salario Básico Unificado Ecuador 2026
+const SBU = 450;
 
-(async()=>{
-  const { data:{session} } = await sb.auth.getSession();
-  if(!session){ window.location.href='login.html'; return; }
-  userId=session.user.id;
-  const { data:u } = await sb.from('usuarios').select('*').eq('id',userId).single();
-  if(u){
-    userData=u;
-    document.getElementById('empresa-sub').textContent=u.empresa||u.nombre||'Mi empresa';
-  }
-  // Verificar que el plugin esté activo
-  const { data:plugin } = await sb.from('plugins_activados').select('*').eq('proveedor_id',userId).eq('plugin_id','rrhh-pro').single();
-  if(!plugin){
-    // Activar automáticamente si entran directamente
-    await sb.from('plugins_activados').upsert({proveedor_id:userId,plugin_id:'rrhh-pro',nombre:'RR.HH. PRO',activo:true});
-  }
+// ═══════════════════════ INIT ═══════════════════════
+(async () => {
+  // 1. Verificar sesión Supabase
+  const { data: { session } } = await sb.auth.getSession();
+  if (!session) { window.location.href = 'login.html'; return; }
+  userId = session.user.id;
 
-  // Cargar todo en paralelo
+  // 2. Cargar datos del usuario (dueño)
+  const { data: u } = await sb.from('usuarios').select('*').eq('id', userId).single();
+  if (u) userData = u;
+
+  // 3. Cargar datos de empresa (logo, nombre, ruc, etc.)
+  await cargarDatosEmpresa();
+
+  // 4. Verificar/activar plugin
+  await sb.from('plugins_activados').upsert(
+    { proveedor_id: userId, plugin_id: 'rrhh-pro', nombre: 'RR.HH. PRO', activo: true },
+    { onConflict: 'proveedor_id,plugin_id' }
+  );
+
+  // 5. Cargar todo y renderizar como admin
+  rolActual = 'admin';
   await cargarTodo();
   inicializarFechas();
+  configurarTabsPorRol();
+  showTab('dashboard', null);
 })();
 
-function inicializarFechas(){
-  const hoy=new Date().toISOString().split('T')[0];
-  const mes=new Date().toISOString().slice(0,7);
-  if(document.getElementById('asist-fecha')) document.getElementById('asist-fecha').value=hoy;
-  if(document.getElementById('asist-hora')) document.getElementById('asist-hora').value=new Date().toTimeString().slice(0,5);
-  if(document.getElementById('nom-periodo')) document.getElementById('nom-periodo').value=mes;
-  if(document.getElementById('serv-fecha')) document.getElementById('serv-fecha').value=hoy;
-  if(document.getElementById('cont-inicio')) document.getElementById('cont-inicio').value=hoy;
-  generarCodigoContrato();
+// ═══════════════════════ EMPRESA ═══════════════════════
+async function cargarDatosEmpresa() {
+  // Intentar desde tabla 'empresas' primero, luego 'usuarios'
+  let logo = '', nombre = '', ruc = '', direccion = '', inicial = 'P';
+  const { data: emp } = await sb.from('empresas').select('*').eq('proveedor_id', userId).single().catch(() => ({ data: null }));
+  if (emp) {
+    empresaData = emp;
+    logo = emp.logo_url || emp.logo || '';
+    nombre = emp.nombre || emp.razon_social || '';
+    ruc = emp.ruc || '';
+    direccion = emp.direccion || '';
+  } else {
+    // Fallback a usuarios
+    logo = userData.logo_url || userData.logo || userData.foto || '';
+    nombre = userData.empresa || userData.nombre_empresa || userData.nombre || 'Mi empresa';
+    ruc = userData.ruc || '';
+    direccion = userData.direccion || '';
+    empresaData = { logo_url: logo, nombre, ruc, direccion };
+  }
+  inicial = (nombre || 'P')[0].toUpperCase();
+
+  // Header logo
+  const logoHeader = document.getElementById('empresa-logo-header');
+  const inicialHeader = document.getElementById('empresa-inicial-header');
+  if (logo) {
+    logoHeader.innerHTML = `<img src="${logo}" alt="${nombre}" onerror="this.style.display='none'">`;
+  } else {
+    inicialHeader.textContent = inicial;
+  }
+  document.getElementById('empresa-nombre-header').textContent = nombre || 'RR.HH. PRO';
+  document.getElementById('empresa-sub-header').textContent = ruc ? `RUC: ${ruc}` : (userData.empresa || 'Mi empresa');
+
+  // Login modal logo
+  const loginLogo = document.getElementById('login-empresa-logo');
+  if (logo) loginLogo.innerHTML = `<img src="${logo}" style="width:100%;height:100%;object-fit:cover;border-radius:16px;" alt="">`;
+  else loginLogo.textContent = inicial;
+  document.getElementById('login-empresa-nombre').textContent = nombre || 'PROVEED';
+
+  return { logo, nombre, ruc, direccion };
 }
 
-async function cargarTodo(){
-  const [empR,sucR,contrR,nomR,servR,asistR] = await Promise.all([
-    sb.from('rrhh_empleados').select('*').eq('proveedor_id',userId).order('created_at',{ascending:false}),
-    sb.from('sucursales').select('*').eq('proveedor_id',userId),
-    sb.from('rrhh_contratos').select('*').eq('proveedor_id',userId).order('created_at',{ascending:false}),
-    sb.from('rrhh_nomina').select('*').eq('proveedor_id',userId).order('created_at',{ascending:false}),
-    sb.from('rrhh_servicios_b2b').select('*').eq('proveedor_id',userId).order('created_at',{ascending:false}),
-    sb.from('rrhh_asistencia').select('*').eq('proveedor_id',userId).order('fecha',{ascending:false}).limit(50)
+function renderEmpresaBanner(contenedorId) {
+  const cont = document.getElementById(contenedorId);
+  if (!cont) return;
+  const logo = empresaData.logo_url || empresaData.logo || '';
+  const nombre = empresaData.nombre || empresaData.razon_social || userData.empresa || 'Mi empresa';
+  const ruc = empresaData.ruc || userData.ruc || '';
+  const direccion = empresaData.direccion || userData.direccion || '';
+  const inicial = (nombre || 'P')[0].toUpperCase();
+  cont.innerHTML = `
+    <div class="empresa-banner">
+      <div class="empresa-banner-logo">
+        ${logo ? `<img src="${logo}" alt="${nombre}" onerror="this.style.display='none';this.parentNode.textContent='${inicial}'">` : inicial}
+      </div>
+      <div class="empresa-banner-info">
+        <div class="empresa-banner-nombre">${nombre}</div>
+        ${ruc ? `<div class="empresa-banner-ruc">RUC: ${ruc}</div>` : ''}
+        ${direccion ? `<div class="empresa-banner-dir">📍 ${direccion}</div>` : ''}
+      </div>
+    </div>`;
+}
+
+// ═══════════════════════ ROLES Y TABS ═══════════════════════
+function configurarTabsPorRol() {
+  const tabsNav = document.getElementById('tabs-nav');
+  const rolBadge = document.getElementById('rol-badge-header');
+
+  let tabs = [];
+  if (rolActual === 'admin' || rolActual === 'gerente') {
+    tabs = [
+      { id: 'dashboard', label: 'Dashboard' },
+      { id: 'empleados', label: 'Empleados' },
+      { id: 'asistencia', label: 'Asistencia' },
+      { id: 'nomina', label: 'Nómina' },
+      { id: 'contratos', label: 'Contratos' },
+      { id: 'servicios', label: 'Servicios B2B' },
+      { id: 'geofence', label: 'Geofencing' },
+    ];
+    if (rolActual === 'admin') tabs.push({ id: 'gestores', label: 'Gestores' });
+    rolBadge.textContent = rolActual === 'admin' ? 'Admin' : 'Gerente';
+    rolBadge.className = 'rol-badge ' + (rolActual === 'admin' ? 'rol-admin' : 'rol-gerente');
+  } else {
+    // Worker: solo ve su asistencia
+    tabs = [{ id: 'mi-asistencia', label: 'Mi Asistencia' }];
+    rolBadge.textContent = 'Worker';
+    rolBadge.className = 'rol-badge rol-worker';
+  }
+
+  tabsNav.innerHTML = tabs.map((t, i) =>
+    `<button class="tab-btn${i === 0 ? ' active' : ''}" onclick="showTab('${t.id}',this)">${t.label}</button>`
+  ).join('');
+}
+
+// ═══════════════════════ CARGA DE DATOS ═══════════════════════
+async function cargarTodo() {
+  const [empR, sucR, contrR, nomR, servR, asistR, gestR] = await Promise.all([
+    sb.from('rrhh_empleados').select('*').eq('proveedor_id', userId).order('created_at', { ascending: false }),
+    sb.from('sucursales').select('*').eq('proveedor_id', userId),
+    sb.from('rrhh_contratos').select('*').eq('proveedor_id', userId).order('created_at', { ascending: false }),
+    sb.from('rrhh_nomina').select('*').eq('proveedor_id', userId).order('created_at', { ascending: false }),
+    sb.from('rrhh_servicios_b2b').select('*').eq('proveedor_id', userId).order('created_at', { ascending: false }),
+    sb.from('rrhh_asistencia').select('*').eq('proveedor_id', userId).order('fecha', { ascending: false }).limit(100),
+    sb.from('rrhh_gestores').select('*').eq('proveedor_id', userId).order('created_at', { ascending: false }),
   ]);
-  empleados=empR.data||[];
-  sucursales=sucR.data||[];
-  contratos=contrR.data||[];
-  nominas=nomR.data||[];
-  servicios=servR.data||[];
-  asistencias=asistR.data||[];
+  empleados = empR.data || [];
+  sucursales = sucR.data || [];
+  contratos = contrR.data || [];
+  nominas = nomR.data || [];
+  servicios = servR.data || [];
+  asistencias = asistR.data || [];
+  gestores = gestR.data || [];
   renderTodo();
 }
 
-function renderTodo(){
-  renderDashboard();
-  renderEmpleados();
-  renderAsistencia();
-  renderNomina();
-  renderContratos();
-  renderServicios();
+function renderTodo() {
+  if (rolActual === 'worker') {
+    renderWorkerPanel();
+  } else {
+    renderDashboard();
+    renderEmpleados();
+    renderAsistencia();
+    renderNomina();
+    renderContratos();
+    renderServicios();
+    renderGestores();
+  }
   poblarSelects();
 }
 
-function renderDashboard(){
-  const activos=empleados.filter(e=>e.activo!==false).length;
-  const hoy=new Date().toISOString().split('T')[0];
-  const asistHoy=asistencias.filter(a=>a.fecha===hoy).length;
-  const totalNomina=nominas.reduce((s,n)=>s+(n.salario_neto||0),0);
+// ═══════════════════════ DASHBOARD ═══════════════════════
+function renderDashboard() {
+  renderEmpresaBanner('empresa-banner-dash');
+  const activos = empleados.filter(e => e.activo !== false).length;
+  const hoy = new Date().toISOString().split('T')[0];
+  const asistHoy = asistencias.filter(a => a.fecha === hoy);
+  const totalNomina = nominas.reduce((s, n) => s + (n.salario_neto || 0), 0);
+  const alertas = empleados.filter(e => (e.score_desempeno || 100) < 60).length;
 
-  // Alertas: empleados con atrasos graves
-  const alertas=empleados.filter(e=>(e.score_desempeno||100)<60).length;
-
-  document.getElementById('k-empleados').textContent=activos;
-  document.getElementById('k-asistencia').textContent=asistHoy+'/'+activos;
-  document.getElementById('k-nomina').textContent='$'+totalNomina.toFixed(0);
-  document.getElementById('k-alertas').textContent=alertas;
+  document.getElementById('k-empleados').textContent = activos;
+  document.getElementById('k-asistencia').textContent = asistHoy.length + '/' + activos;
+  document.getElementById('k-nomina').textContent = '$' + totalNomina.toFixed(0);
+  document.getElementById('k-alertas').textContent = alertas;
 
   // Sucursal principal
-  const sucPrincipal=sucursales.find(s=>s.principal)||sucursales[0];
-  if(sucPrincipal){
-    document.getElementById('sucursal-info-dash').innerHTML=`
+  const sucPrincipal = sucursales.find(s => s.principal) || sucursales[0];
+  if (sucPrincipal) {
+    document.getElementById('sucursal-info-dash').innerHTML = `
       <div class="sucursal-chip"><svg viewBox="0 0 24 24"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg><span>${sucPrincipal.nombre}</span></div>
-      <div style="font-size:0.78rem;color:#666;">${sucPrincipal.ciudad||'—'} · ${sucPrincipal.direccion||'—'}</div>
-      <div style="font-size:0.72rem;color:#aaa;margin-top:4px;">${sucPrincipal.horario||'Horario no configurado'}</div>`;
+      <div style="font-size:0.78rem;color:#666;">${sucPrincipal.ciudad || '—'} · ${sucPrincipal.direccion || '—'}</div>
+      <div style="font-size:0.72rem;color:#aaa;margin-top:4px;">${sucPrincipal.horario || 'Horario no configurado'}</div>`;
   }
 
   // Alertas lista
-  const alertasEmp=empleados.filter(e=>(e.score_desempeno||100)<70);
-  const alertasLista=document.getElementById('alertas-lista');
-  if(!alertasEmp.length){ alertasLista.innerHTML='<div class="empty-state"><svg viewBox="0 0 24 24"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg><p>Sin alertas activas</p></div>'; }
-  else{
-    alertasLista.innerHTML='';
-    alertasEmp.forEach(e=>{
-      const div=document.createElement('div');
-      div.className='card';
-      div.style.borderColor='rgba(255,77,77,0.2)';
-      div.style.background='rgba(255,77,77,0.02)';
-      div.innerHTML=`<div style="display:flex;align-items:center;gap:10px;"><div style="font-size:1.2rem;">⚠️</div><div><div style="font-size:0.85rem;font-weight:700;color:var(--negro);">${e.nombre}</div><div style="font-size:0.72rem;color:var(--rojo);">Score de desempeño: ${e.score_desempeno||100}% — Riesgo de despido</div></div></div>`;
+  const alertasEmp = empleados.filter(e => (e.score_desempeno || 100) < 70);
+  const alertasLista = document.getElementById('alertas-lista');
+  if (!alertasEmp.length) {
+    alertasLista.innerHTML = '<div class="empty-state"><svg viewBox="0 0 24 24"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg><p>Sin alertas activas</p></div>';
+  } else {
+    alertasLista.innerHTML = '';
+    alertasEmp.forEach(e => {
+      const div = document.createElement('div'); div.className = 'card';
+      div.style.borderColor = 'rgba(255,77,77,0.2)';
+      div.innerHTML = `<div style="display:flex;align-items:center;gap:10px;"><div style="font-size:1.2rem;">⚠️</div><div><div style="font-size:0.85rem;font-weight:700;">${e.nombre}</div><div style="font-size:0.72rem;color:var(--rojo);">Score: ${e.score_desempeno || 100}% — Riesgo de despido</div></div></div>`;
       alertasLista.appendChild(div);
     });
   }
 
- // Resumen asistencia 7 días
-  const resumen=document.getElementById('resumen-asist');
-  const dias=[];
-  for(let i=6;i>=0;i--){
-    const d=new Date(); d.setDate(d.getDate()-i);
-    const fechaStr=d.toISOString().split('T')[0];
-    const asistDia=asistencias.filter(a=>a.fecha===fechaStr);
-    dias.push({fecha:fechaStr,dia:d.toLocaleDateString('es-EC',{weekday:'short'}),total:asistDia.length,puntuales:asistDia.filter(a=>a.estado==='puntual').length,tarde:asistDia.filter(a=>a.estado==='tarde').length,faltas:asistDia.filter(a=>a.estado==='falta').length});
+  // Resumen asistencia 7 días
+  const resumen = document.getElementById('resumen-asist');
+  const dias = [];
+  for (let i = 6; i >= 0; i--) {
+    const d = new Date(); d.setDate(d.getDate() - i);
+    const fs = d.toISOString().split('T')[0];
+    const ad = asistencias.filter(a => a.fecha === fs);
+    dias.push({ dia: d.toLocaleDateString('es-EC', { weekday: 'short' }), total: ad.length, puntuales: ad.filter(a => a.estado === 'puntual').length, tarde: ad.filter(a => a.estado === 'tarde').length, faltas: ad.filter(a => a.estado === 'falta').length });
   }
-  resumen.innerHTML=dias.map(d=>`
+  resumen.innerHTML = dias.map(d => `
     <div style="display:flex;align-items:center;gap:10px;padding:6px 0;border-bottom:1px solid #f5f5f5;">
       <div style="font-size:0.72rem;font-weight:700;color:#aaa;width:30px;">${d.dia}</div>
-      <div style="flex:1;height:6px;background:#eee;border-radius:6px;overflow:hidden;"><div style="height:100%;width:${d.total>0?Math.round(d.puntuales/Math.max(activos,1)*100):0}%;background:var(--verde);border-radius:6px;"></div></div>
+      <div style="flex:1;height:6px;background:#eee;border-radius:6px;overflow:hidden;"><div style="height:100%;width:${d.total > 0 ? Math.round(d.puntuales / Math.max(activos, 1) * 100) : 0}%;background:var(--verde);border-radius:6px;"></div></div>
       <div style="font-size:0.68rem;color:#aaa;">${d.puntuales}✓ ${d.tarde}⚠ ${d.faltas}✗</div>
     </div>`).join('');
 }
 
-function renderEmpleados(){
-  const cont=document.getElementById('empleados-lista');
-  if(!empleados.length){ cont.innerHTML='<div class="empty-state"><svg viewBox="0 0 24 24"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg><p>Sin empleados registrados</p></div>'; return; }
-  cont.innerHTML='';
-  empleados.forEach(e=>{
-    const div=document.createElement('div'); div.className='empleado-item';
-    div.onclick=()=>verDetalleEmpleado(e);
-    const score=e.score_desempeno||100;
-    const badgeClass=score>=80?'badge-activo':score>=60?'badge-pendiente':'badge-riesgo';
-    const badgeTxt=score>=80?'Óptimo':score>=60?'Observación':'Riesgo';
-    const bgColor=e.activo!==false?'rgba(50,205,50,0.1)':'rgba(255,77,77,0.1)';
-    const foto=e.foto||'';
-    div.innerHTML=`
-      <div class="emp-avatar" style="background:${bgColor};">${foto?`<img src="${foto}" alt="">`:`<span style="color:var(--verde);font-size:0.9rem;font-weight:800;">${(e.nombre||'E')[0].toUpperCase()}</span>`}</div>
+// ═══════════════════════ EMPLEADOS ═══════════════════════
+function renderEmpleados() {
+  const cont = document.getElementById('empleados-lista');
+  if (!empleados.length) { cont.innerHTML = '<div class="empty-state"><svg viewBox="0 0 24 24"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg><p>Sin empleados registrados</p></div>'; return; }
+  cont.innerHTML = '';
+  empleados.forEach(e => {
+    const div = document.createElement('div'); div.className = 'empleado-item';
+    div.onclick = () => verDetalleEmpleado(e);
+    const score = e.score_desempeno || 100;
+    const badgeClass = score >= 80 ? 'badge-activo' : score >= 60 ? 'badge-pendiente' : 'badge-riesgo';
+    const badgeTxt = score >= 80 ? 'Óptimo' : score >= 60 ? 'Observación' : 'Riesgo';
+    div.innerHTML = `
+      <div class="emp-avatar" style="background:rgba(50,205,50,0.1);">
+        ${e.foto ? `<img src="${e.foto}" alt="">` : `<span style="color:var(--verde);font-size:0.9rem;font-weight:800;">${(e.nombre || 'E')[0].toUpperCase()}</span>`}
+      </div>
       <div class="emp-info">
-        <div class="emp-nombre">${e.nombre||'Sin nombre'}</div>
-        <div class="emp-cargo">${e.cargo||'—'} · ${e.sucursal_nombre||'Sin sucursal'}</div>
-        <div class="emp-cedula">CI: ${e.cedula||'—'} · $${Number(e.salario||0).toFixed(0)}/mes</div>
+        <div class="emp-nombre">${e.nombre || 'Sin nombre'}</div>
+        <div class="emp-cargo">${e.cargo || '—'} · ${e.sucursal_nombre || 'Sin sucursal'}</div>
+        <div class="emp-cedula">CI: ${e.cedula || '—'} · $${Number(e.salario || 0).toFixed(0)}/mes</div>
       </div>
       <span class="emp-badge ${badgeClass}">${badgeTxt}</span>`;
     cont.appendChild(div);
   });
 }
 
-function renderAsistencia(){
-  const hoy=new Date().toISOString().split('T')[0];
-  const asistHoy=asistencias.filter(a=>a.fecha===hoy);
-  const cont=document.getElementById('asistencia-lista');
+// ═══════════════════════ ASISTENCIA ═══════════════════════
+function renderAsistencia() {
+  const hoy = new Date().toISOString().split('T')[0];
+  const asistHoy = asistencias.filter(a => a.fecha === hoy);
+  const cont = document.getElementById('asistencia-lista');
+  const geoConfig = JSON.parse(localStorage.getItem(`geo_config_${userId}`) || '{}');
+  const sucPrincipal = sucursales.find(s => s.principal) || sucursales[0];
+  if (sucPrincipal) document.getElementById('geo-info-txt').textContent = `${sucPrincipal.nombre} · ${geoConfig.radio || 200}m radio · ${geoConfig.horaIni || '08:00'}-${geoConfig.horaFin || '08:40'}`;
 
-  // Geofence info
-  const geoConfig=JSON.parse(localStorage.getItem(`geo_config_${userId}`)||'{}');
-  const sucPrincipal=sucursales.find(s=>s.principal)||sucursales[0];
-  if(sucPrincipal) document.getElementById('geo-info-txt').textContent=`${sucPrincipal.nombre} · ${geoConfig.radio||200}m radio · ${geoConfig.horaIni||'08:00'}-${geoConfig.horaFin||'08:40'}`;
+  if (!asistHoy.length) { cont.innerHTML = '<div class="empty-state"><p>Sin registros de asistencia hoy</p></div>'; return; }
+  cont.innerHTML = '';
+  asistHoy.forEach(a => {
+    const div = document.createElement('div'); div.className = 'asist-item';
+    const horaEntrada = a.hora_entrada || '—';
+    const horaSalida = a.hora_salida || null;
+    const minAtraso = calcularAtraso(horaEntrada, geoConfig.horaFin || '08:40');
+    const estClass = a.estado === 'puntual' ? 'est-puntual' : a.estado === 'tarde' ? 'est-tarde' : a.estado === 'permiso' ? 'est-permiso' : 'est-falta';
 
-  if(!asistHoy.length){ cont.innerHTML='<div class="empty-state"><p>Sin registros de asistencia hoy</p></div>'; return; }
-  cont.innerHTML='';
-  asistHoy.forEach(a=>{
-    const div=document.createElement('div'); div.className='asist-item';
-    const horaEntrada=a.hora_entrada||'—';
-    const minAtraso=calcularAtraso(horaEntrada,geoConfig.horaFin||'08:40');
-    const atrasoClass=minAtraso<=0?'atraso-ok':minAtraso<=15?'atraso-warning':'atraso-danger';
-    const atrasoTxt=minAtraso<=0?'Puntual':`+${minAtraso} min tarde`;
-    const estClass=a.estado==='puntual'?'est-puntual':a.estado==='tarde'?'est-tarde':'est-falta';
-    div.innerHTML=`
-      <div class="asist-foto">${a.foto_url?`<img src="${a.foto_url}" alt="">`:(a.nombre||'?')[0].toUpperCase()}</div>
-      <div class="asist-info">
-        <div class="asist-nombre">${a.empleado_nombre||'Empleado'}</div>
-        <div class="asist-hora">Entrada: ${horaEntrada}</div>
-        <div class="asist-atraso ${atrasoClass}">${atrasoTxt}</div>
+    div.innerHTML = `
+      <div class="asist-header">
+        <div class="asist-foto">${a.foto_url ? `<img src="${a.foto_url}" alt="">` : (a.empleado_nombre || '?')[0].toUpperCase()}</div>
+        <div class="asist-info">
+          <div class="asist-nombre">${a.empleado_nombre || 'Empleado'}</div>
+          <div class="asist-hora">${minAtraso > 0 ? `+${minAtraso} min tarde` : 'Puntual'}</div>
+        </div>
+        <div class="asist-estado ${estClass}">${a.estado || '—'}</div>
       </div>
-      <div class="asist-estado ${estClass}">${a.estado||'—'}</div>`;
+      <div class="asist-horario">
+        <div class="asist-hora-box">
+          <div class="asist-hora-lbl">📥 Entrada</div>
+          <div class="asist-hora-val entrada">${horaEntrada !== '—' ? horaEntrada : '—:——'}</div>
+        </div>
+        <div class="asist-hora-box">
+          <div class="asist-hora-lbl">📤 Salida</div>
+          <div class="asist-hora-val ${horaSalida ? 'salida' : 'pendiente'}">${horaSalida || '—:——'}</div>
+        </div>
+      </div>
+      ${!horaSalida && horaEntrada !== '—' ? `<button class="btn-salida" onclick="registrarSalidaManual('${a.id}')">📤 Registrar salida ahora</button>` : ''}`;
     cont.appendChild(div);
   });
 }
 
-function calcularAtraso(horaEntrada, horaLimite){
-  if(!horaEntrada||horaEntrada==='—') return 0;
-  const [h1,m1]=horaEntrada.split(':').map(Number);
-  const [h2,m2]=horaLimite.split(':').map(Number);
-  return (h1*60+m1)-(h2*60+m2);
-}
-
-function renderNomina(){
-  const cont=document.getElementById('nomina-lista');
-  let total=0;
-  if(!nominas.length){ cont.innerHTML='<div class="empty-state"><p>Sin registros de nómina</p></div>'; document.getElementById('total-nomina').textContent='$0.00'; return; }
-  cont.innerHTML='';
-  nominas.forEach(n=>{
-    const salBruto=n.salario_base||0;
-    const iess=salBruto*(n.porcentaje_iess||9.45)/100;
-    const descuentos=n.otros_descuentos||0;
-    const salNeto=salBruto-iess-descuentos;
-    total+=salNeto;
-    const decTercero=(salBruto/12).toFixed(2);
-    const decCuarto=(SBU/12).toFixed(2);
-    const div=document.createElement('div'); div.className='nomina-item';
-    div.innerHTML=`
-      <div class="nom-header"><div class="nom-nombre">${n.empleado_nombre||'Empleado'}</div><div class="nom-salario">$${salNeto.toFixed(2)}</div></div>
+// ═══════════════════════ NÓMINA ═══════════════════════
+function renderNomina() {
+  const cont = document.getElementById('nomina-lista');
+  let total = 0;
+  if (!nominas.length) { cont.innerHTML = '<div class="empty-state"><p>Sin registros de nómina</p></div>'; document.getElementById('total-nomina').textContent = '$0.00'; return; }
+  cont.innerHTML = '';
+  nominas.forEach(n => {
+    const salBruto = n.salario_base || 0;
+    const iess = salBruto * (n.porcentaje_iess || 9.45) / 100;
+    const descuentos = n.otros_descuentos || 0;
+    const salNeto = salBruto - iess - descuentos;
+    total += salNeto;
+    const div = document.createElement('div'); div.className = 'nomina-item';
+    div.innerHTML = `
+      <div class="nom-header"><div class="nom-nombre">${n.empleado_nombre || 'Empleado'}</div><div class="nom-salario">$${salNeto.toFixed(2)}</div></div>
       <div class="nom-detalles">
         <div class="nom-det">Bruto: <span>$${salBruto.toFixed(2)}</span></div>
-        <div class="nom-det">IESS (${n.porcentaje_iess||9.45}%): <span>-$${iess.toFixed(2)}</span></div>
-        <div class="nom-det">Décimo 13°: <span>$${decTercero}</span></div>
-        <div class="nom-det">Décimo 14°: <span>$${decCuarto}</span></div>
-        <div class="nom-det">Banco: <span>${n.banco||'—'}</span></div>
-        <div class="nom-det">Cuenta: <span>${n.cuenta||'—'}</span></div>
+        <div class="nom-det">IESS (${n.porcentaje_iess || 9.45}%): <span>-$${iess.toFixed(2)}</span></div>
+        <div class="nom-det">Décimo 13°: <span>$${(salBruto / 12).toFixed(2)}</span></div>
+        <div class="nom-det">Décimo 14°: <span>$${(SBU / 12).toFixed(2)}</span></div>
+        <div class="nom-det">Banco: <span>${n.banco || '—'}</span></div>
+        <div class="nom-det">Cuenta: <span>${n.cuenta || '—'}</span></div>
       </div>`;
     cont.appendChild(div);
   });
-  document.getElementById('total-nomina').textContent='$'+total.toFixed(2);
+  document.getElementById('total-nomina').textContent = '$' + total.toFixed(2);
 }
 
-function renderContratos(){
-  const cont=document.getElementById('contratos-lista');
-  if(!contratos.length){ cont.innerHTML='<div class="empty-state"><svg viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/></svg><p>Sin contratos registrados</p></div>'; return; }
-  cont.innerHTML='';
-  contratos.forEach(c=>{
-    const div=document.createElement('div'); div.className='contrato-item';
-    div.innerHTML=`
-      <div class="cont-header">
-        <div class="cont-code">${c.codigo||'CT-—'}</div>
-        <span class="emp-badge badge-activo">${c.tipo||'—'}</span>
-      </div>
-      <div class="cont-nombre">${c.empleado_nombre||'Empleado'}</div>
-      <div class="cont-tipo">${c.fecha_inicio||'—'} → ${c.fecha_fin||'Indefinido'} · $${Number(c.salario||0).toFixed(2)}/mes</div>
+// ═══════════════════════ CONTRATOS ═══════════════════════
+function renderContratos() {
+  const cont = document.getElementById('contratos-lista');
+  if (!contratos.length) { cont.innerHTML = '<div class="empty-state"><p>Sin contratos registrados</p></div>'; return; }
+  cont.innerHTML = '';
+  contratos.forEach(c => {
+    const div = document.createElement('div'); div.className = 'contrato-item';
+    div.innerHTML = `
+      <div class="cont-header"><div class="cont-code">${c.codigo || 'CT-—'}</div><span class="emp-badge badge-activo">${c.tipo || '—'}</span></div>
+      <div class="cont-nombre">${c.empleado_nombre || 'Empleado'}</div>
+      <div class="cont-tipo">${c.fecha_inicio || '—'} → ${c.fecha_fin || 'Indefinido'} · $${Number(c.salario || 0).toFixed(2)}/mes</div>
       <div class="cont-acciones">
-        ${c.scan_url?`<button class="cont-btn" style="background:rgba(50,205,50,0.1);color:var(--verde);" onclick="verContrato('${c.scan_url}')">📄 Ver escáner</button>`:'<span style="font-size:0.7rem;color:#bbb;">Sin escáner</span>'}
+        ${c.scan_url ? `<button class="cont-btn" style="background:rgba(50,205,50,0.1);color:var(--verde);" onclick="window.open('${c.scan_url}','_blank')">📄 Ver escáner</button>` : '<span style="font-size:0.7rem;color:#bbb;">Sin escáner</span>'}
       </div>`;
     cont.appendChild(div);
   });
 }
 
-function renderServicios(){
-  const cont=document.getElementById('servicios-lista');
-  if(!servicios.length){ cont.innerHTML='<div class="empty-state"><p>Sin servicios B2B registrados</p></div>'; return; }
-  cont.innerHTML='';
-  servicios.forEach(s=>{
-    const div=document.createElement('div'); div.className='servicio-item';
-    const fotos=s.fotos_evidencia||[];
-    div.innerHTML=`
-      <div class="serv-header"><div class="serv-empresa">${s.empresa||'Empresa'}</div><div class="serv-monto">$${Number(s.monto||0).toFixed(2)}</div></div>
-      <div class="serv-desc">${s.descripcion||'—'}</div>
-      ${fotos.length?`<div class="serv-evidencias">${fotos.map(f=>`<img src="${f}" class="serv-foto" alt="" onclick="window.open('${f}','_blank')">`).join('')}</div>`:'<div style="font-size:0.72rem;color:var(--rojo);margin-bottom:8px;">⚠ Sin evidencias</div>'}
+// ═══════════════════════ SERVICIOS ═══════════════════════
+function renderServicios() {
+  const cont = document.getElementById('servicios-lista');
+  if (!servicios.length) { cont.innerHTML = '<div class="empty-state"><p>Sin servicios B2B registrados</p></div>'; return; }
+  cont.innerHTML = '';
+  servicios.forEach(s => {
+    const fotos = s.fotos_evidencia || [];
+    const div = document.createElement('div'); div.className = 'servicio-item';
+    div.innerHTML = `
+      <div class="serv-header"><div class="serv-empresa">${s.empresa || 'Empresa'}</div><div class="serv-monto">$${Number(s.monto || 0).toFixed(2)}</div></div>
+      <div class="serv-desc">${s.descripcion || '—'}</div>
+      ${fotos.length ? `<div class="serv-evidencias">${fotos.map(f => `<img src="${f}" class="serv-foto" alt="" onclick="window.open('${f}','_blank')">`).join('')}</div>` : '<div style="font-size:0.72rem;color:var(--rojo);margin-bottom:8px;">⚠ Sin evidencias</div>'}
       <div style="display:flex;align-items:center;justify-content:space-between;">
-        <span class="serv-estado serv-${s.estado||'pendiente'}">${s.estado||'pendiente'}</span>
-        ${s.estado==='pendiente'&&fotos.length?`<button onclick="aprobarServicio('${s.id}')" style="background:rgba(50,205,50,0.1);color:var(--verde);border:none;padding:6px 12px;border-radius:8px;font-family:'Inter',sans-serif;font-size:0.72rem;font-weight:700;cursor:pointer;">✓ Autorizar pago</button>`:''}
+        <span class="serv-estado serv-${s.estado || 'pendiente'}">${s.estado || 'pendiente'}</span>
+        ${s.estado === 'pendiente' && fotos.length ? `<button onclick="aprobarServicio('${s.id}')" style="background:rgba(50,205,50,0.1);color:var(--verde);border:none;padding:6px 12px;border-radius:8px;font-family:'Inter',sans-serif;font-size:0.72rem;font-weight:700;cursor:pointer;">✓ Autorizar pago</button>` : ''}
       </div>`;
     cont.appendChild(div);
   });
 }
 
-function poblarSelects(){
-  const selects=['nom-empleado','cont-empleado','asist-empleado','emp-sucursal'];
-  selects.forEach(id=>{
-    const el=document.getElementById(id);
-    if(!el) return;
-    if(id==='emp-sucursal'){
-      el.innerHTML='<option value="">Sin sucursal</option>';
-      sucursales.forEach(s=>{ el.innerHTML+=`<option value="${s.id}">${s.nombre}</option>`; });
-    } else {
-      el.innerHTML='<option value="">Seleccionar empleado</option>';
-      empleados.forEach(e=>{ el.innerHTML+=`<option value="${e.id}">${e.nombre}</option>`; });
-    }
+// ═══════════════════════ GESTORES ═══════════════════════
+function renderGestores() {
+  const cont = document.getElementById('gestores-lista');
+  if (!gestores.length) {
+    cont.innerHTML = '<div class="empty-state"><svg viewBox="0 0 24 24"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg><p>Sin gestores registrados. Agrega gerentes o workers.</p></div>';
+    return;
+  }
+  cont.innerHTML = '';
+  gestores.forEach(g => {
+    const div = document.createElement('div'); div.className = 'gestor-item';
+    const rolLabel = g.rol === 'gerente' ? 'Gerente RRHH' : 'Worker';
+    const rolClass = g.rol === 'gerente' ? 'rol-gerente' : 'rol-worker';
+    div.innerHTML = `
+      <div class="gestor-avatar">${(g.nombre || 'G')[0].toUpperCase()}</div>
+      <div class="gestor-info">
+        <div class="gestor-nombre">${g.nombre || '—'}</div>
+        <div class="gestor-email">${g.email || '—'}</div>
+        <span class="rol-badge ${rolClass}" style="display:inline-block;margin-top:4px;">${rolLabel}</span>
+      </div>
+      <div class="gestor-acciones">
+        <button onclick="eliminarGestor('${g.id}')" style="background:rgba(255,77,77,0.1);color:var(--rojo);border:none;padding:7px 10px;border-radius:10px;font-family:'Inter',sans-serif;font-size:0.7rem;font-weight:700;cursor:pointer;">Eliminar</button>
+      </div>`;
+    cont.appendChild(div);
   });
 }
 
-// GUARDAR EMPLEADO
-window.guardarEmpleado=async function(){
-  const nombre=document.getElementById('emp-nombre').value.trim();
-  const cedula=document.getElementById('emp-cedula').value.trim();
-  const cargo=document.getElementById('emp-cargo').value.trim();
-  if(!nombre||!cedula||!cargo){ showToast('Completa nombre, cédula y cargo'); return; }
-  document.getElementById('upload-overlay').classList.add('show');
-  try{
-    let fotoUrl='';
-    if(empFotoFile){
-      const path=`rrhh/${userId}/empleados/${Date.now()}`;
-      const { error } = await sb.storage.from('proveed-media').upload(path,empFotoFile,{upsert:true});
-      if(!error){ const { data } = sb.storage.from('proveed-media').getPublicUrl(path); fotoUrl=data.publicUrl; }
+// ═══════════════════════ WORKER PANEL ═══════════════════════
+function renderWorkerPanel() {
+  if (rolActual !== 'worker' || !gestorActual) return;
+  renderEmpresaBanner('worker-empresa-banner');
+
+  const hoy = new Date().toISOString().split('T')[0];
+  const empId = gestorActual.empleado_id;
+  workerEmpleadoId = empId;
+
+  const miAsistHoy = empId ? asistencias.find(a => a.fecha === hoy && a.empleado_id === empId) : null;
+
+  const btnEntrada = document.getElementById('btn-worker-entrada');
+  const btnSalida = document.getElementById('btn-worker-salida');
+  const estadoDiv = document.getElementById('worker-estado-hoy');
+  const horaEntradaDiv = document.getElementById('worker-hora-entrada');
+  const horaSalidaDiv = document.getElementById('worker-hora-salida');
+
+  if (miAsistHoy) {
+    horaEntradaDiv.textContent = miAsistHoy.hora_entrada || '—:——';
+    horaSalidaDiv.textContent = miAsistHoy.hora_salida || '—:——';
+
+    if (miAsistHoy.hora_salida) {
+      // Ya registró salida: todo completado
+      estadoDiv.textContent = '✅ Jornada completa';
+      estadoDiv.className = 'worker-estado-badge est-puntual';
+      btnEntrada.classList.add('btn-disabled'); btnEntrada.disabled = true;
+      btnSalida.classList.add('btn-disabled'); btnSalida.disabled = true;
+    } else {
+      // Solo entrada registrada
+      estadoDiv.textContent = '⏱ En turno — Pendiente salida';
+      estadoDiv.className = 'worker-estado-badge est-pendiente' ;
+      estadoDiv.style.background = 'rgba(0,122,255,0.1)'; estadoDiv.style.color = 'var(--azul)';
+      btnEntrada.classList.add('btn-disabled'); btnEntrada.disabled = true;
+      btnSalida.classList.remove('btn-disabled'); btnSalida.disabled = false;
     }
-    const sucId=document.getElementById('emp-sucursal').value;
-    const suc=sucursales.find(s=>s.id===sucId);
-    const datos={
-      proveedor_id:userId, nombre, cedula, cargo,
-      telefono:document.getElementById('emp-tel').value.trim(),
-      salario:parseFloat(document.getElementById('emp-salario').value)||0,
-      fecha_inicio:document.getElementById('emp-fecha').value,
-      banco:document.getElementById('emp-banco').value.trim(),
-      cuenta:document.getElementById('emp-cuenta').value.trim(),
-      cargas_familiares:parseInt(document.getElementById('emp-cargas').value)||0,
-      sucursal_id:sucId||null,
-      sucursal_nombre:suc?.nombre||'',
-      foto:fotoUrl||null,
-      activo:true,
-      score_desempeno:100
+  } else {
+    estadoDiv.textContent = '⏳ Sin registro hoy';
+    estadoDiv.className = 'worker-estado-badge est-falta';
+    horaEntradaDiv.textContent = '—:——';
+    horaSalidaDiv.textContent = '—:——';
+    btnEntrada.classList.remove('btn-disabled'); btnEntrada.disabled = false;
+    btnSalida.classList.add('btn-disabled'); btnSalida.disabled = true;
+  }
+
+  // Historial del worker
+  const hist = document.getElementById('worker-historial-lista');
+  const misAsist = empId ? asistencias.filter(a => a.empleado_id === empId).slice(0, 14) : [];
+  if (!misAsist.length) { hist.innerHTML = '<div class="empty-state"><p>Sin historial de asistencia</p></div>'; return; }
+  hist.innerHTML = misAsist.map(a => `
+    <div class="asist-item">
+      <div class="asist-header" style="margin-bottom:8px;">
+        <div class="asist-info" style="flex:1;">
+          <div class="asist-nombre">${new Date(a.fecha + 'T12:00:00').toLocaleDateString('es-EC', { weekday: 'short', day: 'numeric', month: 'short' })}</div>
+        </div>
+        <div class="asist-estado ${a.estado === 'puntual' ? 'est-puntual' : a.estado === 'tarde' ? 'est-tarde' : 'est-falta'}">${a.estado || '—'}</div>
+      </div>
+      <div class="asist-horario">
+        <div class="asist-hora-box"><div class="asist-hora-lbl">📥 Entrada</div><div class="asist-hora-val entrada">${a.hora_entrada || '—:——'}</div></div>
+        <div class="asist-hora-box"><div class="asist-hora-lbl">📤 Salida</div><div class="asist-hora-val ${a.hora_salida ? 'salida' : 'pendiente'}">${a.hora_salida || '—:——'}</div></div>
+      </div>
+    </div>`).join('');
+}
+
+// ═══════════════════════ REGISTRO WORKER ═══════════════════════
+window.workerRegistrarEntrada = async function () {
+  if (!workerEmpleadoId) { showToast('Sin empleado vinculado. Contacta al administrador.'); return; }
+  const emp = empleados.find(e => e.id === workerEmpleadoId);
+  const horaEntrada = new Date().toTimeString().slice(0, 5);
+  const hoy = new Date().toISOString().split('T')[0];
+  const geoConfig = JSON.parse(localStorage.getItem(`geo_config_${userId}`) || '{}');
+  const horaLimite = geoConfig.horaFin || '08:40';
+  const minAtraso = calcularAtraso(horaEntrada, horaLimite);
+  let estado = 'puntual';
+  if (minAtraso > (geoConfig.gracia || 10)) estado = 'tarde';
+
+  showUpload(true);
+  try {
+    await sb.from('rrhh_asistencia').insert({
+      proveedor_id: userId, empleado_id: workerEmpleadoId,
+      empleado_nombre: emp?.nombre || gestorActual.nombre,
+      fecha: hoy, hora_entrada: horaEntrada,
+      estado, minutos_atraso: Math.max(0, minAtraso),
+      validado_geo: false
+    });
+    // Actualizar score
+    const puntos = minAtraso <= 0 ? 0 : minAtraso <= 10 ? 5 : minAtraso <= 30 ? 20 : 40;
+    const nuevoScore = Math.max(0, (emp?.score_desempeno || 100) - puntos);
+    await sb.from('rrhh_empleados').update({ score_desempeno: nuevoScore }).eq('id', workerEmpleadoId);
+    await cargarTodo();
+    showToast('✓ Entrada registrada: ' + horaEntrada);
+  } catch (e) { showToast('Error: ' + e.message); }
+  showUpload(false);
+};
+
+window.workerRegistrarSalida = async function () {
+  if (!workerEmpleadoId) { showToast('Sin empleado vinculado.'); return; }
+  const hoy = new Date().toISOString().split('T')[0];
+  const horaSalida = new Date().toTimeString().slice(0, 5);
+  const registro = asistencias.find(a => a.fecha === hoy && a.empleado_id === workerEmpleadoId);
+  if (!registro) { showToast('Primero registra la entrada.'); return; }
+  if (registro.hora_salida) { showToast('Ya registraste la salida hoy.'); return; }
+
+  showUpload(true);
+  try {
+    await sb.from('rrhh_asistencia').update({ hora_salida: horaSalida }).eq('id', registro.id);
+    await cargarTodo();
+    showToast('✓ Salida registrada: ' + horaSalida);
+  } catch (e) { showToast('Error: ' + e.message); }
+  showUpload(false);
+};
+
+// ═══════════════════════ REGISTRO SALIDA MANUAL (Admin) ═══════════════════════
+window.registrarSalidaManual = async function (asistId) {
+  const horaSalida = new Date().toTimeString().slice(0, 5);
+  showUpload(true);
+  try {
+    await sb.from('rrhh_asistencia').update({ hora_salida: horaSalida }).eq('id', asistId);
+    await cargarTodo();
+    showToast('✓ Salida registrada: ' + horaSalida);
+  } catch (e) { showToast('Error: ' + e.message); }
+  showUpload(false);
+};
+
+// ═══════════════════════ GUARDAR EMPLEADO ═══════════════════════
+window.guardarEmpleado = async function () {
+  const nombre = document.getElementById('emp-nombre').value.trim();
+  const cedula = document.getElementById('emp-cedula').value.trim();
+  const cargo = document.getElementById('emp-cargo').value.trim();
+  if (!nombre || !cedula || !cargo) { showToast('Completa nombre, cédula y cargo'); return; }
+  showUpload(true);
+  try {
+    let fotoUrl = '';
+    if (empFotoFile) {
+      const path = `rrhh/${userId}/empleados/${Date.now()}`;
+      const { error } = await sb.storage.from('proveed-media').upload(path, empFotoFile, { upsert: true });
+      if (!error) { const { data } = sb.storage.from('proveed-media').getPublicUrl(path); fotoUrl = data.publicUrl; }
+    }
+    const sucId = document.getElementById('emp-sucursal').value;
+    const suc = sucursales.find(s => s.id === sucId);
+    const datos = {
+      proveedor_id: userId, nombre, cedula, cargo,
+      email: document.getElementById('emp-email').value.trim(),
+      telefono: document.getElementById('emp-tel').value.trim(),
+      salario: parseFloat(document.getElementById('emp-salario').value) || 0,
+      fecha_inicio: document.getElementById('emp-fecha').value,
+      banco: document.getElementById('emp-banco').value.trim(),
+      cuenta: document.getElementById('emp-cuenta').value.trim(),
+      cargas_familiares: parseInt(document.getElementById('emp-cargas').value) || 0,
+      sucursal_id: sucId || null,
+      sucursal_nombre: suc?.nombre || '',
+      foto: fotoUrl || (editandoEmpId ? (empleados.find(e => e.id === editandoEmpId)?.foto || null) : null),
+      activo: true,
+      score_desempeno: editandoEmpId ? (empleados.find(e => e.id === editandoEmpId)?.score_desempeno || 100) : 100
     };
-    if(editandoEmpId) await sb.from('rrhh_empleados').update(datos).eq('id',editandoEmpId);
+    if (editandoEmpId) await sb.from('rrhh_empleados').update(datos).eq('id', editandoEmpId);
     else await sb.from('rrhh_empleados').insert(datos);
     document.getElementById('emp-ok').classList.add('show');
-    setTimeout(()=>{ document.getElementById('modal-empleado').classList.remove('show'); document.getElementById('emp-ok').classList.remove('show'); },1500);
-    empFotoFile=null; editandoEmpId=null;
+    setTimeout(() => { cerrarModalById('modal-empleado'); document.getElementById('emp-ok').classList.remove('show'); resetFormEmpleado(); }, 1500);
     await cargarTodo();
-  } catch(e){ showToast('Error: '+e.message); }
-  document.getElementById('upload-overlay').classList.remove('show');
+  } catch (e) { showToast('Error: ' + e.message); }
+  showUpload(false);
 };
 
-// GUARDAR ASISTENCIA
-window.guardarAsistencia=async function(){
-  const empId=document.getElementById('asist-empleado').value;
-  if(!empId){ showToast('Selecciona un empleado'); return; }
-  const emp=empleados.find(e=>e.id===empId);
-  const horaEntrada=document.getElementById('asist-hora').value;
-  const fecha=document.getElementById('asist-fecha').value;
-  const estado=document.getElementById('asist-estado').value;
-  const geoConfig=JSON.parse(localStorage.getItem(`geo_config_${userId}`)||'{}');
-  const minAtraso=calcularAtraso(horaEntrada,geoConfig.horaFin||'08:40');
+function resetFormEmpleado() {
+  ['emp-nombre', 'emp-cedula', 'emp-cargo', 'emp-email', 'emp-tel', 'emp-salario', 'emp-fecha', 'emp-banco', 'emp-cuenta', 'emp-cargas'].forEach(id => { const el = document.getElementById(id); if (el) el.value = ''; });
+  document.getElementById('emp-foto-prev').style.display = 'none';
+  document.getElementById('emp-foto-placeholder').style.display = 'flex';
+  empFotoFile = null; editandoEmpId = null;
+  document.getElementById('modal-emp-title').textContent = 'Nuevo Empleado';
+}
 
-  // Calcular score desempeño
-  let puntos=0;
-  if(minAtraso<=0) puntos=0;
-  else if(minAtraso<=10) puntos=5;
-  else if(minAtraso<=30) puntos=20;
-  else puntos=40;
-
-  document.getElementById('upload-overlay').classList.add('show');
-  try{
-    let fotoUrl='';
-    if(asistFotoFile){
-      const path=`rrhh/${userId}/asistencia/${empId}_${Date.now()}`;
-      const { error } = await sb.storage.from('proveed-media').upload(path,asistFotoFile,{upsert:true});
-      if(!error){ const { data } = sb.storage.from('proveed-media').getPublicUrl(path); fotoUrl=data.publicUrl; }
+// ═══════════════════════ GUARDAR ASISTENCIA MANUAL ═══════════════════════
+window.guardarAsistencia = async function () {
+  const empId = document.getElementById('asist-empleado').value;
+  if (!empId) { showToast('Selecciona un empleado'); return; }
+  const emp = empleados.find(e => e.id === empId);
+  const horaEntrada = document.getElementById('asist-hora-entrada').value;
+  const horaSalida = document.getElementById('asist-hora-salida-campo').value;
+  const fecha = document.getElementById('asist-fecha').value;
+  const estado = document.getElementById('asist-estado').value;
+  if (!horaEntrada) { showToast('Ingresa la hora de entrada'); return; }
+  const geoConfig = JSON.parse(localStorage.getItem(`geo_config_${userId}`) || '{}');
+  const minAtraso = calcularAtraso(horaEntrada, geoConfig.horaFin || '08:40');
+  const puntos = minAtraso <= 0 ? 0 : minAtraso <= 10 ? 5 : minAtraso <= 30 ? 20 : 40;
+  showUpload(true);
+  try {
+    let fotoUrl = '';
+    if (asistFotoFile) {
+      const path = `rrhh/${userId}/asistencia/${empId}_${Date.now()}`;
+      const { error } = await sb.storage.from('proveed-media').upload(path, asistFotoFile, { upsert: true });
+      if (!error) { const { data } = sb.storage.from('proveed-media').getPublicUrl(path); fotoUrl = data.publicUrl; }
     }
     await sb.from('rrhh_asistencia').insert({
-      proveedor_id:userId, empleado_id:empId,
-      empleado_nombre:emp?.nombre||'',
-      fecha, hora_entrada:horaEntrada,
-      estado, minutos_atraso:Math.max(0,minAtraso),
-      foto_url:fotoUrl||null,
-      validado_geo:false
+      proveedor_id: userId, empleado_id: empId,
+      empleado_nombre: emp?.nombre || '',
+      fecha, hora_entrada: horaEntrada,
+      hora_salida: horaSalida || null,
+      estado, minutos_atraso: Math.max(0, minAtraso),
+      foto_url: fotoUrl || null, validado_geo: false
     });
-    // Actualizar score del empleado
-    const nuevoScore=Math.max(0,(emp?.score_desempeno||100)-puntos);
-    await sb.from('rrhh_empleados').update({score_desempeno:nuevoScore}).eq('id',empId);
-    document.getElementById('modal-asistencia').classList.remove('show');
-    asistFotoFile=null;
+    const nuevoScore = Math.max(0, (emp?.score_desempeno || 100) - puntos);
+    await sb.from('rrhh_empleados').update({ score_desempeno: nuevoScore }).eq('id', empId);
+    cerrarModalById('modal-asistencia');
+    asistFotoFile = null;
+    document.getElementById('asist-foto-area').classList.remove('filled');
+    document.querySelector('#asist-foto-area p').textContent = 'Foto de verificación';
     await cargarTodo();
     showToast('✓ Asistencia registrada');
-  } catch(e){ showToast('Error: '+e.message); }
-  document.getElementById('upload-overlay').classList.remove('show');
+  } catch (e) { showToast('Error: ' + e.message); }
+  showUpload(false);
 };
 
-// GUARDAR NÓMINA
-window.guardarNomina=async function(){
-  const empId=document.getElementById('nom-empleado').value;
-  if(!empId){ showToast('Selecciona un empleado'); return; }
-  const emp=empleados.find(e=>e.id===empId);
-  const salBase=parseFloat(document.getElementById('nom-salario').value)||emp?.salario||SBU;
-  const iessPorc=parseFloat(document.getElementById('nom-iess').value)||9.45;
-  const iess=salBase*iessPorc/100;
-  const descuentos=parseFloat(document.getElementById('nom-descuentos').value)||0;
-  const salNeto=salBase-iess-descuentos;
-  document.getElementById('upload-overlay').classList.add('show');
-  try{
+// ═══════════════════════ GUARDAR NÓMINA ═══════════════════════
+window.guardarNomina = async function () {
+  const empId = document.getElementById('nom-empleado').value;
+  if (!empId) { showToast('Selecciona un empleado'); return; }
+  const emp = empleados.find(e => e.id === empId);
+  const salBase = parseFloat(document.getElementById('nom-salario').value) || emp?.salario || SBU;
+  const iessPorc = parseFloat(document.getElementById('nom-iess').value) || 9.45;
+  const iess = salBase * iessPorc / 100;
+  const descuentos = parseFloat(document.getElementById('nom-descuentos').value) || 0;
+  const salNeto = salBase - iess - descuentos;
+  showUpload(true);
+  try {
     await sb.from('rrhh_nomina').upsert({
-      proveedor_id:userId, empleado_id:empId,
-      empleado_nombre:emp?.nombre||'',
-      salario_base:salBase, porcentaje_iess:iessPorc,
-      otros_descuentos:descuentos, salario_neto:salNeto,
-      banco:emp?.banco||'', cuenta:emp?.cuenta||'',
-      periodo:document.getElementById('nom-periodo').value,
-      decimo_tercero:parseFloat((salBase/12).toFixed(2)),
-      decimo_cuarto:parseFloat((SBU/12).toFixed(2))
-    },{onConflict:'proveedor_id,empleado_id,periodo'});
-    document.getElementById('modal-nomina').classList.remove('show');
+      proveedor_id: userId, empleado_id: empId,
+      empleado_nombre: emp?.nombre || '',
+      salario_base: salBase, porcentaje_iess: iessPorc,
+      otros_descuentos: descuentos, salario_neto: salNeto,
+      banco: emp?.banco || '', cuenta: emp?.cuenta || '',
+      periodo: document.getElementById('nom-periodo').value,
+      decimo_tercero: parseFloat((salBase / 12).toFixed(2)),
+      decimo_cuarto: parseFloat((SBU / 12).toFixed(2))
+    }, { onConflict: 'proveedor_id,empleado_id,periodo' });
+    cerrarModalById('modal-nomina');
     await cargarTodo();
     showToast('✓ Nómina guardada');
-  } catch(e){ showToast('Error: '+e.message); }
-  document.getElementById('upload-overlay').classList.remove('show');
+  } catch (e) { showToast('Error: ' + e.message); }
+  showUpload(false);
 };
 
-// GUARDAR CONTRATO
-function generarCodigoContrato(){
-  const año=new Date().getFullYear();
-  const num=String(contratos.length+1).padStart(3,'0');
-  const codigo=`CT-${año}-${num}`;
-  const el=document.getElementById('codigo-contrato');
-  if(el) el.textContent=codigo;
+// ═══════════════════════ GUARDAR CONTRATO ═══════════════════════
+function generarCodigoContrato() {
+  const año = new Date().getFullYear();
+  const num = String(contratos.length + 1).padStart(3, '0');
+  const codigo = `CT-${año}-${num}`;
+  const el = document.getElementById('codigo-contrato');
+  if (el) el.textContent = codigo;
   return codigo;
 }
 
-window.guardarContrato=async function(){
-  const empId=document.getElementById('cont-empleado').value;
-  if(!empId){ showToast('Selecciona un empleado'); return; }
-  const emp=empleados.find(e=>e.id===empId);
-  const codigo=document.getElementById('codigo-contrato').textContent;
-  document.getElementById('upload-overlay').classList.add('show');
-  try{
-    let scanUrl='';
-    if(contratoScanFile){
-      const path=`rrhh/${userId}/contratos/${codigo}`;
-      const { error } = await sb.storage.from('proveed-media').upload(path,contratoScanFile,{upsert:true});
-      if(!error){ const { data } = sb.storage.from('proveed-media').getPublicUrl(path); scanUrl=data.publicUrl; }
+window.guardarContrato = async function () {
+  const empId = document.getElementById('cont-empleado').value;
+  if (!empId) { showToast('Selecciona un empleado'); return; }
+  const emp = empleados.find(e => e.id === empId);
+  const codigo = document.getElementById('codigo-contrato').textContent;
+  showUpload(true);
+  try {
+    let scanUrl = '';
+    if (contratoScanFile) {
+      const path = `rrhh/${userId}/contratos/${codigo}`;
+      const { error } = await sb.storage.from('proveed-media').upload(path, contratoScanFile, { upsert: true });
+      if (!error) { const { data } = sb.storage.from('proveed-media').getPublicUrl(path); scanUrl = data.publicUrl; }
     }
     await sb.from('rrhh_contratos').insert({
-      proveedor_id:userId, empleado_id:empId,
-      empleado_nombre:emp?.nombre||'',
-      codigo, tipo:document.getElementById('cont-tipo').value,
-      fecha_inicio:document.getElementById('cont-inicio').value,
-      fecha_fin:document.getElementById('cont-fin').value||null,
-      salario:parseFloat(document.getElementById('cont-salario').value)||0,
-      scan_url:scanUrl||null
+      proveedor_id: userId, empleado_id: empId,
+      empleado_nombre: emp?.nombre || '',
+      codigo, tipo: document.getElementById('cont-tipo').value,
+      fecha_inicio: document.getElementById('cont-inicio').value,
+      fecha_fin: document.getElementById('cont-fin').value || null,
+      salario: parseFloat(document.getElementById('cont-salario').value) || 0,
+      scan_url: scanUrl || null
     });
     document.getElementById('cont-ok').classList.add('show');
-    contratoScanFile=null;
-    setTimeout(()=>{ document.getElementById('modal-contrato').classList.remove('show'); document.getElementById('cont-ok').classList.remove('show'); },1500);
+    contratoScanFile = null;
+    setTimeout(() => { cerrarModalById('modal-contrato'); document.getElementById('cont-ok').classList.remove('show'); }, 1500);
     await cargarTodo();
-  } catch(e){ showToast('Error: '+e.message); }
-  document.getElementById('upload-overlay').classList.remove('show');
+  } catch (e) { showToast('Error: ' + e.message); }
+  showUpload(false);
 };
 
-// GUARDAR SERVICIO B2B
-window.guardarServicio=async function(){
-  const empresa=document.getElementById('serv-empresa').value.trim();
-  const desc=document.getElementById('serv-desc').value.trim();
-  const monto=parseFloat(document.getElementById('serv-monto').value)||0;
-  if(!empresa||!desc){ showToast('Completa empresa y descripción'); return; }
-  if(!servFotosFiles.length){ showToast('Sube al menos una foto de evidencia'); return; }
-  document.getElementById('upload-overlay').classList.add('show');
-  try{
-    const fotosUrls=[];
-    for(const f of servFotosFiles){
-      const path=`rrhh/${userId}/servicios/${Date.now()}_${f.name}`;
-      const { error } = await sb.storage.from('proveed-media').upload(path,f,{upsert:true});
-      if(!error){ const { data } = sb.storage.from('proveed-media').getPublicUrl(path); fotosUrls.push(data.publicUrl); }
+// ═══════════════════════ GUARDAR SERVICIO B2B ═══════════════════════
+window.guardarServicio = async function () {
+  const empresa = document.getElementById('serv-empresa').value.trim();
+  const desc = document.getElementById('serv-desc').value.trim();
+  const monto = parseFloat(document.getElementById('serv-monto').value) || 0;
+  if (!empresa || !desc) { showToast('Completa empresa y descripción'); return; }
+  if (!servFotosFiles.length) { showToast('Sube al menos una foto de evidencia'); return; }
+  showUpload(true);
+  try {
+    const fotosUrls = [];
+    for (const f of servFotosFiles) {
+      const path = `rrhh/${userId}/servicios/${Date.now()}_${f.name}`;
+      const { error } = await sb.storage.from('proveed-media').upload(path, f, { upsert: true });
+      if (!error) { const { data } = sb.storage.from('proveed-media').getPublicUrl(path); fotosUrls.push(data.publicUrl); }
     }
     await sb.from('rrhh_servicios_b2b').insert({
-      proveedor_id:userId, empresa, descripcion:desc, monto,
-      fecha:document.getElementById('serv-fecha').value,
-      fotos_evidencia:fotosUrls,
-      estado:'pendiente'
+      proveedor_id: userId, empresa, descripcion: desc, monto,
+      fecha: document.getElementById('serv-fecha').value,
+      fotos_evidencia: fotosUrls, estado: 'pendiente'
     });
-    document.getElementById('modal-servicio').classList.remove('show');
-    servFotosFiles=[];
-    document.getElementById('serv-fotos-preview').innerHTML='';
+    cerrarModalById('modal-servicio');
+    servFotosFiles = [];
+    document.getElementById('serv-fotos-preview').innerHTML = '';
     await cargarTodo();
     showToast('✓ Servicio registrado');
-  } catch(e){ showToast('Error: '+e.message); }
-  document.getElementById('upload-overlay').classList.remove('show');
+  } catch (e) { showToast('Error: ' + e.message); }
+  showUpload(false);
 };
 
-window.aprobarServicio=async function(id){
-  if(!confirm('¿Autorizar el pago de este servicio?')) return;
-  await sb.from('rrhh_servicios_b2b').update({estado:'aprobado'}).eq('id',id);
-  await cargarTodo();
-  showToast('✓ Pago autorizado');
+window.aprobarServicio = async function (id) {
+  if (!confirm('¿Autorizar el pago de este servicio?')) return;
+  await sb.from('rrhh_servicios_b2b').update({ estado: 'aprobado' }).eq('id', id);
+  await cargarTodo(); showToast('✓ Pago autorizado');
 };
 
-window.guardarGeoConfig=function(){
-  const config={
-    radio:parseInt(document.getElementById('geo-radio').value)||200,
-    horaIni:document.getElementById('geo-hora-ini').value||'08:00',
-    horaFin:document.getElementById('geo-hora-fin').value||'08:40',
-    gracia:parseInt(document.getElementById('geo-gracia').value)||10,
-    despido:parseInt(document.getElementById('geo-despido').value)||30
+// ═══════════════════════ GESTORES ═══════════════════════
+window.guardarGestor = async function () {
+  const nombre = document.getElementById('gest-nombre').value.trim();
+  const email = document.getElementById('gest-email').value.trim();
+  const rol = document.getElementById('gest-rol').value;
+  const pin = document.getElementById('gest-pin').value.trim();
+  const empId = document.getElementById('gest-empleado').value;
+  if (!nombre || !email || !pin) { showToast('Completa nombre, email y PIN'); return; }
+  if (pin.length !== 4) { showToast('El PIN debe tener exactamente 4 dígitos'); return; }
+  showUpload(true);
+  try {
+    await sb.from('rrhh_gestores').insert({
+      proveedor_id: userId, nombre, email: email.toLowerCase(),
+      rol, pin, empleado_id: empId || null,
+      activo: true
+    });
+    cerrarModalById('modal-gestor');
+    document.getElementById('gest-nombre').value = '';
+    document.getElementById('gest-email').value = '';
+    document.getElementById('gest-pin').value = '';
+    await cargarTodo();
+    showToast('✓ Gestor registrado');
+  } catch (e) { showToast('Error: ' + e.message); }
+  showUpload(false);
+};
+
+window.eliminarGestor = async function (id) {
+  if (!confirm('¿Eliminar este gestor?')) return;
+  await sb.from('rrhh_gestores').delete().eq('id', id);
+  await cargarTodo(); showToast('Gestor eliminado');
+};
+
+// ═══════════════════════ LOGIN GESTOR (Workers/Gerentes externos) ═══════════════════════
+// Este modal se activa cuando alguien accede al módulo sin ser el dueño
+// (En práctica: el dueño pasa la URL al worker y este se loguea con email+pin)
+window.loginGestor = async function () {
+  const email = document.getElementById('login-email').value.trim().toLowerCase();
+  const pin = document.getElementById('login-pin').value.trim();
+  const errDiv = document.getElementById('login-error');
+  if (!email || !pin) { errDiv.textContent = 'Ingresa tu correo y PIN'; errDiv.style.display = 'block'; return; }
+
+  const gestor = gestores.find(g => g.email === email && g.pin === pin && g.activo !== false);
+  if (!gestor) { errDiv.textContent = 'Correo o PIN incorrecto. Contacta al administrador.'; errDiv.style.display = 'block'; return; }
+
+  gestorActual = gestor;
+  rolActual = gestor.rol; // 'gerente' | 'worker'
+  workerEmpleadoId = gestor.empleado_id;
+  errDiv.style.display = 'none';
+  document.getElementById('modal-login-gestor').classList.remove('show');
+  configurarTabsPorRol();
+  renderTodo();
+  const primerTab = rolActual === 'worker' ? 'mi-asistencia' : 'dashboard';
+  showTab(primerTab, document.querySelector('.tab-btn'));
+  showToast(`✓ Bienvenido/a, ${gestor.nombre}`);
+};
+
+// Función para que un worker/gerente externo acceda (desde URL con parámetro)
+function verificarAccesoExterno() {
+  const params = new URLSearchParams(window.location.search);
+  const modo = params.get('modo');
+  if (modo === 'worker' || modo === 'gestor') {
+    // Mostrar modal de login
+    document.getElementById('modal-login-gestor').classList.add('show');
+  }
+}
+
+// ═══════════════════════ GEO CONFIG ═══════════════════════
+window.guardarGeoConfig = function () {
+  const config = {
+    radio: parseInt(document.getElementById('geo-radio').value) || 200,
+    horaIni: document.getElementById('geo-hora-ini').value || '08:00',
+    horaFin: document.getElementById('geo-hora-fin').value || '08:40',
+    horaSalida: document.getElementById('geo-hora-salida').value || '17:00',
+    gracia: parseInt(document.getElementById('geo-gracia').value) || 10,
+    despido: parseInt(document.getElementById('geo-despido').value) || 30
   };
-  localStorage.setItem(`geo_config_${userId}`,JSON.stringify(config));
+  localStorage.setItem(`geo_config_${userId}`, JSON.stringify(config));
   showToast('✓ Geofencing configurado');
 };
 
-window.calcularDecimos=function(){
-  let msg='CÁLCULO DE DÉCIMOS\n\n';
-  empleados.forEach(e=>{
-    const d13=(e.salario||0)/12;
-    const d14=SBU/12;
-    msg+=`${e.nombre}: 13°=$${d13.toFixed(2)} 14°=$${d14.toFixed(2)}\n`;
-  });
+window.calcularDecimos = function () {
+  let msg = 'CÁLCULO DE DÉCIMOS\n\n';
+  empleados.forEach(e => { msg += `${e.nombre}: 13°=$${(e.salario / 12).toFixed(2)} 14°=$${(SBU / 12).toFixed(2)}\n`; });
   alert(msg);
 };
 
-function verDetalleEmpleado(e){
-  const score=e.score_desempeno||100;
-  const asistEmp=asistencias.filter(a=>a.empleado_id===e.id);
-  const faltas=asistEmp.filter(a=>a.estado==='falta').length;
-  const tardanzas=asistEmp.filter(a=>a.estado==='tarde').length;
-  const body=document.getElementById('detalle-emp-body');
-  body.innerHTML=`
+// ═══════════════════════ DETALLE EMPLEADO ═══════════════════════
+function verDetalleEmpleado(e) {
+  const score = e.score_desempeno || 100;
+  const asistEmp = asistencias.filter(a => a.empleado_id === e.id);
+  const faltas = asistEmp.filter(a => a.estado === 'falta').length;
+  const tardanzas = asistEmp.filter(a => a.estado === 'tarde').length;
+  const body = document.getElementById('detalle-emp-body');
+  body.innerHTML = `
     <div style="text-align:center;padding:16px 0;">
       <div style="width:80px;height:80px;border-radius:20px;background:rgba(50,205,50,0.1);margin:0 auto 12px;display:flex;align-items:center;justify-content:center;overflow:hidden;">
-        ${e.foto?`<img src="${e.foto}" style="width:100%;height:100%;object-fit:cover;" alt="">`:`<span style="font-size:1.8rem;font-weight:800;color:var(--verde);">${(e.nombre||'E')[0].toUpperCase()}</span>`}
+        ${e.foto ? `<img src="${e.foto}" style="width:100%;height:100%;object-fit:cover;" alt="">` : `<span style="font-size:1.8rem;font-weight:800;color:var(--verde);">${(e.nombre || 'E')[0].toUpperCase()}</span>`}
       </div>
       <div style="font-size:1.1rem;font-weight:800;color:var(--negro);">${e.nombre}</div>
-      <div style="font-size:0.78rem;color:#aaa;">${e.cargo||'—'}</div>
+      <div style="font-size:0.78rem;color:#aaa;">${e.cargo || '—'} · ${e.sucursal_nombre || '—'}</div>
     </div>
     <div class="kpi-grid" style="margin-bottom:14px;">
       <div class="kpi"><div class="kpi-val verde">${score}%</div><div class="kpi-lbl">Score desempeño</div></div>
-      <div class="kpi"><div class="kpi-val naranja">$${Number(e.salario||0).toFixed(0)}</div><div class="kpi-lbl">Salario</div></div>
+      <div class="kpi"><div class="kpi-val naranja">$${Number(e.salario || 0).toFixed(0)}</div><div class="kpi-lbl">Salario</div></div>
       <div class="kpi"><div class="kpi-val rojo">${faltas}</div><div class="kpi-lbl">Faltas</div></div>
       <div class="kpi"><div class="kpi-val azul">${tardanzas}</div><div class="kpi-lbl">Tardanzas</div></div>
     </div>
     <div class="card">
       <div style="font-size:0.72rem;color:#aaa;font-weight:700;text-transform:uppercase;margin-bottom:8px;">Datos personales</div>
       <div style="font-size:0.82rem;color:#555;display:grid;grid-template-columns:1fr 1fr;gap:6px;">
-        <div>CI: <strong>${e.cedula||'—'}</strong></div>
-        <div>Tel: <strong>${e.telefono||'—'}</strong></div>
-        <div>Inicio: <strong>${e.fecha_inicio||'—'}</strong></div>
-        <div>Cargas: <strong>${e.cargas_familiares||0}</strong></div>
-        <div>Banco: <strong>${e.banco||'—'}</strong></div>
-        <div>Cuenta: <strong>${e.cuenta||'—'}</strong></div>
+        <div>CI: <strong>${e.cedula || '—'}</strong></div>
+        <div>Tel: <strong>${e.telefono || '—'}</strong></div>
+        <div>Correo: <strong style="font-size:0.7rem;">${e.email || '—'}</strong></div>
+        <div>Inicio: <strong>${e.fecha_inicio || '—'}</strong></div>
+        <div>Banco: <strong>${e.banco || '—'}</strong></div>
+        <div>Cuenta: <strong>${e.cuenta || '—'}</strong></div>
       </div>
     </div>
-    <div class="card" style="background:${score<60?'rgba(255,77,77,0.04)':'rgba(50,205,50,0.04)'};border-color:${score<60?'rgba(255,77,77,0.2)':'rgba(50,205,50,0.2)'};">
+    <div class="card" style="background:${score < 60 ? 'rgba(255,77,77,0.04)' : 'rgba(50,205,50,0.04)'};border-color:${score < 60 ? 'rgba(255,77,77,0.2)' : 'rgba(50,205,50,0.2)'};">
       <div style="font-size:0.82rem;font-weight:700;margin-bottom:6px;">Evaluación automática</div>
-      <div style="font-size:0.78rem;color:#666;">${score>=80?'✅ Empleado óptimo. Candidato para aumento salarial.':score>=60?'⚠️ En observación. Mejorar puntualidad para evitar acciones.':'🔴 En riesgo. Acumulación de faltas y tardanzas. Revisar protocolo de despido.'}</div>
+      <div style="font-size:0.78rem;color:#666;">${score >= 80 ? '✅ Empleado óptimo. Candidato para aumento salarial.' : score >= 60 ? '⚠️ En observación. Mejorar puntualidad.' : '🔴 En riesgo. Acumulación de faltas y tardanzas.'}</div>
     </div>
     <button style="width:100%;padding:12px;background:rgba(50,205,50,0.1);color:var(--verde);border:none;border-radius:12px;font-family:'Inter',sans-serif;font-size:0.88rem;font-weight:700;cursor:pointer;margin-top:6px;" onclick="editarEmpleado('${e.id}')">Editar empleado</button>
-    <button style="width:100%;padding:12px;background:rgba(255,77,77,0.08);color:var(--rojo);border:none;border-radius:12px;font-family:'Inter',sans-serif;font-size:0.82rem;font-weight:700;cursor:pointer;margin-top:8px;" onclick="toggleActivoEmpleado('${e.id}',${e.activo!==false})">${e.activo!==false?'Dar de baja':'Reactivar'}</button>`;
+    <button style="width:100%;padding:12px;background:rgba(255,77,77,0.08);color:var(--rojo);border:none;border-radius:12px;font-family:'Inter',sans-serif;font-size:0.82rem;font-weight:700;cursor:pointer;margin-top:8px;" onclick="toggleActivoEmpleado('${e.id}',${e.activo !== false})">${e.activo !== false ? 'Dar de baja' : 'Reactivar'}</button>`;
   document.getElementById('modal-detalle-emp').classList.add('show');
 }
-window.editarEmpleado=function(id){
-  const e=empleados.find(emp=>emp.id===id); if(!e) return;
-  editandoEmpId=id;
-  document.getElementById('modal-emp-title').textContent='Editar empleado';
-  document.getElementById('emp-nombre').value=e.nombre||'';
-  document.getElementById('emp-cedula').value=e.cedula||'';
-  document.getElementById('emp-cargo').value=e.cargo||'';
-  document.getElementById('emp-tel').value=e.telefono||'';
-  document.getElementById('emp-salario').value=e.salario||'';
-  document.getElementById('emp-fecha').value=e.fecha_inicio||'';
-  document.getElementById('emp-banco').value=e.banco||'';
-  document.getElementById('emp-cuenta').value=e.cuenta||'';
-  document.getElementById('emp-cargas').value=e.cargas_familiares||0;
-  if(e.foto){ document.getElementById('emp-foto-prev').src=e.foto; document.getElementById('emp-foto-prev').style.display='block'; document.getElementById('emp-foto-placeholder').style.display='none'; }
-  document.getElementById('modal-detalle-emp').classList.remove('show');
+
+window.editarEmpleado = function (id) {
+  const e = empleados.find(emp => emp.id === id); if (!e) return;
+  editandoEmpId = id;
+  document.getElementById('modal-emp-title').textContent = 'Editar empleado';
+  document.getElementById('emp-nombre').value = e.nombre || '';
+  document.getElementById('emp-cedula').value = e.cedula || '';
+  document.getElementById('emp-cargo').value = e.cargo || '';
+  document.getElementById('emp-email').value = e.email || '';
+  document.getElementById('emp-tel').value = e.telefono || '';
+  document.getElementById('emp-salario').value = e.salario || '';
+  document.getElementById('emp-fecha').value = e.fecha_inicio || '';
+  document.getElementById('emp-banco').value = e.banco || '';
+  document.getElementById('emp-cuenta').value = e.cuenta || '';
+  document.getElementById('emp-cargas').value = e.cargas_familiares || 0;
+  if (e.foto) { document.getElementById('emp-foto-prev').src = e.foto; document.getElementById('emp-foto-prev').style.display = 'block'; document.getElementById('emp-foto-placeholder').style.display = 'none'; }
+  cerrarModalById('modal-detalle-emp');
   document.getElementById('modal-empleado').classList.add('show');
 };
 
-window.toggleActivoEmpleado=async function(id,activo){
-  if(!confirm(`¿${activo?'Dar de baja':'Reactivar'} a este empleado?`)) return;
-  await sb.from('rrhh_empleados').update({activo:!activo}).eq('id',id);
-  document.getElementById('modal-detalle-emp').classList.remove('show');
-  await cargarTodo();
-  showToast(activo?'Empleado dado de baja':'Empleado reactivado');
+window.toggleActivoEmpleado = async function (id, activo) {
+  if (!confirm(`¿${activo ? 'Dar de baja' : 'Reactivar'} a este empleado?`)) return;
+  await sb.from('rrhh_empleados').update({ activo: !activo }).eq('id', id);
+  cerrarModalById('modal-detalle-emp');
+  await cargarTodo(); showToast(activo ? 'Empleado dado de baja' : 'Empleado reactivado');
 };
 
-// FOTOS
-window.prevFotoEmp=function(input){
-  const file=input.files[0]; if(!file) return;
-  empFotoFile=file;
-  const reader=new FileReader();
-  reader.onload=e=>{ document.getElementById('emp-foto-prev').src=e.target.result; document.getElementById('emp-foto-prev').style.display='block'; document.getElementById('emp-foto-placeholder').style.display='none'; };
+// ═══════════════════════ FOTOS ═══════════════════════
+window.prevFotoEmp = function (input) {
+  const file = input.files[0]; if (!file) return;
+  empFotoFile = file;
+  const reader = new FileReader();
+  reader.onload = e => { document.getElementById('emp-foto-prev').src = e.target.result; document.getElementById('emp-foto-prev').style.display = 'block'; document.getElementById('emp-foto-placeholder').style.display = 'none'; };
   reader.readAsDataURL(file);
 };
 
-window.selServFotos=function(input){
-  const files=[...input.files]; if(!files.length) return;
-  servFotosFiles=[...servFotosFiles,...files];
-  const preview=document.getElementById('serv-fotos-preview');
-  files.forEach(f=>{
-    const reader=new FileReader();
-    reader.onload=e=>{ const img=document.createElement('img'); img.src=e.target.result; img.className='foto-prev-item'; preview.appendChild(img); };
-    reader.readAsDataURL(f);
-  });
+window.selServFotos = function (input) {
+  const files = [...input.files]; if (!files.length) return;
+  servFotosFiles = [...servFotosFiles, ...files];
+  const preview = document.getElementById('serv-fotos-preview');
+  files.forEach(f => { const reader = new FileReader(); reader.onload = e => { const img = document.createElement('img'); img.src = e.target.result; img.className = 'foto-prev-item'; preview.appendChild(img); }; reader.readAsDataURL(f); });
   document.getElementById('serv-foto-area').classList.add('filled');
-  document.querySelector('#serv-foto-area p').textContent=`${servFotosFiles.length} foto(s) seleccionada(s)`;
+  document.querySelector('#serv-foto-area p').textContent = `${servFotosFiles.length} foto(s) seleccionada(s)`;
 };
 
-window.selAsistFoto=function(input){
-  const file=input.files[0]; if(!file) return;
-  asistFotoFile=file;
+window.selAsistFoto = function (input) {
+  const file = input.files[0]; if (!file) return;
+  asistFotoFile = file;
   document.getElementById('asist-foto-area').classList.add('filled');
-  document.querySelector('#asist-foto-area p').textContent='Foto lista ✓';
+  document.querySelector('#asist-foto-area p').textContent = 'Foto lista ✓';
 };
 
-window.selContratoScan=function(input){
-  const file=input.files[0]; if(!file) return;
-  contratoScanFile=file;
+window.selContratoScan = function (input) {
+  const file = input.files[0]; if (!file) return;
+  contratoScanFile = file;
   document.getElementById('cont-scan-area').classList.add('filled');
-  document.querySelector('#cont-scan-area p').textContent=file.name;
+  document.querySelector('#cont-scan-area p').textContent = file.name;
 };
 
-window.verContrato=url=>window.open(url,'_blank');
-
-// TABS Y MODALES
-window.showTab=function(tab,btn){
-  document.querySelectorAll('.section').forEach(s=>s.classList.remove('active'));
-  document.querySelectorAll('.tab-btn').forEach(b=>b.classList.remove('active'));
-  document.getElementById('sec-'+tab).classList.add('active');
-  btn.classList.add('active');
+// ═══════════════════════ TABS Y MODALES ═══════════════════════
+window.showTab = function (tab, btn) {
+  document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
+  document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+  const sec = document.getElementById('sec-' + tab);
+  if (sec) sec.classList.add('active');
+  if (btn) btn.classList.add('active');
+  else { const firstBtn = document.querySelector('.tab-btn'); if (firstBtn) firstBtn.classList.add('active'); }
 };
 
-window.abrirModalEmpleado=()=>{ editandoEmpId=null; document.getElementById('modal-emp-title').textContent='Nuevo Empleado'; document.getElementById('modal-empleado').classList.add('show'); poblarSelects(); };
-window.abrirModalNomina=()=>{ document.getElementById('modal-nomina').classList.add('show'); poblarSelects(); };
-window.abrirModalContrato=()=>{ generarCodigoContrato(); document.getElementById('modal-contrato').classList.add('show'); poblarSelects(); };
-window.abrirModalServicio=()=>{ servFotosFiles=[]; document.getElementById('serv-fotos-preview').innerHTML=''; document.getElementById('modal-servicio').classList.add('show'); };
-window.abrirRegistroManual=()=>{ document.getElementById('modal-asistencia').classList.add('show'); poblarSelects(); };
-window.cerrarModal=(id,e)=>{ if(e.target===document.getElementById(id)) document.getElementById(id).classList.remove('show'); };
+window.cerrarModal = function (id, e) { if (e.target === document.getElementById(id)) document.getElementById(id).classList.remove('show'); };
+window.cerrarModalById = function (id) { const el = document.getElementById(id); if (el) el.classList.remove('show'); };
 
-function showToast(msg){
-  const t=document.getElementById('toast'); t.textContent=msg; t.classList.add('show');
-  setTimeout(()=>t.classList.remove('show'),2500);
+window.abrirModalEmpleado = () => { editandoEmpId = null; resetFormEmpleado(); document.getElementById('modal-empleado').classList.add('show'); poblarSelects(); };
+window.abrirModalNomina = () => { document.getElementById('modal-nomina').classList.add('show'); poblarSelects(); };
+window.abrirModalContrato = () => { generarCodigoContrato(); document.getElementById('modal-contrato').classList.add('show'); poblarSelects(); };
+window.abrirModalServicio = () => { servFotosFiles = []; document.getElementById('serv-fotos-preview').innerHTML = ''; document.getElementById('serv-foto-area').classList.remove('filled'); document.querySelector('#serv-foto-area p').textContent = 'Toca para agregar fotos de evidencia'; document.getElementById('modal-servicio').classList.add('show'); };
+window.abrirRegistroManual = () => { document.getElementById('modal-asistencia').classList.add('show'); poblarSelects(); };
+window.abrirModalGestor = () => { document.getElementById('modal-gestor').classList.add('show'); poblarSelects(); };
+
+// ═══════════════════════ SELECTS ═══════════════════════
+function poblarSelects() {
+  // Empleados selects
+  ['nom-empleado', 'cont-empleado', 'asist-empleado'].forEach(id => {
+    const el = document.getElementById(id); if (!el) return;
+    el.innerHTML = '<option value="">Seleccionar empleado</option>';
+    empleados.forEach(e => { el.innerHTML += `<option value="${e.id}">${e.nombre}</option>`; });
+  });
+  // Sucursal select
+  const sucSel = document.getElementById('emp-sucursal');
+  if (sucSel) { sucSel.innerHTML = '<option value="">Sin sucursal asignada</option>'; sucursales.forEach(s => { sucSel.innerHTML += `<option value="${s.id}">${s.nombre}</option>`; }); }
+  // Gestor empleado vinculado
+  const gestEmpSel = document.getElementById('gest-empleado');
+  if (gestEmpSel) { gestEmpSel.innerHTML = '<option value="">Sin vincular a empleado</option>'; empleados.forEach(e => { gestEmpSel.innerHTML += `<option value="${e.id}">${e.nombre} · ${e.cargo || ''}</option>`; }); }
 }
+
+// ═══════════════════════ UTILS ══════════════
+function calcularAtraso(horaEntrada, horaLimite) {
+  if (!horaEntrada || horaEntrada === '—') return 0;
+  const [h1, m1] = horaEntrada.split(':').map(Number);
+  const [h2, m2] = horaLimite.split(':').map(Number);
+  return (h1 * 60 + m1) - (h2 * 60 + m2);
+}
+
+function inicializarFechas() {
+  const hoy = new Date().toISOString().split('T')[0];
+  const mes = new Date().toISOString().slice(0, 7);
+  const ahora = new Date().toTimeString().slice(0, 5);
+  if (document.getElementById('asist-fecha')) document.getElementById('asist-fecha').value = hoy;
+  if (document.getElementById('asist-hora-entrada')) document.getElementById('asist-hora-entrada').value = ahora;
+  if (document.getElementById('nom-periodo')) document.getElementById('nom-periodo').value = mes;
+  if (document.getElementById('serv-fecha')) document.getElementById('serv-fecha').value = hoy;
+  if (document.getElementById('cont-inicio')) document.getElementById('cont-inicio').value = hoy;
+  generarCodigoContrato();
+  // Cargar config geofencing guardada
+  const geoConfig = JSON.parse(localStorage.getItem(`geo_config_${userId}`) || '{}');
+  if (geoConfig.radio && document.getElementById('geo-radio')) document.getElementById('geo-radio').value = geoConfig.radio;
+  if (geoConfig.horaIni && document.getElementById('geo-hora-ini')) document.getElementById('geo-hora-ini').value = geoConfig.horaIni;
+  if (geoConfig.horaFin && document.getElementById('geo-hora-fin')) document.getElementById('geo-hora-fin').value = geoConfig.horaFin;
+  if (geoConfig.horaSalida && document.getElementById('geo-hora-salida')) document.getElementById('geo-hora-salida').value = geoConfig.horaSalida;
+}
+
+function showUpload(show) { document.getElementById('upload-overlay').classList[show ? 'add' : 'remove']('show'); }
+
+function showToast(msg) {
+  const t = document.getElementById('toast'); t.textContent = msg; t.classList.add('show');
+  setTimeout(() => t.classList.remove('show'), 2500);
+}
+
+// Verificar si hay parámetro de acceso externo
+verificarAccesoExterno();
 </script>
 </body>
 </html>
-
-
